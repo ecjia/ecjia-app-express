@@ -32,14 +32,14 @@
 		            <table class="table table-striped table-hover table-hide-edit">
 		                <thead>
 		                    <tr>
-		                        <th>{lang key='express::express.express_sn'}</th>
+		                        <th class="w150">{lang key='express::express.express_sn'}</th>
 		                        <th class="w150">{lang key='express::express.delivery_sn'}</th>
 		                        <th class="w150">{lang key='express::express.consignee'}</th>
 		                        <th class="w150">{lang key='express::express.mobile'}</th>
 		                        <th class="w150">{lang key='express::express.address'}</th>
 		                        <th class="w150">{lang key='express::express.add_time'}</th>
-		                        <th class="w150">{lang key='express::express.from'}</th>
-		                        <th class="w150">{lang key='express::express.express_status'}</th>
+		                        <th class="w100">{lang key='express::express.from'}</th>
+		                        <th class="w100">{lang key='express::express.express_status'}</th>
 		                    </tr>
 		                </thead>
 		                <tbody>
