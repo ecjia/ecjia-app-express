@@ -42,6 +42,25 @@ return array(
 	'label_express_status'	=> '配送状态：',
 	'label_express_staff_name' => '配送员：',
 	
+	'express_list'	=> '配送列表',
+	'express_info'	=> '配送详情',
+	'view_info'		=> '查看详情',
+	
+	'assign'		=> '派单',
+	'grab'			=> '抢单',
+	'wait_assign'	=> '待派单',
+		
+	'wait_assign_express'	=> '未分派运单',
+	'wait_pick_up'			=> '已接派单待取货',
+	'express_delivery'		=> '已取货派送中',
+	'return_express'		=> '退货中',
+	'refused'				=> '拒收',
+	'already_signed'		=> '已签收',
+	'has_returned'			=> '已退回',
+	
+		
+	
+	
 );		
 
 //end

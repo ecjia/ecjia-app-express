@@ -43,32 +43,28 @@
 		                    </tr>
 		                </thead>
 		                <tbody>
-		                    <!-- {foreach from=$type_list.item item=type} -->
+		                    <!-- {foreach from=$express_list item=list} -->
 		                    <tr>
 		                        <td class="hide-edit-area">
-		                            <span class="cursor_pointer" data-trigger="editable" data-url="{RC_Uri::url('bonus/merchant/edit_type_name')}" data-name="type_name" data-pk="{$type.type_id}" data-title="{lang key='bonus::bonus.edit_bonus_type_name'}">{$type.type_name}</span>
+		                            {$list.express_sn}
 		                            <br/>
 		                            <div class="edit-list">
-		                                <a class="data-pjax" href='{RC_Uri::url("bonus/merchant/bonus_list", "bonus_type={$type.type_id}")}' title="{lang key='bonus::bonus.view_bonus'}">{lang key='bonus::bonus.view_bonus'}</a>&nbsp;|&nbsp;
-		                                <a class="data-pjax" href='{RC_Uri::url("bonus/merchant/edit", "type_id={$type.type_id}")}' title="{lang key='system::system.edit'}">{lang key='system::system.edit'}</a> &nbsp;|&nbsp;
+		                                <a class="data-pjax" href='{RC_Uri::url("express/merchant/info", "express_id={$list.express_id}")}' title="{lang key='express::express.view_info'}">{lang key='express::express.view_info'}</a>&nbsp;|&nbsp;
 		                                <a class="ajaxremove ecjiafc-red" data-toggle="ajaxremove" data-msg="{lang key='bonus::bonus.remove_bonustype_confirm'}" href='{RC_Uri::url("bonus/merchant/remove","id={$type.type_id}")}' title="{lang key='system::system.remove'}">{lang key='system::system.drop'}</a>
-		                                {if $type.send_type neq 2 && $type.send_type neq 4}
-		                                &nbsp;|&nbsp;<a class="data-pjax" href='{RC_Uri::url("bonus/merchant/send", "id={$type.type_id}&send_by={$type.send_type}")}' title="{lang key='bonus::bonus.send_bonus'}">{lang key='bonus::bonus.send_bonus'}</a>
-		                                {/if}
-		                                {if $type.send_type eq 3}
-		                                &nbsp;|&nbsp;<a href='{RC_Uri::url("bonus/merchant/gen_excel", "tid={$type.type_id}")}' title="{lang key='bonus::bonus.gen_excel'}">{lang key='bonus::bonus.gen_excel'}</a>
-		                                {/if}
+		                                
 		                            </div>
 		                        </td>
-		                        <td>{$type.send_by}</td>
+		                        <td>{$list.delivery_sn}</td>
 		                        <td>
-		                            <span class="cursor_pointer" data-trigger="editable" data-url="{RC_Uri::url('bonus/merchant/edit_type_money')}" data-name="type_money" data-pk="{$type.type_id}" data-title="{lang key='bonus::bonus.edit_bonus_money'}">{$type.type_money}</span>
+		                            {$list.consignee}
 		                        </td>
 		                        <td>
-		                            <span class="cursor_pointer" data-trigger="editable" data-url="{RC_Uri::url('bonus/merchant/edit_min_amount')}" data-name="min_amount" data-pk="{$type.type_id}" title="{lang key='bonus::bonus.edit_order_limit'}">{$type.min_amount}</span>
+		                            {$list.mobile}
 		                        </td>
-		                        <td>{$type.send_count}</td>
-		                        <td>{$type.use_count}</td>
+		                        <td>{$list.address}</td>
+		                        <td>{$list.formatted_add_time}</td>
+		                        <td>{$list.label_from}</td>
+		                        <td>{$list.label_status}</td>
 		                    </tr>
 		                    <!-- {foreachelse} -->
 		                    <tr><td class="no-records" colspan="10">{lang key='system::system.no_records'}</td></tr>
