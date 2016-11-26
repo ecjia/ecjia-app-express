@@ -33,11 +33,14 @@ return array(
 	'label_address'		=> '收货地址：',
 	'label_email'		=> '邮箱地址：',
 	'label_mobile'		=> '联系方式：',
-	'label_remark'		=> '备注信息：',
+	'label_remark'		=> '客户给商家的留言：',
+	'label_distance'	=> '送货距离：',
+	'label_best_time'	=> '期望送货时间：',
 	'label_add_time'	=> '创建时间：',
 	'label_receive_time'	=> '接单时间：',
 	'label_express_time'	=> '取货配送时间：',
 	'label_signed_time'	=> '签收时间：',
+	'label_update_time'	=> '更新时间：',
 	'label_from'		=> '配送来源：',
 	'label_express_status'	=> '配送状态：',
 	'label_express_staff_name' => '配送员：',
@@ -58,6 +61,22 @@ return array(
 	'already_signed'		=> '已签收',
 	'has_returned'			=> '已退回',
 	
+	/* 详情页*/
+	'base_info'			=> '基本信息',
+	'consignee_info'	=> '收货人信息',
+	
+	'goods_info'		=> '商品信息',
+	'goods_name_brand'	=> '商品名称 [品牌 ]',
+	'goods_sn'			=> '货号',
+	'product_sn'		=> '货品号',
+	'goods_attr'		=> '属性',
+	'label_send_number'	=> '发货数量',
+	
+	'express_op_info'	=> '配送操作信息',
+	
+	'label_operable_act' => '当前可执行操作：',
+	'change_express_user'	=> '变更配送人员',
+	'label_express_user'	=> '配送人员：'
 		
 	
 	

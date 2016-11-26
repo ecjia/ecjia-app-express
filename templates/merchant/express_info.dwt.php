@@ -30,7 +30,7 @@
 				<div class="panel-heading">
                     <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
                         <h4 class="panel-title">
-                            <strong>{lang key='orders::order.base_info'}</strong>
+                            <strong>{lang key='express::express.base_info'}</strong>
                         </h4>
                     </a>
                 </div>
@@ -38,70 +38,41 @@
 					<table class="table table-oddtd m_b0">
 						<tbody class="first-td-no-leftbd">
 							<tr>
-								<td><div align="right"><strong>{lang key='orders::order.delivery_sn_number'}</strong></div></td>
-								<td>{$delivery_order.delivery_sn}</td>
-								<td><div align="right"><strong>{lang key='orders::order.label_shipping_time'}</strong></div></td>
-								<td>{$delivery_order.formated_update_time}</td>
+								<td><div align="right"><strong>{lang key='express::express.label_express_sn'}</strong></div></td>
+								<td>{$express_info.delivery_sn}</td>
+								<td><div align="right"><strong>{lang key='express::express.label_add_time'}</strong></div></td>
+								<td>{$express_info.formatted_add_time}</td>
 							</tr>
 							<tr>
-								<td><div align="right"><strong>{lang key='orders::order.label_order_sn'}</strong></div></td>
+								<td><div align="right"><strong>{lang key='express::express.label_order_sn'}</strong></div></td>
 								<td>
-									<a href='{url path="orders/merchant/info" args="order_sn={$delivery_order.order_sn}"}'>{$delivery_order.order_sn}</a>
-									{if $delivery_order.extension_code eq "group_buy"}
-<!-- 										<a href="group_buy.php?act=edit&id={$delivery_order.extension_id}">{$lang.group_buy}</a> -->
-									{elseif $delivery_order.extension_code eq "exchange_goods"}
-<!-- 										<a href="exchange_goods.php?act=edit&id={$delivery_order.extension_id}">{$lang.exchange_goods}</a> -->
-									{/if}
+									<a href='{url path="orders/merchant/info" args="order_sn={$express_info.order_sn}"}'>{$express_info.order_sn}</a>
 								</td>
-								<td><div align="right"><strong>{lang key='orders::order.label_time'}</strong></div></td>
-								<td>{$delivery_order.formated_add_time}</td>
+								<td><div align="right"><strong>{lang key='express::express.label_delivery_sn'}</strong></div></td>
+								<td>{$express_info.delivery_sn}</td>
 							</tr>
 							<tr>
-								<td><div align="right"><strong>{lang key='orders::order.print_buy_name'}</strong></div></td>
-								<td>{$delivery_order.user_name|default:$lang.anonymous}</td>
-								<td><div align="right"><strong>{lang key='orders::order.label_how_oos'}</strong></div></td>
-								<td>{$delivery_order.how_oos}</td>
+								<td><div align="right"><strong>{lang key='express::express.label_from'}</strong></div></td>
+								<td>{$express_info.label_from}</td>
+								<td><div align="right"><strong>{lang key='express::express.label_express_status'}</strong></div></td>
+								<td>{$express_info.label_status}</td>
 							</tr>
 							<tr>
-								<td><div align="right"><strong>{lang key='orders::order.label_shipping'}</strong></div></td>
-								<td>{if $exist_real_goods}{if $delivery_order.shipping_id gt 0}{$delivery_order.shipping_name}{else}{$lang.require_field}{/if} {if $delivery_order.insure_fee gt 0}{$lang.label_insure_fee}{$delivery_order.formated_insure_fee}{/if}{/if}</td>
-								<td><div align="right"><strong>{lang key='orders::order.label_shipping_fee'}</strong></div></td>
-								<td>{$delivery_order.shipping_fee}</td>
+								<td><div align="right"><strong>{lang key='express::express.label_express_staff_name'}</strong></div></td>
+								<td>{$express_info.staff_user}</td>
+								<td><div align="right"><strong>{lang key='express::express.label_receive_time'}</strong></div></td>
+								<td>{$express_info.formatted_receive_time}</td>
 							</tr>
 							<tr>
-								<td><div align="right"><strong>{lang key='orders::order.label_insure_yn'}</strong></div></td>
-								<td>{if $insure_yn}{$lang.yes}{else}{$lang.no}{/if}</td>
-								<td><div align="right"><strong>{lang key='orders::order.label_insure_fee'}</strong></div></td>
-								<td>{$delivery_order.insure_fee|default:0.00}</td>
+								<td><div align="right"><strong>{lang key='express::express.label_express_time'}</strong></div></td>
+								<td>{$express_info.formatted_express_time}</td>
+								<td><div align="right"><strong>{lang key='express::express.label_signed_time'}</strong></div></td>
+								<td>{$express_info.formatted_signed_time}</td>
 							</tr>
-							<!-- {if $shipping_code neq 'ship_o2o_express'} -->
 							<tr>
-								<td><div align="right"><strong>{lang key='orders::order.label_invoice_no'}</strong></div></td>
-								<td colspan="3">
-									{if $delivery_order.status neq 1}
-									<input name="invoice_no" type="text" class="w250 form-control" value="{$delivery_order.invoice_no}" {if $delivery_order.status eq 0} readonly="readonly" {/if} />
-									{else}
-									{$delivery_order.invoice_no}
-									{/if}
-								</td>
+								<td><div align="right"><strong>{lang key='express::express.label_update_time'}</strong></div></td>
+								<td colspan="3">{$express_info.formatted_update_time}</td>
 							</tr>
-							<!-- {else} -->
-							<tr>
-								<td><div align="right"><strong>配送人员：</strong></div></td>
-								<td colspan="3" class="delivery-info">
-									<!-- {if $delivery_order.status neq 1} -->
-									<select class="w250 form-control" name='staff_id'>
-										<option value='0'>请选择</option>
-										<!-- {foreach from=$staff_user item=list} -->
-											<option value="{$list.user_id}" {if $list.staff_id eq $express_order.staff_id}selected="selected"{/if}>{$list.name}</option>
-										<!-- {/foreach} -->
-									</select>
-									<!-- {else} -->
-									{$delivery_order.invoice_no}
-									<!-- {/if} -->
-								</td>
-							</tr>
-							<!-- {/if} -->
 						</tbody>
 					</table>
 				</div>
@@ -109,39 +80,33 @@
 			<div class="accordion-group panel panel-default">
 				<div class="panel-heading">
 					<a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
-                		<h4 class="panel-title"><strong>{lang key='orders::order.consignee_info'}</strong></h4>
+                		<h4 class="panel-title"><strong>{lang key='express::express.consignee_info'}</strong></h4>
                   	</a>
 				</div>
 				<div class="accordion-body in collapse" id="collapseTwo">
 					<table class="table table-oddtd m_b0">
 						<tbody class="first-td-no-leftbd">
 							<tr>
-								<td><div align="right"><strong>{lang key='orders::order.label_consignee'}</strong></div></td>
-								<td>{$delivery_order.consignee|escape}</td>
-								<td><div align="right"><strong>{lang key='orders::order.label_email'}</strong></div></td>
-								<td>{$delivery_order.email}</td>
+								<td><div align="right"><strong>{lang key='express::express.label_consignee'}</strong></div></td>
+								<td>{$express_info.consignee|escape}</td>
+								<td><div align="right"><strong>{lang key='express::express.label_email'}</strong></div></td>
+								<td>{$express_info.email}</td>
 							</tr>
 							<tr>
-								<td><div align="right"><strong>{lang key='orders::order.label_shop_address'}</strong></div></td>
-								<td>[{$delivery_order.region}] {$delivery_order.address|escape}</td>
-								<td><div align="right"><strong>{lang key='orders::order.label_zipcode'}</strong></div></td>
-								<td>{$delivery_order.zipcode|escape}</td>
+								<td><div align="right"><strong>{lang key='express::express.label_address'}</strong></div></td>
+								<td>[{$express_info.region}] {$express_info.address|escape}</td>
+								<td><div align="right"><strong>{lang key='express::express.label_mobile'}</strong></div></td>
+								<td>{$express_info.mobile}</td>
 							</tr>
 							<tr>
-								<td><div align="right"><strong>{lang key='orders::order.label_tel'}</strong></div></td>
-								<td>{$delivery_order.tel}</td>
-								<td><div align="right"><strong>{lang key='orders::order.label_mobile'}</strong></div></td>
-								<td>{$delivery_order.mobile|escape}</td>
+								<td><div align="right"><strong>{lang key='express::express.label_distance'}</strong></div></td>
+								<td>{$express_info.distance}</td>
+								<td><div align="right"><strong>{lang key='express::express.label_best_time'}</strong></div></td>
+								<td>{$express_info.label_best_time}</td>
 							</tr>
 							<tr>
-								<td><div align="right"><strong>{lang key='orders::order.label_sign_building'}</strong></div></td>
-								<td>{$delivery_order.sign_building|escape}</td>
-								<td><div align="right"><strong>{lang key='orders::order.label_best_time'}</strong></div></td>
-								<td>{$delivery_order.best_time|escape}</td>
-							</tr>
-							<tr>
-								<td><div align="right"><strong>{lang key='orders::order.label_postscript'}</strong></div></td>
-								<td colspan="3">{$delivery_order.postscript}</td>
+								<td><div align="right"><strong>{lang key='express::express.label_remark'}</strong></div></td>
+								<td colspan="3">{$express_info.remark}</td>
 							</tr>
 						</tbody>
 					</table>
@@ -151,7 +116,7 @@
 				<div class="panel-heading">
                     <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree">
                         <h4 class="panel-title">
-                            <strong>{lang key='orders::order.goods_info'}</strong>
+                            <strong>{lang key='express::express.goods_info'}</strong>
                         </h4>
                     </a>
                 </div>
@@ -159,11 +124,11 @@
 					<table class="table table-striped m_b0 order-table-list">
 						<tbody>
 							<tr class="table-list">
-								<th>{lang key='orders::order.goods_name_brand'}</th>
-								<th>{lang key='orders::order.goods_sn'}</th>
-								<th>{lang key='orders::order.product_sn'}</th>
-								<th>{lang key='orders::order.goods_attr'}</th>
-								<th>{lang key='orders::order.label_send_number'}</th>
+								<th>{lang key='express::express.goods_name_brand'}</th>
+								<th>{lang key='express::express.goods_sn'}</th>
+								<th>{lang key='express::express.product_sn'}</th>
+								<th>{lang key='express::express.goods_attr'}</th>
+								<th>{lang key='express::express.label_send_number'}</th>
 							</tr>
 							<!-- {foreach from=$goods_list item=goods} -->
 							<tr class="table-list">
@@ -180,48 +145,12 @@
 					</table>
 				</div>
 			</div>
-			<div class="accordion-group panel panel-default">
-				<div class="panel-heading">
-                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseFour">
-                        <h4 class="panel-title">
-                            <strong>{lang key='orders::order.op_ship'}{lang key='orders::order.action_info'}</strong>
-                        </h4>
-                    </a>
-                </div>
-				<div class="accordion-body in collapse" id="collapseFour">
-					<table class="table table-striped m_b0 order-table-list">
-						<tbody>
-							<tr class="table-list">
-								<th>{lang key='orders::order.action_user_two'}</th>
-								<th>{lang key='orders::order.action_time'}</th>
-								<th>{lang key='orders::order.order_status'}</th>
-								<th>{lang key='orders::order.pay_status'}</th>
-								<th>{lang key='orders::order.shipping_status'}</th>
-								<th>{lang key='orders::order.action_note'}</th>
-							</tr>
-							<!-- {foreach from=$action_list item=action} -->
-							<tr class="table-list">
-								<td><div>{$action.action_user}</div></td>
-								<td><div>{$action.action_time}</div></td>
-								<td><div>{$action.order_status}</div></td>
-								<td><div>{$action.pay_status}</div></td>
-								<td><div>{$action.shipping_status}</div></td>
-								<td>{$action.action_note|nl2br}</td>
-							</tr>
-							<!-- {foreachelse} -->
-							<tr>
-								<td class="no-records" colspan="6">{t}{lang key='orders::order.no_order_operation_record'}{/t}</td>
-							</tr>
-							<!-- {/foreach} -->
-						</tbody>
-					</table>
-				</div>
-			</div>
+			<!-- {if $express_info.status lt 2} -->
 			<div class="accordion-group panel panel-default">
 				<div class="panel-heading">
                     <a data-toggle="collapse" data-parent="#accordion" href="#collapseFive">
                         <h4 class="panel-title">
-                            <strong>{lang key='orders::order.op_ship'}{lang key='orders::order.action_info'}</strong>
+                            <strong>{lang key='express::express.express_op_info'}</strong>
                         </h4>
                     </a>
                 </div>
@@ -229,33 +158,30 @@
 					<table class="table table-oddtd m_b0">
 						<tbody class="first-td-no-leftbd">
 							<tr>
-								<td><div align="right"><strong>{lang key='orders::order.action_user'}</strong></div></td>
-								<td>{$delivery_order.action_user}</td>
+								<td><div align="right"><strong>{lang key='express::express.label_express_user'}</strong></div></td>
+								<td>
+									<select class="w250 form-control" name='staff_id'>
+										<option value='0'>请选择</option>
+										<!-- {foreach from=$staff_user item=list} -->
+											<option value="{$list.user_id}" {if $list.staff_id eq $express_order.staff_id}selected="selected"{/if}>{$list.name}</option>
+										<!-- {/foreach} -->
+									</select>
+								</td>
 							</tr>
-							<!-- {if $delivery_order.status neq 1} -->
 							<tr>
-								<td><div align="right"><span class="input-must">* </span><strong>{lang key='orders::order.label_action_note'}</strong></div></td>
-								<td><textarea name="action_note" cols="80" rows="5" class="span10 form-control"></textarea></td>
-							</tr>
-							<tr>
-								<td><div align="right"><strong>{lang key='orders::order.label_operable_act'}</strong></div></td>
+								<td><div align="right"><strong>{lang key='express::express.label_operable_act'}</strong></div></td>
 								<td align="left">
-									{if $delivery_order.status eq 2}
-									<button class="btn btn-info" type="submit">{$lang.op_ship}</button>
-									{else}
-									<button class="btn btn-info" type="submit">{$lang.op_cancel_ship}</button>
-									{/if}
-									
-									<input name="order_id" type="hidden" value="{$delivery_order.order_id}">
-									<input name="delivery_id" type="hidden" value="{$delivery_order.delivery_id}">
+									<button class="btn btn-info" type="submit">{lang key='express::express.change_express_user'}</button>
+									<input name="express_id" type="hidden" value="{$express_info.express_id}">
 									<input name="act" type="hidden" value="{$action_act}">
 								</td>
 							</tr>
-							<!-- {/if} -->
+							
 						</tbody>
 					</table>
 				</div>
 			</div>
+			<!-- {/if} -->
 		</form>
 	</div>
 </div>
