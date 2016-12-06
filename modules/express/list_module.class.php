@@ -8,9 +8,9 @@ defined('IN_ECJIA') or exit('No permission resources.');
 class list_module extends api_admin implements api_interface {
     public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {	
     	
-//     	if ($_SESSION['admin_id'] <= 0 && $_SESSION['staff_id'] <= 0) {
-//             return new ecjia_error(100, 'Invalid session');
-//         }
+    	if ($_SESSION['admin_id'] <= 0 && $_SESSION['staff_id'] <= 0) {
+            return new ecjia_error(100, 'Invalid session');
+        }
 		
 		$type = $this->requestData('express_type');
 		$size = $this->requestData('pagination.count', 15);
@@ -25,7 +25,7 @@ class list_module extends api_admin implements api_interface {
 			case 'wait_shipping' :
 				$where['status'] = 2;
 				break;
-			case 'finish' :
+			case 'finished' :
 				$where['status'] = 5;
 				break;
 			default : 
@@ -38,7 +38,7 @@ class list_module extends api_admin implements api_interface {
 		//实例化分页
 		$page_row = new ecjia_page($count, $size, 6, '', $page);
 		
-		$express_order_result = $express_order_db->join(array('delivery_order', 'delivery_goods', 'order_info'))->where($where)->select();
+		$express_order_result = $express_order_db->join(array('delivery_order', 'order_info'))->where($where)->select();
 		
 		$express_order_list = array();
 		if (!empty($express_order_result)) {
@@ -46,7 +46,7 @@ class list_module extends api_admin implements api_interface {
 				$express_order_list[] = array(
 						'express_id'	=> $val['express_id'],
 						'express_sn'	=> $val['express_sn'],
-						'express_type'	=> $val['type'] == 1 ? '系统派单' : '抢单',
+						'express_type'	=> $val['from'] == 'assign' ? '系统派单' : '抢单',
 						'order_sn'		=> $val['order_sn'],
 						'payment_name'	=> $val['pay_name'],
 						'express_from'	=> '【'.$val['merchants_name'].'】'. $val['merchant_address'],

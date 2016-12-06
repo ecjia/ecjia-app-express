@@ -8,15 +8,15 @@ defined('IN_ECJIA') or exit('No permission resources.');
 class grab_list_module extends api_admin implements api_interface {
     public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {	
     	
-//     	if ($_SESSION['admin_id'] <= 0 && $_SESSION['staff_id'] <= 0) {
-//             return new ecjia_error(100, 'Invalid session');
-//         }
+    	if ($_SESSION['admin_id'] <= 0 && $_SESSION['staff_id'] <= 0) {
+            return new ecjia_error(100, 'Invalid session');
+        }
 		
 		$location = $this->requestData('location', array());
 		$size = $this->requestData('pagination.count', 15);
 		$page = $this->requestData('pagination.page', 1);
 		
-		$where = array('store_id' => $_SESSION['store_id'], 'staff_id' => 0, 'type' => 2);
+		$where = array('store_id' => $_SESSION['store_id'], 'staff_id' => 0, 'from' => '');
 		
 		$express_order_db = RC_Model::model('express/express_order_viewmodel');
 		
@@ -32,7 +32,7 @@ class grab_list_module extends api_admin implements api_interface {
 				$express_order_list[] = array(
 						'express_id'	=> $val['express_id'],
 						'express_sn'	=> $val['express_sn'],
-						'express_type'	=> $val['type'] == 1 ? '系统派单' : '抢单',
+						'express_type'	=> $val['from'] == 'assign' ? '系统派单' : '抢单',
 						'order_sn'		=> $val['order_sn'],
 						'payment_name'	=> $val['pay_name'],
 						'express_from'	=> '【'.$val['merchants_name'].'】'. $val['merchant_address'],

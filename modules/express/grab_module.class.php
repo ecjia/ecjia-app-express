@@ -8,14 +8,14 @@ defined('IN_ECJIA') or exit('No permission resources.');
 class grab_module extends api_admin implements api_interface {
     public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {	
     	
-//     	if ($_SESSION['admin_id'] <= 0 && $_SESSION['staff_id'] <= 0) {
-//             return new ecjia_error(100, 'Invalid session');
-//         }
+    	if ($_SESSION['admin_id'] <= 0 && $_SESSION['staff_id'] <= 0) {
+            return new ecjia_error(100, 'Invalid session');
+        }
 		
 		$location	= $this->requestData('location', array());
 		$express_id = $this->requestData('express_id');
 		
-		$where = array('store_id' => $_SESSION['store_id'], 'staff_id' => 0, 'type' => 2);
+		$where = array('store_id' => $_SESSION['store_id'], 'staff_id' => 0, 'from' => '');
 		
 		$express_order_db = RC_Model::model('express/express_order_model');
 		
