@@ -49,12 +49,12 @@ class list_module extends api_admin implements api_interface {
 						'express_type'	=> $val['from'] == 'assign' ? '系统派单' : '抢单',
 						'order_sn'		=> $val['order_sn'],
 						'payment_name'	=> $val['pay_name'],
-						'express_from'	=> '【'.$val['merchants_name'].'】'. $val['merchant_address'],
+						'express_from_address'	=> '【'.$val['merchants_name'].'】'. $val['merchant_address'],
 						'express_from_location'	=> array(
 														'longitude' => $val['merchant_longitude'],
 														'latitude'	=> $val['merchant_latitude'],
 						),
-						'express_to'	=> $val['address'],
+						'express_to_address'	=> $val['address'],
 						'express_to_location'	=> array(
 														'longitude' => $val['longitude'],
 														'latitude'	=> $val['latitude'],
