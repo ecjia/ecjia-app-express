@@ -1,30 +1,33 @@
 <?php
 defined('IN_ECJIA') or exit('No permission resources.');
 /**
- * 配送信息详情
+ * 配送抢单列表
  * @author will.chen
  *
  */
-class detail_module extends api_admin implements api_interface {
+class pickup_module extends api_admin implements api_interface {
     public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {	
     	
     	if ($_SESSION['admin_id'] <= 0 && $_SESSION['staff_id'] <= 0) {
             return new ecjia_error(100, 'Invalid session');
         }
-    	$express_id = $this->requestData('express_id');
-    	
-    	if (empty($express_id)) {
+		
+        $delivery_sn = $this->requestData('delivery_sn');
+        
+		if (empty($delivery_sn)) {
     		return new ecjia_error( 'invalid_parameter', RC_Lang::get ('system::system.invalid_parameter' ));
     	}
     	$express_order = array();
     	$express_order_db = RC_Model::model('express/express_order_viewmodel');
-    	$where = array('staff_id' => $_SESSION['staff_id'], 'express_id' => $express_id);
+    	$where = array('staff_id' => $_SESSION['staff_id'], 'eo.delivery_sn' => $delivery_sn);
     	$express_order_info = $express_order_db->join(array('delivery_order', 'order_info'))->where($where)->find();
 		
-    	/* 判断配送单是否存在*/
-		if (empty($express_order_info)) {
-			return new ecjia_error('express_no_exists_error', '此配送单不存在！');
-		}
+    	if (empty($express_order_info)) {
+    		return new ecjia_error('express_no_exists_error', '此配送单不存在！');
+    	} elseif ($express_order_info['status'] > 1) {
+    		return new ecjia_error('express_already_pickup','此单已被取走！');
+    	}
+    	
     	$express_order = array(
     			'express_id'	=> $express_order_info['express_id'],
     			'express_sn'	=> $express_order_info['express_sn'],
@@ -52,10 +55,10 @@ class detail_module extends api_admin implements api_interface {
     	);
     	
     	$goods_items = RC_DB::table('delivery_goods as dg')->leftjoin('goods as g', RC_DB::raw('dg.goods_id'), '=', RC_DB::raw('g.goods_id'))
-    									->selectRaw('dg.*, g.goods_thumb, g.goods_img, g.original_img, g.shop_price')
-										->where('delivery_id', $express_order_info['delivery_id'])
-										->get();
-    	
+													->selectRaw('dg.*, g.goods_thumb, g.goods_img, g.original_img, g.shop_price')
+													->where('delivery_id', $express_order_info['delivery_id'])
+													->get();
+    	 
     	if (!empty($goods_items)) {
     		foreach ($goods_items as $val) {
     			$express_order['goods_items'][] = array(
@@ -69,15 +72,10 @@ class detail_module extends api_admin implements api_interface {
     							'url'	=> !empty($val['original_img']) ? RC_Upload::upload_url($val['original_img']) : '',
     					),
     			);
-    		}	
+    		}
     	}
     	
-    	
-    	
 		return $express_order;
-
 	 }	
 }
-
-
 // end
