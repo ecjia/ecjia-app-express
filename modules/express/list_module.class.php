@@ -20,25 +20,26 @@ class list_module extends api_admin implements api_interface {
 		
 		switch ($type) {
 			case 'wait_pickup' :
-				$where['status'] = 1;
+				$where['eo.status'] = 1;
 				break;
 			case 'wait_shipping' :
-				$where['status'] = 2;
+				$where['eo.status'] = 2;
 				break;
 			case 'finished' :
-				$where['status'] = 5;
+				$where['eo.status'] = 5;
 				break;
 			default : 
-// 				return new ecjia_error('invalid_parameter', RC_Lang::get('orders::order.invalid_parameter'));
+				return new ecjia_error('invalid_parameter', RC_Lang::get('orders::order.invalid_parameter'));
 		}
 		
 		$express_order_db = RC_Model::model('express/express_order_viewmodel');
 		
-		$count = $express_order_db->join(null)->count();
+		$count = $express_order_db->join(null)->where($where)->count();
 		//实例化分页
 		$page_row = new ecjia_page($count, $size, 6, '', $page);
 		
-		$express_order_result = $express_order_db->join(array('delivery_order', 'order_info'))->where($where)->select();
+		$field = 'eo.*, oi.add_time as order_time, oi.pay_time, oi.order_amount, oi.pay_name, sf.merchants_name, sf.address as merchant_address, sf.longitude as merchant_longitude, sf.latitude as merchant_latitude';
+		$express_order_result = $express_order_db->field($field)->join(array('delivery_order', 'order_info', 'store_franchisee'))->where($where)->select();
 		
 		$express_order_list = array();
 		if (!empty($express_order_result)) {
