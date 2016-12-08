@@ -15,13 +15,14 @@ class grab_module extends api_admin implements api_interface {
 		$location	= $this->requestData('location', array());
 		$express_id = $this->requestData('express_id');
 		
-		$where = array('store_id' => $_SESSION['store_id'], 'staff_id' => 0, 'from' => '');
+		$where = array('store_id' => $_SESSION['store_id'], 'staff_id' => 0, 'express_id' => $express_id);
 		
 		$express_order_db = RC_Model::model('express/express_order_model');
 		
-		$result = $express_order_db->where($where)->update(array('staff_id' => $_SESSION['staff_id'], 'from' => 'grab', 'status' => 1));
+		$express_order_info = $express_order_db->where($where)->find();
 		
-		if ($result) {
+		if (!empty($express_order_info) && empty($express_order_info['from'])) {
+			$result = $express_order_db->where($where)->update(array('staff_id' => $_SESSION['staff_id'], 'from' => 'grab', 'status' => 1));
 			return array();
 		} else {
 			return new ecjia_error('grab_error', '此单已被抢！');
