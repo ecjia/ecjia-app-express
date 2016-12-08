@@ -19,7 +19,7 @@ class grab_module extends api_admin implements api_interface {
 		
 		$express_order_db = RC_Model::model('express/express_order_model');
 		
-		$result = $express_order_db->where($where)->update(array('staff_id' => $_SESSION['staff_id']));
+		$result = $express_order_db->where($where)->update(array('staff_id' => $_SESSION['staff_id'], 'from' => 'grab', 'status' => 1));
 		
 		if ($result) {
 			return array();
