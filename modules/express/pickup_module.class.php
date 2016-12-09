@@ -32,7 +32,8 @@ class pickup_module extends api_admin implements api_interface {
     	$express_order = array(
     			'express_id'	=> $express_order_info['express_id'],
     			'express_sn'	=> $express_order_info['express_sn'],
-    			'express_type'	=> $express_order_info['from'] == 'assign' ? '系统派单' : '抢单',
+    			'express_type'	=> $express_order_info['from'],
+    			'label_express_type'	=> $express_order_info['from'] == 'assign' ? '系统派单' : '抢单',
     			'order_sn'		=> $express_order_info['order_sn'],
     			'payment_name'	=> $express_order_info['pay_name'],
     			'express_from_address'	=> '【'.$express_order_info['merchants_name'].'】'. $express_order_info['merchant_address'],

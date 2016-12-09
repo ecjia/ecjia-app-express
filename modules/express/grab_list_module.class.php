@@ -33,7 +33,8 @@ class grab_list_module extends api_admin implements api_interface {
 				$express_order_list[] = array(
 						'express_id'	=> $val['express_id'],
 						'express_sn'	=> $val['express_sn'],
-						'express_type'	=> $val['from'] == 'assign' ? '系统派单' : '抢单',
+						'express_type'	=> $val['from'],
+						'label_express_type'	=> $val['from'] == 'assign' ? '系统派单' : '抢单',
 						'order_sn'		=> $val['order_sn'],
 						'payment_name'	=> $val['pay_name'],
 						'express_from_address'	=> '【'.$val['merchants_name'].'】'. $val['merchant_address'],

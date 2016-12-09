@@ -21,8 +21,10 @@ class info_module extends api_admin implements api_interface {
         
         $express_user_info = array(
         		'user_id'		=> $_SESSION['staff_id'],
+        		'avatar_img'	=> !empty($staff_user['avatar']) ? RC_Upload::upload_url($staff_user['avatar']) : '',
         		'staff_name'	=> $staff_user['name'],
         		'mobile'		=> $staff_user['mobile'],
+        		'email'			=> $staff_user['email'],
         		'delivery_count'		=> !empty($express_count_stats) ? $express_count_stats['delivery_count'] : 0,
         		'sum_delivery_money'	=> 0,
         		'sum_delivery_distance'	=> !empty($express_count_stats) ? $express_count_stats['delivery_distance'] : 0,
@@ -30,6 +32,8 @@ class info_module extends api_admin implements api_interface {
         									'assign_count'	=> $assign_count,
         									'grab_count'	=> $grab_count,
         		),
+        		'role_name'		=> '配送员',
+        		'last_login' 	=> RC_Time::local_date(ecjia::config('time_format'), $staff_user['last_login']),
         );
 
 		return $express_user_info;
