@@ -16,11 +16,11 @@ class basicinfo_module extends api_admin implements api_interface {
 		
         $where = array('store_id' => $_SESSION['store_id'], 'staff_id' => 0, 'status' => 0);
         
-        $sum_express_grab = $express_order_db->where($where)->sum();
+        $sum_express_grab = $express_order_db->where($where)->count();
         
-        $sum_express_wait_pick = $express_order_db->where(array('store_id' => $_SESSION['store_id'], 'staff_id' => $_SESSION['staff_id'], 'status' => 1))->sum();
+        $sum_express_wait_pick = $express_order_db->where(array('store_id' => $_SESSION['store_id'], 'staff_id' => $_SESSION['staff_id'], 'status' => 1))->count();
         
-        $sum_express_shipping = $express_order_db->where(array('store_id' => $_SESSION['store_id'], 'staff_id' => $_SESSION['staff_id'], 'status' => 2))->sum();
+        $sum_express_shipping = $express_order_db->where(array('store_id' => $_SESSION['store_id'], 'staff_id' => $_SESSION['staff_id'], 'status' => 2))->count();
 		
 		
 		return array(
