@@ -78,7 +78,7 @@ class pickup_module extends api_admin implements api_interface {
     			);
     		}
     	}
-    	
+    	$where = array('staff_id' => $_SESSION['staff_id'], 'delivery_sn' => $delivery_sn);
     	RC_Model::model('express/express_order_model')->where($where)->update(array('status' => 2));
     	
 		return $express_order;
