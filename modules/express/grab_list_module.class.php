@@ -16,7 +16,7 @@ class grab_list_module extends api_admin implements api_interface {
 		$size = $this->requestData('pagination.count', 15);
 		$page = $this->requestData('pagination.page', 1);
 		
-		$where = array('eo.store_id' => $_SESSION['store_id'], 'staff_id' => 0, 'eo.from' => '', 'eo.status' => 0);
+		$where = array('eo.store_id' => $_SESSION['store_id'], 'staff_id' => 0, 'eo.status' => 0);
 		
 		$express_order_db = RC_Model::model('express/express_order_viewmodel');
 		
