@@ -18,6 +18,8 @@ class list_module extends api_admin implements api_interface {
 		
 		$where = array('staff_id' => $_SESSION['staff_id']);
 		
+// 		
+		
 		switch ($type) {
 			case 'wait_pickup' :
 				$where['eo.status'] = 1;
@@ -61,6 +63,7 @@ class list_module extends api_admin implements api_interface {
 														'longitude' => $val['longitude'],
 														'latitude'	=> $val['latitude'],
 						),
+						'distance'		=> $val['distance'],
 						'consignee'		=> $val['consignee'],
 						'mobile'		=> $val['mobile'],
 						'order_time'	=> RC_Time::local_date(ecjia::config('time_format'), $val['add_time']),

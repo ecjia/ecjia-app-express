@@ -12,6 +12,7 @@ class pickup_module extends api_admin implements api_interface {
             return new ecjia_error(100, 'Invalid session');
         }
 		
+        $location	= $this->requestData('location', array());
         $delivery_sn = $this->requestData('delivery_sn');
         
 		if (empty($delivery_sn)) {
@@ -46,6 +47,7 @@ class pickup_module extends api_admin implements api_interface {
     					'longitude' => $express_order_info['longitude'],
     					'latitude'	=> $express_order_info['latitude'],
     			),
+    			'distance'		=> $val['distance'],
     			'consignee'		=> $express_order_info['consignee'],
     			'mobile'		=> $express_order_info['mobile'],
     			'order_time'	=> RC_Time::local_date(ecjia::config('time_format'), $express_order_info['add_time']),

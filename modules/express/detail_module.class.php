@@ -12,7 +12,7 @@ class detail_module extends api_admin implements api_interface {
             return new ecjia_error(100, 'Invalid session');
         }
     	$express_id = $this->requestData('express_id');
-    	
+    	$location	= $this->requestData('location', array());
     	if (empty($express_id)) {
     		return new ecjia_error( 'invalid_parameter', RC_Lang::get ('system::system.invalid_parameter' ));
     	}
@@ -44,6 +44,7 @@ class detail_module extends api_admin implements api_interface {
     					'longitude' => $express_order_info['longitude'],
     					'latitude'	=> $express_order_info['latitude'],
     			),
+    			'distance'		=> $val['distance'],
     			'consignee'		=> $express_order_info['consignee'],
     			'mobile'		=> $express_order_info['mobile'],
     			'order_time'	=> RC_Time::local_date(ecjia::config('time_format'), $express_order_info['add_time']),

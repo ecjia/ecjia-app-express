@@ -47,6 +47,7 @@ class grab_list_module extends api_admin implements api_interface {
 														'longitude' => $val['longitude'],
 														'latitude'	=> $val['latitude'],
 						),
+						'distance'		=> $val['distance'],
 						'consignee'		=> $val['consignee'],
 						'mobile'		=> $val['mobile'],
 						'order_time'	=> RC_Time::local_date(ecjia::config('time_format'), $val['order_time']),
