@@ -1,7 +1,8 @@
 <?php
+use Ecjia\System\Notifications\ExpressPickup;
 defined('IN_ECJIA') or exit('No permission resources.');
 /**
- * 配送抢单列表
+ * 配送取货
  * @author will.chen
  *
  */
@@ -30,6 +31,9 @@ class pickup_module extends api_admin implements api_interface {
     		return new ecjia_error('express_already_pickup','此单已被取走！');
     	}
     	
+    	$where = array('staff_id' => $_SESSION['staff_id'], 'delivery_sn' => $delivery_sn);
+    	RC_Model::model('express/express_order_model')->where($where)->update(array('status' => 2));
+    	
     	$express_order = array(
     			'express_id'	=> $express_order_info['express_id'],
     			'express_sn'	=> $express_order_info['express_sn'],
@@ -47,7 +51,7 @@ class pickup_module extends api_admin implements api_interface {
     					'longitude' => $express_order_info['longitude'],
     					'latitude'	=> $express_order_info['latitude'],
     			),
-    			'distance'		=> $val['distance'],
+    			'distance'		=> $express_order_info['distance'],
     			'consignee'		=> $express_order_info['consignee'],
     			'mobile'		=> $express_order_info['mobile'],
     			'order_time'	=> RC_Time::local_date(ecjia::config('time_format'), $express_order_info['add_time']),
@@ -55,14 +59,24 @@ class pickup_module extends api_admin implements api_interface {
     			'best_time'		=> empty($express_order_info['best_time']) ? '' : RC_Time::local_date(ecjia::config('time_format'), $express_order_info['best_time']),
     			'shipping_fee'	=> $express_order_info['shipping_fee'],
     			'order_amount'	=> $express_order_info['order_amount'],
-    			'goods_items'	=> array(),
+    			
     	);
+    	
+    	$express_data = array(
+    						'title' => '取货成功',
+    						'body'	=> '您已成功取得配送单号为：'.$express_order_info['express_sn'].'的配送货物',
+    						'data'	=> $express_order
+    	);
+    	
     	
     	$goods_items = RC_DB::table('delivery_goods as dg')->leftjoin('goods as g', RC_DB::raw('dg.goods_id'), '=', RC_DB::raw('g.goods_id'))
 													->selectRaw('dg.*, g.goods_thumb, g.goods_img, g.original_img, g.shop_price')
 													->where('delivery_id', $express_order_info['delivery_id'])
 													->get();
-    	 
+    	
+    
+    	
+    	$express_order['goods_items'] = array();
     	if (!empty($goods_items)) {
     		foreach ($goods_items as $val) {
     			$express_order['goods_items'][] = array(
@@ -78,8 +92,13 @@ class pickup_module extends api_admin implements api_interface {
     			);
     		}
     	}
-    	$where = array('staff_id' => $_SESSION['staff_id'], 'delivery_sn' => $delivery_sn);
-    	RC_Model::model('express/express_order_model')->where($where)->update(array('status' => 2));
+    	
+    	/* 新增通知*/
+    	$orm_staff_user_db = RC_Model::model('express/orm_staff_user_model');
+    	$user = $orm_staff_user_db->find($_SESSION['staff_id']);
+    	
+    	$express_pickup = new ExpressPickup($express_data);
+    	RC_Notification::send($user, $express_pickup);
     	
 		return $express_order;
 	 }	

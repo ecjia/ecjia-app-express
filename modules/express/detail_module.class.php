@@ -12,13 +12,19 @@ class detail_module extends api_admin implements api_interface {
             return new ecjia_error(100, 'Invalid session');
         }
     	$express_id = $this->requestData('express_id');
+    	$express_sn = $this->requestData('express_sn');
     	$location	= $this->requestData('location', array());
-    	if (empty($express_id)) {
+    	if (empty($express_id) && empty($express_sn)) {
     		return new ecjia_error( 'invalid_parameter', RC_Lang::get ('system::system.invalid_parameter' ));
     	}
     	$express_order = array();
     	$express_order_db = RC_Model::model('express/express_order_viewmodel');
-    	$where = array('staff_id' => $_SESSION['staff_id'], 'express_id' => $express_id);
+    	if (!empty($express_id)) {
+    		$where = array('staff_id' => $_SESSION['staff_id'], 'express_id' => $express_id);
+    	} else {
+    		$where = array('staff_id' => $_SESSION['staff_id'], 'express_sn' => $express_sn);
+    	}
+    	
     	
     	$field = 'eo.*, oi.add_time as order_time, oi.pay_time, oi.order_amount, oi.pay_name, sf.merchants_name, sf.address as merchant_address, sf.longitude as merchant_longitude, sf.latitude as merchant_latitude';
     	$express_order_info = $express_order_db->field($field)->join(array('delivery_order', 'order_info', 'store_franchisee'))->where($where)->find();
@@ -44,7 +50,7 @@ class detail_module extends api_admin implements api_interface {
     					'longitude' => $express_order_info['longitude'],
     					'latitude'	=> $express_order_info['latitude'],
     			),
-    			'distance'		=> $val['distance'],
+    			'distance'		=> $express_order_info['distance'],
     			'consignee'		=> $express_order_info['consignee'],
     			'mobile'		=> $express_order_info['mobile'],
     			'order_time'	=> RC_Time::local_date(ecjia::config('time_format'), $express_order_info['add_time']),
