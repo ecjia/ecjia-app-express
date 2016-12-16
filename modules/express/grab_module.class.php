@@ -25,7 +25,7 @@ class grab_module extends api_admin implements api_interface {
 		$express_order_info = $express_order_db->where($where)->find();
 		
 		if (!empty($express_order_info)) {
-			$result = $express_order_db->where($where)->update(array('staff_id' => $_SESSION['staff_id'], 'from' => 'grab', 'status' => 1));
+			$result = $express_order_db->where($where)->update(array('staff_id' => $_SESSION['staff_id'], 'from' => 'grab', 'status' => 1, 'receive_time' => RC_Time::gmtime()));
 			
 			$orm_staff_user_db = RC_Model::model('express/orm_staff_user_model');
 			$user = $orm_staff_user_db->find($_SESSION['staff_id']);
