@@ -13,12 +13,11 @@ class list_module extends api_admin implements api_interface {
         }
 		
 		$type = $this->requestData('express_type');
+		$order_sn = $this->requestData('order_sn');
 		$size = $this->requestData('pagination.count', 15);
 		$page = $this->requestData('pagination.page', 1);
 		
 		$where = array('staff_id' => $_SESSION['staff_id']);
-		
-// 		
 		
 		switch ($type) {
 			case 'wait_pickup' :
@@ -31,12 +30,17 @@ class list_module extends api_admin implements api_interface {
 				$where['eo.status'] = 5;
 				break;
 			default : 
-				return new ecjia_error('invalid_parameter', RC_Lang::get('orders::order.invalid_parameter'));
+				if (!empty($order_sn)) {
+					$where['eo.order_sn'] = array('like' => '%'.$order_sn.'%');
+				} else {
+					return new ecjia_error('invalid_parameter', RC_Lang::get('orders::order.invalid_parameter'));
+				}
 		}
 		
 		$express_order_db = RC_Model::model('express/express_order_viewmodel');
 		
 		$count = $express_order_db->join(null)->where($where)->count();
+		
 		//实例化分页
 		$page_row = new ecjia_page($count, $size, 6, '', $page);
 		
@@ -46,6 +50,17 @@ class list_module extends api_admin implements api_interface {
 		$express_order_list = array();
 		if (!empty($express_order_result)) {
 			foreach ($express_order_result as $val) {
+				switch ($val['status']) {
+					case '1' :
+						$status = 'wait_pickup';
+						break;
+					case '2' :
+						$status = 'wait_shipping';
+						break;
+					case '5' :
+						$status = 'finished';
+						break;
+				}
 				$express_order_list[] = array(
 						'express_id'	=> $val['express_id'],
 						'express_sn'	=> $val['express_sn'],
@@ -63,6 +78,7 @@ class list_module extends api_admin implements api_interface {
 														'longitude' => $val['longitude'],
 														'latitude'	=> $val['latitude'],
 						),
+						'express_status' => $status,
 						'distance'		=> $val['distance'],
 						'consignee'		=> $val['consignee'],
 						'mobile'		=> $val['mobile'],
