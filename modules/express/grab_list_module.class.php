@@ -25,7 +25,7 @@ class grab_list_module extends api_admin implements api_interface {
 		$page_row = new ecjia_page($count, $size, 6, '', $page);
 		
 		$field = 'eo.*, oi.add_time as order_time, oi.pay_time, oi.order_amount, oi.pay_name, sf.merchants_name, sf.address as merchant_address, sf.longitude as merchant_longitude, sf.latitude as merchant_latitude';
-		$express_order_result = $express_order_db->field($field)->join(array('delivery_order', 'order_info', 'store_franchisee'))->where($where)->select();
+		$express_order_result = $express_order_db->field($field)->join(array('delivery_order', 'order_info', 'store_franchisee'))->where($where)->order(array('express_id' => 'desc'))->select();
 		
 		$express_order_list = array();
 		if (!empty($express_order_result)) {
