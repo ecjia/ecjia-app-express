@@ -54,9 +54,10 @@ class pickup_module extends api_admin implements api_interface {
     			'distance'		=> $express_order_info['distance'],
     			'consignee'		=> $express_order_info['consignee'],
     			'mobile'		=> $express_order_info['mobile'],
-    			'order_time'	=> RC_Time::local_date(ecjia::config('time_format'), $express_order_info['add_time']),
+    			'receive_time'	=> RC_Time::local_date(ecjia::config('time_format'), $express_order_info['receive_time']),
+    			'order_time'	=> RC_Time::local_date(ecjia::config('time_format'), $express_order_info['order_time']),
     			'pay_time'		=> empty($express_order_info['pay_time']) ? '' : RC_Time::local_date(ecjia::config('time_format'), $express_order_info['pay_time']),
-    			'best_time'		=> empty($express_order_info['best_time']) ? '' : RC_Time::local_date(ecjia::config('time_format'), $express_order_info['best_time']),
+    			'best_time'		=> $express_order_info['best_time'],
     			'shipping_fee'	=> $express_order_info['shipping_fee'],
     			'order_amount'	=> $express_order_info['order_amount'],
     			
