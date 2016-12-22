@@ -48,8 +48,15 @@ class merchant extends ecjia_merchant {
 		
 		$this->assign('ur_here', RC_Lang::get('express::express.express_list'));
 		
-		$where = array('store_id' => $_SESSION['store_id']);
-		$express_list = $this->express_order_db->where($where)->select();
+		$count = RC_Api::api('express', 'express_order_count');
+		
+		/* 定义每页数量*/
+		$filter['limit']	= 15;
+		
+		$page = new ecjia_merchant_page($count, $filter['limit'], 5);
+		$filter['skip']		= $page->start_id-1;
+		
+		$express_list = RC_Api::api('express', 'express_order_list', $filter);
 		
 		if (!empty($express_list)) {
 			foreach ($express_list as $key => $val) {
@@ -89,6 +96,8 @@ class merchant extends ecjia_merchant {
 		}
 		
 		$this->assign('express_list', $express_list);
+		
+		$this->assign('page', $page->show(2));
 		
 		$this->display('express_list.dwt');
 	}

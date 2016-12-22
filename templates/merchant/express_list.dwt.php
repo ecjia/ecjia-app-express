@@ -72,7 +72,7 @@
 		                </tbody>
 		            </table>
 		        </section>
-		         <!-- {$type_list.page} -->
+		        <!-- {$page} -->
 		      </div>
 	     </div>
     </div>
