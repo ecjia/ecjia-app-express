@@ -94,6 +94,13 @@ class pickup_module extends api_admin implements api_interface {
     		}
     	}
     	
+    	RC_DB::table('order_status_log')->insert(array(
+			    	'order_status'	=> RC_Lang::get('express::express.express_user_pickup'),
+			    	'order_id'		=> $express_order_info['order_id'],
+			    	'message'		=> '配送员已取货，正在向您奔去，配送员：'.$_SESSION['staff_name'],
+			    	'add_time'		=> RC_Time::gmtime(),
+    	));
+    	
     	/* 新增通知*/
     	$orm_staff_user_db = RC_Model::model('express/orm_staff_user_model');
     	$user = $orm_staff_user_db->find($_SESSION['staff_id']);

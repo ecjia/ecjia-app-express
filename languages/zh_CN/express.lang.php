@@ -76,7 +76,10 @@ return array(
 	
 	'label_operable_act' => '当前可执行操作：',
 	'change_express_user'	=> '变更配送人员',
-	'label_express_user'	=> '配送人员：'
+	'label_express_user'	=> '配送人员：',
+			
+			
+	'express_user_pickup'	=> '配送员已取货',
 		
 	
 	
