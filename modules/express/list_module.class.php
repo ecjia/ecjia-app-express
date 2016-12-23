@@ -83,6 +83,7 @@ class list_module extends api_admin implements api_interface {
 						'consignee'		=> $val['consignee'],
 						'mobile'		=> $val['mobile'],
 						'receive_time'	=> $val['receive_time'] > 0 ? RC_Time::local_date(ecjia::config('time_format'), $val['receive_time']) : '',
+						'express_time'	=> $val['express_time'] > 0 ? RC_Time::local_date(ecjia::config('time_format'), $val['express_time']) : '',
 						'order_time'	=> $val['order_time'] > 0 ? RC_Time::local_date(ecjia::config('time_format'), $val['order_time']) : '',
 						'pay_time'		=> empty($val['pay_time']) ? '' : RC_Time::local_date(ecjia::config('time_format'), $val['pay_time']),
 						'best_time'		=> $val['best_time'],

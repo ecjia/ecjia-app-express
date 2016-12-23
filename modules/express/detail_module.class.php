@@ -54,6 +54,7 @@ class detail_module extends api_admin implements api_interface {
     			'consignee'		=> $express_order_info['consignee'],
     			'mobile'		=> $express_order_info['mobile'],
     			'receive_time'	=> $express_order_info['receive_time'] > 0 ? RC_Time::local_date(ecjia::config('time_format'), $express_order_info['receive_time']) : '',
+    			'express_time'	=> $express_order_info['express_time'] > 0 ? RC_Time::local_date(ecjia::config('time_format'), $express_order_info['express_time']) : '',
     			'order_time'	=> $express_order_info['order_time'] > 0 ? RC_Time::local_date(ecjia::config('time_format'), $express_order_info['order_time']) : '',
     			'pay_time'		=> empty($express_order_info['pay_time']) ? '' : RC_Time::local_date(ecjia::config('time_format'), $express_order_info['pay_time']),
     			'best_time'		=> $express_order_info['best_time'],
