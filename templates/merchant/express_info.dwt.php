@@ -3,7 +3,7 @@
 
 <!-- {block name="footer"} -->
 <script type="text/javascript">
-	ecjia.merchant.order_delivery.info();
+// 	ecjia.merchant.order_delivery.info();
 </script>
 <!-- {/block} -->
 
