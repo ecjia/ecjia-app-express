@@ -3,7 +3,7 @@
 
 <!-- {block name="footer"} -->
 <script type="text/javascript">
-// 	ecjia.merchant.order_delivery.info();
+	ecjia.merchant.express.info();
 </script>
 <!-- {/block} -->
 
@@ -25,7 +25,7 @@
 
 <div class="row-fluid">
 	<div class="span12 ">
-		<form action="{$form_action}" method="post" name="deliveryForm" class="form-horizontal">
+		<form action="{$form_action}" method="post" name="expressForm" class="form-horizontal">
 			<div id="accordion2" class="panel panel-default">
 				<div class="panel-heading">
                     <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
@@ -163,7 +163,7 @@
 									<select class="w250 form-control" name='staff_id'>
 										<option value='0'>请选择</option>
 										<!-- {foreach from=$staff_user item=list} -->
-											<option value="{$list.user_id}" {if $list.staff_id eq $express_order.staff_id}selected="selected"{/if}>{$list.name}</option>
+											<option value="{$list.user_id}" {if $list.user_id eq $express_info.staff_id}selected="selected"{/if}>{$list.name}</option>
 										<!-- {/foreach} -->
 									</select>
 								</td>

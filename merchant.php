@@ -22,15 +22,13 @@ class merchant extends ecjia_merchant {
 		RC_Script::enqueue_script('jquery-form');
 		RC_Script::enqueue_script('smoke');
 		
-		RC_Script::enqueue_script('merchant_express', RC_App::apps_url('statics/js/merchant_shipping.js', __FILE__));
+		RC_Script::enqueue_script('express', RC_App::apps_url('statics/js/merchant_express.js', __FILE__));
 		RC_Script::enqueue_script('ecjia.utils');
-		RC_Script::enqueue_script('ecjia.common');
-		RC_Style::enqueue_style('chosen');
-		RC_Script::enqueue_script('jquery-chosen');
+		
 		RC_Loader::load_app_class('shipping_factory', null, false);
 		
-		RC_Script::localize_script('merchant_shipping', 'js_lang', RC_Lang::get('shipping::shipping.js_lang'));
-		RC_Script::localize_script('shopping_admin', 'js_lang', RC_Lang::get('shipping::shipping.js_lang'));
+// 		RC_Script::localize_script('merchant_shipping', 'js_lang', RC_Lang::get('shipping::shipping.js_lang'));
+// 		RC_Script::localize_script('shopping_admin', 'js_lang', RC_Lang::get('shipping::shipping.js_lang'));
 		
 		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here('配送管理', RC_Uri::url('shipping/merchant/init')));
 	}
@@ -39,7 +37,7 @@ class merchant extends ecjia_merchant {
 	 * 配送方式列表 
 	 */
 	public function init() { 
-		$this->admin_priv('express_manage', ecjia::MSGTYPE_JSON);
+		$this->admin_priv('express_manage');
 		
 		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(RC_Lang::get('express::express.express_list')));
 		
@@ -100,7 +98,7 @@ class merchant extends ecjia_merchant {
 	}
 	
 	public function info() {
-		$this->admin_priv('express_manage', ecjia::MSGTYPE_JSON);
+		$this->admin_priv('express_manage');
 		
 		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(RC_Lang::get('express::express.express_info')));
 		
@@ -119,9 +117,9 @@ class merchant extends ecjia_merchant {
 		
 		if ($express_info['from'] == 'assign') {
 			$express_info['label_from'] = RC_Lang::get('express::express.assign');
-		} elseif ($val['from'] == 'grab') {
+		} elseif ($express_info['from'] == 'grab') {
 			$express_info['label_from'] = RC_Lang::get('express::express.grab');
-		} else {
+		} elseif ($express_info['from'] == 'grab' && $express_info['staff_id'] == 0) {
 			$express_info['label_from'] = RC_Lang::get('express::express.wait_assign');
 		}
 		
@@ -176,11 +174,38 @@ class merchant extends ecjia_merchant {
 		$this->assign('staff_user', $staff_list);
 		$this->assign('express_info', $express_info);
 		$this->assign('goods_list', $goods_list);
+		$this->assign('form_action', RC_Uri::url('express/merchant/assign_express'));
 		
 		$this->assign('ur_here', RC_Lang::get('express::express.express_info'));
 		$this->assign('action_link',array('href' => RC_Uri::url('express/merchant/init'),'text' => RC_Lang::get('express::express.express_list')));
 		
 		$this->display('express_info.dwt');
+	}
+	
+	
+	function assign_express()
+	{
+		$this->admin_priv('express_manage', ecjia::MSGTYPE_JSON);
+		_dump(urlencode('https://ecjia.com/wiki/帮助:ECJia尊享版'),1);
+		$staff_id	= isset($_POST['staff_id']) ? intval($_POST['staff_id']) : 0;
+		$express_id	= isset($_POST['express_id']) ? intval($_POST['express_id']) : 0;
+		
+		$express_info = RC_DB::table('express_order')->where('status', '<=', 2)->where('store_id', $_SESSION['store_id'])->where('express_id', $express_id)->first();
+		
+		/* 判断配送单*/
+		if (empty($express_info)) {
+			return $this->showmessage('没有相应的配送单！', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+		}
+		
+		$staff_user = RC_DB::table('staff_user')->where('store_id', $_SESSION['store_id'])->where('user_id', $staff_id)->first();
+		if (empty($staff_user)) {
+			return $this->showmessage('请选择相应配送员！', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+		}
+		
+		$assign_express_data = array('status' => 1, 'staff_id' => $staff_id, 'express_user' => $staff_user['name'], 'express_mobile' => $staff_user['mobile'], 'update_time' => RC_Time::gmtime());
+		RC_DB::table('express_order')->where('store_id', $_SESSION['store_id'])->where('express_id', $express_id)->update($assign_express_data);
+		
+		return $this->showmessage('配送单派单成功！', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('pjaxurl' => RC_Uri::url('express/merchant/info', array('express_id' => $express_id))));
 	}
 }	
 

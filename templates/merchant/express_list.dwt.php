@@ -2,7 +2,7 @@
 <!-- {extends file="ecjia-merchant.dwt.php"} -->
 <!-- {block name="footer"} -->
 <script type="text/javascript">
-//     ecjia.merchant.bonus_type.type_list_init();
+
 </script>
 <!-- {/block} -->
 
