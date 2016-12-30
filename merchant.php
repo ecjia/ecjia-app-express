@@ -186,7 +186,7 @@ class merchant extends ecjia_merchant {
 	function assign_express()
 	{
 		$this->admin_priv('express_manage', ecjia::MSGTYPE_JSON);
-		_dump(urlencode('https://ecjia.com/wiki/帮助:ECJia尊享版'),1);
+		
 		$staff_id	= isset($_POST['staff_id']) ? intval($_POST['staff_id']) : 0;
 		$express_id	= isset($_POST['express_id']) ? intval($_POST['express_id']) : 0;
 		
