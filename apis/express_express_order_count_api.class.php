@@ -19,8 +19,6 @@ class express_express_order_count_api extends Component_Event_Api {
     	if (isset($_SESSION['store_id']) && $_SESSION['store_id']) {
     		$db->where('store_id', $_SESSION['store_id']);
     	}
-    	
-    	
     	return $db->count();
     }
 }

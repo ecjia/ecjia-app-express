@@ -25,9 +25,6 @@
     <div class="col-lg-12">
     	<div class="panel">
     		<div class="panel-body panel-body-small">
-    			
-    		</div>
-    		<div class="panel-body panel-body-small">
 		        <section class="panel">
 		            <table class="table table-striped table-hover table-hide-edit">
 		                <thead>

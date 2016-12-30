@@ -8,7 +8,7 @@ defined('IN_ECJIA') or exit('No permission resources.');
 class express_admin_purview_api extends Component_Event_Api {
     public function call(&$options) {
         $purviews = array(
-        	array('action_name' => RC_Lang::get('article::article.article_manage'), 	'action_code' => 'article_manage', 		'relevance' => ''),
+        	array('action_name' => '配送信息管理', 'action_code' => 'express_manage', 'relevance' => ''),
         	
         );
         return $purviews;
