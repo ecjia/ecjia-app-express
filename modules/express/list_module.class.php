@@ -1,10 +1,12 @@
 <?php
 defined('IN_ECJIA') or exit('No permission resources.');
+
 /**
  * 配送信息列表
  * @author will.chen
  *
  */
+ 
 class list_module extends api_admin implements api_interface {
     public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {	
     	
@@ -12,12 +14,12 @@ class list_module extends api_admin implements api_interface {
             return new ecjia_error(100, 'Invalid session');
         }
 		
-		$type = $this->requestData('express_type');
+		$type     = $this->requestData('express_type');
 		$order_sn = $this->requestData('order_sn');
-		$size = $this->requestData('pagination.count', 15);
-		$page = $this->requestData('pagination.page', 1);
+		$size     = $this->requestData('pagination.count', 15);
+		$page     = $this->requestData('pagination.page', 1);
 		
-		$where = array('staff_id' => $_SESSION['staff_id']);
+		$where    = array('staff_id' => $_SESSION['staff_id']);
 		
 		switch ($type) {
 			case 'wait_pickup' :
@@ -39,12 +41,12 @@ class list_module extends api_admin implements api_interface {
 		
 		$express_order_db = RC_Model::model('express/express_order_viewmodel');
 		
-		$count = $express_order_db->join(null)->where($where)->count();
+		$count            = $express_order_db->join(null)->where($where)->count();
 		
 		//实例化分页
 		$page_row = new ecjia_page($count, $size, 6, '', $page);
 		
-		$field = 'eo.*, oi.add_time as order_time, oi.pay_time, oi.order_amount, oi.pay_name, sf.merchants_name, sf.address as merchant_address, sf.longitude as merchant_longitude, sf.latitude as merchant_latitude';
+		$field                = 'eo.*, oi.add_time as order_time, oi.pay_time, oi.order_amount, oi.pay_name, sf.merchants_name, sf.address as merchant_address, sf.longitude as merchant_longitude, sf.latitude as merchant_latitude';
 		$express_order_result = $express_order_db->field($field)->join(array('delivery_order', 'order_info', 'store_franchisee'))->where($where)->order(array('express_id' => 'desc'))->limit($page_row->limit())->select();
 		
 		$express_order_list = array();
@@ -62,19 +64,19 @@ class list_module extends api_admin implements api_interface {
 						break;
 				}
 				$express_order_list[] = array(
-						'express_id'	=> $val['express_id'],
-						'express_sn'	=> $val['express_sn'],
-						'express_type'	=> $val['from'],
-						'label_express_type'	=> $val['from'] == 'assign' ? '系统派单' : '抢单',
-						'order_sn'		=> $val['order_sn'],
-						'payment_name'	=> $val['pay_name'],
-						'express_from_address'	=> '【'.$val['merchants_name'].'】'. $val['merchant_address'],
-						'express_from_location'	=> array(
+						'express_id'	         => $val['express_id'],
+						'express_sn'	         => $val['express_sn'],
+						'express_type'	         => $val['from'],
+						'label_express_type'	 => $val['from'] == 'assign' ? '系统派单' : '抢单',
+						'order_sn'		         => $val['order_sn'],
+						'payment_name'	         => $val['pay_name'],
+						'express_from_address'	 => '【'.$val['merchants_name'].'】'. $val['merchant_address'],
+						'express_from_location'	 => array(
 														'longitude' => $val['merchant_longitude'],
 														'latitude'	=> $val['merchant_latitude'],
 						),
-						'express_to_address'	=> $val['address'],
-						'express_to_location'	=> array(
+						'express_to_address'	 => $val['address'],
+						'express_to_location'	 => array(
 														'longitude' => $val['longitude'],
 														'latitude'	=> $val['latitude'],
 						),
@@ -105,4 +107,5 @@ class list_module extends api_admin implements api_interface {
 
 	 }	
 }
+
 // end

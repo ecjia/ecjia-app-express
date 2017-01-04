@@ -1,10 +1,12 @@
 <?php
 defined('IN_ECJIA') or exit('No permission resources.');
+
 /**
  * 管理员签到记录
  * @author will.chen
  *
  */
+ 
 class checkin_module extends api_admin implements api_interface {
     public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {	
     	
@@ -19,13 +21,13 @@ class checkin_module extends api_admin implements api_interface {
 		}
 		
 		/* 获取配送员信息*/
-		$staff_info = RC_DB::table('staff_user')->where('user_id', $_SESSION['staff_id'])->first();
+		$staff_info   = RC_DB::table('staff_user')->where('user_id', $_SESSION['staff_id'])->first();
 		
 		/* 获取配送员打卡最后一条记录信息*/
-		$checkin_log = RC_DB::table('express_checkin')->where('user_id', $_SESSION['staff_id'])->orderBy('log_id', 'desc')->first();
+		$checkin_log  = RC_DB::table('express_checkin')->where('user_id', $_SESSION['staff_id'])->orderBy('log_id', 'desc')->first();
 		
 		/* 获取当前时间戳*/
-		$time = RC_Time::gmtime();
+		$time         = RC_Time::gmtime();
 		$fomated_time = RC_Time::local_date('Y-m-d', $time);
 		/* 在线设定*/
 		if ($checkin_type == 'online') {
@@ -72,4 +74,5 @@ class checkin_module extends api_admin implements api_interface {
 
 	 }	
 }
+
 // end

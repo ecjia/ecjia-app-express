@@ -1,10 +1,9 @@
 <?php
+defined('IN_ECJIA') or exit('No permission resources.');
 
 /**
  * ECJIA 配送信息
  */
-
-defined('IN_ECJIA') or exit('No permission resources.');
 
 class merchant extends ecjia_merchant {
 	private $express_order_db;
@@ -48,10 +47,10 @@ class merchant extends ecjia_merchant {
 		/* 定义每页数量*/
 		$filter['limit']	= 15;
 		
-		$page = new ecjia_merchant_page($count, $filter['limit'], 5);
+		$page               = new ecjia_merchant_page($count, $filter['limit'], 5);
 		$filter['skip']		= $page->start_id-1;
 		
-		$express_list = RC_Api::api('express', 'express_order_list', $filter);
+		$express_list       = RC_Api::api('express', 'express_order_list', $filter);
 		
 		if (!empty($express_list)) {
 			foreach ($express_list as $key => $val) {
