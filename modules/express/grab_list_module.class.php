@@ -4,9 +4,7 @@ defined('IN_ECJIA') or exit('No permission resources.');
 /**
  * 配送抢单列表
  * @author will.chen
- *
  */
- 
 class grab_list_module extends api_admin implements api_interface {
     public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {	
     	
@@ -32,43 +30,40 @@ class grab_list_module extends api_admin implements api_interface {
 		if (!empty($express_order_result)) {
 			foreach ($express_order_result as $val) {
 				$express_order_list[] = array(
-						'express_id'	         => $val['express_id'],
-						'express_sn'	         => $val['express_sn'],
-						'express_type'	         => $val['from'],
-						'label_express_type'	 => $val['from'] == 'assign' ? '系统派单' : '抢单',
-						'order_sn'		         => $val['order_sn'],
-						'payment_name'	         => $val['pay_name'],
-						'express_from_address'	 => '【'.$val['merchants_name'].'】'. $val['merchant_address'],
-						'express_from_location'	 => array(
-														'longitude' => $val['merchant_longitude'],
-														'latitude'	=> $val['merchant_latitude'],
-						),
-						'express_to_address'	=> $val['address'],
-						'express_to_location'	=> array(
-														'longitude' => $val['longitude'],
-														'latitude'	=> $val['latitude'],
-						),
-						'distance'		=> $val['distance'],
-						'consignee'		=> $val['consignee'],
-						'mobile'		=> $val['mobile'],
-						'order_time'	=> $val['order_time'] > 0 ? RC_Time::local_date(ecjia::config('time_format'), $val['order_time']) : '',
-						'pay_time'		=> empty($val['pay_time']) ? '' : RC_Time::local_date(ecjia::config('time_format'), $val['pay_time']),
-						'best_time'		=> $val['best_time'],
-						'shipping_fee'	=> $val['shipping_fee'],
-						'order_amount'	=> $val['order_amount'],
+					'express_id'	         => $val['express_id'],
+					'express_sn'	         => $val['express_sn'],
+					'express_type'	         => $val['from'],
+					'label_express_type'	 => $val['from'] == 'assign' ? '系统派单' : '抢单',
+					'order_sn'		         => $val['order_sn'],
+					'payment_name'	         => $val['pay_name'],
+					'express_from_address'	 => '【'.$val['merchants_name'].'】'. $val['merchant_address'],
+					'express_from_location'	 => array(
+						'longitude' => $val['merchant_longitude'],
+						'latitude'	=> $val['merchant_latitude'],
+					),
+					'express_to_address'	=> $val['address'],
+					'express_to_location'	=> array(
+						'longitude' => $val['longitude'],
+						'latitude'	=> $val['latitude'],
+					),
+					'distance'		=> $val['distance'],
+					'consignee'		=> $val['consignee'],
+					'mobile'		=> $val['mobile'],
+					'order_time'	=> $val['order_time'] > 0 ? RC_Time::local_date(ecjia::config('time_format'), $val['order_time']) : '',
+					'pay_time'		=> empty($val['pay_time']) ? '' : RC_Time::local_date(ecjia::config('time_format'), $val['pay_time']),
+					'best_time'		=> $val['best_time'],
+					'shipping_fee'	=> $val['shipping_fee'],
+					'order_amount'	=> $val['order_amount'],
 				);
 			}
 		}
 		
-		
 		$pager = array(
-				'total' => $page_row->total_records,
-				'count' => $page_row->total_records,
-				'more'	=> $page_row->total_pages <= $page ? 0 : 1,
+			'total' => $page_row->total_records,
+			'count' => $page_row->total_records,
+			'more'	=> $page_row->total_pages <= $page ? 0 : 1,
 		);
-		
 		return array('data' => $express_order_list, 'pager' => $pager);
-
 	 }	
 }
 

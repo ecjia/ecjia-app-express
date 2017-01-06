@@ -4,9 +4,7 @@ defined('IN_ECJIA') or exit('No permission resources.');
 /**
  * 管理员签到记录
  * @author will.chen
- *
  */
- 
 class checkin_module extends api_admin implements api_interface {
     public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {	
     	
@@ -68,10 +66,7 @@ class checkin_module extends api_admin implements api_interface {
 				RC_DB::table('staff_user')->where('user_id', $_SESSION['staff_id'])->update(array('online_status' => 4));
 			}
 		}
-		
-		
 		return array();
-
 	 }	
 }
 

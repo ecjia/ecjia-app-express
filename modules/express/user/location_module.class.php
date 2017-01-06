@@ -4,9 +4,7 @@ defined('IN_ECJIA') or exit('No permission resources.');
 /**
  * 时时更新配送员坐标
  * @author will.chen
- *
  */
- 
 class location_module extends api_admin implements api_interface {
     public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {	
     	
@@ -28,9 +26,7 @@ class location_module extends api_admin implements api_interface {
 		} else {
 			$express_model_db->where(array('user_id' => $_SESSION['staff_id']))->update(array('longitude' => $location['longitude'], 'latitude' => $location['latitude']));
 		}
-		
 		return array();
-
 	 }	
 }
 

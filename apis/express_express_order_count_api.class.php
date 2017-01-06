@@ -7,7 +7,6 @@ defined('IN_ECJIA') or exit('No permission resources.');
  * @param   array	 $options
  * @return  array   商家活动数组
  */
- 
 class express_express_order_count_api extends Component_Event_Api {
     
     public function call(&$options) {

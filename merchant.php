@@ -4,7 +4,6 @@ defined('IN_ECJIA') or exit('No permission resources.');
 /**
  * ECJIA 配送信息
  */
-
 class merchant extends ecjia_merchant {
 	private $express_order_db;
 
@@ -12,9 +11,7 @@ class merchant extends ecjia_merchant {
 		parent::__construct();
 
 		RC_Loader::load_app_func('global');
-
 		$this->express_order_db	= RC_Model::model('express/express_order_model');
-		
 		
 		/* 加载全局 js/css */
 		RC_Script::enqueue_script('jquery-validate');
@@ -25,10 +22,6 @@ class merchant extends ecjia_merchant {
 		RC_Script::enqueue_script('ecjia.utils');
 		
 		RC_Loader::load_app_class('shipping_factory', null, false);
-		
-// 		RC_Script::localize_script('merchant_shipping', 'js_lang', RC_Lang::get('shipping::shipping.js_lang'));
-// 		RC_Script::localize_script('shopping_admin', 'js_lang', RC_Lang::get('shipping::shipping.js_lang'));
-		
 		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here('配送管理', RC_Uri::url('shipping/merchant/init')));
 	}
 
@@ -181,9 +174,7 @@ class merchant extends ecjia_merchant {
 		$this->display('express_info.dwt');
 	}
 	
-	
-	function assign_express()
-	{
+	function assign_express() {
 		$this->admin_priv('express_manage', ecjia::MSGTYPE_JSON);
 		
 		$staff_id	= isset($_POST['staff_id']) ? intval($_POST['staff_id']) : 0;

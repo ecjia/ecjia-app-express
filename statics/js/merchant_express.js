@@ -3,9 +3,7 @@
 ;(function(app, $) {
 	app.express = {
 		init : function() {
-			
 		},
-		
 		info : function() {
 			app.express.expressForm();
 		},
@@ -20,7 +18,6 @@
 				});
 			});
 		},
-		
 	}
 	
 })(ecjia.merchant, jQuery);

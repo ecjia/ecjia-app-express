@@ -5,7 +5,6 @@ use Royalcms\Component\Notifications\Notifiable;
 class orm_staff_user_model extends Notifiable {
 	protected $table       = 'staff_user';
 	protected $primaryKey  = 'user_id';
-
 }
 
 // end
