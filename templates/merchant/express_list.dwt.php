@@ -46,9 +46,8 @@
 		                            {$list.express_sn}
 		                            <br/>
 		                            <div class="edit-list">
-		                                <a class="data-pjax" href='{RC_Uri::url("express/merchant/info", "express_id={$list.express_id}")}' title="{lang key='express::express.view_info'}">{lang key='express::express.view_info'}</a>&nbsp;|&nbsp;
-		                                <a class="ajaxremove ecjiafc-red" data-toggle="ajaxremove" data-msg="{lang key='bonus::bonus.remove_bonustype_confirm'}" href='{RC_Uri::url("bonus/merchant/remove","id={$type.type_id}")}' title="{lang key='system::system.remove'}">{lang key='system::system.drop'}</a>
-		                                
+		                                <a class="data-pjax" href='{RC_Uri::url("express/merchant/info", "express_id={$list.express_id}")}' title="{lang key='express::express.view_info'}">{lang key='express::express.view_info'}</a><!-- &nbsp;|&nbsp;
+		                                <a class="ajaxremove ecjiafc-red" data-toggle="ajaxremove" data-msg="{lang key='bonus::bonus.remove_bonustype_confirm'}" href='{RC_Uri::url("bonus/merchant/remove","id={$type.type_id}")}' title="{lang key='system::system.remove'}">{lang key='system::system.drop'}</a> -->
 		                            </div>
 		                        </td>
 		                        <td>{$list.delivery_sn}</td>
