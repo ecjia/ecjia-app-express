@@ -44,8 +44,9 @@
 //
 //  ---------------------------------------------------------------------------------
 //
-defined('IN_ECJIA') or exit('No permission resources.');
 use Ecjia\System\Notifications\ExpressPickup;
+defined('IN_ECJIA') or exit('No permission resources.');
+
 
 /**
  * 配送取货

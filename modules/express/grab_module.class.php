@@ -44,8 +44,9 @@
 //
 //  ---------------------------------------------------------------------------------
 //
-defined('IN_ECJIA') or exit('No permission resources.');
 use Ecjia\System\Notifications\ExpressGrab;
+defined('IN_ECJIA') or exit('No permission resources.');
+
 
 /**
  * 配送抢单列表
