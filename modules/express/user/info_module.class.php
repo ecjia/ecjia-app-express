@@ -78,6 +78,7 @@ class info_module extends api_admin implements api_interface {
         	),
         	'role_name'				=> '配送员',
         	'last_login' 			=> RC_Time::local_date(ecjia::config('time_format'), $staff_user['last_login']),
+            'online_status'         => $staff_user['online_status'] == 1 ? 'online' : 'offline',
         );
 		return $express_user_info;
 	 }	
