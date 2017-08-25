@@ -145,6 +145,23 @@ class pickup_module extends api_admin implements api_interface {
 	    	'add_time'		=> RC_Time::gmtime(),
     	));
     	
+    	/*当订单配送方式为o2o速递时,记录o2o速递物流信息*/
+    	$order_info = RC_DB::table('order_info')->where('order_id', $express_order_info['order_id'])->first();
+    	if ($order_info['shipping_id'] > 0) {
+    		$shipping_method = RC_Loader::load_app_class('shipping_method', 'shipping');
+    		$shipping_info = $shipping_method->shipping_info($order_info['shipping_id']);
+    		if ($shipping_info['shipping_code'] == 'ship_o2o_express') {
+    			$data = array(
+    					'express_code' => $shipping_info['shipping_code'],
+    					'track_number' => $order_info['invoice_no'],
+    					'time'		   => RC_Time::local_date(ecjia::config('time_format'), RC_Time::gmtime()),
+    					'context'	   => '配送员已取货，正在向您奔去，配送员：'.$_SESSION['staff_name'],
+    			);
+    			RC_DB::table('express_track_record')->insert($data);
+    		}
+    	}
+    	
+    	
     	/* 新增通知*/
 //     	$orm_staff_user_db = RC_Model::model('express/orm_staff_user_model');
 //     	$user              = $orm_staff_user_db->find($_SESSION['staff_id']);
