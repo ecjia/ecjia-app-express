@@ -135,6 +135,7 @@ class grab_module extends api_admin implements api_interface {
 // 				}
 // 			}
 
+			//推送消息
 			$options = array(
 				'user_id'   => $_SESSION['staff_id'],
 				'user_type' => 'merchant',
@@ -148,6 +149,20 @@ class grab_module extends api_admin implements api_interface {
 				),
 			);
 			RC_Api::api('push', 'push_event_send', $options);		
+
+			/* 如果需要，发短信 */
+			if (!empty($user['express_mobile'])) {
+				$options = array(
+					'mobile' => $user['express_mobile'],
+					'event'	 => 'sms_order_grab',
+					'value'  =>array(
+						'express_sn'   => $express_order_info['express_sn'],
+						'service_phone'=> ecjia::config('service_phone'),
+					),
+				);
+				RC_Api::api('sms', 'send_event_sms', $options);
+			}
+			
 			return array();
 		} else {
 			return new ecjia_error('grab_error', '此单已被抢！');
