@@ -154,7 +154,7 @@ class grab_module extends api_admin implements api_interface {
 			if (!empty($user['express_mobile'])) {
 				$options = array(
 					'mobile' => $user['express_mobile'],
-					'event'	 => 'sms_order_grab',
+					'event'	 => 'sms_express_grab',
 					'value'  =>array(
 						'express_sn'   => $express_order_info['express_sn'],
 						'service_phone'=> ecjia::config('service_phone'),
