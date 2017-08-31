@@ -150,7 +150,7 @@ class grab_module extends api_admin implements api_interface {
 			);
 			RC_Api::api('push', 'push_event_send', $options);		
 
-			/* 如果需要，发短信 */
+			//短信事件
 			if (!empty($user['express_mobile'])) {
 				$options = array(
 					'mobile' => $user['express_mobile'],
