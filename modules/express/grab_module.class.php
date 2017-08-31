@@ -149,10 +149,10 @@ class grab_module extends api_admin implements api_interface {
 			);
 			RC_Api::api('push', 'push_event_send', $options);		
 
-			//短信事件
-			if (!empty($user['express_mobile'])) {
+			//短信发送
+			if (!empty($express_order_info['express_mobile'])) {
 				$options = array(
-					'mobile' => $user['express_mobile'],
+					'mobile' => $express_order_info['express_mobile'],
 					'event'	 => 'sms_express_grab',
 					'value'  =>array(
 						'express_sn'   => $express_order_info['express_sn'],

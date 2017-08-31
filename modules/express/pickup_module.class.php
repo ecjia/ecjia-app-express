@@ -197,6 +197,18 @@ class pickup_module extends api_admin implements api_interface {
     	);
     	RC_Api::api('push', 'push_event_send', $options);
     	
+    	//短信发送
+    	if (!empty($express_order_info['express_mobile'])) {
+    		$options = array(
+    				'mobile' => $express_order_info['express_mobile'],
+    				'event'	 => 'sms_express_pickup',
+    				'value'  =>array(
+    						'express_sn'   => $express_order_info['express_sn'],
+    				),
+    		);
+    		RC_Api::api('sms', 'send_event_sms', $options);
+    	}
+    	
 		return $express_order;
 	 }	
 }
