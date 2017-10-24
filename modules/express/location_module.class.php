@@ -87,7 +87,7 @@ class location_module extends api_front implements api_interface {
 		
 		/*收货地址既送达位置处理*/
 		$to = array();
-		$region_name = RC_DB::table('region')->whereIn('region_id', array($order_info['province'], $order_info['city']))->orderBy('region_type', 'asc')->get();
+		$region_name = RC_DB::table('regions')->whereIn('region_id', array($order_info['province'], $order_info['city']))->orderBy('region_type', 'asc')->get();
 		$province_name  = $region_name[0]['region_name'];
 		$city_name		= $region_name[1]['region_name'];
 		$consignee_address = $province_name.'省'.$city_name.'市'.$order_info['address'];
