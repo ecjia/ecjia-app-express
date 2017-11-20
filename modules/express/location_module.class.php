@@ -87,12 +87,28 @@ class location_module extends api_front implements api_interface {
 		
 		/*收货地址既送达位置处理*/
 		$to = array();
-		$region_name = ecjia_region::getRegions(array($order_info['province'], $order_info['city'], $order_info['district']));
-		$province_name  = $region_name[0]['region_name'];
-		$district_name	= $region_name[2]['region_name'];
 
-		$consignee_address = $province_name.$district_name.$order_info['address'];
+		$province_name = ecjia_region::getRegionName($order_info['province']);
+		$city_name = ecjia_region::getRegionName($order_info['city']);
+		$district_name = ecjia_region::getRegionName($order_info['distreet']);
+		$street_name = ecjia_region::getRegionName($order_info['street']);
+
+		$consignee_address = '';
+		if (!empty($province_name)) {
+			$consignee_address .= $province_name;
+		}
+		if (!empty($city_name)) {
+			$consignee_address .= $city_name;
+		}
+		if (!empty($district_name)) {
+			$consignee_address .= $district_name;
+		}
+		if (!empty($street_name)) {
+			$consignee_address .= $street_name;
+		}
+		$consignee_address .= $order_info['address'];
 		$consignee_address = urlencode($consignee_address);
+
 		//腾讯地图api 地址解析（地址转坐标）
 		$map_qq_key = ecjia::config('map_qq_key');
 		$shop_point = RC_Http::remote_get("https://apis.map.qq.com/ws/geocoder/v1/?address=".$consignee_address."&key=".$map_qq_key);
