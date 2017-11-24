@@ -8,6 +8,7 @@
 			app.express.selected_area();
 			app.express.quick_search();
 			app.express.delete_area();
+			app.express.close_model();
 		},
 		expressForm : function() {
 			$("form[name='expressForm']").on('submit', function(e){
@@ -89,14 +90,8 @@
                     val = $parent.attr('data-val'),
                     name = $parent.find('span').eq(0).text(),
                     $tmp = $('<li><input type="hidden" value="' + val + '" name="regions[]" id="regions_' + val + '"/>'+ name +'<span class="delete_area">x</span></li>');
-                
                 $('.select-region input').each(function (i) {
                     if ($(this).val() == val) {
-//                        var data = {
-//                            message: '该地区已被选择',
-//                            state: "error",
-//                        };
-//                        ecjia.merchant.showmessage(data);
                         bool = false;
                         return false;
                     }
@@ -141,11 +136,62 @@
         			if ($(this).attr('data-val') == val) {
         				$(this).find('a').show();
         			}
-        		})
+        		});
         		$this.parent('li').remove();
         	});
-        }
+        },
         
+        close_model: function() {
+        	$('#chooseRegion').on('show.bs.modal', function () {
+        		var child = $('.content-area-list').html();
+        		var length = $('.content-area-list').find('li').length;
+        		if (length > 0) {
+            		$('.select-region').html('').html(child);
+            		var region = [];
+            		$('.select-region li').each(function() {
+            			$(this).append('<span class="delete_area">x</span>');
+            			region.push($(this).find('input').val());
+            		});
+            		app.express.delete_area();
+            		
+            		$('.ms-elem-selectable').each(function() {
+            			var val = $(this).attr('data-val');
+            			var index = $.inArray(val, region);
+            			if (index > 0) {
+            				$(this).find('a').hide();
+            			}
+            		});
+        		} else {
+        			$('.ms-elem-selectable').each(function() {
+            			$(this).find('a').show();
+            		});
+        		}
+        	});
+        		
+        	$('.close_model').off('click').on('click', function() {
+        		var $this = $(this);
+        		var region = $('.select-region').children();
+        		if (region.length > 0) {
+        			$('.add_area').hide();
+        			$('.content-area').show();
+        			$('.content-area-list').show();
+        			$('.content-area-list').html(region);
+        			$('.content-area-list').find('.delete_area').remove();
+        		} else {
+        			$('.add_area').show();
+        			$('.content-area').hide();
+        			$('.content-area-list').hide();
+        			$('.content-area-list').html('');
+        		}
+        	});
+        	
+        	$('.reset_region').off('click').on('click', function() {
+        		$('.add_area').show();
+    			$('.content-area').hide();
+    			$('.content-area-list').hide();
+    			$('.content-area-list').html('');
+        	});
+        },
 	}
 	
 })(ecjia.merchant, jQuery);

@@ -57,7 +57,13 @@
 											每增加 <input class="form-control" type="text" name="default" value="1" /> 件，
 											增加运费 <input class="form-control" type="text" name="default" value="1" /> 元
 										</div>
-										<a class="btn btn-primary" data-toggle="modal" href="#chooseRegion">添加地区</a>
+										<div class="content-area">
+											<ul class="content-area-list"></ul>
+											<div class="content-area-handle">
+												<a data-toggle="modal" href="#chooseRegion">编辑</a> &nbsp;|&nbsp; <a class="reset_region">重置</a>
+											</div>
+										</div>
+										<a class="btn btn-primary add_area" data-toggle="modal" href="#chooseRegion">添加地区</a>
 									</div>
 								</div>
 							</div>
@@ -72,7 +78,7 @@
 										<div class="head-right">操作</div>
 									</div>
 									<div class="template-info-content">
-										<a class="btn btn-primary">添加快递</a>
+										<a class="btn btn-primary add_shipping">添加快递</a>
 									</div>
 								</div>
 							</div>
@@ -105,12 +111,6 @@
 			</div>
 			<div class="modal-body form-horizontal">
 				<ul class="select-region">
-					<li>广州<span class="delete_area">x</span></li>
-					<li>广州<span class="delete_area">x</span></li>
-					<li>广州<span class="delete_area">x</span></li>
-					<li>广州<span class="delete_area">x</span></li>
-					<li>广州<span class="delete_area">x</span></li>
-					<li>广州<span class="delete_area">x</span></li>
 				</ul>
 				<div class="form-group">
 					<div class="ms-container ms-shipping" id="ms-custom-navigation">
@@ -156,7 +156,7 @@
 					</div>
 				</div>
 				<div class="form-group t_c">
-					<a class="btn btn-primary">确定</a>
+					<a class="btn btn-primary close_model" data-dismiss="modal">确定</a>
 				</div>
 			</div>
 		</div>
