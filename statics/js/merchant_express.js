@@ -9,6 +9,8 @@
 			app.express.quick_search();
 			app.express.delete_area();
 			app.express.close_model();
+			app.express.add_shipping();
+			app.express.shippingForm();
 		},
 		expressForm : function() {
 			$("form[name='expressForm']").on('submit', function(e){
@@ -186,13 +188,285 @@
         	});
         	
         	$('.reset_region').off('click').on('click', function() {
-        		$('.add_area').show();
-    			$('.content-area').hide();
-    			$('.content-area-list').hide();
-    			$('.content-area-list').html('');
+        		var message = '您确定要重置该地区设置吗？';
+        		var $this = $(this);
+				smoke.confirm(message, function(e) {
+					if (e) {
+						$('.add_area').show();
+		    			$('.content-area').hide();
+		    			$('.content-area-list').hide();
+		    			$('.content-area-list').html('');
+					}
+				}, {ok:"确定", cancel:"取消"});
         	});
         },
+        
+        add_shipping: function() {
+        	$('select[name="shipping_id"]').off('change').on('change', function() {
+        		$('#shipping_info').html('');
+        		var $this = $(this),
+        			val = $this.val(),
+        			url = $this.attr('data-url'),
+        			fee_compute_mode = 'by_weight',
+        			type = $('.add-shipping-btn').attr('data-type');
+        		
+        		var shipping_item = $('.template-info-item').find('.shipping-item-' + val);
+        		if (type == 'edit') {
+	        		if (shipping_item.length > 0) {
+	        			var fee_compute_mode = shipping_item.find("input[name='fee_compute_mode']").val(),
+	        				item_fee = shipping_item.find('input[name="item_fee"]').val(),
+	        				pay_fee = shipping_item.find('input[name="pay_fee"]').val(),
+	        				base_fee = shipping_item.find('input[name="base_fee"]').val(),
+	        				free_money = shipping_item.find('input[name="free_money"]').val(),
+	        				step_fee = shipping_item.find('input[name="step_fee"]').val();
+	        		}
+        		}
+        		if (val > 0) {
+        			$.post(url, {'shipping_id': val}, function(data) {
+        				var shipping_code = data.shipping_area.shipping_code;
+        				var html = '';
+        				var arr = ['ship_ems', 'ship_yto', 'ship_zto', 'ship_sto_express', 'ship_post_mail', 'ship_sf_express', 'ship_post_express'];
+        				if ($.inArray(shipping_code, arr) > 0) {
+        					html += '<div class="form-group"><label class="control-label col-lg-3">费用计算方式</label>';
+        					if (fee_compute_mode != undefined && fee_compute_mode == 'by_number') {
+    							html += '<div class="controls col-lg-6"><input type="radio" id="fee_compute_mode_by_weight" class="uni_style" name="fee_compute_mode" value="by_weight" data-code="'+ shipping_code +'"/>';
+            					html += '<label for="fee_compute_mode_by_weight">按重量计算</label>';
+            					html += '<input type="radio" id="fee_compute_mode_by_number" class="uni_style" name="fee_compute_mode" value="by_number" checked data-code="'+ shipping_code +'"/>';
+        					} else {
+        						html += '<div class="controls col-lg-6"><input type="radio" id="fee_compute_mode_by_weight" class="uni_style" name="fee_compute_mode" value="by_weight" checked data-code="'+ shipping_code +'"/>';
+            					html += '<label for="fee_compute_mode_by_weight">按重量计算</label>';
+            					html += '<input type="radio" id="fee_compute_mode_by_number" class="uni_style" name="fee_compute_mode" value="by_number" data-code="'+ shipping_code +'"/>';
+        					}
+        					html += '<label for="fee_compute_mode_by_number">按数量计算</label>';
+        					html += '</div></div>';
+        				}
+        				if (data.content.length > 0 && shipping_code != 'ship_cac') {
+        					var content = data.content;
+        					for (var i = 0; i <= content.length - 1; i++) {
+        						if (fee_compute_mode == 'by_number') {
+	        						if (content[i].name == 'item_fee' || content[i].name == 'free_money' || content[i].name == 'pay_fee') {
+	        							if (content[i].name == 'item_fee') {
+	        								content[i].value = item_fee != undefined ? item_fee : content[i].value;
+	        							}
+	        							if (content[i].name == 'free_money') {
+	        								content[i].value = free_money != undefined ? free_money : content[i].value;
+	        							}
+	        							if (content[i].name == 'pay_fee') {
+	        								content[i].value = pay_fee != undefined ? pay_fee : content[i].value;
+	        							}
+	        							html += '<div class="form-group" id='+ content[i].name +'>';
+	        							html += '<label class="control-label col-lg-3">'+ content[i].label+ '</label>';
+	        							html += '<div class="controls col-lg-6"><input class="form-control" name="'+ content[i].name +'" type="text" value="'+ content[i].value +'"/></div><span class="input-must">*</span>';
+	        							html += '</div>';
+	        						} else {
+	        							if (content[i].name == 'base_fee') {
+	        								content[i].value = base_fee != undefined ? base_fee : content[i].value;
+	        							}
+	        							if (content[i].name == 'step_fee') {
+	        								content[i].value = step_fee != undefined ? step_fee : content[i].value;
+	        							}
+	        							html += '<div class="form-group" id='+ content[i].name +' style="display:none;">';
+	        							html += '<label class="control-label col-lg-3">'+ content[i].label+ '</label>';
+	        							html += '<div class="controls col-lg-6"><input class="form-control" name="'+ content[i].name +'" type="text" value="'+ content[i].value +'" disabled/></div><span class="input-must">*</span>';
+	        							html += '</div>';
+	        						}
+        						} else {
+        							if (content[i].name != 'item_fee') {
+	        							if (content[i].name == 'free_money') {
+	        								content[i].value = free_money != undefined ? free_money : content[i].value;
+	        							}
+	        							if (content[i].name == 'pay_fee') {
+	        								content[i].value = pay_fee != undefined ? pay_fee : content[i].value;
+	        							}
+	        							if (content[i].name == 'base_fee') {
+	        								content[i].value = base_fee != undefined ? base_fee : content[i].value;
+	        							}
+	        							if (content[i].name == 'step_fee') {
+	        								content[i].value = step_fee != undefined ? step_fee : content[i].value;
+	        							}
+	        							html += '<div class="form-group" id='+ content[i].name +'>';
+	        							html += '<label class="control-label col-lg-3">'+ content[i].label+ '</label>';
+	        							html += '<div class="controls col-lg-6"><input class="form-control" name="'+ content[i].name +'" type="text" value="'+ content[i].value +'"/></div><span class="input-must">*</span>';
+	        							html += '</div>';
+	        						} else {
+	        							if (content[i].name == 'item_fee') {
+	        								content[i].value = item_fee != undefined ? item_fee : content[i].value;
+	        							}
+	        							html += '<div class="form-group" id='+ content[i].name +' style="display:none;">';
+	        							html += '<label class="control-label col-lg-3">'+ content[i].label+ '</label>';
+	        							html += '<div class="controls col-lg-6"><input class="form-control" name="'+ content[i].name +'" type="text" value="'+ content[i].value +'" disabled/></div><span class="input-must">*</span>';
+	        							html += '</div>';
+	        						}
+        						}
+        					}
+        				}
+        				$('#shipping_info').append(html);
+        				app.express.area_compute_mode();
+        			});
+        		}
+        	});
+        	
+        	$('.add_shipping').off('click').on('click', function() {
+        		clearForm();
+        		$('.add-shipping-btn').attr('data-type', 'add');
+        		$('#addShipping').modal('show');
+        	});
+        	
+        	$('.remove_shipping').off('click').on('click', function() {
+        		var message = '您确定要删除该快递方式吗？';
+        		var $this = $(this);
+				smoke.confirm(message, function(e) {
+					if (e) {
+						$this.parents('.info-shipping-item').remove();
+					}
+				}, {ok:"确定", cancel:"取消"});
+        	});
+        	
+        	$('.edit_shipping').off('click').on('click', function() {
+        		var $this = $(this),
+        			shipping_id = $this.attr('data-shipping');
+        		$('.add-shipping-btn').attr('data-type', 'edit');
+        		
+        		$('select[name="shipping_id"] option[value='+ shipping_id +']').attr('selected', true);
+        		$('select[name="shipping_id"]').trigger("liszt:updated").trigger("change");
+        		$('#addShipping').modal('show');
+        	});
+        },
+        
+        /* 配送费用计算方式 */
+        area_compute_mode: function () {
+        	$('input[name="fee_compute_mode"]').off('click').on('click', function() {
+        		var base_fee = document.getElementById("base_fee");
+                var step_fee = document.getElementById("step_fee");
+                var item_fee = document.getElementById("item_fee");
+                var $this = $(this),
+                	shipping_code = $this.attr('data-code'),
+                 	mode = $this.val();
+                 
+                if (shipping_code == 'ship_post_mail' || shipping_code == 'ship_post_express') {
+                    var step_fee1 = document.getElementById("step_fee1");
+                }
+                if (mode == 'by_number') {
+                    item_fee.style.display = '';
+                    base_fee.style.display = 'none';
+                    step_fee.style.display = 'none';
+                    $('#item_fee').find('input').removeAttr('disabled');
+                    $('#base_fee').find('input').attr('disabled', true);
+                   	$('#step_fee').find('input').attr('disabled', true);
+                    if (shipping_code == 'ship_post_mail' || shipping_code == 'ship_post_express') {
+                    	step_fee1.style.display = 'none';
+                    	$('#step_fee1').find('input').attr('disabled', true);
+                    }
+                } else {
+                  	item_fee.style.display = 'none';
+                   	base_fee.style.display = '';
+                   	step_fee.style.display = '';
+                   	$('#item_fee').find('input').attr('disabled', true);
+                   	$('#base_fee').find('input').removeAttr('disabled');
+                   	$('#step_fee').find('input').removeAttr('disabled');
+                    if (shipping_code == 'ship_post_mail' || shipping_code == 'ship_post_express') {
+                    	step_fee1.style.display = '';
+                    	$('#step_fee1').find('input').removeAttr('disabled');
+                    }
+              	}
+        	});
+        },
+        
+        shippingForm: function () {
+            var $form = $("form[name='shippingForm']");
+            var option = {
+                rules: {
+                	shipping_id: {
+                        required: true,
+                        min: 0
+                    },
+                    base_fee: {
+                    	min: 0
+                    },
+                    step_fee: {
+                    	min: 0
+                    },
+                    free_money: {
+                    	min: 0
+                    },
+                    pay_fee: {
+                    	min: 0
+                    },
+                    item_fee: {
+                    	min: 0
+                    }
+                },
+                messages: {
+                	shipping_id: {
+                        required: '请选择快递方式',
+                        min: '请选择快递方式'
+                    },
+                    base_fee: {
+                    	min: '请输入正确的价格格式',
+                    },
+                    step_fee: {
+                    	min: '请输入正确的价格格式',
+                    },
+                    free_money: {
+                    	min: '请输入正确的价格格式',
+                    },
+                    pay_fee: {
+                    	min: '请输入正确的价格格式',
+                    },
+                    item_fee: {
+                    	min: '请输入正确的价格格式',
+                    }
+                },
+                submitHandler: function () {
+                	var val = $('select[name="shipping_id"]').val();
+                	var type = $('.add-shipping-btn').attr('data-type');
+                	var shipping_item = $('.template-info-item').find('.shipping-item-' + val);
+                	if (type == 'add') {
+             			if (shipping_item.length > 0) {
+             				$('#addShipping').modal('hide');
+             				var data = {
+         						message : "该快递方式已存在",
+         						state : "error",
+         					};
+             				ecjia.merchant.showmessage(data);
+             				return false;
+             			}
+             		}
+                    $form.ajaxSubmit({
+                        dataType: "json",
+                        success: function (data) {
+                        	var html = '';
+                        	var shipping_name = $('select[name="shipping_id"] option[value='+ data.shipping_id +']').html();
+                			html += shipping_name + '：';
+                    		for (var i in data.content) {
+                    			html += '<input type="hidden" name="'+ i +'" value="'+ data.content[i] +'" />';
+                    			if (i != 'fee_compute_mode') {
+	                    			var name = $('#shipping_info').find('input[name='+ i +']').parents('.form-group').find('.control-label').html();
+	                    			html += name + '（'+ data.content[i] +'元），';
+                    			}
+                    		}
+                    		html = html.substring(0,html.length-1);
+                    		var temp = '<div class="info-shipping-item shipping-item-'+ data.shipping_id +'"><div class="info-shipping-left">'+ html +'</div>';
+                    		temp += '<div class="info-shipping-right"><a class="edit_shipping" href="javascript:;" data-shipping="'+ data.shipping_id +'">编辑</a> &nbsp;|&nbsp; <a class="remove_shipping ecjiafc-red" href="javascript:;">删除</a></div></div>';
+                    		$('.shipping-item-'+ data.shipping_id).remove();
+                    		$('.template-info-shipping').append(temp);
+                        	app.express.add_shipping();
+                        	$('#addShipping').modal('hide');
+                        }
+                    });
+                }
+            }
+            var options = $.extend(ecjia.merchant.defaultOptions.validate, option);
+            $form.validate(options);
+        }
 	}
+	
+	function clearForm() {
+		$('select[name="shipping_id"] option').eq(0).attr("selected", true);
+		$('select[name="shipping_id"]').trigger("liszt:updated").trigger("change");
+		$('#shipping_info').html('');
+	};
+
 	
 })(ecjia.merchant, jQuery);
 

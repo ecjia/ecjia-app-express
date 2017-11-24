@@ -51,15 +51,13 @@ defined('IN_ECJIA') or exit('No permission resources.');
  */
 class merchant extends ecjia_merchant
 {
-    private $express_order_db;
-
     public function __construct()
     {
         parent::__construct();
 
         RC_Loader::load_app_func('global');
-        $this->express_order_db = RC_Model::model('express/express_order_model');
-
+        RC_Loader::load_app_class('shipping_factory', 'shipping', false);
+        
         /* 加载全局 js/css */
         RC_Script::enqueue_script('jquery-validate');
         RC_Script::enqueue_script('jquery-form');
@@ -70,7 +68,6 @@ class merchant extends ecjia_merchant
 
         RC_Style::enqueue_style('merchant', RC_App::apps_url('statics/css/merchant.css', __FILE__), array());
 
-        RC_Loader::load_app_class('shipping_factory', null, false);
         ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here('配送管理', RC_Uri::url('express/merchant/shipping_template')));
     }
 
@@ -272,6 +269,11 @@ class merchant extends ecjia_merchant
         $provinces = ecjia_region::getSubarea(ecjia::config('shop_country'));//获取当前国家的所有省份
         $this->assign('provinces', $provinces);
         
+        $shipping_data  = RC_DB::table('shipping')->select('shipping_id', 'shipping_name')->get();
+        $this->assign('shipping', $shipping_data);
+        
+        $this->assign('shipping_form_action', RC_Uri::url('express/merchant/add_shipping'));
+        
         $this->display('shipping_template_info.dwt');
     }
 
@@ -284,6 +286,50 @@ class merchant extends ecjia_merchant
         ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here('运费模版'));
 
         $this->display('shipping_template_list.dwt');
+    }
+    
+    public function get_shipping_info() {
+    	$shipping_id = !empty($_POST['shipping_id']) ? intval($_POST['shipping_id']) : 0;
+    	
+    	$shipping_data  = RC_DB::table('shipping')
+	    	->select('shipping_name', 'shipping_code', 'support_cod')
+	    	->where('shipping_id', $shipping_id)
+	    	->first();
+    	
+    	$fields = array();
+    	$shipping_handle = new shipping_factory($shipping_data['shipping_code']);
+    	$fields = $shipping_handle->form_format($fields, true);
+    	
+    	$count = count($fields);
+    	$fields[$count]['name']     = "free_money";
+    	$fields[$count]['value']    = "0";
+    	$fields[$count]['label']    = RC_Lang::get('shipping::shipping_area.free_money');
+    	
+    	/* 如果支持货到付款，则允许设置货到付款支付费用 */
+    	if ($shipping_data['support_cod']) {
+    		$count++;
+    		$fields[$count]['name']     = "pay_fee";
+    		$fields[$count]['value']    = "0";
+    		$fields[$count]['label']    = RC_Lang::get('shipping::shipping_area.pay_fee');
+    	}
+    	
+    	$shipping_area['shipping_id']   = $shipping_id;
+    	$shipping_area['shipping_code'] = $shipping_data['shipping_code'];
+    	return $this->showmessage('', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('content' => $fields, 'shipping_area' => $shipping_area));
+    }
+    
+    public function add_shipping() {
+    	$data = !empty($_POST) ? $_POST : '';
+    	$shipping_id = $data['shipping_id'];
+    	unset($data['shipping_id']);
+    	
+    	return $this->showmessage('', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('content' => $data, 'shipping_id' => $shipping_id));
+    }
+    
+    public function get_shipping_list() {
+    	$shipping_data  = RC_DB::table('shipping')->select('shipping_id', 'shipping_name')->get();
+    	 
+    	return $this->showmessage('', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('content' => $shipping_data));
     }
 }
 

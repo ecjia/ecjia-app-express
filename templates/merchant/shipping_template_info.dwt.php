@@ -26,22 +26,12 @@
                   <form class="cmxform form-horizontal tasi-form" name="theForm" method="post" action="{$form_action}">
                   		<div class="form-group">
                           	<label class="control-label col-lg-2">模版名称：</label>
-                           	<div class="col-lg-6">
+                           	<div class="col-lg-8">
                               	<input class="form-control" type="text" name="template_name" />
                               	<span class="help-block">该名称只在运费模板列表显示，便于管理员查找模板</span>
                           	</div>
                           	<span class="input-must">{lang key='system::system.require_field'}</span>
                        	</div>
-                       	<div class="form-group">
-							<label class="control-label col-lg-2">计价方式：</label>
-							<div class="chk_radio col-lg-6">
-                                <input id="by_number" type="radio" name="price_method" value="1" {if $bonus_arr.send_type eq 1} checked{/if} />
-                                <label for="by_number">按件</label>
-
-                                <input id="by_weight" type="radio" name="price_method" value="2" {if $bonus_arr.send_type eq 2} checked{/if} />
-                                <label for="by_weight">按重量</label>
-							</div>
-					  	</div>
 					  	<div class="form-group">
 							<label class="control-label col-lg-2">地区设置：</label>
 							<div class="controls col-lg-8">
@@ -51,18 +41,6 @@
 										<div class="head-right">操作</div>
 									</div>
 									<div class="template-info-content">
-										<div class="content-shipping by_number">
-											默认运费：<input type="text" class="form-control" name="default" value="5" /> 件内，
-											<input type="text" class="form-control" name="default" value="1" /> 元，
-											每增加 <input class="form-control" type="text" name="default" value="1" /> 件，
-											增加运费 <input class="form-control" type="text" name="default" value="1" /> 元
-										</div>
-										<div class="content-shipping by_weight">
-											默认运费：<input type="text" class="form-control" name="default" value="5" /> kg内，
-											<input type="text" class="form-control" name="default" value="1" /> 元，
-											每增加 <input class="form-control" type="text" name="default" value="1" /> kg，
-											增加运费 <input class="form-control" type="text" name="default" value="1" /> 元
-										</div>
 										<div class="content-area">
 											<ul class="content-area-list"></ul>
 											<div class="content-area-handle">
@@ -83,8 +61,9 @@
 										<div class="head-left">快递方式</div>
 										<div class="head-right">操作</div>
 									</div>
+									<div class="template-info-shipping" data-url='{url path="express/merchant/get_shipping_list"}'></div>
 									<div class="template-info-content">
-										<a class="btn btn-primary add_shipping">添加快递</a>
+										<a class="btn btn-primary add_shipping" href="javascript:;">添加快递</a>
 									</div>
 								</div>
 							</div>
@@ -164,6 +143,41 @@
 				<div class="form-group t_c">
 					<a class="btn btn-primary close_model" data-dismiss="modal">确定</a>
 				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="addShipping">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button class="close" data-dismiss="modal">×</button>
+				<h3>选择快递</h3>
+			</div>
+			<div class="modal-body">
+				<form class="cmxform form-horizontal tasi-form" name="shippingForm" method="post" action="{$shipping_form_action}">
+					<div class="form-group">
+						<label class="control-label col-lg-3">快递方式：</label>
+						<div class="controls col-lg-6">
+							<select name="shipping_id" class="w300 form-control shipping_list" data-url='{url path="express/merchant/get_shipping_info"}'>
+								<option value="-1">请选择快递方式...</option>
+								<!-- {foreach from=$shipping item=val} -->
+								<option value="{$val.shipping_id}">{$val.shipping_name}</option>
+								<!-- {/foreach} -->
+					        </select>
+						</div>
+						<span class="input-must">{lang key='system::system.require_field'}</span>
+					</div>
+					<div id="shipping_info">
+					
+					</div>
+					<div class="form-group">
+						<div class="col-lg-offset-3 col-lg-6">
+							<input type="submit" value="{lang key='system::system.button_submit'}" class="btn btn-primary add-shipping-btn" />
+						</div>
+					</div>
+				</form>
 			</div>
 		</div>
 	</div>
