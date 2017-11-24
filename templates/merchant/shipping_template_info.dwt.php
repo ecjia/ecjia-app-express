@@ -51,16 +51,22 @@
 										<div class="head-right">操作</div>
 									</div>
 									<div class="template-info-content">
-										<div class="content-shipping">
+										<div class="content-shipping by_number">
 											默认运费：<input type="text" class="form-control" name="default" value="5" /> 件内，
 											<input type="text" class="form-control" name="default" value="1" /> 元，
 											每增加 <input class="form-control" type="text" name="default" value="1" /> 件，
 											增加运费 <input class="form-control" type="text" name="default" value="1" /> 元
 										</div>
+										<div class="content-shipping by_weight">
+											默认运费：<input type="text" class="form-control" name="default" value="5" /> kg内，
+											<input type="text" class="form-control" name="default" value="1" /> 元，
+											每增加 <input class="form-control" type="text" name="default" value="1" /> kg，
+											增加运费 <input class="form-control" type="text" name="default" value="1" /> 元
+										</div>
 										<div class="content-area">
 											<ul class="content-area-list"></ul>
 											<div class="content-area-handle">
-												<a data-toggle="modal" href="#chooseRegion">编辑</a> &nbsp;|&nbsp; <a class="reset_region">重置</a>
+												<a data-toggle="modal" href="#chooseRegion">编辑</a> &nbsp;|&nbsp; <a class="reset_region ecjiafc-red" href="javascript:;">重置</a>
 											</div>
 										</div>
 										<a class="btn btn-primary add_area" data-toggle="modal" href="#chooseRegion">添加地区</a>

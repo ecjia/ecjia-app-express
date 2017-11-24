@@ -44,7 +44,7 @@
 									<div class="template-head">
 										<div class="head-left">运费模板名称1</div>
 										<div class="head-right">
-											<a>查看详情</a>&nbsp;&nbsp;<a>删除</a>
+											<a>查看详情</a> &nbsp;|&nbsp; <a class="ecjiafc-red">删除</a>
 										</div>
 									</div>
 									<div class="template-content">
@@ -67,7 +67,7 @@
 									<div class="template-head">
 										<div class="head-left">运费模板名称2</div>
 										<div class="head-right">
-											<a>查看详情</a>&nbsp;&nbsp;<a>删除</a>
+											<a>查看详情</a> &nbsp;|&nbsp; <a class="ecjiafc-red">删除</a>
 										</div>
 									</div>
 									<div class="template-content">
@@ -90,7 +90,7 @@
 									<div class="template-head">
 										<div class="head-left">运费模板名称3</div>
 										<div class="head-right">
-											<a>查看详情</a>&nbsp;&nbsp;<a>删除</a>
+											<a>查看详情</a> &nbsp;|&nbsp; <a class="ecjiafc-red">删除</a>
 										</div>
 									</div>
 									<div class="template-content">
@@ -108,7 +108,6 @@
 										</div>
 									</div>
 								</div>
-								
 								
 								<table class="table table-striped table-hover table-hide-edit ecjiaf-tlf">
 									<tbody>
