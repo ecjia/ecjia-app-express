@@ -56,7 +56,6 @@ class merchant extends ecjia_merchant
         parent::__construct();
 
         RC_Loader::load_app_func('global');
-        RC_Loader::load_app_class('shipping_factory', 'shipping', false);
         
         /* 加载全局 js/css */
         RC_Script::enqueue_script('jquery-validate');
@@ -297,8 +296,8 @@ class merchant extends ecjia_merchant
 	    	->first();
     	
     	$fields = array();
-    	$shipping_handle = new shipping_factory($shipping_data['shipping_code']);
-    	$fields = $shipping_handle->form_format($fields, true);
+    	$shipping_handle = ecjia_shipping::channel($shipping_data['shipping_code']);
+    	$fields = $shipping_handle->makeFormData($fields);
     	
     	$count = count($fields);
     	$fields[$count]['name']     = "free_money";
