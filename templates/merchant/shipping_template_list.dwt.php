@@ -40,80 +40,38 @@
 							</h2>
 							
 							<section class="panel">
+								<!-- {foreach from=$data.item item=list} -->
 								<div class="template-item">
 									<div class="template-head">
-										<div class="head-left">运费模板名称1</div>
+										<div class="head-left">{$list.shipping_area_name}</div>
 										<div class="head-right">
-											<a>查看详情</a> &nbsp;|&nbsp; <a class="ecjiafc-red">删除</a>
+											<a class="data-pjax" href='{RC_Uri::url("express/merchant/edit_shipping_template")}&template_name={$list.shipping_area_name}'>查看详情</a> &nbsp;|&nbsp;
+											<a data-toggle="ajaxremove" class="ajaxremove ecjiafc-red" data-msg="您确定要删除该运费模板吗？" href='{RC_Uri::url("express/merchant/remove_template", "name={$list.shipping_area_name}")}' title="{lang key='system::system.drop'}">删除</a>
 										</div>
 									</div>
 									<div class="template-content">
 										<div class="content-group">
 											<div class="content-label">物流快递：</div>
 											<div class="content-controls">
-												申通、中通、申通、中通、申通、中通、申通、中通、申通、中通、申通、中通、申通、中通、申通、中通
+												{$list.shipping_name}
 											</div>
 										</div>
 										<div class="content-group">
 											<div class="content-label">配送区域：</div>
 											<div class="content-controls">
-												上海市 | 北京市 | 南京市 | 上海市 | 北京市 | 南京市 | 上海市 | 北京市 | 南京市 | 上海市 | 北京市 | 南京市 | 上海市 | 北京市 | 南京市 | 上海市 | 北京市 | 南京市 | 上海市 | 北京市 | 南京市 | 上海市 | 北京市 | 南京市
+												{$list.shipping_area}
 											</div>
 										</div>
 									</div>
 								</div>
-								
-								<div class="template-item">
-									<div class="template-head">
-										<div class="head-left">运费模板名称2</div>
-										<div class="head-right">
-											<a>查看详情</a> &nbsp;|&nbsp; <a class="ecjiafc-red">删除</a>
-										</div>
-									</div>
-									<div class="template-content">
-										<div class="content-group">
-											<div class="content-label">物流快递：</div>
-											<div class="content-controls">
-												申通、中通、申通、中通、申通、中通、申通、中通、申通、中通、申通、中通、申通、中通、申通、中通
-											</div>
-										</div>
-										<div class="content-group">
-											<div class="content-label">配送区域：</div>
-											<div class="content-controls">
-												上海市 | 北京市 | 南京市 | 上海市 | 北京市 | 南京市 | 上海市 | 北京市 | 南京市 | 上海市 | 北京市 | 南京市 | 上海市 | 北京市 | 南京市 | 上海市 | 北京市 | 南京市 | 上海市 | 北京市 | 南京市 | 上海市 | 北京市 | 南京市
-											</div>
-										</div>
-									</div>
-								</div>
-								
-								<div class="template-item">
-									<div class="template-head">
-										<div class="head-left">运费模板名称3</div>
-										<div class="head-right">
-											<a>查看详情</a> &nbsp;|&nbsp; <a class="ecjiafc-red">删除</a>
-										</div>
-									</div>
-									<div class="template-content">
-										<div class="content-group">
-											<div class="content-label">物流快递：</div>
-											<div class="content-controls">
-												申通、中通、申通、中通、申通、中通、申通、中通、申通、中通、申通、中通、申通、中通、申通、中通
-											</div>
-										</div>
-										<div class="content-group">
-											<div class="content-label">配送区域：</div>
-											<div class="content-controls">
-												上海市 | 北京市 | 南京市 | 上海市 | 北京市 | 南京市 | 上海市 | 北京市 | 南京市 | 上海市 | 北京市 | 南京市 | 上海市 | 北京市 | 南京市 | 上海市 | 北京市 | 南京市 | 上海市 | 北京市 | 南京市 | 上海市 | 北京市 | 南京市
-											</div>
-										</div>
-									</div>
-								</div>
-								
-								<table class="table table-striped table-hover table-hide-edit ecjiaf-tlf">
-									<tbody>
-										<tr><td class="no-records" colspan="4">{lang key='system::system.no_records'}</td></tr>
-									</tbody>
-								</table>
+								<!-- {foreachelse} -->
+									<table class="table table-striped table-hover table-hide-edit ecjiaf-tlf">
+										<tbody>
+											<tr><td class="no-records" colspan="4">{lang key='system::system.no_records'}</td></tr>
+										</tbody>
+									</table>
+								<!-- {/foreach} -->
+								<!-- {$data.page} -->
 							</section>
 						</div>
 					</div>

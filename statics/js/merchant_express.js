@@ -22,6 +22,31 @@
 					}
 				});
 			});
+			
+            var $form = $("form[name='theForm']");
+            var option = {
+                rules: {
+                	template_name: {
+                        required: true,
+                    }
+                },
+                messages: {
+                	template_name: {
+                        required: '请填写模版名称',
+                    }
+                },
+                submitHandler: function () {
+                    $form.ajaxSubmit({
+                        dataType: "json",
+                        success: function (data) {
+                        	ecjia.merchant.showmessage(data);
+                        	return false;
+                        }
+                    });
+                }
+            }
+            var options = $.extend(ecjia.merchant.defaultOptions.validate, option);
+            $form.validate(options);
 		},
 		
 		choose_area: function () {
@@ -188,16 +213,10 @@
         	});
         	
         	$('.reset_region').off('click').on('click', function() {
-        		var message = '您确定要重置该地区设置吗？';
-        		var $this = $(this);
-				smoke.confirm(message, function(e) {
-					if (e) {
-						$('.add_area').show();
-		    			$('.content-area').hide();
-		    			$('.content-area-list').hide();
-		    			$('.content-area-list').html('');
-					}
-				}, {ok:"确定", cancel:"取消"});
+				$('.add_area').show();
+    			$('.content-area').hide();
+    			$('.content-area-list').hide();
+    			$('.content-area-list').html('');
         	});
         },
         
@@ -209,7 +228,6 @@
         			url = $this.attr('data-url'),
         			fee_compute_mode = 'by_weight',
         			type = $('.add-shipping-btn').attr('data-type');
-        		
         		var shipping_item = $('.template-info-item').find('.shipping-item-' + val);
         		if (type == 'edit') {
 	        		if (shipping_item.length > 0) {
@@ -307,8 +325,27 @@
         	});
         	
         	$('.add_shipping').off('click').on('click', function() {
+        		var template_name = $('input[name="temp_name"]').val();
+        		if (template_name == '') {
+        			smoke.alert('请输入模版名称');
+        			return false;
+        		}
+        		
+        		var length = $('.content-area-list').find('input').length;
+        		if (length == 0) {
+        			smoke.alert('请选择地区');
+        			return false;
+        		}
         		clearForm();
         		$('.add-shipping-btn').attr('data-type', 'add');
+        		
+        		var shipping_name = $('form[name="theForm"]').find('input[name="temp_name"]').val();
+            	$('form[name="shippingForm"]').find('input[name="temp_name"]').val(shipping_name);
+            	$('form[name="shippingForm"]').find('input[name="shipping_area_id"]').val(0);
+            	
+            	var $temp = $('form[name="theForm"]').find('input[name="regions[]"]');
+            	$('form[name="shippingForm"]').append($temp.clone(true));
+            	
         		$('#addShipping').modal('show');
         	});
         	
@@ -323,12 +360,24 @@
         	});
         	
         	$('.edit_shipping').off('click').on('click', function() {
+        		var length = $('.content-area-list').find('input').length;
+        		if (length == 0) {
+        			smoke.alert('请选择地区');
+        			return false;
+        		}
+        		
         		var $this = $(this),
-        			shipping_id = $this.attr('data-shipping');
+        			shipping_id = $this.attr('data-shipping'),
+        			shipping_area_id = $this.attr('data-area');
         		$('.add-shipping-btn').attr('data-type', 'edit');
         		
         		$('select[name="shipping_id"] option[value='+ shipping_id +']').attr('selected', true);
         		$('select[name="shipping_id"]').trigger("liszt:updated").trigger("change");
+        		$('form[name="shippingForm"]').find('input[name="shipping_area_id"]').val(shipping_area_id);
+        		
+        		var $temp = $('form[name="theForm"]').find('input[name="regions[]"]');
+            	$('form[name="shippingForm"]').append($temp.clone(true));
+        		
         		$('#addShipping').modal('show');
         	});
         },
@@ -435,23 +484,9 @@
                     $form.ajaxSubmit({
                         dataType: "json",
                         success: function (data) {
-                        	var html = '';
-                        	var shipping_name = $('select[name="shipping_id"] option[value='+ data.shipping_id +']').html();
-                			html += shipping_name + '：';
-                    		for (var i in data.content) {
-                    			html += '<input type="hidden" name="'+ i +'" value="'+ data.content[i] +'" />';
-                    			if (i != 'fee_compute_mode') {
-	                    			var name = $('#shipping_info').find('input[name='+ i +']').parents('.form-group').find('.control-label').html();
-	                    			html += name + '（'+ data.content[i] +'元），';
-                    			}
-                    		}
-                    		html = html.substring(0,html.length-1);
-                    		var temp = '<div class="info-shipping-item shipping-item-'+ data.shipping_id +'"><div class="info-shipping-left">'+ html +'</div>';
-                    		temp += '<div class="info-shipping-right"><a class="edit_shipping" href="javascript:;" data-shipping="'+ data.shipping_id +'">编辑</a> &nbsp;|&nbsp; <a class="remove_shipping ecjiafc-red" href="javascript:;">删除</a></div></div>';
-                    		$('.shipping-item-'+ data.shipping_id).remove();
-                    		$('.template-info-shipping').append(temp);
-                        	app.express.add_shipping();
                         	$('#addShipping').modal('hide');
+                        	ecjia.merchant.showmessage(data);
+                        	return false;
                         }
                     });
                 }
