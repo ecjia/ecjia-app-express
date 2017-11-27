@@ -650,6 +650,7 @@ class merchant extends ecjia_merchant
             ->select('shipping_area_name')
             ->skip($page->start_id - 1)
             ->groupBy('shipping_area_name')
+            ->orderBy('shipping_area_id', 'desc')
             ->get();
 
         if (!empty($data)) {

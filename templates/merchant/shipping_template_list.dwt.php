@@ -71,6 +71,7 @@
 										</tbody>
 									</table>
 								<!-- {/foreach} -->
+								<!-- {$data.page} -->
 							</section>
 						</div>
 					</div>
