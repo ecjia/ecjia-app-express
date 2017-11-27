@@ -37,7 +37,7 @@
 .template-info-head .head-right{float:right;padding-right:62px}
 .template-info-content{overflow:hidden}
 .template-info-content input{display:inline-block;width:80px}
-.template-info-content .content-area{display:none;border-top:1px solid #ddd}
+.template-info-content .content-area{display:none}
 .template-info-content .content-area-list{overflow:hidden;-webkit-padding-start:10px;padding-top:15px;margin-bottom:5px;width:85%;float:left;display:none}
 .template-info-content .add_area{margin:10px 0 10px 10px}
 .template-info-content .add_shipping{margin:10px 0 10px 10px}

@@ -27,12 +27,13 @@
                   		<div class="form-group">
                           	<label class="control-label col-lg-2">模版名称：</label>
                            	<div class="col-lg-8">
-                              	<input class="form-control" type="text" name="template_name" />
+                              	<input class="form-control" type="text" name="temp_name" value="{$template_name}" />
                               	<span class="help-block">该名称只在运费模板列表显示，便于管理员查找模板</span>
                           	</div>
                           	<span class="input-must">{lang key='system::system.require_field'}</span>
                        	</div>
-					  	<div class="form-group">
+                       	
+                      	<div class="form-group">
 							<label class="control-label col-lg-2">地区设置：</label>
 							<div class="controls col-lg-8">
 								<div class="template-info-item">
@@ -41,19 +42,26 @@
 										<div class="head-right">操作</div>
 									</div>
 									<div class="template-info-content">
-										<div class="content-area">
-											<ul class="content-area-list"></ul>
+										<div class="content-area" {if $regions}style="display:block"{/if}>
+											<ul class="content-area-list" {if $regions}style="display:block"{/if}>
+												<!-- {if $regions} -->
+													<!-- {foreach from=$regions item=val} -->
+													<li><input type="hidden" value="{$val.region_id}" name="regions[]" id="regions_{$val.region_id}"/>{$val.region_name}</li>
+													<!-- {/foreach} -->
+												<!-- {/if} -->
+											</ul>
 											<div class="content-area-handle">
-												<a data-toggle="modal" href="#chooseRegion">编辑</a> &nbsp;|&nbsp; <a class="reset_region ecjiafc-red" href="javascript:;">重置</a>
+												<a data-toggle="modal" href="#chooseRegion">编辑</a> &nbsp;|&nbsp; <a class="reset_region ecjiafc-red" href="javascript:;">移除</a>
 											</div>
 										</div>
-										<a class="btn btn-primary add_area" data-toggle="modal" href="#chooseRegion">添加地区</a>
+										<a class="btn btn-primary add_area" data-toggle="modal" href="#chooseRegion" {if $regions}style="display:none"{/if}>添加地区</a>
 									</div>
 								</div>
 							</div>
 							<span class="input-must">{lang key='system::system.require_field'}</span>
 					  	</div>
-					  	<div class="form-group">
+					  	
+                       	<div class="form-group">
 							<label class="control-label col-lg-2">快递方式：</label>
 							<div class="controls col-lg-8">
 								<div class="template-info-item">
@@ -61,7 +69,37 @@
 										<div class="head-left">快递方式</div>
 										<div class="head-right">操作</div>
 									</div>
-									<div class="template-info-shipping" data-url='{url path="express/merchant/get_shipping_list"}'></div>
+									<div class="template-info-shipping">
+									<!-- {foreach from=$data item=list} -->
+										
+										<div class="info-shipping-item shipping-item-{$list.shipping_id}">
+											<div class="info-shipping-left">
+											{$list.shipping_name}
+											<!-- {if $list.shipping_code != 'ship_cac'} -->：
+											<!-- {foreach from=$list.fields name=f item=field} -->
+												<input type="hidden" name="{$field.name}" value="{if $field.value}{$field.value}{else}0{/if}" />
+												<!-- {if $list.fee_compute_mode == 'by_number'} -->
+													<!--{if $field.name == 'item_fee' || $field.name == 'free_money' || $field.name == 'pay_fee'}-->
+														{$field.label}（{$field.value}）{if !$smarty.foreach.f.last}，{/if}
+													<!-- {/if} -->
+												<!--{else}-->
+													<!--{if $field.name != 'item_fee'}-->
+														{$field.label}（{$field.value}）{if !$smarty.foreach.f.last}，{/if}
+													<!-- {/if} -->
+												<!-- {/if} -->
+											<!-- {/foreach} -->
+											<!-- {/if} -->
+											</div>
+											<div class="info-shipping-right">
+												<a class="edit_shipping" href="javascript:;" data-shipping="{$list.shipping_id}" data-area="{$list.shipping_area_id}">编辑</a> &nbsp;|&nbsp;
+												<a data-toggle="ajaxremove" class="ajaxremove ecjiafc-red" data-msg="您确定要删除该快递方式吗？" href='{RC_Uri::url("express/merchant/remove", "id={$list.shipping_area_id}")}' title="{lang key='system::system.drop'}">删除</a>
+											</div>
+											
+										</div>
+										
+									<!-- {/foreach} -->
+									
+									</div>
 									<div class="template-info-content">
 										<a class="btn btn-primary add_shipping" href="javascript:;">添加快递</a>
 									</div>
@@ -72,12 +110,8 @@
 					  
                  		<div class="form-group">
 							<div class="col-lg-offset-2 col-lg-6">
-								<!-- {if $data.template_id} -->
-									<input type="submit" value="更新" class="btn btn-info" />
-									<input type="hidden" name='template_id' value="{$data.template_id}">
-								<!-- {else} -->
-									<input type="submit" value="{lang key='system::system.button_submit'}" class="btn btn-info" />
-								<!-- {/if} -->
+								<input type="hidden" name="template_name" value="{$template_name}"/>
+								<input type="submit" value="{lang key='system::system.button_submit'}" class="btn btn-info" />
 							</div>
 						</div>
                   	</form>
@@ -163,7 +197,7 @@
 							<select name="shipping_id" class="w300 form-control shipping_list" data-url='{url path="express/merchant/get_shipping_info"}'>
 								<option value="-1">请选择快递方式...</option>
 								<!-- {foreach from=$shipping item=val} -->
-								<option value="{$val.shipping_id}">{$val.shipping_name}</option>
+								<option value="{$val.id}">{$val.name}</option>
 								<!-- {/foreach} -->
 					        </select>
 						</div>
@@ -174,6 +208,9 @@
 					</div>
 					<div class="form-group">
 						<div class="col-lg-offset-3 col-lg-6">
+							<input type="hidden" name="shipping_area_id" />
+							<input type="hidden" name="temp_name" />
+							<input type="hidden" name="template_name" value="{$template_name}"/>
 							<input type="submit" value="{lang key='system::system.button_submit'}" class="btn btn-primary add-shipping-btn" />
 						</div>
 					</div>
