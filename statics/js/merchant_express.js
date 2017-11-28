@@ -380,6 +380,9 @@
         		
         		$('select[name="shipping_id"] option[value='+ shipping_id +']').attr('selected', true);
         		$('select[name="shipping_id"]').trigger("liszt:updated").trigger("change");
+        		
+        		var shipping_name = $('form[name="theForm"]').find('input[name="temp_name"]').val();
+            	$('form[name="shippingForm"]').find('input[name="temp_name"]').val(shipping_name);
         		$('form[name="shippingForm"]').find('input[name="shipping_area_id"]').val(shipping_area_id);
         		
         		var $temp = $('form[name="theForm"]').find('input[name="regions[]"]');

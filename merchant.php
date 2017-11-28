@@ -340,7 +340,7 @@ class merchant extends ecjia_merchant
             $config[$count]['value'] = empty($time) ? '' : $time;
         }
         $data = array(
-            'shipping_area_name' => $template_name,
+            'shipping_area_name' => $temp_name,
             'shipping_id'        => $shipping_id,
             'configure'          => serialize($config),
         );
@@ -359,9 +359,10 @@ class merchant extends ecjia_merchant
             ->where('store_id', $_SESSION['store_id'])
             ->where('shipping_area_name', $template_name)
             ->lists('shipping_area_id');
-        RC_DB::table('area_region')->whereIn('shipping_area_id', $area_list)->delete();
-        _dump($area_list);
-        _dump($regions);
+        if (!empty($area_list)) {
+        	RC_DB::table('area_region')->whereIn('shipping_area_id', $area_list)->delete();
+        }
+        
         foreach ($area_list as $v) {
             foreach ($regions as $val) {
                 $data = array(
@@ -443,8 +444,9 @@ class merchant extends ecjia_merchant
         	->where('shipping_area_name', $template_name)
         	->update(array('shipping_area_name' => $temp_name));
         }
-
-        RC_DB::table('area_region')->whereIn('shipping_area_id', $area_list)->delete();
+		if (!empty($area_list)) {
+			RC_DB::table('area_region')->whereIn('shipping_area_id', $area_list)->delete();
+		}
         foreach ($area_list as $k => $v) {
             foreach ($regions as $key => $val) {
                 $area_list = array(
