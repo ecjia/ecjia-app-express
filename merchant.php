@@ -143,8 +143,8 @@ class merchant extends ecjia_merchant
                     );
                 }
                 $shipping_handle = ecjia_shipping::channel($shipping_data['shipping_code']);
-                $fields = $shipping_handle->makeFormData($fields);
-                
+                $fields          = $shipping_handle->makeFormData($fields);
+				
                 if (!empty($fields)) {
                     foreach ($fields as $key => $val) {
                         /* 替换更改的语言项 */
@@ -230,7 +230,7 @@ class merchant extends ecjia_merchant
 
         $fields          = array();
         $shipping_handle = ecjia_shipping::channel($shipping_data['shipping_code']);
-        $fields = $shipping_handle->makeFormData($fields);
+        $fields          = $shipping_handle->makeFormData($fields);
 
         $count                   = count($fields);
         $fields[$count]['name']  = "free_money";
@@ -298,8 +298,8 @@ class merchant extends ecjia_merchant
 
         $config          = array();
         $shipping_handle = ecjia_shipping::channel($shipping_data['shipping_code']);
-        $config = $shipping_handle->makeFormData($config);
-        
+        $config          = $shipping_handle->makeFormData($config);
+
         if (!empty($config)) {
             foreach ($config as $key => $val) {
                 $config[$key]['name']  = $val['name'];
@@ -344,7 +344,6 @@ class merchant extends ecjia_merchant
             'shipping_id'        => $shipping_id,
             'configure'          => serialize($config),
         );
-
         if (!empty($shipping_area_id)) {
             RC_DB::table('shipping_area')->where('store_id', $_SESSION['store_id'])->where('shipping_area_id', $shipping_area_id)->update($data);
         } else {
@@ -357,12 +356,11 @@ class merchant extends ecjia_merchant
         //重新设置area_region
         $area_list = RC_DB::table('shipping_area')
             ->where('store_id', $_SESSION['store_id'])
-            ->where('shipping_area_name', $template_name)
+            ->where('shipping_area_name', $temp_name)
             ->lists('shipping_area_id');
         if (!empty($area_list)) {
-        	RC_DB::table('area_region')->whereIn('shipping_area_id', $area_list)->delete();
+            RC_DB::table('area_region')->whereIn('shipping_area_id', $area_list)->delete();
         }
-        
         foreach ($area_list as $v) {
             foreach ($regions as $val) {
                 $data = array(
@@ -437,16 +435,16 @@ class merchant extends ecjia_merchant
                 return $this->showmessage('该模版名称已存在', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
             }
         }
-        
+
         if (!empty($template_name)) {
-        	RC_DB::table('shipping_area')
-        	->where('store_id', $_SESSION['store_id'])
-        	->where('shipping_area_name', $template_name)
-        	->update(array('shipping_area_name' => $temp_name));
+            RC_DB::table('shipping_area')
+                ->where('store_id', $_SESSION['store_id'])
+                ->where('shipping_area_name', $template_name)
+                ->update(array('shipping_area_name' => $temp_name));
         }
-		if (!empty($area_list)) {
-			RC_DB::table('area_region')->whereIn('shipping_area_id', $area_list)->delete();
-		}
+        if (!empty($area_list)) {
+            RC_DB::table('area_region')->whereIn('shipping_area_id', $area_list)->delete();
+        }
         foreach ($area_list as $k => $v) {
             foreach ($regions as $key => $val) {
                 $area_list = array(
@@ -596,7 +594,7 @@ class merchant extends ecjia_merchant
 
         $staff_list = RC_DB::table('staff_user')
             ->where('store_id', $_SESSION['store_id'])
-//          	->where('online_status', 1)
+//              ->where('online_status', 1)
             ->get();
 
         $this->assign('staff_user', $staff_list);
@@ -609,30 +607,30 @@ class merchant extends ecjia_merchant
 
         $this->display('shipping_record_info.dwt');
     }
-    
+
     public function assign_express()
     {
-    	$this->admin_priv('express_manage', ecjia::MSGTYPE_JSON);
-    
-    	$staff_id   = isset($_POST['staff_id']) ? intval($_POST['staff_id']) : 0;
-    	$express_id = isset($_POST['express_id']) ? intval($_POST['express_id']) : 0;
-    
-    	$express_info = RC_DB::table('express_order')->where('status', '<=', 2)->where('store_id', $_SESSION['store_id'])->where('express_id', $express_id)->first();
-    
-    	/* 判断配送单*/
-    	if (empty($express_info)) {
-    		return $this->showmessage('没有相应的配送单！', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
-    	}
-    
-    	$staff_user = RC_DB::table('staff_user')->where('store_id', $_SESSION['store_id'])->where('user_id', $staff_id)->first();
-    	if (empty($staff_user)) {
-    		return $this->showmessage('请选择相应配送员！', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
-    	}
-    
-    	$assign_express_data = array('status' => 1, 'staff_id' => $staff_id, 'express_user' => $staff_user['name'], 'express_mobile' => $staff_user['mobile'], 'update_time' => RC_Time::gmtime());
-    	RC_DB::table('express_order')->where('store_id', $_SESSION['store_id'])->where('express_id', $express_id)->update($assign_express_data);
-    
-    	return $this->showmessage('配送单派单成功！', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('pjaxurl' => RC_Uri::url('express/merchant/record_info', array('express_id' => $express_id))));
+        $this->admin_priv('express_manage', ecjia::MSGTYPE_JSON);
+
+        $staff_id   = isset($_POST['staff_id']) ? intval($_POST['staff_id']) : 0;
+        $express_id = isset($_POST['express_id']) ? intval($_POST['express_id']) : 0;
+
+        $express_info = RC_DB::table('express_order')->where('status', '<=', 2)->where('store_id', $_SESSION['store_id'])->where('express_id', $express_id)->first();
+
+        /* 判断配送单*/
+        if (empty($express_info)) {
+            return $this->showmessage('没有相应的配送单！', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+        }
+
+        $staff_user = RC_DB::table('staff_user')->where('store_id', $_SESSION['store_id'])->where('user_id', $staff_id)->first();
+        if (empty($staff_user)) {
+            return $this->showmessage('请选择相应配送员！', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+        }
+
+        $assign_express_data = array('status' => 1, 'staff_id' => $staff_id, 'express_user' => $staff_user['name'], 'express_mobile' => $staff_user['mobile'], 'update_time' => RC_Time::gmtime());
+        RC_DB::table('express_order')->where('store_id', $_SESSION['store_id'])->where('express_id', $express_id)->update($assign_express_data);
+
+        return $this->showmessage('配送单派单成功！', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('pjaxurl' => RC_Uri::url('express/merchant/record_info', array('express_id' => $express_id))));
     }
 
     //快递单模板

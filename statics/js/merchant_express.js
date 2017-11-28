@@ -377,6 +377,7 @@
         			shipping_id = $this.attr('data-shipping'),
         			shipping_area_id = $this.attr('data-area');
         		$('.add-shipping-btn').attr('data-type', 'edit');
+        		$('form[name="shippingForm"]').find('input[name="regions[]"]').remove();
         		
         		$('select[name="shipping_id"] option[value='+ shipping_id +']').attr('selected', true);
         		$('select[name="shipping_id"]').trigger("liszt:updated").trigger("change");
