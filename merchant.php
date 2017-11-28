@@ -426,7 +426,7 @@ class merchant extends ecjia_merchant
             return $this->showmessage('请添加快递方式', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
         }
 
-        if (!empty($template_name)) {
+        if (!empty($temp_name) && !empty($template_name)) {
             $count = RC_DB::table('shipping_area')
                 ->where('store_id', $_SESSION['store_id'])
                 ->where('shipping_area_name', '!=', $template_name)
@@ -435,6 +435,13 @@ class merchant extends ecjia_merchant
             if ($count > 0) {
                 return $this->showmessage('该模版名称已存在', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
             }
+        }
+        
+        if (!empty($template_name)) {
+        	RC_DB::table('shipping_area')
+        	->where('store_id', $_SESSION['store_id'])
+        	->where('shipping_area_name', $template_name)
+        	->update(array('shipping_area_name' => $temp_name));
         }
 
         RC_DB::table('area_region')->whereIn('shipping_area_id', $area_list)->delete();
@@ -447,7 +454,7 @@ class merchant extends ecjia_merchant
                 RC_DB::table('area_region')->insert($area_list);
             }
         }
-        $url = RC_Uri::url('express/merchant/edit_shipping_template', array('template_name' => $template_name));
+        $url = RC_Uri::url('express/merchant/edit_shipping_template', array('template_name' => $temp_name));
 
         return $this->showmessage('编辑成功', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('pjaxurl' => $url));
     }
