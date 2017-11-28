@@ -79,19 +79,25 @@
                     var html = '';
                     /* 如果有返回参数，则赋值并触发下一级别的选中 */
                     if (data.regions) {
-                    	  for (var i = 0; i <= data.regions.length - 1; i++) {
-                              html += '<li class="ms-elem-selectable select_hot_city" data-val="' + data.regions[i].region_id + '"><span>' +
-                              	data.regions[i].region_name + '</span>';
-                              if ($next_attr == 'selCities') {
-                                  html += '<span class="edit-list"><a href="javascript:;">添加</a></span>';
-                              }
-                              if ($next_attr == 'selDistricts') {
-                                  html += '<span class="edit-list"><a href="javascript:;">添加</a></span>';
-                              }
-                              if ($next_attr == 'selStreets') {
-                                  html += '<span class="edit-list"><a href="javascript:;">添加</a></span>';
-                              }
-                              html += '</li>';
+                    	var region = [];
+	                	$('.select-region li').each(function() {
+	                		region.push($(this).find('input').val());
+	                	});
+	                	for (var i = 0; i <= data.regions.length - 1; i++) {
+	                		html += '<li class="ms-elem-selectable select_hot_city" data-val="' + data.regions[i].region_id + '"><span>' +
+                            data.regions[i].region_name + '</span>';
+	                		var region_id = data.regions[i].region_id;
+	                		var index = $.inArray(region_id, region);
+	                		if ($next_attr == 'selCities' && index == -1) {
+	                			html += '<span class="edit-list"><a href="javascript:;">添加</a></span>';
+                          	}
+                        	if ($next_attr == 'selDistricts' && index == -1) {
+                             	html += '<span class="edit-list"><a href="javascript:;">添加</a></span>';
+                            }
+                            if ($next_attr == 'selStreets' && index == -1) {
+                                html += '<span class="edit-list"><a href="javascript:;">添加</a></span>';
+                            }
+                            html += '</li>';
                           };
                         $next.html(html);
                         app.express.quick_search();
@@ -184,7 +190,7 @@
             		$('.ms-elem-selectable').each(function() {
             			var val = $(this).attr('data-val');
             			var index = $.inArray(val, region);
-            			if (index > 0) {
+            			if (index != -1) {
             				$(this).find('a').hide();
             			}
             		});
@@ -244,7 +250,7 @@
         				var shipping_code = data.shipping_area.shipping_code;
         				var html = '';
         				var arr = ['ship_ems', 'ship_yto', 'ship_zto', 'ship_sto_express', 'ship_post_mail', 'ship_sf_express', 'ship_post_express'];
-        				if ($.inArray(shipping_code, arr) > 0) {
+        				if ($.inArray(shipping_code, arr) != -1) {
         					html += '<div class="form-group"><label class="control-label col-lg-3">费用计算方式</label>';
         					if (fee_compute_mode != undefined && fee_compute_mode == 'by_number') {
     							html += '<div class="controls col-lg-6"><input type="radio" id="fee_compute_mode_by_weight" class="uni_style" name="fee_compute_mode" value="by_weight" data-code="'+ shipping_code +'"/>';
@@ -338,6 +344,7 @@
         		}
         		clearForm();
         		$('.add-shipping-btn').attr('data-type', 'add');
+        		$('form[name="shippingForm"]').find('input[name="regions[]"]').remove();
         		
         		var shipping_name = $('form[name="theForm"]').find('input[name="temp_name"]').val();
             	$('form[name="shippingForm"]').find('input[name="temp_name"]').val(shipping_name);

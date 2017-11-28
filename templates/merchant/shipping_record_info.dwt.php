@@ -46,7 +46,7 @@
 							<tr>
 								<td><div align="right"><strong>{lang key='express::express.label_order_sn'}</strong></div></td>
 								<td>
-									<a href='{url path="orders/merchant/info" args="order_sn={$express_info.order_sn}"}'>{$express_info.order_sn}</a>
+									<a href='{url path="orders/merchant/record_info" args="order_sn={$express_info.order_sn}"}'>{$express_info.order_sn}</a>
 								</td>
 								<td><div align="right"><strong>{lang key='express::express.label_delivery_sn'}</strong></div></td>
 								<td>{$express_info.delivery_sn}</td>

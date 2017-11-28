@@ -92,7 +92,7 @@
 											</div>
 											<div class="info-shipping-right">
 												<a class="edit_shipping" href="javascript:;" data-shipping="{$list.shipping_id}" data-area="{$list.shipping_area_id}">编辑</a> &nbsp;|&nbsp;
-												<a data-toggle="ajaxremove" class="ajaxremove ecjiafc-red" data-msg="您确定要删除该快递方式吗？" href='{RC_Uri::url("express/merchant/remove", "id={$list.shipping_area_id}")}' title="{lang key='system::system.drop'}">删除</a>
+												<a data-toggle="ajaxremove" class="ajaxremove ecjiafc-red" data-msg="您确定要删除该快递方式吗？" href='{RC_Uri::url("express/merchant/remove_shipping", "id={$list.shipping_area_id}")}' title="{lang key='system::system.drop'}">删除</a>
 											</div>
 											
 										</div>

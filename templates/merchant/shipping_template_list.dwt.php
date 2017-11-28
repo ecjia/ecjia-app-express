@@ -24,7 +24,6 @@
 					        <span class="setting-group-title">配送管理</span>
 					        <ul class="nav nav-list m_t10 change">
 						        <li><a class="setting-group-item data-pjax llv-active" href='{url path="express/merchant/shipping_template"}'>运费模板</a></li>
-						        <li><a class="setting-group-item data-pjax" href='{url path="express/merchant/express_template"}'>快递单模版</a></li>
 						        <li><a class="setting-group-item data-pjax" href='{url path="express/merchant/shipping_record"}'>配送记录</a></li>
 					        </ul>
 						</div>
@@ -46,7 +45,7 @@
 										<div class="head-left">{$list.shipping_area_name}</div>
 										<div class="head-right">
 											<a class="data-pjax" href='{RC_Uri::url("express/merchant/edit_shipping_template")}&template_name={$list.shipping_area_name}'>查看详情</a> &nbsp;|&nbsp;
-											<a data-toggle="ajaxremove" class="ajaxremove ecjiafc-red" data-msg="您确定要删除该运费模板吗？" href='{RC_Uri::url("express/merchant/remove_template", "name={$list.shipping_area_name}")}' title="{lang key='system::system.drop'}">删除</a>
+											<a data-toggle="ajaxremove" class="ajaxremove ecjiafc-red" data-msg="您确定要删除该运费模板吗？" href='{RC_Uri::url("express/merchant/remove_shipping_template", "name={$list.shipping_area_name}")}' title="{lang key='system::system.drop'}">删除</a>
 										</div>
 									</div>
 									<div class="template-content">

@@ -71,155 +71,6 @@ class merchant extends ecjia_merchant
         ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here('配送管理', RC_Uri::url('express/merchant/shipping_template')));
     }
 
-    /**
-     * 配送记录
-     */
-    public function shipping_record()
-    {
-        $this->admin_priv('express_manage');
-        $this->assign('ur_here', '配送记录');
-
-        ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here('配送记录'));
-
-        $count = RC_Api::api('express', 'express_order_count');
-
-        /* 定义每页数量*/
-        $filter['limit'] = 10;
-        $page            = new ecjia_merchant_page($count, $filter['limit'], 5);
-        $filter['skip']  = $page->start_id - 1;
-
-        $express_list = RC_Api::api('express', 'express_order_list', $filter);
-
-        if (!empty($express_list)) {
-            foreach ($express_list as $key => $val) {
-                $express_list[$key]['formatted_add_time'] = RC_Time::local_date(ecjia::config('time_format'), $val['add_time']);
-                if ($val['from'] == 'assign') {
-                    $express_list[$key]['label_from'] = RC_Lang::get('express::express.assign');
-                } elseif ($val['from'] == 'grab') {
-                    $express_list[$key]['label_from'] = RC_Lang::get('express::express.grab');
-                } else {
-                    $express_list[$key]['label_from'] = RC_Lang::get('express::express.wait_assign');
-                }
-
-                switch ($val['status']) {
-                    case 0:
-                        $express_list[$key]['label_status'] = RC_Lang::get('express::express.wait_assign_express');
-                        break;
-                    case 1:
-                        $express_list[$key]['label_status'] = RC_Lang::get('express::express.wait_pick_up');
-                        break;
-                    case 2:
-                        $express_list[$key]['label_status'] = RC_Lang::get('express::express.express_delivery');
-                        break;
-                    case 3:
-                        $express_list[$key]['label_status'] = RC_Lang::get('express::express.return_express');
-                        break;
-                    case 4:
-                        $express_list[$key]['label_status'] = RC_Lang::get('express::express.refused');
-                        break;
-                    case 5:
-                        $express_list[$key]['label_status'] = RC_Lang::get('express::express.already_signed');
-                        break;
-                    case 6:
-                        $express_list[$key]['label_status'] = RC_Lang::get('express::express.has_returned');
-                        break;
-                }
-            }
-        }
-
-        $this->assign('express_list', $express_list);
-
-        $this->assign('page', $page->show(2));
-
-        $this->display('shipping_record_list.dwt');
-    }
-
-    public function info()
-    {
-        $this->admin_priv('express_manage');
-
-        ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(RC_Lang::get('express::express.express_info')));
-
-        $express_id = isset($_GET['express_id']) ? intval($_GET['express_id']) : 0;
-        $where      = array('store_id' => $_SESSION['store_id']);
-
-        $express_info = RC_DB::table('express_order as eo')
-            ->where(RC_DB::raw('express_id'), $express_id)
-            ->first();
-
-        $express_info['formatted_add_time']     = RC_Time::local_date(ecjia::config('time_format'), $express_info['add_time']);
-        $express_info['formatted_receive_time'] = $express_info['receive_time'] > 0 ? RC_Time::local_date(ecjia::config('time_format'), $express_info['receive_time']) : '';
-        $express_info['formatted_express_time'] = $express_info['express_time'] > 0 ? RC_Time::local_date(ecjia::config('time_format'), $express_info['express_time']) : '';
-        $express_info['formatted_signed_time']  = $express_info['signed_time'] > 0 ? RC_Time::local_date(ecjia::config('time_format'), $express_info['signed_time']) : '';
-        $express_info['formatted_update_time']  = $express_info['update_time'] > 0 ? RC_Time::local_date(ecjia::config('time_format'), $express_info['update_time']) : '';
-
-        if ($express_info['from'] == 'assign') {
-            $express_info['label_from'] = RC_Lang::get('express::express.assign');
-        } elseif ($express_info['from'] == 'grab') {
-            $express_info['label_from'] = RC_Lang::get('express::express.grab');
-        } elseif ($express_info['from'] == 'grab' && $express_info['staff_id'] == 0) {
-            $express_info['label_from'] = RC_Lang::get('express::express.wait_assign');
-        }
-
-        switch ($express_info['status']) {
-            case 0:
-                $express_info['label_status'] = RC_Lang::get('express::express.wait_assign_express');
-                break;
-            case 1:
-                $express_info['label_status'] = RC_Lang::get('express::express.wait_pick_up');
-                break;
-            case 2:
-                $express_info['label_status'] = RC_Lang::get('express::express.express_delivery');
-                break;
-            case 3:
-                $express_info['label_status'] = RC_Lang::get('express::express.return_express');
-                break;
-            case 4:
-                $express_info['label_status'] = RC_Lang::get('express::express.refused');
-                break;
-            case 5:
-                $express_info['label_status'] = RC_Lang::get('express::express.already_signed');
-                break;
-            case 6:
-                $express_info['label_status'] = RC_Lang::get('express::express.has_returned');
-                break;
-        }
-
-        /* 取得发货单商品 */
-        $goods_list = RC_DB::table('delivery_goods')->where('delivery_id', $express_info['delivery_id'])->get();
-
-        /* 取得区域名 */
-        $region = RC_DB::table('express_order as eo')
-            ->leftJoin('regions as c', RC_DB::raw('eo.country'), '=', RC_DB::raw('c.region_id'))
-            ->leftJoin('regions as p', RC_DB::raw('eo.province'), '=', RC_DB::raw('p.region_id'))
-            ->leftJoin('regions as t', RC_DB::raw('eo.city'), '=', RC_DB::raw('t.region_id'))
-            ->leftJoin('regions as d', RC_DB::raw('eo.district'), '=', RC_DB::raw('d.region_id'))
-            ->select(RC_DB::raw("concat(IFNULL(c.region_name, ''), '  ', IFNULL(p.region_name, ''),'  ', IFNULL(t.region_name, ''), '  ', IFNULL(d.region_name, '')) AS region"))
-            ->where(RC_DB::raw('eo.express_id'), $express_id)
-            ->first();
-
-        $express_info['region'] = $region['region'];
-
-        if ($express_info['staff_id'] > 0) {
-            $express_info['staff_user'] = RC_DB::table('staff_user')->where('user_id', $express_info['staff_id'])->pluck('name');
-        }
-
-        $staff_list = RC_DB::table('staff_user')
-            ->where('store_id', $_SESSION['store_id'])
-//             ->where('online_status', 1)
-            ->get();
-
-        $this->assign('staff_user', $staff_list);
-        $this->assign('express_info', $express_info);
-        $this->assign('goods_list', $goods_list);
-        $this->assign('form_action', RC_Uri::url('express/merchant/assign_express'));
-
-        $this->assign('ur_here', RC_Lang::get('express::express.express_info'));
-        $this->assign('action_link', array('href' => RC_Uri::url('express/merchant/shipping_record'), 'text' => RC_Lang::get('express::express.express_list')));
-
-        $this->display('express_info.dwt');
-    }
-
     public function assign_express()
     {
         $this->admin_priv('express_manage', ecjia::MSGTYPE_JSON);
@@ -242,7 +93,7 @@ class merchant extends ecjia_merchant
         $assign_express_data = array('status' => 1, 'staff_id' => $staff_id, 'express_user' => $staff_user['name'], 'express_mobile' => $staff_user['mobile'], 'update_time' => RC_Time::gmtime());
         RC_DB::table('express_order')->where('store_id', $_SESSION['store_id'])->where('express_id', $express_id)->update($assign_express_data);
 
-        return $this->showmessage('配送单派单成功！', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('pjaxurl' => RC_Uri::url('express/merchant/info', array('express_id' => $express_id))));
+        return $this->showmessage('配送单派单成功！', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('pjaxurl' => RC_Uri::url('express/merchant/record_info', array('express_id' => $express_id))));
     }
 
     //运费模板
@@ -275,7 +126,7 @@ class merchant extends ecjia_merchant
         $this->assign('shipping', $shipping);
 
         $this->assign('shipping_form_action', RC_Uri::url('express/merchant/add_shipping'));
-        $this->assign('form_action', RC_Uri::url('express/merchant/save'));
+        $this->assign('form_action', RC_Uri::url('express/merchant/save_shipping_template'));
 
         $this->display('shipping_template_info.dwt');
     }
@@ -386,23 +237,12 @@ class merchant extends ecjia_merchant
         $this->assign('shipping', $shipping);
 
         $this->assign('shipping_form_action', RC_Uri::url('express/merchant/add_shipping'));
-        $this->assign('form_action', RC_Uri::url('express/merchant/save'));
+        $this->assign('form_action', RC_Uri::url('express/merchant/save_shipping_template'));
 
         $this->assign('data', $data);
         $this->assign('template_name', $template_name);
 
         $this->display('shipping_template_info.dwt');
-    }
-
-    //快递单模板
-    public function express_template()
-    {
-        $this->admin_priv('express_manage');
-        $this->assign('ur_here', '运费模版');
-
-        ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here('运费模版'));
-
-        $this->display('shipping_template_list.dwt');
     }
 
     public function get_shipping_info()
@@ -467,6 +307,8 @@ class merchant extends ecjia_merchant
             }
         }
 
+        $template_name = !empty($temp_name) ? $temp_name : (!empty($template_name) ? $template_name : '');
+
         if (!empty($shipping_area_id)) {
             $count = RC_DB::table('shipping_area')
                 ->where('store_id', $_SESSION['store_id'])
@@ -523,7 +365,7 @@ class merchant extends ecjia_merchant
             $config[$count]['value'] = empty($time) ? '' : $time;
         }
         $data = array(
-            'shipping_area_name' => $temp_name,
+            'shipping_area_name' => $template_name,
             'shipping_id'        => $shipping_id,
             'configure'          => serialize($config),
         );
@@ -540,11 +382,11 @@ class merchant extends ecjia_merchant
         //重新设置area_region
         $area_list = RC_DB::table('shipping_area')
             ->where('store_id', $_SESSION['store_id'])
-            ->where('shipping_area_name', $temp_name)
+            ->where('shipping_area_name', $template_name)
             ->lists('shipping_area_id');
-
         RC_DB::table('area_region')->whereIn('shipping_area_id', $area_list)->delete();
-
+        _dump($area_list);
+        _dump($regions);
         foreach ($area_list as $v) {
             foreach ($regions as $val) {
                 $data = array(
@@ -554,8 +396,7 @@ class merchant extends ecjia_merchant
                 RC_DB::table('area_region')->insert($data);
             }
         }
-
-        $url = RC_Uri::url('express/merchant/edit_shipping_template', array('template_name' => $temp_name));
+        $url = RC_Uri::url('express/merchant/edit_shipping_template', array('template_name' => $template_name));
         if (!empty($shipping_area_id)) {
             return $this->showmessage('编辑成功', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('pjaxurl' => $url));
         } else {
@@ -563,7 +404,7 @@ class merchant extends ecjia_merchant
         }
     }
 
-    public function remove()
+    public function remove_shipping()
     {
         $shipping_area_id = !empty($_GET['id']) ? intval($_GET['id']) : 0;
 
@@ -580,18 +421,19 @@ class merchant extends ecjia_merchant
         }
     }
 
-    public function remove_template()
+    public function remove_shipping_template()
     {
         $name         = !empty($_GET['name']) ? trim($_GET['name']) : '';
         $area_id_list = RC_DB::table('shipping_area')->where('shipping_area_name', $name)->where('store_id', $_SESSION['store_id'])->lists('shipping_area_id');
 
         RC_DB::table('shipping_area')->where('shipping_area_name', $name)->where('store_id', $_SESSION['store_id'])->delete();
-        RC_DB::table('area_region')->whereIn('shipping_area_id', $area_id_list)->delete();
-
+        if (!empty($area_id_list)) {
+            RC_DB::table('area_region')->whereIn('shipping_area_id', $area_id_list)->delete();
+        }
         return $this->showmessage('删除成功', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS);
     }
 
-    public function save()
+    public function save_shipping_template()
     {
         $temp_name     = !empty($_POST['temp_name']) ? trim($_POST['temp_name']) : '';
         $template_name = !empty($_POST['template_name']) ? trim($_POST['template_name']) : '';
@@ -633,6 +475,166 @@ class merchant extends ecjia_merchant
         $url = RC_Uri::url('express/merchant/edit_shipping_template', array('template_name' => $template_name));
 
         return $this->showmessage('编辑成功', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('pjaxurl' => $url));
+    }
+
+    /**
+     * 配送记录
+     */
+    public function shipping_record()
+    {
+        $this->admin_priv('express_manage');
+        $this->assign('ur_here', '配送记录');
+
+        ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here('配送记录'));
+
+        $count = RC_Api::api('express', 'express_order_count');
+
+        /* 定义每页数量*/
+        $filter['limit'] = 10;
+        $page            = new ecjia_merchant_page($count, $filter['limit'], 5);
+        $filter['skip']  = $page->start_id - 1;
+
+        $express_list = RC_Api::api('express', 'express_order_list', $filter);
+
+        if (!empty($express_list)) {
+            foreach ($express_list as $key => $val) {
+                $express_list[$key]['formatted_add_time'] = RC_Time::local_date(ecjia::config('time_format'), $val['add_time']);
+                if ($val['from'] == 'assign') {
+                    $express_list[$key]['label_from'] = RC_Lang::get('express::express.assign');
+                } elseif ($val['from'] == 'grab') {
+                    $express_list[$key]['label_from'] = RC_Lang::get('express::express.grab');
+                } else {
+                    $express_list[$key]['label_from'] = RC_Lang::get('express::express.wait_assign');
+                }
+
+                switch ($val['status']) {
+                    case 0:
+                        $express_list[$key]['label_status'] = RC_Lang::get('express::express.wait_assign_express');
+                        break;
+                    case 1:
+                        $express_list[$key]['label_status'] = RC_Lang::get('express::express.wait_pick_up');
+                        break;
+                    case 2:
+                        $express_list[$key]['label_status'] = RC_Lang::get('express::express.express_delivery');
+                        break;
+                    case 3:
+                        $express_list[$key]['label_status'] = RC_Lang::get('express::express.return_express');
+                        break;
+                    case 4:
+                        $express_list[$key]['label_status'] = RC_Lang::get('express::express.refused');
+                        break;
+                    case 5:
+                        $express_list[$key]['label_status'] = RC_Lang::get('express::express.already_signed');
+                        break;
+                    case 6:
+                        $express_list[$key]['label_status'] = RC_Lang::get('express::express.has_returned');
+                        break;
+                }
+            }
+        }
+
+        $this->assign('express_list', $express_list);
+
+        $this->assign('page', $page->show(2));
+
+        $this->display('shipping_record_list.dwt');
+    }
+
+    public function record_info()
+    {
+        $this->admin_priv('express_manage');
+
+        ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(RC_Lang::get('express::express.express_info')));
+
+        $express_id = isset($_GET['express_id']) ? intval($_GET['express_id']) : 0;
+        $where      = array('store_id' => $_SESSION['store_id']);
+
+        $express_info = RC_DB::table('express_order as eo')
+            ->where(RC_DB::raw('express_id'), $express_id)
+            ->first();
+
+        $express_info['formatted_add_time']     = RC_Time::local_date(ecjia::config('time_format'), $express_info['add_time']);
+        $express_info['formatted_receive_time'] = $express_info['receive_time'] > 0 ? RC_Time::local_date(ecjia::config('time_format'), $express_info['receive_time']) : '';
+        $express_info['formatted_express_time'] = $express_info['express_time'] > 0 ? RC_Time::local_date(ecjia::config('time_format'), $express_info['express_time']) : '';
+        $express_info['formatted_signed_time']  = $express_info['signed_time'] > 0 ? RC_Time::local_date(ecjia::config('time_format'), $express_info['signed_time']) : '';
+        $express_info['formatted_update_time']  = $express_info['update_time'] > 0 ? RC_Time::local_date(ecjia::config('time_format'), $express_info['update_time']) : '';
+
+        if ($express_info['from'] == 'assign') {
+            $express_info['label_from'] = RC_Lang::get('express::express.assign');
+        } elseif ($express_info['from'] == 'grab') {
+            $express_info['label_from'] = RC_Lang::get('express::express.grab');
+        } elseif ($express_info['from'] == 'grab' && $express_info['staff_id'] == 0) {
+            $express_info['label_from'] = RC_Lang::get('express::express.wait_assign');
+        }
+
+        switch ($express_info['status']) {
+            case 0:
+                $express_info['label_status'] = RC_Lang::get('express::express.wait_assign_express');
+                break;
+            case 1:
+                $express_info['label_status'] = RC_Lang::get('express::express.wait_pick_up');
+                break;
+            case 2:
+                $express_info['label_status'] = RC_Lang::get('express::express.express_delivery');
+                break;
+            case 3:
+                $express_info['label_status'] = RC_Lang::get('express::express.return_express');
+                break;
+            case 4:
+                $express_info['label_status'] = RC_Lang::get('express::express.refused');
+                break;
+            case 5:
+                $express_info['label_status'] = RC_Lang::get('express::express.already_signed');
+                break;
+            case 6:
+                $express_info['label_status'] = RC_Lang::get('express::express.has_returned');
+                break;
+        }
+
+        /* 取得发货单商品 */
+        $goods_list = RC_DB::table('delivery_goods')->where('delivery_id', $express_info['delivery_id'])->get();
+
+        /* 取得区域名 */
+        $region = RC_DB::table('express_order as eo')
+            ->leftJoin('regions as c', RC_DB::raw('eo.country'), '=', RC_DB::raw('c.region_id'))
+            ->leftJoin('regions as p', RC_DB::raw('eo.province'), '=', RC_DB::raw('p.region_id'))
+            ->leftJoin('regions as t', RC_DB::raw('eo.city'), '=', RC_DB::raw('t.region_id'))
+            ->leftJoin('regions as d', RC_DB::raw('eo.district'), '=', RC_DB::raw('d.region_id'))
+            ->select(RC_DB::raw("concat(IFNULL(c.region_name, ''), '  ', IFNULL(p.region_name, ''),'  ', IFNULL(t.region_name, ''), '  ', IFNULL(d.region_name, '')) AS region"))
+            ->where(RC_DB::raw('eo.express_id'), $express_id)
+            ->first();
+
+        $express_info['region'] = $region['region'];
+
+        if ($express_info['staff_id'] > 0) {
+            $express_info['staff_user'] = RC_DB::table('staff_user')->where('user_id', $express_info['staff_id'])->pluck('name');
+        }
+
+        $staff_list = RC_DB::table('staff_user')
+            ->where('store_id', $_SESSION['store_id'])
+//          	->where('online_status', 1)
+            ->get();
+
+        $this->assign('staff_user', $staff_list);
+        $this->assign('express_info', $express_info);
+        $this->assign('goods_list', $goods_list);
+        $this->assign('form_action', RC_Uri::url('express/merchant/assign_express'));
+
+        $this->assign('ur_here', RC_Lang::get('express::express.express_info'));
+        $this->assign('action_link', array('href' => RC_Uri::url('express/merchant/shipping_record'), 'text' => RC_Lang::get('express::express.express_list')));
+
+        $this->display('shipping_record_info.dwt');
+    }
+
+    //快递单模板
+    public function express_template()
+    {
+        $this->admin_priv('express_manage');
+        $this->assign('ur_here', '运费模版');
+
+        ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here('运费模版'));
+
+        $this->display('shipping_template_list.dwt');
     }
 
     private function get_template_list()
