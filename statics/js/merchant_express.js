@@ -254,14 +254,14 @@
         					html += '<div class="form-group"><label class="control-label col-lg-3">费用计算方式</label>';
         					if (fee_compute_mode != undefined && fee_compute_mode == 'by_number') {
     							html += '<div class="controls col-lg-6"><input type="radio" id="fee_compute_mode_by_weight" class="uni_style" name="fee_compute_mode" value="by_weight" data-code="'+ shipping_code +'"/>';
-            					html += '<label for="fee_compute_mode_by_weight">按重量计算</label>';
+            					html += '<label for="fee_compute_mode_by_weight">按重量</label>';
             					html += '<input type="radio" id="fee_compute_mode_by_number" class="uni_style" name="fee_compute_mode" value="by_number" checked data-code="'+ shipping_code +'"/>';
         					} else {
         						html += '<div class="controls col-lg-6"><input type="radio" id="fee_compute_mode_by_weight" class="uni_style" name="fee_compute_mode" value="by_weight" checked data-code="'+ shipping_code +'"/>';
-            					html += '<label for="fee_compute_mode_by_weight">按重量计算</label>';
+            					html += '<label for="fee_compute_mode_by_weight">按重量</label>';
             					html += '<input type="radio" id="fee_compute_mode_by_number" class="uni_style" name="fee_compute_mode" value="by_number" data-code="'+ shipping_code +'"/>';
         					}
-        					html += '<label for="fee_compute_mode_by_number">按数量计算</label>';
+        					html += '<label for="fee_compute_mode_by_number">按件数</label>';
         					html += '</div></div>';
         				}
         				if (data.content.length > 0 && shipping_code != 'ship_cac') {
