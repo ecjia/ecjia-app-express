@@ -56,7 +56,6 @@ class merchant extends ecjia_merchant
         parent::__construct();
 
         RC_Loader::load_app_func('global');
-        RC_Loader::load_app_class('shipping_factory', 'shipping', false);
 
         /* 加载全局 js/css */
         RC_Script::enqueue_script('jquery-validate');
@@ -143,9 +142,9 @@ class merchant extends ecjia_merchant
                         'value' => 0,
                     );
                 }
-
-                $shipping_handle = new shipping_factory($shipping_data['shipping_code']);
-                $fields          = $shipping_handle->form_format($fields, true);
+                $shipping_handle = ecjia_shipping::channel($shipping_data['shipping_code']);
+                $fields = $shipping_handle->makeFormData($fields);
+                
                 if (!empty($fields)) {
                     foreach ($fields as $key => $val) {
                         /* 替换更改的语言项 */
@@ -230,8 +229,8 @@ class merchant extends ecjia_merchant
             ->first();
 
         $fields          = array();
-        $shipping_handle = new shipping_factory($shipping_data['shipping_code']);
-        $fields          = $shipping_handle->form_format($fields, true);
+        $shipping_handle = ecjia_shipping::channel($shipping_data['shipping_code']);
+        $fields = $shipping_handle->makeFormData($fields);
 
         $count                   = count($fields);
         $fields[$count]['name']  = "free_money";
@@ -298,8 +297,9 @@ class merchant extends ecjia_merchant
         $shipping_data = RC_DB::table('shipping')->where('shipping_id', $shipping_id)->select('shipping_name', 'shipping_code', 'support_cod')->first();
 
         $config          = array();
-        $shipping_handle = new shipping_factory($shipping_data['shipping_code']);
-        $config          = $shipping_handle->form_format($config, true);
+        $shipping_handle = ecjia_shipping::channel($shipping_data['shipping_code']);
+        $config = $shipping_handle->makeFormData($config);
+        
         if (!empty($config)) {
             foreach ($config as $key => $val) {
                 $config[$key]['name']  = $val['name'];
@@ -719,8 +719,8 @@ class merchant extends ecjia_merchant
                 $data[$_key]['enabled']        = $_value['enabled'];
 
                 /* 判断该派送方式是否支持保价 支持报价的允许在页面修改保价费 */
-                $shipping_handle = new shipping_factory($_value['shipping_code']);
-                $config          = $shipping_handle->configure_config();
+                $shipping_handle = ecjia_shipping::channel($_value['shipping_code']);
+                $config          = $shipping_handle->getConfig();
 
                 /* 只能根据配置判断是否支持保价  只有配置项明确说明不支持保价，才是不支持*/
                 if (isset($config['insure']) && ($config['insure'] === false)) {
