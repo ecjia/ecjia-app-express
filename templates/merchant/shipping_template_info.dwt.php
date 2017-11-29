@@ -70,15 +70,13 @@
 										<div class="head-right">操作</div>
 									</div>
 									<div class="template-info-shipping">
-									<!-- {foreach from=$data item=list} -->
-										
+										<!-- {foreach from=$data item=list} -->
 										<div class="info-shipping-item shipping-item-{$list.shipping_id}">
 											<div class="info-shipping-left">
 											{$list.shipping_name}
 											<!-- {if $list.shipping_code != 'ship_cac'} -->：
 												<!-- {foreach from=$list.fields name=f item=field} -->
 													<input type="hidden" name="{$field.name}" value="{if $field.value}{$field.value}{else}0{/if}" />
-													
 													<!-- {if $list.fee_compute_mode == 'by_number'} -->
 														<!--{if $field.name == 'item_fee' || $field.name == 'free_money' || $field.name == 'pay_fee'}-->
 															{$field.label}（{if $field.value}{$field.value}{else}0{/if}）{if !$smarty.foreach.f.last}，{/if}
@@ -90,17 +88,13 @@
 													<!-- {/if} -->
 												<!-- {/foreach} -->
 											<!-- {/if} -->
-											
 											</div>
 											<div class="info-shipping-right">
 												<a class="edit_shipping" href="javascript:;" data-shipping="{$list.shipping_id}" data-area="{$list.shipping_area_id}">编辑</a> &nbsp;|&nbsp;
 												<a data-toggle="ajaxremove" class="ajaxremove ecjiafc-red" data-msg="您确定要删除该快递方式吗？" href='{RC_Uri::url("express/merchant/remove_shipping", "id={$list.shipping_area_id}")}' title="{lang key='system::system.drop'}">删除</a>
 											</div>
-											
 										</div>
-										
-									<!-- {/foreach} -->
-									
+										<!-- {/foreach} -->
 									</div>
 									<div class="template-info-content">
 										<a class="btn btn-primary add_shipping" href="javascript:;">添加快递</a>

@@ -287,7 +287,7 @@
 	        							html += '<label class="control-label col-lg-4">'+ content[i].label+ '</label>';
 	        							html += '<div class="controls col-lg-6"><input class="form-control" name="'+ content[i].name +'" type="text" value="'+ content[i].value +'"/></div><span class="input-must">*</span>';
 	        							html += '</div>';
-	        						} else {
+	        						} else if (content[i].name != 'fee_compute_mode') {
 	        							if (content[i].name == 'base_fee') {
 	        								content[i].value = base_fee != undefined ? base_fee : content[i].value;
 	        							}

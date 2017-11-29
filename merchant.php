@@ -302,13 +302,7 @@ class merchant extends ecjia_merchant
             }
         }
 
-        $count                   = count($config);
-        $config[$count]['name']  = 'free_money';
-        $config[$count]['value'] = empty($_POST['free_money']) ? '0' : trim($_POST['free_money']);
-        $count++;
-        $config[$count]['name']  = 'fee_compute_mode';
-        $config[$count]['value'] = empty($_POST['fee_compute_mode']) ? 'by_weight' : trim($_POST['fee_compute_mode']);
-
+        $count = count($config);
         if ($shipping_data['shipping_code'] == 'ship_o2o_express') {
             $time = array();
             foreach ($_POST['start_ship_time'] as $k => $v) {
@@ -657,6 +651,7 @@ class merchant extends ecjia_merchant
                 $data[$k]['area_list'] = $shipping_area_list;
                 if (!empty($shipping_area_list)) {
                     $shipping_name = '';
+                    $count = count($shipping_area_list);
                     foreach ($shipping_area_list as $key => $val) {
                         if ($key == 0) {
                             $region_name = RC_DB::table('area_region as a')
@@ -667,13 +662,17 @@ class merchant extends ecjia_merchant
                                 $data[$k]['shipping_area'] = implode(' | ', $region_name);
                             }
                         }
-                        $shipping_name .= RC_DB::table('shipping')->where('shipping_id', $val['shipping_id'])->pluck('shipping_name') . '、';
+                        $name = RC_DB::table('shipping')->where('shipping_id', $val['shipping_id'])->pluck('shipping_name');
+                        if ($key != $count- 1) {
+                        	$shipping_name .= $name.'、';
+                        } else {
+                        	$shipping_name .= $name;
+                        }
                     }
-                    $data[$k]['shipping_name'] = rtrim($shipping_name, '、');
+                    $data[$k]['shipping_name'] = $shipping_name;
                 }
             }
         }
-
         return array('item' => $data, 'page' => $page->show(5), 'desc' => $page->page_desc());
     }
 
