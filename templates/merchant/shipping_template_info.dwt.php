@@ -194,7 +194,7 @@
 			<div class="modal-body">
 				<form class="cmxform form-horizontal tasi-form min_h335" name="shippingForm" method="post" action="{$shipping_form_action}">
 					<div class="form-group">
-						<label class="control-label col-lg-3">快递方式：</label>
+						<label class="control-label col-lg-4">快递方式：</label>
 						<div class="controls col-lg-6">
 							<select name="shipping_id" class="w300 form-control shipping_list" data-url='{url path="express/merchant/get_shipping_info"}'>
 								<option value="-1">请选择快递方式...</option>
@@ -207,7 +207,7 @@
 					</div>
 					<div id="shipping_info"></div>
 					<div class="form-group">
-						<div class="col-lg-offset-3 col-lg-6">
+						<div class="col-lg-offset-4 col-lg-6">
 							<input type="hidden" name="shipping_area_id" />
 							<input type="hidden" name="shipping" />
 							<input type="hidden" name="temp_name" />

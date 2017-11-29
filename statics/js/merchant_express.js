@@ -257,7 +257,7 @@
         					for (var i = 0; i <= content.length - 1; i++) {
         						if ($.inArray(shipping_code, arr) != -1 && content[i].name == 'fee_compute_mode') {
         							html += '<div class="form-group" id='+ content[i].name +'>';
-        							html += '<label class="control-label col-lg-3">'+ content[i].label+ '</label>';
+        							html += '<label class="control-label col-lg-4">'+ content[i].label+ '</label>';
         							if (content[i].value == 'by_weight') {
         								html += '<div class="controls col-lg-6"><input type="radio" id="fee_compute_mode_by_weight" name="fee_compute_mode" checked value="by_weight" data-code="'+ shipping_code +'"/>';
         							} else {
@@ -284,7 +284,7 @@
 	        								content[i].value = pay_fee != undefined ? pay_fee : content[i].value;
 	        							}
 	        							html += '<div class="form-group" id='+ content[i].name +'>';
-	        							html += '<label class="control-label col-lg-3">'+ content[i].label+ '</label>';
+	        							html += '<label class="control-label col-lg-4">'+ content[i].label+ '</label>';
 	        							html += '<div class="controls col-lg-6"><input class="form-control" name="'+ content[i].name +'" type="text" value="'+ content[i].value +'"/></div><span class="input-must">*</span>';
 	        							html += '</div>';
 	        						} else {
@@ -295,7 +295,7 @@
 	        								content[i].value = step_fee != undefined ? step_fee : content[i].value;
 	        							}
 	        							html += '<div class="form-group" id='+ content[i].name +' style="display:none;">';
-	        							html += '<label class="control-label col-lg-3">'+ content[i].label+ '</label>';
+	        							html += '<label class="control-label col-lg-4">'+ content[i].label+ '</label>';
 	        							html += '<div class="controls col-lg-6"><input class="form-control" name="'+ content[i].name +'" type="text" value="'+ content[i].value +'" disabled/></div><span class="input-must">*</span>';
 	        							html += '</div>';
 	        						}
@@ -314,7 +314,7 @@
 	        								content[i].value = step_fee != undefined ? step_fee : content[i].value;
 	        							}
 	        							html += '<div class="form-group" id='+ content[i].name +'>';
-	        							html += '<label class="control-label col-lg-3">'+ content[i].label+ '</label>';
+	        							html += '<label class="control-label col-lg-4">'+ content[i].label+ '</label>';
 	        							html += '<div class="controls col-lg-6"><input class="form-control" name="'+ content[i].name +'" type="text" value="'+ content[i].value +'"/></div><span class="input-must">*</span>';
 	        							html += '</div>';
 	        						} else {
@@ -322,7 +322,7 @@
 	        								content[i].value = item_fee != undefined ? item_fee : content[i].value;
 	        							}
 	        							html += '<div class="form-group" id='+ content[i].name +' style="display:none;">';
-	        							html += '<label class="control-label col-lg-3">'+ content[i].label+ '</label>';
+	        							html += '<label class="control-label col-lg-4">'+ content[i].label+ '</label>';
 	        							html += '<div class="controls col-lg-6"><input class="form-control" name="'+ content[i].name +'" type="text" value="'+ content[i].value +'" disabled/></div><span class="input-must">*</span>';
 	        							html += '</div>';
 	        						}
