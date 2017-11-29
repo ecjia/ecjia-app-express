@@ -76,19 +76,21 @@
 											<div class="info-shipping-left">
 											{$list.shipping_name}
 											<!-- {if $list.shipping_code != 'ship_cac'} -->：
-											<!-- {foreach from=$list.fields name=f item=field} -->
-												<input type="hidden" name="{$field.name}" value="{if $field.value}{$field.value}{else}0{/if}" />
-												<!-- {if $list.fee_compute_mode == 'by_number'} -->
-													<!--{if $field.name == 'item_fee' || $field.name == 'free_money' || $field.name == 'pay_fee'}-->
-														{$field.label}（{$field.value}）{if !$smarty.foreach.f.last}，{/if}
+												<!-- {foreach from=$list.fields name=f item=field} -->
+													<input type="hidden" name="{$field.name}" value="{if $field.value}{$field.value}{else}0{/if}" />
+													
+													<!-- {if $list.fee_compute_mode == 'by_number'} -->
+														<!--{if $field.name == 'item_fee' || $field.name == 'free_money' || $field.name == 'pay_fee'}-->
+															{$field.label}（{if $field.value}{$field.value}{else}0{/if}）{if !$smarty.foreach.f.last}，{/if}
+														<!-- {/if} -->
+													<!--{else}-->
+														<!--{if $field.name != 'item_fee' && $field.name != 'fee_compute_mode'}-->
+															{$field.label}（{if $field.value}{$field.value}{else}0{/if}）{if !$smarty.foreach.f.last}，{/if}
+														<!-- {/if} -->
 													<!-- {/if} -->
-												<!--{else}-->
-													<!--{if $field.name != 'item_fee'}-->
-														{$field.label}（{$field.value}）{if !$smarty.foreach.f.last}，{/if}
-													<!-- {/if} -->
-												<!-- {/if} -->
-											<!-- {/foreach} -->
+												<!-- {/foreach} -->
 											<!-- {/if} -->
+											
 											</div>
 											<div class="info-shipping-right">
 												<a class="edit_shipping" href="javascript:;" data-shipping="{$list.shipping_id}" data-area="{$list.shipping_area_id}">编辑</a> &nbsp;|&nbsp;
@@ -190,7 +192,7 @@
 				<h3>选择快递</h3>
 			</div>
 			<div class="modal-body">
-				<form class="cmxform form-horizontal tasi-form" name="shippingForm" method="post" action="{$shipping_form_action}">
+				<form class="cmxform form-horizontal tasi-form min_h335" name="shippingForm" method="post" action="{$shipping_form_action}">
 					<div class="form-group">
 						<label class="control-label col-lg-3">快递方式：</label>
 						<div class="controls col-lg-6">
@@ -203,12 +205,11 @@
 						</div>
 						<span class="input-must">{lang key='system::system.require_field'}</span>
 					</div>
-					<div id="shipping_info">
-					
-					</div>
+					<div id="shipping_info"></div>
 					<div class="form-group">
 						<div class="col-lg-offset-3 col-lg-6">
 							<input type="hidden" name="shipping_area_id" />
+							<input type="hidden" name="shipping" />
 							<input type="hidden" name="temp_name" />
 							<input type="hidden" name="template_name" value="{$template_name}"/>
 							<input type="submit" value="{lang key='system::system.button_submit'}" class="btn btn-primary add-shipping-btn" />

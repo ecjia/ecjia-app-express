@@ -246,27 +246,32 @@
 	        		}
         		}
         		if (val > 0) {
-        			$.post(url, {'shipping_id': val}, function(data) {
+        			var shipping_area_id = $('input[name="shipping_area_id"]').val();
+        			var shipping = $('input[name="shipping"]').val();
+        			$.post(url, {'shipping_id': val, 'shipping_area_id': shipping_area_id, 'shipping': shipping}, function(data) {
         				var shipping_code = data.shipping_area.shipping_code;
         				var html = '';
         				var arr = ['ship_ems', 'ship_yto', 'ship_zto', 'ship_sto_express', 'ship_post_mail', 'ship_sf_express', 'ship_post_express'];
-        				if ($.inArray(shipping_code, arr) != -1) {
-        					html += '<div class="form-group"><label class="control-label col-lg-3">费用计算方式</label>';
-        					if (fee_compute_mode != undefined && fee_compute_mode == 'by_number') {
-    							html += '<div class="controls col-lg-6"><input type="radio" id="fee_compute_mode_by_weight" class="uni_style" name="fee_compute_mode" value="by_weight" data-code="'+ shipping_code +'"/>';
-            					html += '<label for="fee_compute_mode_by_weight">按重量</label>';
-            					html += '<input type="radio" id="fee_compute_mode_by_number" class="uni_style" name="fee_compute_mode" value="by_number" checked data-code="'+ shipping_code +'"/>';
-        					} else {
-        						html += '<div class="controls col-lg-6"><input type="radio" id="fee_compute_mode_by_weight" class="uni_style" name="fee_compute_mode" value="by_weight" checked data-code="'+ shipping_code +'"/>';
-            					html += '<label for="fee_compute_mode_by_weight">按重量</label>';
-            					html += '<input type="radio" id="fee_compute_mode_by_number" class="uni_style" name="fee_compute_mode" value="by_number" data-code="'+ shipping_code +'"/>';
-        					}
-        					html += '<label for="fee_compute_mode_by_number">按件数</label>';
-        					html += '</div></div>';
-        				}
         				if (data.content.length > 0 && shipping_code != 'ship_cac') {
         					var content = data.content;
         					for (var i = 0; i <= content.length - 1; i++) {
+        						if ($.inArray(shipping_code, arr) != -1 && content[i].name == 'fee_compute_mode') {
+        							html += '<div class="form-group" id='+ content[i].name +'>';
+        							html += '<label class="control-label col-lg-3">'+ content[i].label+ '</label>';
+        							if (content[i].value == 'by_weight') {
+        								html += '<div class="controls col-lg-6"><input type="radio" id="fee_compute_mode_by_weight" name="fee_compute_mode" checked value="by_weight" data-code="'+ shipping_code +'"/>';
+        							} else {
+        								html += '<div class="controls col-lg-6"><input type="radio" id="fee_compute_mode_by_weight" name="fee_compute_mode" value="by_weight" data-code="'+ shipping_code +'"/>';
+        							}
+                					html += '<label for="fee_compute_mode_by_weight">按重量</label>';
+                					if (content[i].value == 'by_number') {
+                						html += '<input type="radio" id="fee_compute_mode_by_number" name="fee_compute_mode" checked value="by_number" data-code="'+ shipping_code +'"/>';
+                					} else {
+                						html += '<input type="radio" id="fee_compute_mode_by_number" name="fee_compute_mode" value="by_number" data-code="'+ shipping_code +'"/>';
+                					}
+                					html += '<label for="fee_compute_mode_by_number">按件数</label>';
+                					html += '</div></div>';
+        						}
         						if (fee_compute_mode == 'by_number') {
 	        						if (content[i].name == 'item_fee' || content[i].name == 'free_money' || content[i].name == 'pay_fee') {
 	        							if (content[i].name == 'item_fee') {
@@ -295,7 +300,7 @@
 	        							html += '</div>';
 	        						}
         						} else {
-        							if (content[i].name != 'item_fee') {
+        							if (content[i].name != 'item_fee' && content[i].name != 'fee_compute_mode') {
 	        							if (content[i].name == 'free_money') {
 	        								content[i].value = free_money != undefined ? free_money : content[i].value;
 	        							}
@@ -379,15 +384,16 @@
         		$('.add-shipping-btn').attr('data-type', 'edit');
         		$('form[name="shippingForm"]').find('input[name="regions[]"]').remove();
         		
-        		$('select[name="shipping_id"] option[value='+ shipping_id +']').attr('selected', true);
-        		$('select[name="shipping_id"]').trigger("liszt:updated").trigger("change");
-        		
         		var shipping_name = $('form[name="theForm"]').find('input[name="temp_name"]').val();
             	$('form[name="shippingForm"]').find('input[name="temp_name"]').val(shipping_name);
         		$('form[name="shippingForm"]').find('input[name="shipping_area_id"]').val(shipping_area_id);
+        		$('form[name="shippingForm"]').find('input[name="shipping"]').val(shipping_id);
         		
         		var $temp = $('form[name="theForm"]').find('input[name="regions[]"]');
             	$('form[name="shippingForm"]').append($temp.clone(true));
+            	
+            	$('select[name="shipping_id"] option[value='+ shipping_id +']').attr('selected', true);
+        		$('select[name="shipping_id"]').trigger("liszt:updated").trigger("change");
         		
         		$('#addShipping').modal('show');
         	});
@@ -402,7 +408,7 @@
                 var $this = $(this),
                 	shipping_code = $this.attr('data-code'),
                  	mode = $this.val();
-                 
+                
                 if (shipping_code == 'ship_post_mail' || shipping_code == 'ship_post_express') {
                     var step_fee1 = document.getElementById("step_fee1");
                 }

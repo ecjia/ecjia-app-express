@@ -133,36 +133,14 @@ class merchant extends ecjia_merchant
                     ->where(RC_DB::raw('a.shipping_area_id'), $v['shipping_area_id'])
                     ->where(RC_DB::raw('a.store_id'), $_SESSION['store_id'])
                     ->first();
-                $fields = unserialize($shipping_data['configure']);
+                $fields = ecjia_shipping::unserializeConfig($shipping_data['configure']);
 
-                /* 如果配送方式支持货到付款并且没有设置货到付款支付费用，则加入货到付款费用 */
-                if ($shipping_data['support_cod'] && $fields[count($fields) - 1]['name'] != 'pay_fee') {
-                    $fields[] = array(
-                        'name'  => 'pay_fee',
-                        'value' => 0,
-                    );
-                }
-                $shipping_handle = ecjia_shipping::channel($shipping_data['shipping_code']);
-                $fields          = $shipping_handle->makeFormData($fields);
-				
+                $data[$k]['fee_compute_mode'] = $fields['fee_compute_mode'];
+                $shipping_handle              = ecjia_shipping::areaChannel($shipping_data['shipping_area_id']);
+                $fields                       = $shipping_handle->makeFormData($fields);
+
                 if (!empty($fields)) {
                     foreach ($fields as $key => $val) {
-                        /* 替换更改的语言项 */
-                        if ($val['name'] == 'basic_fee') {
-                            $val['name'] = 'base_fee';
-                        }
-
-                        if ($val['name'] == 'item_fee') {
-                            $item_fee = 1;
-                        }
-                        if ($val['name'] == 'fee_compute_mode') {
-                            $data[$k]['fee_compute_mode'] = $val['value'];
-                            unset($fields[$key]);
-                        } else {
-                            $fields[$key]['name']  = $val['name'];
-                            $fields[$key]['label'] = empty($val['label']) ? RC_Lang::get('shipping::shipping_area.' . $val['name']) : $val['label'];
-                        }
-
                         if ($shipping_data['shipping_code'] == 'ship_o2o_express' && (in_array($val['name'], array('ship_days', 'last_order_time', 'ship_time', 'express_money')))) {
                             if ($val['name'] == 'ship_time') {
                                 $o2o_shipping_time = array();
@@ -183,14 +161,6 @@ class merchant extends ecjia_merchant
                             unset($fields[$key]);
                         }
                     }
-                }
-                if (empty($item_fee) && !empty($fields)) {
-                    $field = array(
-                        'name'  => 'item_fee',
-                        'value' => '0',
-                        'label' => ecjia_config::has(RC_Lang::get('shipping::shipping_area.item_fee')) ? '' : RC_Lang::get('shipping::shipping_area.item_fee'),
-                    );
-                    array_unshift($fields, $field);
                 }
                 $data[$k]['fields']        = $fields;
                 $data[$k]['shipping_code'] = $shipping_data['shipping_code'];
@@ -222,30 +192,55 @@ class merchant extends ecjia_merchant
     public function get_shipping_info()
     {
         $shipping_id = !empty($_POST['shipping_id']) ? intval($_POST['shipping_id']) : 0;
-
-        $shipping_data = RC_DB::table('shipping')
-            ->select('shipping_name', 'shipping_code', 'support_cod')
-            ->where('shipping_id', $shipping_id)
-            ->first();
-
-        $fields          = array();
-        $shipping_handle = ecjia_shipping::channel($shipping_data['shipping_code']);
-        $fields          = $shipping_handle->makeFormData($fields);
-
-        $count                   = count($fields);
-        $fields[$count]['name']  = "free_money";
-        $fields[$count]['value'] = "0";
-        $fields[$count]['label'] = RC_Lang::get('shipping::shipping_area.free_money');
-
-        /* 如果支持货到付款，则允许设置货到付款支付费用 */
-        if ($shipping_data['support_cod']) {
-            $count++;
-            $fields[$count]['name']  = "pay_fee";
-            $fields[$count]['value'] = "0";
-            $fields[$count]['label'] = RC_Lang::get('shipping::shipping_area.pay_fee');
+        $shipping_area_id = !empty($_POST['shipping_area_id']) ? intval($_POST['shipping_area_id']) : 0;
+        $shipping = !empty($_POST['shipping']) ? intval($_POST['shipping']) : 0;
+        
+        if (!empty($shipping_area_id) && $shipping_id == $shipping) {
+        	$shipping_data = RC_DB::table('shipping as s')
+	        	->leftJoin('shipping_area as a', RC_DB::raw('a.shipping_id'), '=', RC_DB::raw('s.shipping_id'))
+	        	->selectRaw('s.shipping_name, s.shipping_code, s.support_cod, a.*')
+	        	->where(RC_DB::raw('a.shipping_area_id'), $shipping_area_id)
+	        	->where(RC_DB::raw('a.store_id'), $_SESSION['store_id'])
+	        	->first();
+        	$fields = ecjia_shipping::unserializeConfig($shipping_data['configure']);
+        	
+        	$shipping_handle              = ecjia_shipping::areaChannel($shipping_data['shipping_area_id']);
+        	$fields                       = $shipping_handle->makeFormData($fields);
+        	
+        	if (!empty($fields)) {
+        		foreach ($fields as $key => $val) {
+        			if ($shipping_data['shipping_code'] == 'ship_o2o_express' && (in_array($val['name'], array('ship_days', 'last_order_time', 'ship_time', 'express_money')))) {
+        				if ($val['name'] == 'ship_time') {
+        					$o2o_shipping_time = array();
+        					foreach ($val['value'] as $v) {
+        						$o2o_shipping_time[] = $v;
+        					}
+        					$data[$k]['o2o_shipping_time'] = $o2o_shipping_time;
+        				}
+        				if ($val['name'] == 'ship_days') {
+        					$data[$k]['ship_days'] = $o2o_shipping_time;
+        				}
+        				if ($val['name'] == 'last_order_time') {
+        					$data[$k]['last_order_time'] = $o2o_shipping_time;
+        				}
+        				if ($val['name'] == 'express_money') {
+        					$data[$k]['express_money'] = $o2o_shipping_time;
+        				}
+        				unset($fields[$key]);
+        			}
+        		}
+        	}
+        } else {
+        	$shipping_data = RC_DB::table('shipping')
+	        	->select('shipping_name', 'shipping_code', 'support_cod')
+	        	->where('shipping_id', $shipping_id)
+	        	->first();
+        	
+        	$fields          = array();
+        	$shipping_handle = ecjia_shipping::channel($shipping_data['shipping_code']);
+        	$fields          = $shipping_handle->makeFormData($fields);
         }
-
-        $shipping_area['shipping_id']   = $shipping_id;
+        
         $shipping_area['shipping_code'] = $shipping_data['shipping_code'];
         return $this->showmessage('', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('content' => $fields, 'shipping_area' => $shipping_area));
     }
@@ -306,12 +301,13 @@ class merchant extends ecjia_merchant
                 $config[$key]['value'] = $_POST[$val['name']];
             }
         }
+
         $count                   = count($config);
         $config[$count]['name']  = 'free_money';
         $config[$count]['value'] = empty($_POST['free_money']) ? '0' : trim($_POST['free_money']);
         $count++;
         $config[$count]['name']  = 'fee_compute_mode';
-        $config[$count]['value'] = empty($_POST['fee_compute_mode']) ? '' : trim($_POST['fee_compute_mode']);
+        $config[$count]['value'] = empty($_POST['fee_compute_mode']) ? 'by_weight' : trim($_POST['fee_compute_mode']);
 
         /* 如果支持货到付款，则允许设置货到付款支付费用 */
         if ($shipping_data['support_cod']) {
