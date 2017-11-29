@@ -204,8 +204,8 @@ class merchant extends ecjia_merchant
 	        	->first();
         	$fields = ecjia_shipping::unserializeConfig($shipping_data['configure']);
         	
-        	$shipping_handle              = ecjia_shipping::areaChannel($shipping_data['shipping_area_id']);
-        	$fields                       = $shipping_handle->makeFormData($fields);
+        	$shipping_handle	= ecjia_shipping::areaChannel($shipping_data['shipping_area_id']);
+        	$fields				= $shipping_handle->makeFormData($fields);
         	
         	if (!empty($fields)) {
         		foreach ($fields as $key => $val) {
@@ -308,13 +308,6 @@ class merchant extends ecjia_merchant
         $count++;
         $config[$count]['name']  = 'fee_compute_mode';
         $config[$count]['value'] = empty($_POST['fee_compute_mode']) ? 'by_weight' : trim($_POST['fee_compute_mode']);
-
-        /* 如果支持货到付款，则允许设置货到付款支付费用 */
-        if ($shipping_data['support_cod']) {
-            $count++;
-            $config[$count]['name']  = 'pay_fee';
-            $config[$count]['value'] = make_semiangle(empty($_POST['pay_fee']) ? '0' : trim($_POST['pay_fee']));
-        }
 
         if ($shipping_data['shipping_code'] == 'ship_o2o_express') {
             $time = array();
@@ -711,17 +704,6 @@ class merchant extends ecjia_merchant
                 $data[$_key]['shipping_order'] = $_value['shipping_order'];
                 $data[$_key]['insure_fee']     = $_value['insure'];
                 $data[$_key]['enabled']        = $_value['enabled'];
-
-                /* 判断该派送方式是否支持保价 支持报价的允许在页面修改保价费 */
-                $shipping_handle = ecjia_shipping::channel($_value['shipping_code']);
-                $config          = $shipping_handle->getConfig();
-
-                /* 只能根据配置判断是否支持保价  只有配置项明确说明不支持保价，才是不支持*/
-                if (isset($config['insure']) && ($config['insure'] === false)) {
-                    $data[$_key]['is_insure'] = false;
-                } else {
-                    $data[$_key]['is_insure'] = true;
-                }
             }
         }
 
