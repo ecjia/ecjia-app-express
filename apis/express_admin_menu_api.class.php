@@ -53,7 +53,7 @@ defined('IN_ECJIA') or exit('No permission resources.');
 class express_admin_menu_api extends Component_Event_Api {
 
     public function call(&$options) {
-        $menus = ecjia_admin::make_admin_menu('05_content', '配送调度', '', 4);
+        $menus = ecjia_admin::make_admin_menu('05_content', '配送调度', '', 5);
         
         $submenus = array(
             ecjia_admin::make_admin_menu('01_task_list', '任务中心', RC_Uri::url('express/admin/init'), 1)->add_purview('express_task_manage'),
