@@ -348,7 +348,7 @@ class admin_express extends ecjia_admin {
 		$count = $db_order->count();
 		$page = new ecjia_page($count, 5, 5);
 		$data = $db_order
-		->selectRaw('eo.express_sn,eo.express_id,eo.province as eoprovince,eo.city as eocity,eo.district as eodistrict,eo.street as eostreet,eo.address as eoaddress,eo.receive_time,eo.express_time,eo.signed_time,eo.from,eo.commision,eo.status,sf.merchants_name,sf.province,sf.city,sf.district,sf.street,sf.address')
+		->selectRaw('eo.express_sn,eo.express_id,eo.province as eoprovince,eo.city as eocity,eo.district as eodistrict,eo.street as eostreet,eo.address as eoaddress,eo.receive_time,eo.from,eo.commision,eo.status,sf.merchants_name,sf.province,sf.city,sf.district,sf.street,sf.address')
 		->orderby(RC_DB::raw('eo.express_id'), 'desc')
 		->take(10)
 		->skip($page->start_id-1)
@@ -356,9 +356,7 @@ class admin_express extends ecjia_admin {
 		$list = array();
 		if (!empty($data)) {
 			foreach ($data as $row) {
-				$row['receive_time']  = RC_Time::local_date('Y-m-d H:i:s', $row['receive_time']);
-				$row['express_time']  = RC_Time::local_date('Y-m-d H:i:s', $row['express_time']);
-				$row['signed_time']   = RC_Time::local_date('Y-m-d H:i:s', $row['signed_time']);
+				$row['receive_time']  = RC_Time::local_date('Y-m-d H:i', $row['receive_time']);
 				$row['province']  	  = ecjia_region::getRegionName($row['province']);
 				$row['city']          = ecjia_region::getRegionName($row['city']);
 				$row['district']      = ecjia_region::getRegionName($row['district']);

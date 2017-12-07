@@ -121,8 +121,7 @@
 										送：{$list.eoprovince}{$list.eocity}{$list.eodistrict}{$list.eostreet}{$list.eoaddress}
 									</td>
 									<td>
-										{$list.receive_time}～<br>
-										{$list.express_time}
+										{$list.receive_time}
 									</td>
 									<td>{if $list.from eq 'assign'}派单{else}抢单{/if}</td>
 									<td>¥{$list.commision}</td>
