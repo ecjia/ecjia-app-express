@@ -297,10 +297,11 @@ class admin_express extends ecjia_admin {
 	public function remove() {
 		$this->admin_priv('express_delete');
 	
-		$id = intval($_GET['id']);
-		RC_DB::table('quickpay_activity')->where('id', $id)->delete();
+		$user_id = intval($_GET['user_id']);
+		RC_DB::table('staff_user')->where('user_id', $user_id)->delete();
+		RC_DB::table('express_user')->where('user_id', $user_id)->delete();
 	
-		return $this->showmessage('成功删除该优惠买单规则', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS);
+		return $this->showmessage('删除配送员成功', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS);
 	}
 	
 	/**
@@ -309,10 +310,11 @@ class admin_express extends ecjia_admin {
 	public function batch() {
 		$this->admin_priv('express_delete');
 
-		$ids  = explode(',', $_POST['id']);
-		RC_DB::table('quickpay_activity')->whereIn('id', $ids)->delete();
+		$ids  = explode(',', $_POST['user_id']);
+		RC_DB::table('staff_user')->whereIn('user_id', $ids)->delete();
+		RC_DB::table('express_user')->whereIn('user_id', $ids)->delete();
 		
-		return $this->showmessage('批量删除成功', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('pjaxurl' => RC_Uri::url('express/admin_express/init')));
+		return $this->showmessage('批量删除配送员成功', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('pjaxurl' => RC_Uri::url('express/admin_express/init')));
 	}
 
 	

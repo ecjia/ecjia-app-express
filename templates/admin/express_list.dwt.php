@@ -32,7 +32,7 @@
 				<span class="caret"></span>
 			</a>
 			<ul class="dropdown-menu">
-				<li><a class="button_remove" data-toggle="ecjiabatch" data-idClass=".checkbox:checked" data-url="{url path='express/admin_express/batch'}" data-msg="您确实要删除选中的配送员吗？" data-noSelectMsg="请先选中要删除的配送员！" data-name="id" href="javascript:;"><i class="fontello-icon-trash"></i>删除配送员</a></li>
+				<li><a class="button_remove" data-toggle="ecjiabatch" data-idClass=".checkbox:checked" data-url="{url path='express/admin_express/batch'}" data-msg="您确实要删除选中的配送员吗？" data-noSelectMsg="请先选中要删除的配送员！" data-name="user_id" href="javascript:;"><i class="fontello-icon-trash"></i>删除配送员</a></li>
 			</ul>
 		</div>
 		
@@ -68,7 +68,7 @@
 			<!-- {foreach from=$data.list item=express} -->
 		    <tr>
 				<td>
-					<span><input type="checkbox" name="checkboxes[]" class="checkbox" value="{$quickpay.id}"/></span>
+					<span><input type="checkbox" name="checkboxes[]" class="checkbox" value="{$express.user_id}"/></span>
 				</td>
 			
 		      	<td class="hide-edit-area">
