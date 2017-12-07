@@ -56,6 +56,7 @@ class express_admin_purview_api extends Component_Event_Api {
         	array('action_name' => '配送员管理', 'action_code' => 'express_manage', 'relevance' => ''),
         	array('action_name' => '配送员编辑', 'action_code' => 'express_update', 'relevance' => ''),
         	array('action_name' => '配送员删除', 'action_code' => 'express_delete', 'relevance' => ''),
+        	array('action_name' => '配送任务中心', 'action_code' => 'express_task_manage', 'relevance' => ''),
         );
         return $purviews;
     }
