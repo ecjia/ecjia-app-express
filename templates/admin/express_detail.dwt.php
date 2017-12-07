@@ -125,7 +125,8 @@
 									</td>
 									<td>{if $list.from eq 'assign'}派单{else}抢单{/if}</td>
 									<td>¥{$list.commision}</td>
-									<td>{if $list.status eq 0}未分配派单{elseif $list.status eq 1}已接派单待取货{elseif $list.status eq 2}已取货派送中{elseif $list.status eq 3}退货中{elseif $list.status eq 4}拒收{elseif $list.status eq 5}已签收{else}已退回{/if}</td>
+									<td>
+									{if $list.status eq 0}<font class="ecjiafc-red">未接单</font>{elseif $list.status eq 1}<font class="ecjiafc-red">待取货</font>{elseif $list.status eq 2}<font class="ecjiafc-red">派送中</font>{elseif $list.status eq 3}退货中{elseif $list.status eq 4}已拒收{elseif $list.status eq 5}已完成{else}已退回{/if}</td>
 								</tr>
 								<!-- {foreachelse} -->
 								<tr>
