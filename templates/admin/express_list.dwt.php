@@ -75,8 +75,8 @@
 					{$express.name}
 		     	  	<div class="edit-list">
 					  	<a class="data-pjax" href='{url path="express/admin_express/edit" args="user_id={$express.user_id}"}' title="编辑">编辑</a>&nbsp;|&nbsp;
-					  	<a target="_blank"   href='{url path="express/admin_express/edit" args="user_id={$express.user_id}"}' title="查看详情">查看详情</a>&nbsp;|&nbsp;
-					  	<a target="_blank"   href='{url path="express/admin_express/edit" args="user_id={$express.user_id}"}' title="当前位置">当前位置</a>&nbsp;|&nbsp;
+					  	<a target="_blank"   href='{url path="express/admin_express/detail" args="user_id={$express.user_id}"}' title="查看详情">查看详情</a>&nbsp;|&nbsp;
+					  	<a href='{url path="express/admin_express/edit" args="user_id={$express.user_id}"}' title="当前位置">当前位置</a>&nbsp;|&nbsp;
 					  	<a class="data-pjax" href='{url path="express/admin_express/edit" args="user_id={$express.user_id}"}' title="查看账目明细">查看账目明细</a>&nbsp;|&nbsp;
 			          	<a class="ajaxremove ecjiafc-red" data-toggle="ajaxremove" data-msg="你确定要删除该买单规则吗？" href='{url path="express/admin_express/remove" args="user_id={$express.user_id}"}' title="删除">删除</a>
 		    	  	</div>
@@ -90,7 +90,7 @@
 						<i class="fontello-icon-star" style="color:#bbb;"></i>
 					{/section}
 				</td>
-		      	<td>¥{$express.user_money}</td>
+		      	<td>¥ {$express.user_money}</td>
 		      	<td>{if $express.work_type eq 1}派单{else}抢单{/if}</td>
 		      	<td>{if $express.online_status eq 1}在线{else}<font class="ecjiafc-red">离线</font>{/if}</td>
 		      	<td>{$express.add_time}</td>

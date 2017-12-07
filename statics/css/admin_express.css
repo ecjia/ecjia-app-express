@@ -1,3 +1,7 @@
 .w480 {
 	width: 480px;
 }
+.order_number span{
+	margin-left:180px;
+	 font-size: 16px;
+}

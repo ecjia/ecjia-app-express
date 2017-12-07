@@ -73,7 +73,7 @@ class admin_express extends ecjia_admin {
 	}
 	
 	/**
-	 * 活动列表页
+	 * 配送员列表页加载
 	 */
 	public function init() {
 		$this->admin_priv('express_manage');
@@ -112,7 +112,6 @@ class admin_express extends ecjia_admin {
 		
 		$this->display('express_edit.dwt');
 	}
-	
 	
 	/**
 	 * 添加配送员处理
@@ -316,7 +315,67 @@ class admin_express extends ecjia_admin {
 		
 		return $this->showmessage('批量删除配送员成功', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('pjaxurl' => RC_Uri::url('express/admin_express/init')));
 	}
+	
+	/**
+	 * 查看详情
+	 */
+	public function detail() {
+		$this->admin_priv('express_manage');
+		
+		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here('配送员详情'));
+		$this->assign('ur_here', '配送员详情');
+		$this->assign('action_link', array('text' => '配送员列表', 'href' => RC_Uri::url('express/admin_express/init')));
+		
+		$user_id = intval($_GET['user_id']);
+		$staff_user   = RC_DB::table('staff_user')->where('user_id', $user_id)->first();
+		$express_user = RC_DB::table('express_user')->where('user_id', $user_id)->first();
+		$express_info = array_merge($staff_user,$express_user);
+		$express_info['add_time']  = RC_Time::local_date('Y-m-d H:i:s', $express_info['add_time']);
+		$express_info['province']  = ecjia_region::getRegionName($express_info['province']);
+		$express_info['city']      = ecjia_region::getRegionName($express_info['city']);
+		$express_info['district']  = ecjia_region::getRegionName($express_info['district']);
+		$express_info['street']    = ecjia_region::getRegionName($express_info['street']);
+		$this->assign('express_info', $express_info);
 
+		$order_number['finish'] = RC_DB::TABLE('express_order')->where('status', 5)->where('staff_id', $user_id)->count();
+		$order_number['grab']	= RC_DB::TABLE('express_order')->where('from', 'grab')->where('staff_id', $user_id)->count();
+		$order_number['assign'] = RC_DB::TABLE('express_order')->where('from', 'assign')->where('staff_id', $user_id)->count();
+		$this->assign('order_number', $order_number);
+
+		$db_order = RC_DB::table('express_order as eo')
+				   ->leftJoin('store_franchisee as sf', RC_DB::raw('eo.store_id'), '=', RC_DB::raw('sf.store_id'));
+		$db_order->where(RC_DB::raw('eo.staff_id'), $user_id);
+		$count = $db_order->count();
+		$page = new ecjia_page($count, 5, 5);
+		$data = $db_order
+		->selectRaw('eo.express_sn,eo.express_id,eo.province as eoprovince,eo.city as eocity,eo.district as eodistrict,eo.street as eostreet,eo.address as eoaddress,eo.receive_time,eo.express_time,eo.signed_time,eo.from,eo.commision,eo.status,sf.merchants_name,sf.province,sf.city,sf.district,sf.street,sf.address')
+		->orderby(RC_DB::raw('eo.express_id'), 'desc')
+		->take(10)
+		->skip($page->start_id-1)
+		->get();
+		$list = array();
+		if (!empty($data)) {
+			foreach ($data as $row) {
+				$row['receive_time']  = RC_Time::local_date('Y-m-d H:i:s', $row['receive_time']);
+				$row['express_time']  = RC_Time::local_date('Y-m-d H:i:s', $row['express_time']);
+				$row['signed_time']   = RC_Time::local_date('Y-m-d H:i:s', $row['signed_time']);
+				$row['province']  	  = ecjia_region::getRegionName($row['province']);
+				$row['city']          = ecjia_region::getRegionName($row['city']);
+				$row['district']      = ecjia_region::getRegionName($row['district']);
+				$row['street']        = ecjia_region::getRegionName($row['street']);
+				$row['eoprovince']    = ecjia_region::getRegionName($row['eoprovince']);
+				$row['eocity']        = ecjia_region::getRegionName($row['eocity']);
+				$row['eodistrict']    = ecjia_region::getRegionName($row['eodistrict']);
+				$row['eostreet']      = ecjia_region::getRegionName($row['eostreet']);
+				$list[] = $row;
+			}
+		}
+		
+		$order_list =  array('list' => $list,'page' => $page->show(5), 'desc' => $page->page_desc());
+		$this->assign('order_list', $order_list);
+		
+		$this->display('express_detail.dwt');
+	}
 	
 	private function get_express_list($type = '') {
 		$db_data = RC_DB::table('staff_user as su')
