@@ -1,0 +1,194 @@
+.express-task .editpage-rightbar{
+	width:100%;
+	margin-right:0px;
+}
+
+.express-task .editpage-rightbar .left-bar1 .left-bar{
+	width:21%;
+}
+
+.express-task .editpage-rightbar .left-bar .accordion-toggle{
+	background-image:url();
+}
+
+.express-task .editpage-rightbar .right-bar .accordion-toggle{
+	background-image:url();
+}
+
+.express-task .editpage-rightbar .middle-bar .left-bar{
+	width:56%;
+	margin-left:1%;
+	border: 1px solid #dcdcdc;
+	border-radius:4px;
+	height:685px;
+}
+
+.express-task .editpage-rightbar .right-bar{
+	width:21%;
+	margin-right:0;
+}
+.express-task .editpage-rightbar .right-bar .foldable-list .accordion-group{
+	border:none;
+	border-radius:0px;
+}
+.express-task .editpage-rightbar .left-bar1 .left-bar .accordion-inner{
+	margin:6px 4px;
+	border: 1px solid #dcdcdc;
+	padding:0 0;
+}
+.margin-label{
+	margin-left: 4px;
+    margin-top: 13px;
+    margin-bottom: 13px;
+}
+.border-bottom-line{
+	border-bottom: 1px dashed #dcdcdc;
+}
+.takeing{
+	background: url("../images/take.png") no-repeat;
+	position: absolute;
+	background-origin: content-box;
+	background-repeat: no-repeat;
+	background-size: 100% 100%;
+	width:20px;
+	height:20px;
+	display:inline-block;
+}
+
+.sending{
+	background: url("../images/send.png") no-repeat;
+	position: absolute;
+	background-origin: content-box;
+	background-repeat: no-repeat;
+	background-size: 100% 100%;
+	width:20px;
+	height:20px;
+	display:inline-block;
+}
+
+.express-task .editpage-rightbar .right-bar .accordion-inner{
+	margin:6px 4px;
+	padding:0 0;
+	border-top:none;
+}
+.triangle{
+	background: url(../images/tran_1.png) no-repeat -2px 4px;
+    position: relative;
+    background-origin: content-box;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    width: 17px;
+    height: 17px;
+    display: inline-block;
+    font-weight: bold;
+    margin-left: 9px;
+}
+.triangle1{
+	background: url(../images/tran_2.png) no-repeat -2px 4px;
+    position: relative;
+    background-origin: content-box;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    width: 17px;
+    height: 17px;
+    display: inline-block;
+    font-weight: bold;
+    margin-left: 9px;
+}
+.triangle2{
+	background: url(../images/tran_1.png) no-repeat -2px 4px;
+    position: relative;
+    background-origin: content-box;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    width: 17px;
+    height: 17px;
+    display: inline-block;
+    font-weight: bold;
+    margin-left: 9px;
+}
+.press-list{
+	/*verflow-y:scroll;
+	height:376px;*/
+}
+
+.express-user-info{
+	margin-left: 0px;
+    margin-top: 7px;
+    margin-bottom: 7px;
+	border: 1px solid #dcdcdc;
+	height:140px;
+	width:97%;
+}
+.express-user-info .express-img{
+	float:left;
+	clear:both;
+	position:relative;
+	width:40%;
+}
+.express-user-info .express-img img{
+	width:60px;
+	height:60px;
+	margin:5px;
+}
+.express-user-info .imginfo-div .expressinfo{
+	float: right;
+    margin-right: 10%;
+    height: 44px;
+    line-height: 22px;
+    margin-top: 15px;
+	width:50%;
+}
+.express-order-div{
+	width:100%;
+	float:left;
+	margin-top: 7px;
+    margin-bottom: 7px;
+	clear:both;
+}
+.express-order-div .waitfor-pickup{
+	padding-left: 6%;
+    width: 45%;
+    float: left;
+}
+.express-order-div .waitfor-pickup span{
+	color:#c62626;
+	display:inline-block;
+	margin-left:8px;
+}
+.express-order-div .wait-sending{
+	width: 44%;
+    padding-right: 4%;
+    float: right;
+}
+.express-order-div .wait-sending span{
+	color:#c62626;
+	display:inline-block;
+	margin-left:8px;
+}
+
+.express-user-info .assigin-div{
+	width:100%;
+	float:left;
+	margin-top: 0px;
+    margin-bottom: 7px;
+	clear:both;
+	margin-left:5px;
+}
+.press-list{
+	border:1px solid #fff;
+}
+.leave-press-list{
+	border:1px solid #fff;
+}
+.right-scroll{
+	height:645px;
+	overflow:auto;
+}
+.margin-icon{
+	margin-left:25px;
+}
+.norecord{
+	text-align: center;
+    margin-top: 290px;
+}

@@ -47,27 +47,82 @@
 defined('IN_ECJIA') or exit('No permission resources.');
 
 /**
- * 后台配送菜单API
- * @author 
+ * 配送调度任务中心
+ * @author zrl
  */
-class express_admin_menu_api extends Component_Event_Api {
+class admin extends ecjia_admin {
+	
+	public function __construct() {
+		parent::__construct();
+		
+		/* 加载全局 js/css */
+		RC_Script::enqueue_script('jquery-validate');
+		RC_Script::enqueue_script('jquery-form');
+		RC_Script::enqueue_script('smoke');
+		RC_Style::enqueue_style('chosen');
+		RC_Style::enqueue_style('uniform-aristo');
 
-    public function call(&$options) {
-        $menus = ecjia_admin::make_admin_menu('05_content', '配送调度', '', 5);
-        
-        $submenus = array(
-            ecjia_admin::make_admin_menu('01_task_list', '任务中心', RC_Uri::url('express/admin/init', array('type' => 'wait_grab')), 1)->add_purview('express_task_manage'),
-        	ecjia_admin::make_admin_menu('02_express_list', '配送员管理', RC_Uri::url('express/admin_express/init'), 2)->add_purview('express_manage'),
-        );
-        
-        $menus->add_submenu($submenus);
-        $menus = RC_Hook::apply_filters('express_admin_menu_api', $menus);
-        
-		if ($menus->has_submenus()) {
-		    return $menus;
+		RC_Script::enqueue_script('jquery-uniform');
+		RC_Script::enqueue_script('jquery-chosen');
+		RC_Script::enqueue_script('admin_express_task', RC_App::apps_url('statics/js/admin_express_task.js', __FILE__));
+		RC_Style::enqueue_style('admin_express_task', RC_App::apps_url('statics/css/admin_express_task.css', __FILE__));
+		
+		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here('配送调度', RC_Uri::url('express/admin/init')));
+	}
+	
+	/**
+	 * 任务中心
+	 */
+	public function init() {
+		$this->admin_priv('express_task_manage');
+		
+		ecjia_screen::get_current_screen()->remove_last_nav_here();
+		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here('任务中心'));
+		$this->assign('ur_here', '任务中心');
+		
+		$type = empty($_GET['type']) ? 'wait_grab' : trim($_GET['type']);
+		$this->assign('type', $type);
+		
+		/*待抢单列表*/
+		$wait_grab_list = $this->get_wait_grab_list();
+		$count = count($wait_grab_list);
+		
+		/*配送员列表*/
+		$express_user_list = $this->get_express_user_list();
+		
+		//$this->assign('search_action', RC_Uri::url('quickpay/admin/init'));
+		$this->assign('wait_grab_count', $count);
+		$this->assign('wait_grab_list', $wait_grab_list);
+		$this->display('express_task_list.dwt');
+	}
+	
+	/**
+	 * 待抢单列表
+	 */
+	private function get_wait_grab_list(){
+		$dbview = RC_DB::table('express_order as eo')->leftJoin('store_franchisee as sf', RC_DB::raw('eo.store_id'), '=', RC_DB::raw('sf.store_id'));
+		$list = $dbview->where(RC_DB::raw('eo.status'), 0)
+		->select(RC_DB::raw('eo.express_id, eo.express_sn, eo.country, eo.province, eo.city, eo.district, eo.street, eo.address, eo.distance, eo.add_time, sf.province as sf_province, sf.city as sf_city, sf.district as sf_district, sf.street as sf_street, sf.address as sf_address'))
+		->orderBy(RC_DB::raw('eo.add_time'), 'desc')
+		->get();
+		$data = array();
+		if (!empty($list)) {
+			foreach ($list as $row) {
+				$row['format_add_time'] = RC_Time::local_date(ecjia::config('time_format'), $row['start_time']);
+				$row['from_address'] 	= ecjia_region::getRegionName($row['sf_province']).ecjia_region::getRegionName($row['sf_city']).ecjia_region::getRegionName($row['sf_district']).ecjia_region::getRegionName($row['sf_street']).ecjia_region::getRegionName($row['sf_address']);
+				$row['to_address']		= ecjia_region::getRegionName($row['province']).ecjia_region::getRegionName($row['city']).ecjia_region::getRegionName($row['district']).ecjia_region::getRegionName($row['street']).ecjia_region::getRegionName($row['address']);
+				$data[] = $row;
+			}
 		}
-		return false;
-    }
+		return $data;
+	}
+	
+	/**
+	 * 配送员列表
+	 */
+	private function get_express_user_list() {
+		$express_user_view =  RC_DB::table('staff_user as su')->leftJoin('express_user as eu', RC_DB::raw('su.user_id'), '=', RC_DB::raw('eu.user_id'));
+	}
 }
 
-// end
+//end
