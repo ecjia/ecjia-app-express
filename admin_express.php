@@ -203,17 +203,18 @@ class admin_express extends ecjia_admin {
 		
 		$user_id = intval($_GET['user_id']);
 		$staff_user   = RC_DB::table('staff_user')->where('user_id', $user_id)->first();
-		$express_user   = RC_DB::table('express_user')->where('user_id', $user_id)->first();
+		$express_user = RC_DB::table('express_user')->where('user_id', $user_id)->first();
+		$data = array_merge($staff_user,$express_user);
 		
 		$provinces = ecjia_region::getSubarea(ecjia::config('shop_country'));
-		$cities = ecjia_region::getSubarea($express_user['province']);
-		$districts = ecjia_region::getSubarea($express_user['city']);
-		$streets = ecjia_region::getSubarea($express_user['district']);
-		
+		$cities    = ecjia_region::getSubarea($data['province']);
+		$districts = ecjia_region::getSubarea($data['city']);
+		$streets   = ecjia_region::getSubarea($data['district']);
 		$this->assign('province', $provinces);
 		$this->assign('city', $cities);
 		$this->assign('district', $districts);
 		$this->assign('street', $streets);
+		$this->assign('data', $data);
 		
 		$this->assign('form_action', RC_Uri::url('express/admin_express/update'));
 	
@@ -224,117 +225,63 @@ class admin_express extends ecjia_admin {
 	 */
 	public function update() {
 		$this->admin_priv('express_update');
-	
-		$store_id = intval($_POST['store_id']);
-		$id       = intval($_POST['id']);
-		$title    = trim($_POST['title']);
-		$description = trim($_POST['description']);
-	
-		if (RC_DB::table('quickpay_activity')->where('title', $title)->where('store_id', $store_id)->where('id', '!=', $id)->count() > 0) {
-			return $this->showmessage('当前店铺下已存在该买单标题', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
-		}
-	
-		$start_time = RC_Time::local_strtotime($_POST['start_time']);
-		$end_time   = RC_Time::local_strtotime($_POST['end_time']);
-	
-		if ($start_time >= $end_time) {
-			return $this->showmessage('开始时间不能大于或等于结束时间', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
-		}
-	
-		//相对应的买单优惠类型活动参数处理
-		$activity_discount_value = $_POST['activity_discount_value'];
-		if (!empty($activity_discount_value)) {
-			$activity_value = $activity_discount_value;
-		} else {
-			if (is_array($_POST['activity_value'])) {
-				foreach($_POST['activity_value'] as $row){
-					if (empty($row)){
-						return $this->showmessage('活动参数不能为空', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
-					}
-				}
-				$activity_value = implode(",", $_POST['activity_value']);
-			}
-		}
-	
-		//时间规则处理
-		$limit_time_type = trim($_POST['limit_time_type']);//限制时间类型类型
-		$limit_time_weekly = 0;
-		if ($limit_time_type == 'customize') {
-			//每周星期0x1111111代表7天
-			if (!empty($_POST['limit_time_weekly'])){
-				$limit_time_weekly = Ecjia\App\Quickpay\Weekly::weeklySelected($_POST['limit_time_weekly']);
-			}
-	
-			//每天时间段
-			$time_quantum = array();
-			foreach ($_POST['start_ship_time'] as $k => $v) {
-				$time_quantum[$k]['start']	= $v;
-				$time_quantum[$k]['end']	= $_POST['end_ship_time'][$k];
-			}
-			$limit_time_daily = serialize($time_quantum);
-	
-			//排除日期
-			$limit_time_exclude_data = $_POST['limit_time_exclude'];
-			$limit_time_exclude = implode(",", $limit_time_exclude_data);
-		}
-	
-		//是否可参与红包抵现
-		$use_bonus_enabled = trim($_POST['use_bonus_enabled']);
-		if ($use_bonus_enabled == 'on') {
-			$use_bonus_select = trim($_POST['use_bonus_select']);
-			if ($use_bonus_select == 'nolimit') {
-				$use_bonus = $use_bonus_select;
-			} else{
-				if (!empty($_POST['act_range_ext'])) {
-					$use_bonus = implode(",", $_POST['act_range_ext']);
-				}else{
-					return $this->showmessage('请选择您要指定的红包项', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
-				}
-			}
-		} else{
-			$use_bonus = 'close';
-		}
-	
-	
-		//是否可参与积分抵现
-		$use_integral_enabled = trim($_POST['use_integral_enabled']);
-		if ($use_integral_enabled == 'on') {
-			$use_integral_select = trim($_POST['use_integral_select']);
-			if ($use_integral_select == 'nolimit') {
-				$use_integral = $use_integral_select;
-			} else{
-				if (!empty($_POST['integral_keyword'])) {
-					$use_integral = $_POST['integral_keyword'];
-				}else{
-					return $this->showmessage('设置最大可用积分数', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
-				}
-			}
-		} else{
-			$use_integral = 'close';
-		}
-	
-		$data = array(
-				'title'      	=> $title,
-				'description'	=> $description,
-				'activity_type' => $_POST['activity_type'],
-				'activity_value'=> $activity_value,
-	
-				'limit_time_type'	=> $limit_time_type,
-				'limit_time_weekly'	=> $limit_time_weekly,
-				'limit_time_daily'	=> $limit_time_daily,
-				'limit_time_exclude'=> $limit_time_exclude,
-	
-				'start_time'	=> $start_time,
-				'end_time'		=> $end_time,
-	
-				'use_integral'	=> $use_integral,
-				'use_bonus'		=> $use_bonus,
-	
-				'enabled' 		=> intval($_POST['enabled']),
+		
+		$user_id = intval($_POST['user_id']);
+		$mobile  = trim($_POST['mobile']);
+		$email   = trim($_POST['email']);
+		$shippingfee_percent = intval($_POST['shippingfee_percent']);
+		$work_type = intval($_POST['work_type']);
+		$address   = trim($_POST['address']);
+		
+		if (!preg_match('/^1(3|4|5|7|8)\d{9}$/', $mobile)) {
+			return $this->showmessage('手机号码格式错误', ecjia::MSGSTAT_ERROR | ecjia::MSGTYPE_JSON);
+		} 
+	   	$is_exist_mobile = RC_DB::table('staff_user')->where('user_id', '<>', $user_id)->where('mobile', $mobile)->get();
+        if ($is_exist_mobile) {
+            return $this->showmessage('手机号已存在，请修改', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+        }
+        
+        if (!preg_match('/\w[-\w.+]*@([A-Za-z0-9][-A-Za-z0-9]+\.)+[A-Za-z]{2,14}/', $email)) {
+        	return $this->showmessage('email地址格式错误', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+        }
+        
+        $is_exist_email = RC_DB::table('staff_user')->where('email', $email)->where('user_id', '<>', $user_id)->get();
+        if ($is_exist_email) {
+        	return $this->showmessage('邮箱已存在，请修改', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+        }
+        
+        if(empty($_POST['province']) || empty($_POST['city']) || empty($_POST['district']) || empty($_POST['street'])) {
+        	return $this->showmessage('请选择配送员所在地区', ecjia::MSGSTAT_ERROR | ecjia::MSGTYPE_JSON);
+        }
+        
+        if(empty($address)) {
+        	return $this->showmessage('请输入详细地址', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+        }
+        		
+		//产生配送员资料staff_user表
+		$salt = rand(1, 9999);
+		$staff_info = array(
+			'name'         => trim($_POST['name']),
+			'user_ident'   => trim($_POST['user_ident']),
+			'mobile'       => $mobile,
+			'email'        => $email,
+			'password'	   => !empty($_POST['password']) ? md5(md5($_POST['password']) . $salt) : '',
+			'salt'         => !empty($_POST['password']) ? $salt : '',
 		);
-	
-		RC_DB::table('quickpay_activity')->where('id', $id)->update($data);
-		return $this->showmessage('编辑优惠买单规则成功', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('pjaxurl' => RC_Uri::url('express/admin_express/edit', array('id' => $id ,'store_id' => $store_id))));
+		RC_DB::table('staff_user')->where('user_id', $user_id)->update($staff_info);
+
+		$data_express = array(
+			'province'  => $_POST['province'],
+			'city'      => $_POST['city'],
+			'district'  => $_POST['district'],
+			'street'    => $_POST['street'],
+			'address'	=> $address,
+			'work_type' => $work_type,
+			'shippingfee_percent' => $shippingfee_percent,
+		);
+		RC_DB::table('express_user')->where('user_id', $user_id)->update($data_express);
+		return $this->showmessage('编辑配送员成功', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('pjaxurl' => RC_Uri::url('express/admin_express/edit', array('user_id' => $user_id))));
+		
 	}
 
 	/**
@@ -372,8 +319,7 @@ class admin_express extends ecjia_admin {
 		$filter['work_type'] = trim($_GET['work_type']);
 
 		if ($filter['keyword']) {
-			$db_data->where(RC_DB::raw('su.name'), 'like', '%' . mysql_like_quote($filter['keyword']) . '%')
-			->orWhere(RC_DB::raw('su.mobile'), 'like', '%' . mysql_like_quote($filter['keyword']) . '%');
+			$db_data ->whereRaw('(su.name  like  "%'.mysql_like_quote($filter['keyword']).'%"  or su.mobile like "%'.mysql_like_quote($filter['keyword']).'%")');
 		}
 		
 		if ($filter['work_type']) {
@@ -396,7 +342,6 @@ class admin_express extends ecjia_admin {
 		
 		$data = $db_data
 		->selectRaw('eu.*, su.user_id, su.name, su.mobile, su.add_time, su.online_status')
-		->where(RC_DB::raw('su.store_id'), 0)
 		->orderby(RC_DB::raw('su.user_id'), 'desc')
 		->take(10)
 		->skip($page->start_id-1)
