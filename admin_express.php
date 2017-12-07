@@ -125,6 +125,7 @@ class admin_express extends ecjia_admin {
 		$shippingfee_percent = intval($_POST['shippingfee_percent']);
 		$work_type = intval($_POST['work_type']);
 		$address   = trim($_POST['address']);
+		$password  = empty($_POST['password']) ? ''	: trim($_POST['password']);
 		
 		if (!preg_match('/^1(3|4|5|7|8)\d{9}$/', $mobile)) {
 			return $this->showmessage('手机号码格式错误', ecjia::MSGSTAT_ERROR | ecjia::MSGTYPE_JSON);
@@ -159,11 +160,14 @@ class admin_express extends ecjia_admin {
 			'user_ident'   => trim($_POST['user_ident']),
 			'mobile'       => $mobile,
 			'email'        => $email,
-			'password'     => md5(md5($_POST['password']) . $salt),
-			'salt'         => $salt,
 			'group_id'	   => -1,	
 			'add_time'     => RC_Time::gmtime(),
 		);
+		
+		if($password) {
+			$staff_info['password'] = md5(md5($password) . $salt);
+			$staff_info['salt']     = $salt;
+		}
 		$staff_id = RC_DB::table('staff_user')->insertGetId($staff_info);
 		
 		if($staff_id){
@@ -232,6 +236,7 @@ class admin_express extends ecjia_admin {
 		$shippingfee_percent = intval($_POST['shippingfee_percent']);
 		$work_type = intval($_POST['work_type']);
 		$address   = trim($_POST['address']);
+		$newpassword = trim($_POST['newpassword']);
 		
 		if (!preg_match('/^1(3|4|5|7|8)\d{9}$/', $mobile)) {
 			return $this->showmessage('手机号码格式错误', ecjia::MSGSTAT_ERROR | ecjia::MSGTYPE_JSON);
@@ -265,9 +270,11 @@ class admin_express extends ecjia_admin {
 			'user_ident'   => trim($_POST['user_ident']),
 			'mobile'       => $mobile,
 			'email'        => $email,
-			'password'	   => !empty($_POST['password']) ? md5(md5($_POST['password']) . $salt) : '',
-			'salt'         => !empty($_POST['password']) ? $salt : '',
 		);
+		if($newpassword) {
+			$staff_info['password'] = md5(md5($newpassword) . $salt);
+			$staff_info['salt']     = $salt;
+		} 
 		RC_DB::table('staff_user')->where('user_id', $user_id)->update($staff_info);
 
 		$data_express = array(

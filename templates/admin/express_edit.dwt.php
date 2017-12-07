@@ -51,14 +51,23 @@
 						<input class="w480" type="text" name="email" value="{$data.email}" />
 					</div>
 				</div>  
-				
+				<!-- {if $data.user_id} -->
 				<div class="control-group formSep">
 					<label class="control-label">登录密码：</label>
 					<div class="controls">
-						<input class="w480" type="password" name="password" value="" placeholder="请输入登录密码"/>
+						<input class="w480" type="password" name="newpassword"  placeholder="请输入新的登录密码"/>
 						<span class="help-block">请设置配送员在App端的登录密码</span>
 					</div>
 				</div>  
+				<!-- {else} -->
+				<div class="control-group formSep">
+					<label class="control-label">登录密码：</label>
+					<div class="controls">
+						<input class="w480" type="password" name="password"  placeholder="请输入登录密码"/>
+						<span class="help-block">请设置配送员在App端的登录密码</span>
+					</div>
+				</div> 
+				<!-- {/if} -->
 								
 				<div class="control-group formSep">
 					<label class="control-label">选择地区：</label>
