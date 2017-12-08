@@ -3,5 +3,16 @@
 }
 .order_number span{
 	margin-left:180px;
-	 font-size: 16px;
+	font-size: 16px;
+}
+.modal {
+   width: 930px;
+   margin-left: -350px;
+   margin-top: 40px;
+}
+.modal-body {
+    max-height: 800px;
+}
+#allmap {
+	height:600px;
 }

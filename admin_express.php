@@ -65,6 +65,7 @@ class admin_express extends ecjia_admin {
 		RC_Script::enqueue_script('jquery-uniform');
 		RC_Script::enqueue_script('jquery-chosen');
 		RC_Script::enqueue_script('ecjia-region');
+		RC_Script::enqueue_script('qq_map', 'https://map.qq.com/api/js?v=2.exp');
 		
 		RC_Script::enqueue_script('admin_express', RC_App::apps_url('statics/js/admin_express.js', __FILE__));
 		RC_Style::enqueue_style('admin_express', RC_App::apps_url('statics/css/admin_express.css', __FILE__));
@@ -89,7 +90,6 @@ class admin_express extends ecjia_admin {
 		$this->assign('data', $data);
 		$this->assign('type_count', $data['count']);
 		$this->assign('filter', $data['filter']);
-		
 		$this->assign('search_action', RC_Uri::url('express/admin_express/init'));
 
 		$this->display('express_list.dwt');
