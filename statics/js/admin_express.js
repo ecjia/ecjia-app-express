@@ -65,12 +65,30 @@
                 Label.prototype.construct = function() {
                      this.dom = document.createElement('div');
                      this.dom.style.cssText =
-                          'background:url("content/apps/express/statics/images/lable_text.png") no-repeat;width:130px;height:60px;margin-top:-98px;margin-left:-38px;' +
+                          'background:url("content/apps/express/statics/images/lable_text.png") no-repeat;width:130px;height:60px;margin-top:-98px;margin-left:-38px;position:absolute;' +
                           'text-align:left;color:white;padding-left:25px;padding-top:8px;';
                      this.dom.innerHTML = name +'<br>'+mobile;
                      //将dom添加到覆盖物层，overlayLayer的顺序为容器 1，此容器中包含Polyline、Polygon、GroundOverlay等
                      this.getPanes().overlayLayer.appendChild(this.dom);
 
+                }
+                //绘制和更新自定义的dom元素
+                Label.prototype.draw = function() {
+                    //获取地理经纬度坐标
+                    var position = this.get('position');
+                    if (position) {
+                        //根据经纬度坐标计算相对于地图外部容器左上角的相对像素坐标
+                        //var pixel = this.getProjection().fromLatLngToContainerPixel(position);
+                        //根据经纬度坐标计算相对于地图内部容器原点的相对像素坐标
+                        var pixel = this.getProjection().fromLatLngToDivPixel(position);
+                        this.dom.style.left = pixel.getX() + 'px';
+                        this.dom.style.top = pixel.getY() + 'px';
+                    }
+                }
+
+                Label.prototype.destroy = function() {
+                    //移除dom
+                    this.dom.parentNode.removeChild(this.dom);
                 }
 	            var label = new Label({
 	                 map: map,
