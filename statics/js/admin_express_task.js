@@ -26,8 +26,21 @@
                 		$(".leaveline").removeClass("triangle1");
                 	}
     			});
-//              app.quickpay_info.activity_type_change();
-            }
+              app.admin_express_task.search_express_user();
+            },
+    
+            search_express_user: function () {
+                /* 配送员列表搜索 */
+                $("form[name='express_searchForm'] .express-search-btn").on('click', function (e) {
+                    e.preventDefault();
+                    var url = $("form[name='express_searchForm']").attr('action');
+                    var keyword = $("input[name='keywords']").val();
+                    if (keyword != '') {
+                    	url += '&keywords=' + keyword;
+                    }
+                    ecjia.pjax(url);
+                });
+		    },
       };
     
 })(ecjia.admin, jQuery);

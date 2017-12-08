@@ -81,6 +81,8 @@ class admin extends ecjia_admin {
 		$this->assign('ur_here', '任务中心');
 		
 		$type = empty($_GET['type']) ? 'wait_grab' : trim($_GET['type']);
+		$keywords = empty($_GET['keywords']) ? '' : trim($_GET['keywords']);
+		
 		$this->assign('type', $type);
 		
 		/*待抢单列表*/
@@ -90,9 +92,13 @@ class admin extends ecjia_admin {
 		/*配送员列表*/
 		$express_user_list = $this->get_express_user_list();
 		
-		//$this->assign('search_action', RC_Uri::url('quickpay/admin/init'));
+		$this->assign('search_action', RC_Uri::url('express/admin/init'));
+		$app_url =  RC_App::apps_url('statics/images', __FILE__);
+		$this->assign('app_url', $app_url);
 		$this->assign('wait_grab_count', $count);
 		$this->assign('wait_grab_list', $wait_grab_list);
+		$this->assign('express_count', $express_user_list['express_count']);
+		$this->assign('express_user_list', $express_user_list);
 		$this->display('express_task_list.dwt');
 	}
 	
@@ -121,7 +127,35 @@ class admin extends ecjia_admin {
 	 * 配送员列表
 	 */
 	private function get_express_user_list() {
-		$express_user_view =  RC_DB::table('staff_user as su')->leftJoin('express_user as eu', RC_DB::raw('su.user_id'), '=', RC_DB::raw('eu.user_id'));
+		$keywords = $_GET['keywords'];
+		$express_user_view =  RC_DB::table('staff_user as su')
+		->leftJoin('express_user as eu', RC_DB::raw('su.user_id'), '=', RC_DB::raw('eu.user_id'));
+		$express_user_view->where(RC_DB::raw('su.store_id'), 0);
+		
+		if (!empty($keywords)) {
+			$express_user_view ->whereRaw('(su.name  like  "%'.mysql_like_quote($keywords).'%")');
+		}
+		$express_user_count = RC_DB::table('staff_user as su')
+								->leftJoin('express_user as eu', RC_DB::raw('su.user_id'), '=', RC_DB::raw('eu.user_id'))
+								->where(RC_DB::raw('su.store_id'), 0)
+								->select(RC_DB::raw('count(*) as count'),RC_DB::raw('SUM(IF(su.online_status = 1, 1, 0)) as online'),RC_DB::raw('SUM(IF(su.online_status = 4, 1, 0)) as offline'))
+								->first();
+		
+		$list = $express_user_view->selectRaw('eu.*, su.mobile, su.name, su.avatar, su.online_status')->get();
+		$data = array();
+		if (!empty($list)) {
+			foreach ($list as $row) {
+				$count = RC_DB::table('express_order')->where('staff_id', $row['user_id'])->select(RC_DB::raw('count(*) as count'),RC_DB::raw('SUM(IF(status = 1, 1, 0)) as wait_pickup'),RC_DB::raw('SUM(IF(status = 2, 1, 0)) as sending'))->first();
+				$row['avatar'] = empty($row['avatar']) ? '' : RC_Upload::upload_url($row['avatar']);
+				$row['wait_pickup_count'] = $count['wait_pickup'];
+				$row['sending_count'] = $count['sending'];
+				$data[] = $row;
+			}
+		}
+		
+		$result = array('list' => $data, 'express_count' => $express_user_count);
+		
+		return $result;
 	}
 }
 

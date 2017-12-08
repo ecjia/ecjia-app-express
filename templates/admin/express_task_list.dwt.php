@@ -84,91 +84,69 @@
 							<div class="accordion-inner right-scroll">
 								<div class="control-group control-group-small">
 									<div class="margin-label">
-									     <form id="form-privilege" class="form-horizontal" name="theForm" action="{$form_action}" method="post" >
-											 <input name="express_user_name" class="span9" type="text" placeholder="请输入配送员名称" value="{$data.start_time}" />
-											 <button class="btn btn-gebo" style="background:#058DC7;padding:4px 7px;" type="submit">搜索</button>
+									     <form id="form-privilege" class="form-horizontal" name="express_searchForm" action="{$search_action}" method="post" >
+											 <input name="keywords" class="span9" type="text" placeholder="请输入配送员名称" value="{$smarty.get.keywords}" />
+											 <button class="btn btn-gebo express-search-btn" style="background:#058DC7;padding:4px 7px;" type="button">搜索</button>
 										 </form>
 									</div>
 								</div>
 								<div class="control-group control-group-small press-list" style="margin-bottom:0px;">
-									<div class="margin-label online-list" style="margin-top:5px;margin-bottom: 5px;">在线 （13）<a class="accordion-toggle acc-in move-mod-head online-triangle" data-toggle="collapse" data-target="#online"><b class="triangle on-tran"></b></a></div>
+									<div class="margin-label online-list" style="margin-top:5px;margin-bottom: 5px;">在线 （{$express_count.online}）<a class="accordion-toggle acc-in move-mod-head online-triangle" data-toggle="collapse" data-target="#online"><b class="triangle on-tran"></b></a></div>
 									<div class="online open">
 									<div class="express-user-list accordion-body in in_visable collapse" id="online">
-										<div class="express-user-info">
-											<div class="imginfo-div">
-	        		                			<div class="express-img"><img src="http://10.10.10.47/o2o/content/apps/express/statics/images/touxiang.png"></div>
-	        		                			<div class="expressinfo">一号配送员<br>15216670568</div>
-											</div>
-											<div class="express-order-div">
-												<div class="waitfor-pickup">
-													待取货<span class="ecjia-red">2单</span>
+										<!-- {foreach from=$express_user_list.list item=list} -->
+											{if $list.online_status eq '1'}
+												<div class="express-user-info">
+													<div class="imginfo-div">
+			        		                			<div class="express-img">{if $list.avatar}<img src="{$list.avatar}">{else}<img src="{$app_url}/touxiang.png">{/if}</div>
+			        		                			<div class="expressinfo">{$list.name}<br>{$list.mobile}</div>
+													</div>
+													<div class="express-order-div">
+														<div class="waitfor-pickup">
+															待取货<span class="ecjia-red">{$list.wait_pickup_count}单</span>
+														</div>
+														<div class="wait-sending">
+															待配送<span class="ecjia-red">{$list.sending_count}单</span>
+														</div>
+													</div>
+													<div class="assigin-div">
+														<a class="ajaxremove btn btn-gebo" style="background:#F6A618;text-shadow:none;" data-toggle="ajaxremove" data-msg="你确定要删除该买单规则吗？" href='{url path="quickpay/admin/remove" args="id={$quickpay.id}"}' title="删除"><span style="color:#fff;">指派给他</span></a>
+													</div>
 												</div>
-												<div class="wait-sending">
-													待配送<span class="ecjia-red">8单</span>
-												</div>
-											</div>
-											<div class="assigin-div">
-												<a class="ajaxremove btn btn-gebo" style="background:#F6A618;text-shadow:none;" data-toggle="ajaxremove" data-msg="你确定要删除该买单规则吗？" href='{url path="quickpay/admin/remove" args="id={$quickpay.id}"}' title="删除"><span style="color:#fff;">指派给他</span></a>
-											</div>
-										</div>
-										<div class="express-user-info">
-											<div class="imginfo-div">
-	        		                			<div class="express-img"><img src="http://10.10.10.47/o2o/content/apps/express/statics/images/touxiang.png"></div>
-	        		                			<div class="expressinfo">一号配送员<br>15216670568</div>
-											</div>
-											<div class="express-order-div">
-												<div class="waitfor-pickup">
-													待取货<span class="ecjia-red">2单</span>
-												</div>
-												<div class="wait-sending">
-													待配送<span class="ecjia-red">8单</span>
-												</div>
-											</div>
-											<div class="assigin-div">
-												<a class="ajaxremove btn btn-gebo" style="background:#F6A618;text-shadow:none;" data-toggle="ajaxremove" data-msg="你确定要删除该买单规则吗？" href='{url path="quickpay/admin/remove" args="id={$quickpay.id}"}' title="删除"><span style="color:#fff;">指派给他</span></a>
-											</div>
-										</div>
+											{/if}
+										<!-- {foreachelse} -->
+											<div class="">暂无任何记录!</div>
+										<!-- {/foreach} -->
 									</div>
 								</div>
 								</div>
 								<div class="control-group control-group-small press-list" style="margin-bottom:0px;">
-									<div class="margin-label online-list" style="margin-top:5px;margin-bottom: 5px;">离线 （16）<a class="accordion-toggle acc-in move-mod-head leave-trangle" data-val="0" data-toggle="collapse" data-target="#leave"><b class="triangle1 leaveline"></b></a></div>
+									<div class="margin-label online-list" style="margin-top:5px;margin-bottom: 5px;">离线 （{$express_count.offline}）<a class="accordion-toggle acc-in move-mod-head leave-trangle" data-val="0" data-toggle="collapse" data-target="#leave"><b class="triangle1 leaveline"></b></a></div>
 									<div class="leaveline-express">
 									<div class="express-user-list-leave accordion-body collapse" id="leave">
-										<div class="express-user-info">
-											<div class="imginfo-div">
-	        		                			<div class="express-img"><img src="http://10.10.10.47/o2o/content/apps/express/statics/images/touxiang.png"></div>
-	        		                			<div class="expressinfo">一号配送员<br>15216670568</div>
-											</div>
-											<div class="express-order-div">
-												<div class="waitfor-pickup">
-													待取货<span class="ecjia-red">2单</span>
+										<!-- {foreach from=$express_user_list.list item=list} -->
+											{if $list.online_status eq '4'}
+												<div class="express-user-info">
+													<div class="imginfo-div">
+			        		                			<div class="express-img">{if $list.avatar}<img src="{$list.avatar}">{else}<img src="{$app_url}/touxiang.png">{/if}</div>
+			        		                			<div class="expressinfo">{$list.name}<br>{$list.mobile}</div>
+													</div>
+													<div class="express-order-div">
+														<div class="waitfor-pickup">
+															待取货<span class="ecjia-red">{$list.wait_pickup_count}单</span>
+														</div>
+														<div class="wait-sending">
+															待配送<span class="ecjia-red">{$list.sending_count}单</span>
+														</div>
+													</div>
+													<div class="assigin-div">
+														<a class="ajaxremove btn btn-gebo" style="background:#F6A618;text-shadow:none;" data-toggle="ajaxremove" data-msg="你确定要删除该买单规则吗？" href='{url path="quickpay/admin/remove" args="id={$quickpay.id}"}' title="删除"><span style="color:#fff;">指派给他</span></a>
+													</div>
 												</div>
-												<div class="wait-sending">
-													待配送<span class="ecjia-red">8单</span>
-												</div>
-											</div>
-											<div class="assigin-div">
-												<a class="ajaxremove btn btn-gebo" style="background:#F6A618;text-shadow:none;" data-toggle="ajaxremove" data-msg="你确定要删除该买单规则吗？" href='{url path="quickpay/admin/remove" args="id={$quickpay.id}"}' title="删除"><span style="color:#fff;">指派给他</span></a>
-											</div>
-										</div>
-										<div class="express-user-info">
-											<div class="imginfo-div">
-	        		                			<div class="express-img"><img src="http://10.10.10.47/o2o/content/apps/express/statics/images/touxiang.png"></div>
-	        		                			<div class="expressinfo">一号配送员<br>15216670568</div>
-											</div>
-											<div class="express-order-div">
-												<div class="waitfor-pickup">
-													待取货<span class="ecjia-red">2单</span>
-												</div>
-												<div class="wait-sending">
-													待配送<span class="ecjia-red">8单</span>
-												</div>
-											</div>
-											<div class="assigin-div">
-												<a class="ajaxremove btn btn-gebo" style="background:#F6A618;text-shadow:none;" data-toggle="ajaxremove" data-msg="你确定要删除该买单规则吗？" href='{url path="quickpay/admin/remove" args="id={$quickpay.id}"}' title="删除"><span style="color:#fff;">指派给他</span></a>
-											</div>
-										</div>
+											{/if}
+										<!-- {foreachelse} -->
+											<div class="">暂无任何记录!</div>
+										<!-- {/foreach} -->
 									</div>
 									</div>
 								</div>
