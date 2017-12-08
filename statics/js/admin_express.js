@@ -34,7 +34,7 @@
              	var latLng = new qq.maps.LatLng(lat, lng);
              	var map = new qq.maps.Map(document.getElementById("allmap"),{
              	    center: latLng,
-             	    zoom: 16
+             	    zoom: 18
              	});
              	
          		//创建一个Marker(自定义图片)
