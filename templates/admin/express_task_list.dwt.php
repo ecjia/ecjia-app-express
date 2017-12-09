@@ -22,7 +22,8 @@
 		<li class="{if $type eq 'self'}active{/if}"><a class="data-pjax" href='{url path="quickpay/admin/init" args="type=self{if $filter.merchant_name}&merchant_name={$filter.merchant_name}{/if}{if $filter.keyword}&keyword={$filter.keyword}{/if}"}'>配送中 <span class="badge badge-info">{if $type_count.self}{$type_count.self}{else}0{/if}</span> </a></li>
 	</ul>
 </div>
-	
+
+
 <div class="row-fluid">
 	<div class="span12 express-task">
 		<div class="row-fluid ditpage-rightbar-new editpage-rightbar">
@@ -35,7 +36,7 @@
 							</div>
 							<div class="accordion-body in collapse" style="height:650px;overflow:auto;">
 								<!-- {foreach from=$wait_grab_list item=wait_grab} -->
-									<div class="accordion-inner">
+									<div class="accordion-inner order-div" express_id="{$wait_grab.express_id}">
 										<div class="control-group control-group-small border-bottom-line">
 											<div class="margin-label">配送单号：{$wait_grab.express_sn}</div>
 										</div>
@@ -66,13 +67,11 @@
 				</div>
 			</div>
 			<div class="middle-bar">
-				<div class="left-bar move-mod">
-					<div class="control-group">
-        				<div class="" style="overflow:hidden;">
-        					<div class="span6" id="allmap"></div>
-        				</div>
+				<div class="control-group">
+        			<div class="">
+        				<div class="span6" id="allmap" style="height:685px;width:100%;"></div>
         			</div>
-				</div>
+        		</div>
 			</div>
 			<div class="right-bar move-mod" style="height:685px;border:1px solid #dcdcdc;border-radius:4px;">
 				<div class="foldable-list move-mod-group">
@@ -86,6 +85,8 @@
 									<div class="margin-label">
 									     <form id="form-privilege" class="form-horizontal" name="express_searchForm" action="{$search_action}" method="post" >
 											 <input name="keywords" class="span9" type="text" placeholder="请输入配送员名称" value="{$smarty.get.keywords}" />
+											 <input id="start" class="span9" type="hidden" value="{$start}"/>
+											 <input id="end" class="span9" type="hidden" value="{$end}"/>
 											 <button class="btn btn-gebo express-search-btn" style="background:#058DC7;padding:4px 7px;" type="button">搜索</button>
 										 </form>
 									</div>
