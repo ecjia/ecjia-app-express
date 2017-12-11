@@ -12,7 +12,7 @@
 	<h3 class="heading">
 		<!-- {if $ur_here}{$ur_here}{/if} --><small>（{$name}）</small>
 		<!-- {if $action_link} -->
-		<a class="btn plus_or_reply" href="{$action_link.href}&start_date={$filter.start_date}&end_date={$filter.end_date}"><i class="fontello-icon-reply"></i>{$action_link.text}</a>
+		<a class="btn plus_or_reply" href="{$action_link.href}"><i class="fontello-icon-reply"></i>{$action_link.text}</a>
 		<!-- {/if} -->
 	</h3>
 </div>
