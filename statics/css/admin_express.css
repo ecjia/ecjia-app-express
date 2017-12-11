@@ -16,3 +16,21 @@
 #allmap {
 	height:600px;
 }
+
+
+
+
+
+
+
+.all{
+	
+	background-color: #f9fafa;
+    border: 1px solid #f9fafa;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    padding: 5px 0 20px 18px;
+}
+.sale_desc{
+	line-height:50px;
+}
