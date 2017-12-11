@@ -67,6 +67,9 @@ class admin_express extends ecjia_admin {
 		RC_Script::enqueue_script('ecjia-region');
 		RC_Script::enqueue_script('qq_map', 'https://map.qq.com/api/js?v=2.exp');
 		
+		RC_Script::enqueue_script('bootstrap-datepicker', RC_Uri::admin_url('statics/lib/datepicker/bootstrap-datepicker.min.js'));
+		RC_Style::enqueue_style('datepicker', RC_Uri::admin_url('statics/lib/datepicker/datepicker.css'));
+		
 		RC_Script::enqueue_script('admin_express', RC_App::apps_url('statics/js/admin_express.js', __FILE__));
 		RC_Style::enqueue_style('admin_express', RC_App::apps_url('statics/css/admin_express.css', __FILE__));
 		
@@ -193,7 +196,6 @@ class admin_express extends ecjia_admin {
 		}	
 	}
 	
-	
 	/**
 	 * 编辑配送员
 	 */
@@ -223,6 +225,7 @@ class admin_express extends ecjia_admin {
 	
 		$this->display('express_edit.dwt');
 	}
+	
 	/**
 	 * 编辑配送员处理
 	 */
@@ -373,6 +376,60 @@ class admin_express extends ecjia_admin {
 		$this->assign('order_list', $order_list);
 		
 		$this->display('express_detail.dwt');
+	}
+	
+	/**
+	 * 查看账目详情
+	 */
+	public function account_list() {
+		$this->admin_priv('express_manage');
+	
+		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here('查看账目详情'));
+		$this->assign('ur_here', '查看账目详情');
+		$this->assign('action_link', array('text' => '配送员列表', 'href' => RC_Uri::url('express/admin_express/init')));
+	
+		$user_id = intval($_GET['user_id']);
+		$user_money = RC_DB::TABLE('express_user')->where('user_id', $user_id)->pluck('user_money');
+		$this->assign('user_money', $user_money);
+		$this->assign('user_id', $user_id);
+		
+		$this->assign('form_action',	RC_Uri::url('express/admin_express/account_list'));
+		$start_date = $end_date = '';
+		if (isset($_GET['start_date']) && !empty($_GET['end_date'])) {
+			$start_date	= RC_Time::local_strtotime($_GET['start_date']);
+			$end_date	= RC_Time::local_strtotime($_GET['end_date']);
+				
+		} else {
+			$today		= RC_Time::local_strtotime(RC_Time::local_date('Y-m-d'));
+			$start_date	= $today - 86400 * 7;
+			$end_date	= $today;
+		}
+		$this->assign('start_date',		RC_Time::local_date('Y-m-d', $start_date));
+		$this->assign('end_date',		RC_Time::local_date('Y-m-d', $end_date));
+		$log_db = RC_DB::table('express_user_account_log');
+		$log_db->where(RC_DB::raw('staff_user_id'), $user_id);
+		$log_db->where('change_time', '>=', $start_date);
+		$log_db->where('change_time', '<', $end_date + 86400);
+		$count = $log_db->count();
+		$page = new ecjia_page($count, 5, 5);
+		$data = $log_db
+		->selectRaw('staff_user_id,user_money,change_time,change_desc')
+		->orderby('log_id', 'desc')
+		->take(10)
+		->skip($page->start_id-1)
+		->get();
+		$list = array();
+		if (!empty($data)) {
+			foreach ($data as $row) {
+				$row['change_time']  = RC_Time::local_date('Y-m-d H:i:s', $row['change_time']);
+				$list[] = $row;
+			}
+		}
+		
+		$log_list =  array('list' => $list,'page' => $page->show(5), 'desc' => $page->page_desc());
+		$this->assign('log_list', $log_list);
+	
+		$this->display('express_account_list.dwt');
 	}
 	
 	private function get_express_list($type = '') {
