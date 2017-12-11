@@ -42,7 +42,7 @@
 		      	<td class="hide-edit-area">
 					{$match.name}
 		     	  	<div class="edit-list">
-					  	<a target="_blank"   href='{url path="express/admin_express/detail" args="user_id={$express.user_id}"}' title="查看详情">查看详情</a>
+					  	<a target="_blank"   href='{url path="express/admin_match/detail" args="user_id={$match.user_id}"}' title="查看详情">查看详情</a>
 		    	  	</div>
 		      	</td>
 		      	<td>{$match.mobile}</td>

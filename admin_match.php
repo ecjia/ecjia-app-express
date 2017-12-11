@@ -70,7 +70,7 @@ class admin_match extends ecjia_admin {
 		RC_Style::enqueue_style('datepicker', RC_Uri::admin_url('statics/lib/datepicker/datepicker.css'));
 		
 		RC_Script::enqueue_script('admin_express', RC_App::apps_url('statics/js/admin_express.js', __FILE__));
-		
+		RC_Style::enqueue_style('admin_express', RC_App::apps_url('statics/css/admin_express.css', __FILE__));
 		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here('资金对账', RC_Uri::url('express/admin_match/init')));
 	}
 	
@@ -91,6 +91,35 @@ class admin_match extends ecjia_admin {
 		$this->assign('search_action', RC_Uri::url('express/admin_match/init'));
 	
 		$this->display('express_match_list.dwt');
+	}
+	
+	/**
+	 * 查看详情
+	 */
+	public function detail() {
+		$this->admin_priv('express_match_manage');
+	
+		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here('对账详情'));
+		$this->assign('ur_here', '对账详情');
+	
+		$user_id = intval($_GET['user_id']);
+		$name = RC_DB::TABLE('staff_user')->where('user_id', $user_id)->pluck('name');
+		$this->assign('name', $name);
+		$start_date = $end_date = '';
+		if (isset($_GET['start_date']) && !empty($_GET['end_date'])) {
+			$start_date	= RC_Time::local_strtotime($_GET['start_date']);
+			$end_date	= RC_Time::local_strtotime($_GET['end_date']);
+		
+		} else {
+			$today		= RC_Time::local_strtotime(RC_Time::local_date('Y-m-d'));
+			$start_date	= $today - 86400 * 7;
+			$end_date	= $today;
+		}
+		$this->assign('start_date',		RC_Time::local_date('Y-m-d', $start_date));
+		$this->assign('end_date',		RC_Time::local_date('Y-m-d', $end_date));
+		
+		
+		$this->display('express_match_detail.dwt');
 	}
 	
 	private function get_account_list() {
