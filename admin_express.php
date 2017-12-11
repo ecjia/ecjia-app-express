@@ -390,7 +390,9 @@ class admin_express extends ecjia_admin {
 	
 		$user_id = intval($_GET['user_id']);
 		$user_money = RC_DB::TABLE('express_user')->where('user_id', $user_id)->pluck('user_money');
+		$name = RC_DB::TABLE('staff_user')->where('user_id', $user_id)->pluck('name');
 		$this->assign('user_money', $user_money);
+		$this->assign('name', $name);
 		$this->assign('user_id', $user_id);
 		
 		$this->assign('form_action',	RC_Uri::url('express/admin_express/account_list'));
