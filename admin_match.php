@@ -47,28 +47,81 @@
 defined('IN_ECJIA') or exit('No permission resources.');
 
 /**
- * 后台配送菜单API
- * @author 
+ * 资金对账
+ * @author songqianqian
  */
-class express_admin_menu_api extends Component_Event_Api {
-
-    public function call(&$options) {
-        $menus = ecjia_admin::make_admin_menu('05_content', '配送调度', '', 5);
-        
-        $submenus = array(
-            ecjia_admin::make_admin_menu('01_task_list', '任务中心', RC_Uri::url('express/admin/init', array('type' => 'wait_grab')), 1)->add_purview('express_task_manage'),
-        	ecjia_admin::make_admin_menu('02_express_list', '配送员管理', RC_Uri::url('express/admin_express/init'), 2)->add_purview('express_manage'),
-        	ecjia_admin::make_admin_menu('03_match_list', '资金对账', RC_Uri::url('express/admin_match/init'), 3)->add_purview('express_match_manage'),
-        );
-        
-        $menus->add_submenu($submenus);
-        $menus = RC_Hook::apply_filters('express_admin_menu_api', $menus);
-        
-		if ($menus->has_submenus()) {
-		    return $menus;
+class admin_match extends ecjia_admin {
+	
+	public function __construct() {
+		parent::__construct();
+		
+		RC_Script::enqueue_script('jquery-validate');
+		RC_Script::enqueue_script('jquery-form');
+		RC_Script::enqueue_script('smoke');
+		RC_Script::enqueue_script('bootstrap-editable.min', RC_Uri::admin_url('statics/lib/x-editable/bootstrap-editable/js/bootstrap-editable.min.js'), array(), false, false);
+		RC_Style::enqueue_style('bootstrap-editable',RC_Uri::admin_url('statics/lib/x-editable/bootstrap-editable/css/bootstrap-editable.css'), array(), false, false);
+		RC_Style::enqueue_style('chosen');
+		RC_Style::enqueue_style('uniform-aristo');
+		RC_Script::enqueue_script('jquery-uniform');
+		RC_Script::enqueue_script('jquery-chosen');
+		RC_Script::enqueue_script('ecjia-region');
+		
+		RC_Script::enqueue_script('bootstrap-datepicker', RC_Uri::admin_url('statics/lib/datepicker/bootstrap-datepicker.min.js'));
+		RC_Style::enqueue_style('datepicker', RC_Uri::admin_url('statics/lib/datepicker/datepicker.css'));
+		
+		RC_Script::enqueue_script('admin_express', RC_App::apps_url('statics/js/admin_express.js', __FILE__));
+		
+		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here('资金对账', RC_Uri::url('express/admin_match/init')));
+	}
+	
+	/**
+	 * 资金对账
+	 */
+	public function init() {
+		$this->admin_priv('express_match_manage');
+	
+		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here('资金对账'));
+		$this->assign('ur_here', '资金对账');
+	
+		$data = $this->get_account_list();
+		$this->assign('data', $data);
+		$this->assign('type_count', $data['count']);
+		$this->assign('filter', $data['filter']);
+		
+		$this->assign('search_action', RC_Uri::url('express/admin_match/init'));
+	
+		$this->display('express_match_list.dwt');
+	}
+	
+	private function get_account_list() {
+		
+		$db_data = RC_DB::table('staff_user');
+		$db_data->where(RC_DB::raw('store_id'), 0);
+	
+		$filter['keyword']	 = trim($_GET['keyword']);
+		if ($filter['keyword']) {
+			$db_data ->whereRaw('(name  like  "%'.mysql_like_quote($filter['keyword']).'%"  or mobile like "%'.mysql_like_quote($filter['keyword']).'%")');
 		}
-		return false;
-    }
+
+		$count = $db_data->count();
+		$page = new ecjia_page($count, 10, 5);
+		
+		$data = $db_data
+		->selectRaw('user_id, name, mobile')
+		->orderby(RC_DB::raw('user_id'), 'desc')
+		->take(10)
+		->skip($page->start_id-1)
+		->get();
+		$list = array();
+		if (!empty($data)) {
+			foreach ($data as $row) {
+				$row['order_number'] = RC_DB::TABLE('express_order')->where('staff_id', $row['user_id'])->count();
+				$row['money']= RC_DB::TABLE('express_order')->where('staff_id', $row['user_id'])->select(RC_DB::raw('sum(shipping_fee) as all_money'),RC_DB::raw('sum(commision) as express_money'),RC_DB::raw('sum(shipping_fee-commision) as store_money'))->first();
+				$list[] = $row;
+			}
+		}
+		return array('list' => $list, 'filter' => $filter, 'page' => $page->show(5), 'desc' => $page->page_desc(), 'count' => $express_count);
+	}
 }
 
-// end
+//end

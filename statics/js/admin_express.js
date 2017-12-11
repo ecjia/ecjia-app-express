@@ -167,7 +167,24 @@
                     ecjia.pjax(url);
                 });
             }
-    	};
+    	}
+    
+    
+    
+    app.match_list = {
+            init: function () {
+                /* 列表搜索传参 */
+                $("form[name='searchForm'] .search_match").on('click', function (e) {
+                    e.preventDefault();
+                    var url = $("form[name='searchForm']").attr('action');
+                    var keyword = $("input[name='keyword']").val();
+                    if (keyword != '') {
+                    	url += '&keyword=' + keyword;
+                    }
+                    ecjia.pjax(url);
+                })
+            },
+        };
     
 })(ecjia.admin, jQuery);
  
