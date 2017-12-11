@@ -61,11 +61,13 @@ class admin extends ecjia_admin {
 		RC_Script::enqueue_script('smoke');
 		RC_Style::enqueue_style('chosen');
 		RC_Style::enqueue_style('uniform-aristo');
+		
 
 		RC_Script::enqueue_script('jquery-uniform');
 		RC_Script::enqueue_script('jquery-chosen');
 		RC_Script::enqueue_script('admin_express_task', RC_App::apps_url('statics/js/admin_express_task.js', __FILE__));
 		RC_Style::enqueue_style('admin_express_task', RC_App::apps_url('statics/css/admin_express_task.css', __FILE__));
+		RC_Script::enqueue_script('qq_map', 'https://map.qq.com/api/js?v=2.exp');
 		
 		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here('配送调度', RC_Uri::url('express/admin/init')));
 	}
@@ -87,10 +89,48 @@ class admin extends ecjia_admin {
 		
 		/*待抢单列表*/
 		$wait_grab_list = $this->get_wait_grab_list();
+		
 		$count = count($wait_grab_list);
+		
+		/*第一个订单获取*/
+		$first_express_order = $wait_grab_list['0'];
+		$start = $first_express_order['sf_latitude'].','.$first_express_order['sf_longitude'];
+		$end = $first_express_order['latitude'].','.$first_express_order['longitude'];
+		$this->assign('start', $start);
+		$this->assign('end', $end);
 		
 		/*配送员列表*/
 		$express_user_list = $this->get_express_user_list();
+
+		/*在线配送员列表与第一个订单之间的距离数组*/
+		$express_user_dis_data = array();
+		if (!empty($express_user_list['list']) && !empty($first_express_order)) {
+			foreach ($express_user_list['list'] as $k => $v) {
+				if ($v['online_status'] == '1') {
+					if (!empty($first_express_order['sf_latitude']) && !empty($first_express_order['sf_longitude'])) {
+						//腾讯地图api距离计算
+						$keys = ecjia::config('map_qq_key');
+						$url = "http://apis.map.qq.com/ws/distance/v1/?mode=driving&from=".$first_express_order['sf_latitude'].",".$first_express_order['sf_longitude']."&to=".$v['latitude'].",".$v['longitude']."&key=".$keys;
+						$distance_json = file_get_contents($url);
+						$distance_info = json_decode($distance_json, true);
+						$v['distance'] = isset($distance_info['result']['elements'][0]['distance']) ? $distance_info['result']['elements'][0]['distance'] : 0;
+						$express_user_dis_data[] = $v;
+					}
+				}
+			}
+		}
+		/*获取离第一个订单最近的配送员的id*/
+		if ($express_user_dis_data) {
+			foreach ($express_user_dis_data as $a => $b) {
+				$express_user_dis_data_new[$b['user_id']] =  $b['distance'];
+			}
+		}
+		$hots = $express_user_dis_data_new;
+		$key = array_search(min($hots),$hots);
+		
+		if ($key) {
+			$express_info = RC_DB::table('express_user')->where('user_id', $key)->first();
+		}
 		
 		$this->assign('search_action', RC_Uri::url('express/admin/init'));
 		$app_url =  RC_App::apps_url('statics/images', __FILE__);
@@ -107,8 +147,11 @@ class admin extends ecjia_admin {
 	 */
 	private function get_wait_grab_list(){
 		$dbview = RC_DB::table('express_order as eo')->leftJoin('store_franchisee as sf', RC_DB::raw('eo.store_id'), '=', RC_DB::raw('sf.store_id'));
+		$field = 'eo.express_id, eo.express_sn, eo.country, eo.province, eo.city, eo.district, eo.street, eo.address, eo.distance, eo.add_time, 
+				  eo.longitude, eo.latitude, sf.province as sf_province, sf.city as sf_city, sf.longitude as sf_longitude, sf.latitude as sf_latitude, 
+				  sf.district as sf_district, sf.street as sf_street, sf.address as sf_address';
 		$list = $dbview->where(RC_DB::raw('eo.status'), 0)
-		->select(RC_DB::raw('eo.express_id, eo.express_sn, eo.country, eo.province, eo.city, eo.district, eo.street, eo.address, eo.distance, eo.add_time, sf.province as sf_province, sf.city as sf_city, sf.district as sf_district, sf.street as sf_street, sf.address as sf_address'))
+		->select(RC_DB::raw($field))
 		->orderBy(RC_DB::raw('eo.add_time'), 'desc')
 		->get();
 		$data = array();
