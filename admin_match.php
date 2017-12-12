@@ -105,6 +105,9 @@ class admin_match extends ecjia_admin {
 		$user_id = intval($_GET['user_id']);
 		$name = RC_DB::TABLE('staff_user')->where('user_id', $user_id)->pluck('name');
 		$this->assign('name', $name);
+		$this->assign('user_id', $user_id);
+		
+		$this->assign('form_action', RC_Uri::url('express/admin_match/detail'));
 		$start_date = $end_date = '';
 		if (isset($_GET['start_date']) && !empty($_GET['end_date'])) {
 			$start_date	= RC_Time::local_strtotime($_GET['start_date']);
@@ -118,6 +121,36 @@ class admin_match extends ecjia_admin {
 		$this->assign('start_date',		RC_Time::local_date('Y-m-d', $start_date));
 		$this->assign('end_date',		RC_Time::local_date('Y-m-d', $end_date));
 		
+		$order_number= RC_DB::TABLE('express_order')->where('staff_id', $user_id)->count();
+		$money= RC_DB::TABLE('express_order')->where('staff_id', $user_id)->select(RC_DB::raw('sum(shipping_fee) as all_money'),RC_DB::raw('sum(commision) as express_money'),RC_DB::raw('sum(shipping_fee-commision) as store_money'))->first();
+		$this->assign('order_number', $order_number);
+		$this->assign('money', $money);
+		
+
+		$db_data = RC_DB::table('express_order');
+		$db_data->where(RC_DB::raw('staff_id'), $user_id);
+		$db_data->where('receive_time', '>=', $start_date);
+		$db_data->where('receive_time', '<', $end_date + 86400);
+		$count = $db_data->count();
+		$page = new ecjia_page($count, 10, 5);
+		
+		$data = $db_data
+		->selectRaw('express_id,express_sn,commision,shipping_fee,commision_status,receive_time,staff_id,shipping_fee-commision as store_money')
+		->orderby('express_id', 'desc')
+		->take(10)
+		->skip($page->start_id-1)
+		->get();
+		
+		$list = array();
+		if (!empty($data)) {
+			foreach ($data as $row) {
+				$row['from'] = RC_DB::TABLE('express_order')->where('staff_id', $row['staff_id'])->pluck('from');
+				$row['receive_time']  = RC_Time::local_date('Y-m-d', $row['receive_time']);
+				$list[] = $row;
+			}
+		}
+		$order_list = array('list' => $list,'page' => $page->show(5), 'desc' => $page->page_desc());
+		$this->assign('order_list', $order_list);
 		
 		$this->display('express_match_detail.dwt');
 	}

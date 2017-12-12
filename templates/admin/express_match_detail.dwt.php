@@ -3,7 +3,7 @@
 
 <!-- {block name="footer"} -->
 <script type="text/javascript">
-	ecjia.admin.account_list.init()
+	ecjia.admin.match_list.init()
 </script>
 <!-- {/block} -->
 
@@ -37,19 +37,19 @@
 		<div class="move-mod-group" id="widget_admin_dashboard_briefing">
 			<ul class="list-mod list-mod-briefing move-mod-head">
 				<li class="span3">
-					<div class="bd">100<span class="f_s14"> 单</span></div>
+					<div class="bd">{$order_number}<span class="f_s14"> 单</span></div>
 					<div class="ft"><i class="fontello-icon-chart-bar"></i>订单数量</div>
 				</li>
 				<li class="span3">
-					<div class="bd">¥200<span class="f_s14"> 元</span></div>
+					<div class="bd">¥{$money.all_money}<span class="f_s14"> 元</span></div>
 					<div class="ft"><i class="fontello-icon-truck"></i>配送总费用</div>
 				</li>
 				<li class="span3">
-					<div class="bd">¥300<span class="f_s14"> 元</span></div>
+					<div class="bd">¥{$money.store_money}<span class="f_s14"> 元</span></div>
 					<div class="ft"><i class="fontello-icon-yen"></i>平台应得</div>
 				</li>
 				<li class="span3">
-					<div class="bd">¥400<span class="f_s14"> 元</span></div>
+					<div class="bd">¥{$money.express_money}<span class="f_s14"> 元</span></div>
 					<div class="ft"><i class="fontello-icon-user"></i>配送员应得</div>
 				</li>
 			</ul>
@@ -68,14 +68,15 @@
 				</tr>
 			</thead>
 			<tbody>
-				<!-- {foreach from=$log_list.list item=list} -->
+				<!-- {foreach from=$order_list.list item=list} -->
 				<tr>
-					<td>{$list.change_time}</td>
-					<td>{$list.change_desc}</td>
-					<td>¥{$list.user_money}</td>
-					<td>¥{$list.user_money}</td>
-					<td>¥{$list.user_money}</td>
-					<td>{$list.user_money}</td>
+					<td>{$list.receive_time}</td>
+					<td>{$list.express_sn}</td>
+					<td>{if $list.from eq 'grab'}抢单{else}派单{/if}</td>
+					<td>¥{$list.shipping_fee}</td>
+					<td>¥{$list.store_money}</td>
+					<td>¥{$list.commision}</td>
+					<td>{if $list.commision_status eq 1}已结算{else}<font class="ecjiafc-red">未结算</font>{/if}</td>
 				</tr>
 				<!-- {foreachelse} -->
 				<tr>

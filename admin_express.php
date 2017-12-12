@@ -400,7 +400,6 @@ class admin_express extends ecjia_admin {
 		if (isset($_GET['start_date']) && !empty($_GET['end_date'])) {
 			$start_date	= RC_Time::local_strtotime($_GET['start_date']);
 			$end_date	= RC_Time::local_strtotime($_GET['end_date']);
-				
 		} else {
 			$today		= RC_Time::local_strtotime(RC_Time::local_date('Y-m-d'));
 			$start_date	= $today - 86400 * 7;

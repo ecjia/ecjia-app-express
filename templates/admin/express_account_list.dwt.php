@@ -32,7 +32,6 @@
 				<button class="btn select-button" type="button">查询</button>
 				<input type="hidden" name="user_id" value="{$user_id}">
 			</form>
-		
 		</div>
 	</div>
 </div>

@@ -183,7 +183,35 @@
                     }
                     ecjia.pjax(url);
                 })
+                 $(".date").datepicker({
+                    format: "yyyy-mm-dd",
+                    container : '.main_content',
+                });
+                app.match_list.screen();
             },
+            
+            screen: function () {
+                $(".select-button").click(function () {
+                    var start_date = $("input[name='start_date']").val();
+                    var end_date = $("input[name='end_date']").val();
+                    var user_id = $("input[name='user_id']").val();
+     
+                    if (start_date > end_date && (start_date != '' && end_date != '')) {
+                        var data = {
+                            message: account_jslang.check_time,
+                            state: "error",
+                        };
+                        ecjia.admin.showmessage(data);
+                        return false;
+                    }
+                    var url = $("form[name='searchForm']").attr('action');
+     
+                    if (user_id != '') url += '&user_id=' + user_id;
+                    if (start_date != '') url += '&start_date=' + start_date;
+                    if (end_date != '') url += '&end_date=' + end_date;
+                    ecjia.pjax(url);
+                });
+            }
         };
     
 })(ecjia.admin, jQuery);
