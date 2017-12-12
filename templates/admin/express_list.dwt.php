@@ -85,7 +85,7 @@
 					{$express.name}
 		     	  	<div class="edit-list">
 					  	<a class="data-pjax" href='{url path="express/admin_express/edit" args="user_id={$express.user_id}"}' title="编辑">编辑</a>&nbsp;|&nbsp;
-					  	<a target="_blank"   href='{url path="express/admin_express/detail" args="user_id={$express.user_id}"}' title="查看详情">查看详情</a>&nbsp;|&nbsp;
+					  	<a class="data-pjax" href='{url path="express/admin_express/detail" args="user_id={$express.user_id}"}' title="查看详情">查看详情</a>&nbsp;|&nbsp;
 					  	<a data-toggle="modal" data-backdrop="static" href="#myModal1" exmobile="{$express.mobile}" exname="{$express.name}" exlng="{$express.longitude}" exlat="{$express.latitude}" title="当前位置">当前位置</a>&nbsp;|&nbsp;
 					  	<a target="_blank"   href='{url path="express/admin_express/account_list" args="user_id={$express.user_id}"}' title="查看账目明细">查看账目明细</a>&nbsp;|&nbsp;
 			          	<a class="ajaxremove ecjiafc-red" data-toggle="ajaxremove" data-msg="你确定要删除该买单规则吗？" href='{url path="express/admin_express/remove" args="user_id={$express.user_id}"}' title="删除">删除</a>

@@ -105,7 +105,7 @@
 									<td class="w150">配送单号</td>
 									<td class="w150">店铺名称</td>
 									<td class="w500">取货/送货地址</td>
-									<td class="w200">起止时间</td>
+									<td class="w200">接单时间</td>
 									<td class="w100">任务类型</td>
 									<td class="w100">配送费</td>
 									<td class="w100">配送状态</td>
