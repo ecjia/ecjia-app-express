@@ -47,10 +47,10 @@
 defined('IN_ECJIA') or exit('No permission resources.');
 
 /**
- * 资金对账
+ * 历史配送订单管理
  * @author songqianqian
  */
-class admin_match extends ecjia_admin {
+class admin_history extends ecjia_admin {
 	
 	public function __construct() {
 		parent::__construct();
@@ -69,111 +69,76 @@ class admin_match extends ecjia_admin {
 		RC_Script::enqueue_script('bootstrap-datepicker', RC_Uri::admin_url('statics/lib/datepicker/bootstrap-datepicker.min.js'));
 		RC_Style::enqueue_style('datepicker', RC_Uri::admin_url('statics/lib/datepicker/datepicker.css'));
 		
-		RC_Script::enqueue_script('admin_express', RC_App::apps_url('statics/js/admin_express.js', __FILE__));
-		RC_Style::enqueue_style('admin_express', RC_App::apps_url('statics/css/admin_express.css', __FILE__));
-		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here('资金对账', RC_Uri::url('express/admin_match/init')));
+		RC_Script::enqueue_script('admin_history', RC_App::apps_url('statics/js/admin_history.js', __FILE__));
+		
+		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here('历史配送', RC_Uri::url('express/admin_history/init')));
 	}
 	
 	/**
-	 * 资金对账
+	 * 历史配送订单列表加载
 	 */
 	public function init() {
-		$this->admin_priv('express_match_manage');
-	
-		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here('资金对账'));
-		$this->assign('ur_here', '资金对账');
-	
-		$data = $this->get_account_list();
+		$this->admin_priv('express_history_manage');
+		
+		ecjia_screen::get_current_screen()->remove_last_nav_here();
+		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here('历史配送'));
+		$this->assign('ur_here', '历史配送');
+		
+		$data = $this->get_history_list();
 		$this->assign('data', $data);
 		
-		$this->assign('search_action', RC_Uri::url('express/admin_match/init'));
-	
-		$this->display('express_match_list.dwt');
-	}
-	
-	/**
-	 * 查看详情
-	 */
-	public function detail() {
-		$this->admin_priv('express_match_manage');
-	
-		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here('对账详情'));
-		$this->assign('ur_here', '对账详情');
-	
-		$user_id = intval($_GET['user_id']);
-		$name = RC_DB::TABLE('staff_user')->where('user_id', $user_id)->pluck('name');
-		$this->assign('name', $name);
-		$this->assign('user_id', $user_id);
-		
-		$this->assign('form_action', RC_Uri::url('express/admin_match/detail'));
-		$start_date = $end_date = '';
-		if (isset($_GET['start_date']) && !empty($_GET['end_date'])) {
-			$start_date	= RC_Time::local_strtotime($_GET['start_date']);
-			$end_date	= RC_Time::local_strtotime($_GET['end_date']);
-		} else {
-			$start_date	= RC_Time::local_strtotime(RC_Time::local_date(ecjia::config('date_format'), strtotime('-1 month')-8*3600));
-			$end_date	= RC_Time::local_strtotime(RC_Time::local_date(ecjia::config('date_format')));
-		}
-		$this->assign('start_date',		RC_Time::local_date('Y-m-d', $start_date));
-		$this->assign('end_date',		RC_Time::local_date('Y-m-d', $end_date));
-		
-		$order_number= RC_DB::TABLE('express_order')->where('staff_id', $user_id)->count();
-		$money= RC_DB::TABLE('express_order')->where('staff_id', $user_id)->select(RC_DB::raw('sum(shipping_fee) as all_money'),RC_DB::raw('sum(commision) as express_money'),RC_DB::raw('sum(shipping_fee-commision) as store_money'))->first();
-		$this->assign('order_number', $order_number);
-		$this->assign('money', $money);
-		
-		$db_data = RC_DB::table('express_order');
-		$db_data->where(RC_DB::raw('staff_id'), $user_id);
-		$db_data->where('receive_time', '>=', $start_date);
-		$db_data->where('receive_time', '<', $end_date + 86400);
-		$count = $db_data->count();
-		$page = new ecjia_page($count, 10, 5);
-		
-		$data = $db_data
-		->selectRaw('express_id,express_sn,commision,shipping_fee,commision_status,receive_time,staff_id,shipping_fee-commision as store_money')
-		->orderby('express_id', 'desc')
-		->take(10)
-		->skip($page->start_id-1)
-		->get();
-		
-		$list = array();
-		if (!empty($data)) {
-			foreach ($data as $row) {
-				$row['from'] = RC_DB::TABLE('express_order')->where('staff_id', $row['staff_id'])->pluck('from');
-				$row['receive_time']  = RC_Time::local_date('Y-m-d', $row['receive_time']);
-				$list[] = $row;
-			}
-		}
-		$order_list = array('list' => $list,'page' => $page->show(5), 'desc' => $page->page_desc());
-		$this->assign('order_list', $order_list);
-		
-		$this->display('express_match_detail.dwt');
-	}
-	
-	private function get_account_list() {
-		
-		$db_data = RC_DB::table('staff_user');
-		$db_data->where(RC_DB::raw('store_id'), 0);
-	
-		$filter['keyword']	 = trim($_GET['keyword']);
-		if ($filter['keyword']) {
-			$db_data ->whereRaw('(name  like  "%'.mysql_like_quote($filter['keyword']).'%"  or mobile like "%'.mysql_like_quote($filter['keyword']).'%")');
-		}
+		$this->assign('search_action', RC_Uri::url('express/admin_history/init'));
 
+		$this->display('express_history_list.dwt');
+	}
+	
+	private function get_history_list() {
+		$db_data = RC_DB::table('express_order as eo')
+		->leftJoin('users as user', RC_DB::raw('eo.user_id'), '=', RC_DB::raw('user.user_id'))
+		->leftJoin('store_franchisee as sf', RC_DB::raw('eo.store_id'), '=', RC_DB::raw('sf.store_id'));
+		
+		$db_data->where(RC_DB::raw('eo.status'), 5);
+		
+		if($_GET['start_date'] && $_GET['end_date']) {
+			$start_date = RC_Time::local_strtotime($_GET['start_date']);
+			$end_date	= RC_Time::local_strtotime($_GET['end_date']);
+			$db_data->where('signed_time', '>=', $start_date);
+			$db_data->where('signed_time', '<', $end_date + 86400);
+		}
+		
+		$filter['work_type'] = trim($_GET['work_type']);
+		$filter['keyword']	 = trim($_GET['keyword']);
+		
+		if ($filter['keyword']) {
+			$db_data ->whereRaw('(eo.express_user  like  "%'.mysql_like_quote($filter['keyword']).'%"  or eo.express_mobile like "%'.mysql_like_quote($filter['keyword']).'%")');
+		}
+		
+		if ($filter['work_type']) {
+			$db_data ->where('from', $filter['work_type']);
+		}
+		
 		$count = $db_data->count();
 		$page = new ecjia_page($count, 10, 5);
 		
 		$data = $db_data
-		->selectRaw('user_id, name, mobile')
-		->orderby(RC_DB::raw('user_id'), 'desc')
+		->selectRaw('eo.express_id,eo.order_sn,eo.from,eo.express_user,eo.express_mobile,eo.signed_time,eo.status,eo.province as eoprovince,eo.city as eocity,eo.district as eodistrict,eo.street as eostreet,eo.address as eoaddress,user.user_name,user.mobile_phone,sf.province,sf.city,sf.district,sf.street,sf.address')
+		->orderby(RC_DB::raw('eo.signed_time'), 'desc')
 		->take(10)
 		->skip($page->start_id-1)
 		->get();
+		
 		$list = array();
 		if (!empty($data)) {
 			foreach ($data as $row) {
-				$row['order_number'] = RC_DB::TABLE('express_order')->where('staff_id', $row['user_id'])->count();
-				$row['money']= RC_DB::TABLE('express_order')->where('staff_id', $row['user_id'])->select(RC_DB::raw('sum(shipping_fee) as all_money'),RC_DB::raw('sum(commision) as express_money'),RC_DB::raw('sum(shipping_fee-commision) as store_money'))->first();
+				$row['signed_time']  = RC_Time::local_date('Y-m-d H:i:s', $row['signed_time']);
+				$row['province']  	  = ecjia_region::getRegionName($row['province']);
+				$row['city']          = ecjia_region::getRegionName($row['city']);
+				$row['district']      = ecjia_region::getRegionName($row['district']);
+				$row['street']        = ecjia_region::getRegionName($row['street']);
+				$row['eoprovince']    = ecjia_region::getRegionName($row['eoprovince']);
+				$row['eocity']        = ecjia_region::getRegionName($row['eocity']);
+				$row['eodistrict']    = ecjia_region::getRegionName($row['eodistrict']);
+				$row['eostreet']      = ecjia_region::getRegionName($row['eostreet']);
 				$list[] = $row;
 			}
 		}

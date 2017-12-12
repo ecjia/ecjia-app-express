@@ -394,16 +394,14 @@ class admin_express extends ecjia_admin {
 		$this->assign('user_money', $user_money);
 		$this->assign('name', $name);
 		$this->assign('user_id', $user_id);
-		
 		$this->assign('form_action',	RC_Uri::url('express/admin_express/account_list'));
 		$start_date = $end_date = '';
 		if (isset($_GET['start_date']) && !empty($_GET['end_date'])) {
 			$start_date	= RC_Time::local_strtotime($_GET['start_date']);
 			$end_date	= RC_Time::local_strtotime($_GET['end_date']);
 		} else {
-			$today		= RC_Time::local_strtotime(RC_Time::local_date('Y-m-d'));
-			$start_date	= $today - 86400 * 7;
-			$end_date	= $today;
+			$start_date	= RC_Time::local_strtotime(RC_Time::local_date(ecjia::config('date_format'), strtotime('-1 month')-8*3600));
+			$end_date	= RC_Time::local_strtotime(RC_Time::local_date(ecjia::config('date_format')));
 		}
 		$this->assign('start_date',		RC_Time::local_date('Y-m-d', $start_date));
 		$this->assign('end_date',		RC_Time::local_date('Y-m-d', $end_date));
