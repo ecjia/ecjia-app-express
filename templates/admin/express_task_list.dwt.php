@@ -104,7 +104,7 @@
 									<div class="express-user-list accordion-body in in_visable collapse" id="online">
 										<!-- {foreach from=$express_user_list.list item=list} -->
 											{if $list.online_status eq '1'}
-												<div class="express-user-info exuser_div">
+												<div class="express-user-info exuser_div" >
 													<div class="imginfo-div">
 			        		                			<div class="express-img">{if $list.avatar}<img src="{$list.avatar}">{else}<img src="{$app_url}/touxiang.png">{/if}</div>
 			        		                			<div class="expressinfo">{$list.name}<br>{$list.mobile}</div>
@@ -134,7 +134,7 @@
 									<div class="express-user-list-leave accordion-body collapse" id="leave">
 										<!-- {foreach from=$express_user_list.list item=list} -->
 											{if $list.online_status eq '4'}
-												<div class="express-user-info exuser_div">
+												<div class="express-user-info exuser_div" longitude="{$list.longitude}" latitude="{$list.latitude}" name="{$list.name}" mobile="{$list.mobile}">
 													<div class="imginfo-div">
 			        		                			<div class="express-img">{if $list.avatar}<img src="{$list.avatar}">{else}<img src="{$app_url}/touxiang.png">{/if}</div>
 			        		                			<div class="expressinfo">{$list.name}<br>{$list.mobile}</div>

@@ -29,6 +29,7 @@
               app.admin_express_task.search_express_user();
               app.admin_express_task.map();
               app.admin_express_task.click_order();
+              app.admin_express_task.click_exuser();
             },
     
             search_express_user: function () {
@@ -280,6 +281,92 @@
                   
                   app.admin_express_task.map();
               });
+		 },
+		 
+		 click_exuser: function () {
+			  $(".exuser_div").on('click', function (e) {
+                 e.preventDefault();
+                 
+                 var $this = $(this);
+                 var ex_lng = $this.attr('longitude');
+                 var ex_lat = $this.attr('latitude');
+                 var ex_name = $this.attr('name');
+                 var ex_mobile = $this.attr('mobile');
+             
+//                 $("#start").val('');
+//                 $("#end").val('');
+//                 
+//                 $('.nearest_exuser_name').val(ex_name);
+//          		 $('.nearest_exuser_mobile').val(ex_mobile);
+//          		 $('.nearest_exuser_lng').val(ex_lng);
+//          		 $('.nearest_exuser_lat').val(ex_lat);
+          		 
+              	//腾讯地图加载
+              	var map, markersArray = [];
+              	var latLng = new qq.maps.LatLng(ex_lat, ex_lng);
+              	var map = new qq.maps.Map(document.getElementById("allmap"),{
+              	    center: latLng,
+              	    zoom: 18
+              	});
+              	
+          		//创建一个Marker(自定义图片)
+          	    var marker = new qq.maps.Marker({
+          	        position: latLng, 
+          	        map: map
+          	    });
+          	    
+          	    //设置Marker自定义图标的属性，size是图标尺寸，该尺寸为显示图标的实际尺寸，origin是切图坐标，该坐标是相对于图片左上角默认为（0,0）的相对像素坐标，anchor是锚点坐标，描述经纬度点对应图标中的位置
+                 var anchor = new qq.maps.Point(0, 39),
+                     size   = new qq.maps.Size(50,50),
+                     origin = new qq.maps.Point(0, 0),
+                     icon   = new qq.maps.MarkerImage(
+                         "content/apps/express/statics/images/ex_user.png",
+                         size,
+                         origin,
+                         anchor
+                     );
+                 marker.setIcon(icon);
+
+                 //创建描述框
+              	var Label = function(opts) {
+                     qq.maps.Overlay.call(this, opts);
+                	}
+                	//继承Overlay基类
+                 Label.prototype = new qq.maps.Overlay();
+                 //定义construct,实现这个接口来初始化自定义的Dom元素
+                 Label.prototype.construct = function() {
+                      this.dom = document.createElement('div');
+                      this.dom.style.cssText =
+                           'background:url("content/apps/express/statics/images/lable_text.png") no-repeat;width:130px;height:60px;margin-top:-98px;margin-left:-38px;position:absolute;' +
+                           'text-align:left;color:white;padding-left:25px;padding-top:8px;';
+                      this.dom.innerHTML = ex_name +'<br>'+ex_mobile;
+                      //将dom添加到覆盖物层，overlayLayer的顺序为容器 1，此容器中包含Polyline、Polygon、GroundOverlay等
+                      this.getPanes().overlayLayer.appendChild(this.dom);
+
+                 }
+                 //绘制和更新自定义的dom元素
+                 Label.prototype.draw = function() {
+                     //获取地理经纬度坐标
+                     var position = this.get('position');
+                     if (position) {
+                         //根据经纬度坐标计算相对于地图外部容器左上角的相对像素坐标
+                         //var pixel = this.getProjection().fromLatLngToContainerPixel(position);
+                         //根据经纬度坐标计算相对于地图内部容器原点的相对像素坐标
+                         var pixel = this.getProjection().fromLatLngToDivPixel(position);
+                         this.dom.style.left = pixel.getX() + 'px';
+                         this.dom.style.top = pixel.getY() + 'px';
+                     }
+                 }
+
+                 Label.prototype.destroy = function() {
+                     //移除dom
+                     this.dom.parentNode.removeChild(this.dom);
+                 }
+ 	            var label = new Label({
+ 	                 map: map,
+ 	                 position: latLng
+ 	            });
+             });
 		 },
       };
     
