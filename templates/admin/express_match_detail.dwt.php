@@ -58,7 +58,7 @@
 		<table class="table table-striped table-hide-edit">
 			<thead>
 				<tr>
-					<th class="w150">时间</th>
+					<th class="w150">下单时间</th>
 					<th>配送单号</th>
 					<th class="w100">任务类型</th>
 					<th class="w100">配送费用</th>
