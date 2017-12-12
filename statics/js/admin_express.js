@@ -153,7 +153,7 @@
      
                     if (start_date > end_date && (start_date != '' && end_date != '')) {
                         var data = {
-                            message: account_jslang.check_time,
+                            message: "请选择正确的时间范围进行筛选",
                             state: "error",
                         };
                         ecjia.admin.showmessage(data);
@@ -198,7 +198,7 @@
      
                     if (start_date > end_date && (start_date != '' && end_date != '')) {
                         var data = {
-                            message: account_jslang.check_time,
+                            message: "请选择正确的时间范围进行筛选",
                             state: "error",
                         };
                         ecjia.admin.showmessage(data);
