@@ -102,20 +102,18 @@ class admin extends ecjia_admin {
 		/*配送员列表*/
 		$express_user_list = $this->get_express_user_list();
 
-		/*在线配送员列表与第一个订单之间的距离数组*/
+		/*配送员列表与第一个订单之间的距离数组*/
 		$express_user_dis_data = array();
 		if (!empty($express_user_list['list']) && !empty($first_express_order)) {
 			foreach ($express_user_list['list'] as $k => $v) {
-				if ($v['online_status'] == '1') {
-					if (!empty($first_express_order['sf_latitude']) && !empty($first_express_order['sf_longitude'])) {
-						//腾讯地图api距离计算
-						$keys = ecjia::config('map_qq_key');
-						$url = "http://apis.map.qq.com/ws/distance/v1/?mode=driving&from=".$first_express_order['sf_latitude'].",".$first_express_order['sf_longitude']."&to=".$v['latitude'].",".$v['longitude']."&key=".$keys;
-						$distance_json = file_get_contents($url);
-						$distance_info = json_decode($distance_json, true);
-						$v['distance'] = isset($distance_info['result']['elements'][0]['distance']) ? $distance_info['result']['elements'][0]['distance'] : 0;
-						$express_user_dis_data[] = $v;
-					}
+				if (!empty($first_express_order['sf_latitude']) && !empty($first_express_order['sf_longitude'])) {
+					//腾讯地图api距离计算
+					$keys = ecjia::config('map_qq_key');
+					$url = "http://apis.map.qq.com/ws/distance/v1/?mode=driving&from=".$first_express_order['sf_latitude'].",".$first_express_order['sf_longitude']."&to=".$v['latitude'].",".$v['longitude']."&key=".$keys;
+					$distance_json = file_get_contents($url);
+					$distance_info = json_decode($distance_json, true);
+					$v['distance'] = isset($distance_info['result']['elements'][0]['distance']) ? $distance_info['result']['elements'][0]['distance'] : 0;
+					$express_user_dis_data[] = $v;
 				}
 			}
 		}
@@ -129,7 +127,13 @@ class admin extends ecjia_admin {
 		$key = array_search(min($hots),$hots);
 		
 		if ($key) {
-			$express_info = RC_DB::table('express_user')->where('user_id', $key)->first();
+			$express_info = RC_DB::table('express_user as eu')
+								->leftJoin('staff_user as su', RC_DB::raw('su.user_id'), '=', RC_DB::raw('eu.user_id'))
+								->selectRaw('eu.*, su.mobile, su.name, su.avatar, su.online_status')
+								->where(RC_DB::raw('su.user_id'), $key)
+								->first();
+			
+			$this->assign('express_info', $express_info);
 		}
 		
 		$this->assign('search_action', RC_Uri::url('express/admin/init'));
@@ -140,6 +144,52 @@ class admin extends ecjia_admin {
 		$this->assign('express_count', $express_user_list['express_count']);
 		$this->assign('express_user_list', $express_user_list);
 		$this->display('express_task_list.dwt');
+	}
+	
+	/**
+	 * 获取距离当前订单最近的配送员信息
+	 */
+	public function get_nearest_exuser() {
+		$sf_lng = $_POST['sf_lng'];
+		$sf_lat = $_POST['sf_lat'];
+		/*配送员列表*/
+		$express_user_list = $this->get_express_user_list();
+		
+		/*配送员列表与第一个订单之间的距离数组*/
+		$express_user_dis_data = array();
+		if (!empty($express_user_list['list']) && !empty($sf_lng) && !empty($sf_lat)) {
+			foreach ($express_user_list['list'] as $k => $v) {
+				if (!empty($sf_lat) && !empty($sf_lng)) {
+					//腾讯地图api距离计算
+					$keys = ecjia::config('map_qq_key');
+					$url = "http://apis.map.qq.com/ws/distance/v1/?mode=driving&from=".$sf_lat.",".$sf_lng."&to=".$v['latitude'].",".$v['longitude']."&key=".$keys;
+					$distance_json = file_get_contents($url);
+					$distance_info = json_decode($distance_json, true);
+					$v['distance'] = isset($distance_info['result']['elements'][0]['distance']) ? $distance_info['result']['elements'][0]['distance'] : 0;
+					$express_user_dis_data[] = $v;
+				}
+			}
+		}
+		/*获取离当前订单最近的配送员的id*/
+		if ($express_user_dis_data) {
+			foreach ($express_user_dis_data as $a => $b) {
+				$express_user_dis_data_new[$b['user_id']] =  $b['distance'];
+			}
+		}
+		$hots = $express_user_dis_data_new;
+		$key = array_search(min($hots),$hots);
+		
+		$express_info = array();
+		
+		if ($key) {
+			$express_info = RC_DB::table('express_user as eu')
+			->leftJoin('staff_user as su', RC_DB::raw('su.user_id'), '=', RC_DB::raw('eu.user_id'))
+			->selectRaw('eu.*, su.mobile, su.name')
+			->where(RC_DB::raw('su.user_id'), $key)
+			->first();
+		}
+	
+		return $this->showmessage('', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('express_info' => $express_info));
 	}
 	
 	/**
@@ -184,7 +234,7 @@ class admin extends ecjia_admin {
 								->select(RC_DB::raw('count(*) as count'),RC_DB::raw('SUM(IF(su.online_status = 1, 1, 0)) as online'),RC_DB::raw('SUM(IF(su.online_status = 4, 1, 0)) as offline'))
 								->first();
 		
-		$list = $express_user_view->selectRaw('eu.*, su.mobile, su.name, su.avatar, su.online_status')->get();
+		$list = $express_user_view->selectRaw('eu.*, su.mobile, su.name, su.avatar, su.online_status')->orderBy('online_status', 'asc')->get();
 		$data = array();
 		if (!empty($list)) {
 			foreach ($list as $row) {

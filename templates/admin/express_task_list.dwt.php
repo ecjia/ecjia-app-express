@@ -37,7 +37,7 @@
 							</div>
 							<div class="accordion-body in collapse" style="height:650px;overflow:auto;">
 								<!-- {foreach from=$wait_grab_list item=wait_grab} -->
-									<div class="accordion-inner order-div" express_start="{$wait_grab.sf_latitude},{$wait_grab.sf_longitude}" express_end="{$wait_grab.latitude},{$wait_grab.longitude}">
+									<div class="accordion-inner order-div" express_start="{$wait_grab.sf_latitude},{$wait_grab.sf_longitude}" express_end="{$wait_grab.latitude},{$wait_grab.longitude}" sf_lng="{$wait_grab.sf_longitude}" sf_lat="{$wait_grab.sf_latitude}" data-url='{url path="express/admin/get_nearest_exuser"}'>
 										<div class="control-group control-group-small border-bottom-line">
 											<div class="margin-label">配送单号：{$wait_grab.express_sn}</div>
 										</div>
@@ -58,8 +58,10 @@
 												<a class="data-pjax btn btn-gebo" style="background:#058DC7;" href='{url path="quickpay/admin/init" args="{if $filter.merchant_name}&merchant_name={$filter.merchant_name}{/if}{if $filter.keyword}&keyword={$filter.keyword}{/if}"}'>查看详情</a>
 											</div>
 										</div>
-											<input type="hidden" class="order_start{$wait_grab.express_id}" value="{$wait_grab.sf_latitude},{$wait_grab.sf_longitude}">
-											<input type="hidden" class="order_end{$wait_grab.express_id}" value="{$wait_grab.latitude},{$wait_grab.longitude}">
+											<input type="hidden" class="nearest_exuser_name" value="{$express_info.name}"/>
+											<input type="hidden" class="nearest_exuser_mobile" value="{$express_info.mobile}"/>
+											<input type="hidden" class="nearest_exuser_lng" value="{$express_info.longitude}"/>
+											<input type="hidden" class="nearest_exuser_lat" value="{$express_info.latitude}"/>
 									</div>
 								<!-- {foreachelse} -->
 									<div class="norecord">暂无任何记录!</div>
@@ -102,7 +104,7 @@
 									<div class="express-user-list accordion-body in in_visable collapse" id="online">
 										<!-- {foreach from=$express_user_list.list item=list} -->
 											{if $list.online_status eq '1'}
-												<div class="express-user-info">
+												<div class="express-user-info exuser_div">
 													<div class="imginfo-div">
 			        		                			<div class="express-img">{if $list.avatar}<img src="{$list.avatar}">{else}<img src="{$app_url}/touxiang.png">{/if}</div>
 			        		                			<div class="expressinfo">{$list.name}<br>{$list.mobile}</div>
@@ -132,7 +134,7 @@
 									<div class="express-user-list-leave accordion-body collapse" id="leave">
 										<!-- {foreach from=$express_user_list.list item=list} -->
 											{if $list.online_status eq '4'}
-												<div class="express-user-info">
+												<div class="express-user-info exuser_div">
 													<div class="imginfo-div">
 			        		                			<div class="express-img">{if $list.avatar}<img src="{$list.avatar}">{else}<img src="{$app_url}/touxiang.png">{/if}</div>
 			        		                			<div class="expressinfo">{$list.name}<br>{$list.mobile}</div>
