@@ -17,6 +17,78 @@
 	</h3>
 </div>
 
+<div class="modal hide fade" id="myModal1" style="height:650px;">
+	<div class="modal-header">
+		<button class="close" data-dismiss="modal">×</button>
+		<h3>配送详情</h3>
+	</div> 
+	<div class="modal-body">
+		<div class="express_content">
+			<div class="express_order">
+				<span>配送单号：<font class="ecjiafc-red"> 2017000000000 </font></span>
+				<span>配送状态：<font class="ecjiafc-red"> 已完成   </font></span>
+				<span>取货距离：<font class="ecjiafc-red"> 540 </font>米</span>
+				<span>运费：<font class="ecjiafc-red">¥ 5 </font>元</span>
+			</div>
+			
+			<div class="pickup_info">
+	            <ul>
+	             	<li><h3>取货信息</h3></li>
+	                <li>商家名称：<span>aa</span></li>
+	                <li>商家电话：<span>bb</span></li>
+	                <li>下单时间：<span>cc</span></li>
+	                <li>取货地址：<span>dd</span></li>
+	            </ul>
+			</div>
+			
+			<div class="delivery_info">
+			  	<ul>
+	             	<li><h3>送货信息</h3></li>
+	                <li>用户名称：<span>aa</span></li>
+	                <li>用户电话：<span>bb</span></li>
+	                <li>期望送达时间：<span>cc</span></li>
+	                <li>送货地址：<span>dd</span></li>
+	            </ul>
+			</div>
+			
+			<div class="shipping_info">
+				<ul>
+	             	<li><h3>配送信息</h3></li>
+	                <li>配送员名称：<span>aa</span></li>
+	                <li>配送员电话：<span>bb</span></li>
+	                <li>任务类型：<span>cc</span></li>
+	                <li>完成时间：<span>dd</span></li>
+	            </ul>
+			</div>
+			
+			<div class="order_goods">
+				<ul>
+	             	<li><h3>订单商品</h3></li>
+	             	
+	                <li>
+		                <div class="goods-info">
+		                 	<div class="info-left">
+								<img src="{RC_Uri::admin_url('statics/images/appplus.png')}" width="50" height="50" />
+							</div>
+							<div class="info-right">
+								<span>屈臣氏自然补水</span><span class="goods_number">数量：X1</span>
+								<p>¥20元 </p>
+							</div>
+		                </div>
+		           </li>
+	            </ul>
+			</div>
+			
+			<div class="order_desc">
+				<ul>
+	             	<li><h3>订单备注</h3></li>
+	                <li>商品急用，麻烦商家速度发货，谢谢！</li>
+	            </ul>
+			</div>
+		</div>
+	</div>
+</div>
+
 <div class="row-fluid">
 	<div class="span12">
 		<div class="form-group choose_list">
@@ -58,7 +130,7 @@
 		      	<td class="hide-edit-area">
 					{$history.order_sn}
 		     	  	<div class="edit-list">
-					  	<a target="_blank"   href='{url path="express/admin_history/detail" args="express_id={$history.express_id}"}' title="查看详情">查看详情</a>
+					  	 <a data-toggle="modal" data-backdrop="static" href="#myModal1" express-id="{$history.express_id}" express-url="{$express_detail}"  title="查看详情">查看详情</a>
 		    	  	</div>
 		      	</td>
 		      	<td>{$history.express_user}<br>[{$history.express_mobile}]</td>
@@ -68,7 +140,7 @@
 		      	</td>
 		      	<td>{if $history.from eq 'assign'}派单{else}抢单{/if}</td>
 		      	<td>{$history.signed_time}</td>
-		      	<td>完成</td>
+		      	<td>已完成</td>
 		    </tr>
 		    <!-- {foreachelse} -->
 	        <tr><td class="no-records" colspan="7">{lang key='system::system.no_records'}</td></tr>

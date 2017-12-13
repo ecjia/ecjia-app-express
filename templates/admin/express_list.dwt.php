@@ -23,7 +23,7 @@
 		<h3>配送员当前位置</h3>
 	</div>
 	<div class="modal-body">
-		<div id="allmap" ></div>
+		<div id="allmap"></div>
 	</div>
 </div>
 

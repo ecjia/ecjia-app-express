@@ -29,7 +29,23 @@
                 if (keyword != '') url += '&keyword=' + keyword;
                 ecjia.pjax(url);
             });
-        }
+            app.history_list.detail();
+        },
+        detail :function(){
+            $("a[data-toggle='modal']").on('click', function (e) {
+            	e.preventDefault();
+                var $this = $(this);
+                var express_id = $this.attr('express-id');
+                var url = $this.attr('express-url');
+                $.post(url, {'express_id': express_id}, function (data) {
+                	app.history_list.ajax_event_data(data);
+                }, 'json');
+			})
+        },
+        
+        ajax_event_data :function(data){
+        	$('#content').val(data.content);
+        },  
     };
     
 })(ecjia.admin, jQuery);

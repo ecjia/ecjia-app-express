@@ -1,3 +1,6 @@
+/* 
+ * 配送员管理-查看详情
+ */
 .w480 {
 	width: 480px;
 }
@@ -5,6 +8,12 @@
 	margin-left:180px;
 	font-size: 16px;
 }
+
+
+
+/* 
+ * 配送员管理-查看当前位置
+ */
 .modal {
    width: 930px;
    margin-left: -350px;
@@ -19,10 +28,95 @@
 
 
 
+/* 
+ * 历史配送-查看详情
+ */
+.express_content{
+	height:575px;
+	overflow:auto;
+}
+.express_order{
+	height:35px;
+	border-bottom: 1px solid #dcdcdc;
+}
+.express_order span{
+	font-size: 16px;
+	margin-right: 35px;
+}
+.pickup_info{
+	width:435px;
+	height:150px;
+	background-color: #f9fafa;
+	border: 1px solid #f9fafa;
+    border-radius: 5px;
+    margin-top: 20px;
+	float:left;
+}
+.delivery_info{
+	width:435px;
+	height:150px;
+	background-color: #f9fafa;
+	border: 1px solid #f9fafa;
+    border-radius: 5px;
+    margin-top: 20px;
+	float:right;
+}
+
+.shipping_info{
+	width:435px;
+	height:150px;
+	background-color: #f9fafa;
+	border: 1px solid #f9fafa;
+    border-radius: 5px;
+    margin-top: 20px;
+	float:left;
+}
+li {
+	list-style: none;
+	margin-top: 5px;
+}
+
+.order_goods{
+	width:881px;
+	background-color: #f9fafa;
+	border: 1px solid #f9fafa;
+    margin-top: 20px;
+	float:left;
+	border-bottom: 1px solid #dcdcdc;
+	border-top-right-radius: 5px;
+	border-top-left-radius: 5px;
+}
+.goods-info{
+	margin-bottom: 15px;
+}
+.info-left{
+    float: left;
+}
+.info-right{
+	 margin-left: 70px;
+}
+.goods_number{
+	margin-left:60px;
+}
+.order_desc{
+	width:881px;
+	background-color: #f9fafa;
+	border: 1px solid #f9fafa;
+	float:left;
+	border-bottom-right-radius: 5px;
+	border-bottom-left-radius: 5px;
+}
+
+
+
+
+/* 
+ * 配送员管理-查看账目明细
+ */
 .all{
 	background-color: #f9fafa;
     border: 1px solid #f9fafa;
-    border-radius: 4px;
+    border-radius: 5px;
     margin-bottom: 20px;
     padding: 5px 0 20px 18px;
 }
@@ -32,7 +126,9 @@
 
 
 
-
+/* 
+ * 资金对账-对账详情
+ */
 ul.list-mod-briefing {
 	margin: 0;
 	overflow: hidden;
