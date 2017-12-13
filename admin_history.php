@@ -141,7 +141,12 @@ class admin_history extends ecjia_admin {
 		} else {
 			$content['from'] ='派单';
 		}
-		return $this->showmessage('', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS,array('content' => $content,'list'=>$goods_list));
+	
+		$this->assign('content', $content);
+		$this->assign('goods_list', $goods_list);
+		
+		$data = $this->fetch('express_history_detail.dwt');
+		return $this->showmessage('', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('data' => $data));
 	}
 	
 	private function get_history_list() {
