@@ -17,32 +17,7 @@
 	</h3>
 </div>
 
-<div class="modal hide fade" id="myModal1" style="height:650px;">
-	<div class="modal-header">
-		<button class="close" data-dismiss="modal">×</button>
-		<h3>配送详情{$content}</h3>
-	</div> 
-	<div class="modal-body">
-		<div class="express_content">
-			<div class="express_order"></div>
-			<div class="pickup_info"></div>
-			<div class="delivery_info"></div>
-			<div class="shipping_info"></div>
-			<div class="order_goods">
-				<ul>
-	             	<li><h3>订单商品</h3></li>
-	                <li class="goodslist"></li>
-	            </ul>
-			</div>
-			<div class="order_desc">
-				<ul>
-	             	<li><h3>订单备注</h3></li>
-	                <li id="postscript"></li>
-	            </ul>
-			</div>
-		</div>
-	</div>
-</div>
+<div class="modal hide fade" id="myModal1" style="height:650px;"></div>
 
 <div class="row-fluid">
 	<div class="span12">
