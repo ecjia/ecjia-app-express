@@ -16,6 +16,7 @@
     			});
                 $('.leave-trangle').click(function(e) {
                 	var div = ($(".express-user-list-leave").hasClass("in"));
+                	
                 	if (div) {
                 		$(".leaveline").addClass("triangle1");
                 		$(".leaveline").removeClass("triangle");
@@ -257,12 +258,22 @@
                   var ex_lng = $this.attr('sf_lng');
                   var ex_lat = $this.attr('sf_lat');
                   var starts = $this.attr('express_start');
-                  var ends = $this.attr('express_end');
-                  
+                  var ends 	 = $this.attr('express_end');
+                  var ex_sn  = $this.attr('express_sn');
+                  var exp_id  = $this.attr('express_id');
+                
                   //$this.css("border","1px solid #009ACD");
                   
                   $("#start").val(starts);
                   $("#end").val(ends);
+                  
+                  //地图备注切换显示
+                  $('.map-exp-order').css("display","block");
+                  $('.map-exp-user').css("display","none");
+                  $('.order').html('[' + ex_sn + ']');
+                  
+                  //express_id替换；供指派使用
+                  $(".selected-express-id").val(exp_id);
                   
                   var url = $this.attr('data-url');
                 
@@ -292,15 +303,12 @@
                  var ex_lat = $this.attr('latitude');
                  var ex_name = $this.attr('name');
                  var ex_mobile = $this.attr('mobile');
-             
-//                 $("#start").val('');
-//                 $("#end").val('');
-//                 
-//                 $('.nearest_exuser_name').val(ex_name);
-//          		 $('.nearest_exuser_mobile').val(ex_mobile);
-//          		 $('.nearest_exuser_lng').val(ex_lng);
-//          		 $('.nearest_exuser_lat').val(ex_lat);
-          		 
+                 //var exp_id = $this.attr('express_id');
+                 
+                 $('.map-exp-order').css("display","none");
+                 $('.map-exp-user').css("display","block");
+                 $(".user").html('[' + ex_name + ']');
+                           		 
               	//腾讯地图加载
               	var map, markersArray = [];
               	var latLng = new qq.maps.LatLng(ex_lat, ex_lng);
@@ -368,6 +376,51 @@
  	            });
              });
 		 },
+		 
+		assign : function(url){
+			$(".ajaxmenu").on('click', function(e){
+				e.preventDefault();
+				var $this = $(this);
+				$this.html(js_lang.getting).addClass('disabled');
+				
+				var info = '';
+				var value = $(this).attr('data-value');
+				info = js_lang.get_region_info;
+				var url = $(this).attr('data-url');
+				var message = $(this).attr('data-msg');
+				if (message) {
+					smoke.confirm(message,function(e){
+						e && $.ajax({
+							type: "get",
+							url: url,
+							dataType: "json",
+							success: function(data){
+								$this.html(info).removeClass('disabled');
+								ecjia.admin.showmessage(data); 
+							}
+						});
+					}, {ok:js_lang.ok, cancel:js_lang.cancel});
+				} else { 
+					app.setting.get_userinfo(url);
+				}
+			});	
+		},
+		
+//		get_userinfo : function(url){
+//			$.ajax({
+//				type: "get",
+//				url: url,
+//				dataType: "json",
+//				success: function(data){
+//					ecjia.admin.showmessage(data);
+//					if (data.notice == 1) {
+//						var url = data.url;
+//						app.setting.get_userinfo(url + '&page=' + data.page + '&more=' + data.more);
+//					}
+//				}
+//			});
+//		}
+		
       };
     
 })(ecjia.admin, jQuery);

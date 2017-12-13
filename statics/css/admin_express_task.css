@@ -87,7 +87,7 @@
     margin-left: 9px;
 }
 .triangle1{
-	background: url(../images/tran_2.png) no-repeat -2px 4px;
+	background: url(../images/tran_2.png) no-repeat -2px 2px;
     position: relative;
     background-origin: content-box;
     background-repeat: no-repeat;
@@ -97,9 +97,10 @@
     display: inline-block;
     font-weight: bold;
     margin-left: 9px;
+	margin-bottom:-2px;
 }
 .triangle2{
-	background: url(../images/tran_1.png) no-repeat -2px 4px;
+	background: url(../images/tran_1.png) no-repeat -2px 3px;
     position: relative;
     background-origin: content-box;
     background-repeat: no-repeat;
@@ -110,10 +111,7 @@
     font-weight: bold;
     margin-left: 9px;
 }
-.press-list{
-	/*verflow-y:scroll;
-	height:376px;*/
-}
+
 
 .express-user-info{
 	margin-left: 0px;
@@ -170,7 +168,7 @@
 	margin-left:8px;
 }
 
-.express-user-info .assigin-div{
+.express-user-info .assign-div{
 	width:100%;
 	float:left;
 	margin-top: 0px;
@@ -194,4 +192,19 @@
 .norecord{
 	text-align: center;
     margin-top: 290px;
+}
+.map-change-remark{
+	height:32px;
+	width:300px;
+	float:right;
+	margin-right:255px;
+}
+.mark{
+	color:#c62626;
+}
+.map-exp-order{
+	display:block;
+}
+.map-exp-user{
+	display:none;
 }

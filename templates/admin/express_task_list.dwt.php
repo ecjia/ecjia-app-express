@@ -4,6 +4,7 @@
 <!-- {block name="footer"} -->
 <script type="text/javascript">
 	ecjia.admin.admin_express_task.init();
+	//ecjia.admin.express_operate.operate();
 </script>
 
 <!-- {/block} -->
@@ -22,8 +23,12 @@
 		<li class="{if $type eq 'wait_grab'}active{/if}"><a class="data-pjax" href='{url path="express/admin/init" args="{if $filter.keyword}&keyword={$filter.keyword}{/if}"}'>待抢单 <span class="badge badge-info">{if $wait_grab_count}{$wait_grab_count}{else}0{/if}</span> </a></li>
 		<li class="{if $type eq 'on_going'}active{/if}"><a class="data-pjax" href='{url path="quickpay/admin/init" args="type=on_going{if $filter.merchant_name}&merchant_name={$filter.merchant_name}{/if}{if $filter.keyword}&keyword={$filter.keyword}{/if}"}'>待取货 <span class="badge badge-info">{if $type_count.on_sale}{$type_count.on_sale}{else}0{/if}</span> </a></li>
 		<li class="{if $type eq 'self'}active{/if}"><a class="data-pjax" href='{url path="quickpay/admin/init" args="type=self{if $filter.merchant_name}&merchant_name={$filter.merchant_name}{/if}{if $filter.keyword}&keyword={$filter.keyword}{/if}"}'>配送中 <span class="badge badge-info">{if $type_count.self}{$type_count.self}{else}0{/if}</span> </a></li>
+		<div class="map-change-remark map-exp-order">注：配送单号&nbsp;&nbsp;<span class="mark order">[{$first_express_order.express_sn}]</span>&nbsp;&nbsp;位置</div>
+		<div class="map-change-remark map-exp-user">注：配送员&nbsp;&nbsp;<span class="mark user">[{$express_info.name}]</span>&nbsp;&nbsp;位置</div>
 	</ul>
 </div>
+
+
 
 <div class="row-fluid">
 	<div class="span12 express-task">
@@ -37,7 +42,7 @@
 							</div>
 							<div class="accordion-body in collapse" style="height:650px;overflow:auto;">
 								<!-- {foreach from=$wait_grab_list item=wait_grab} -->
-									<div class="accordion-inner order-div" express_start="{$wait_grab.sf_latitude},{$wait_grab.sf_longitude}" express_end="{$wait_grab.latitude},{$wait_grab.longitude}" sf_lng="{$wait_grab.sf_longitude}" sf_lat="{$wait_grab.sf_latitude}" data-url='{url path="express/admin/get_nearest_exuser"}'>
+									<div class="accordion-inner order-div" express_id="{$wait_grab.express_id}" express_sn="{$wait_grab.express_sn}" express_start="{$wait_grab.sf_latitude},{$wait_grab.sf_longitude}" express_end="{$wait_grab.latitude},{$wait_grab.longitude}" sf_lng="{$wait_grab.sf_longitude}" sf_lat="{$wait_grab.sf_latitude}" data-url='{url path="express/admin/get_nearest_exuser"}'>
 										<div class="control-group control-group-small border-bottom-line">
 											<div class="margin-label">配送单号：{$wait_grab.express_sn}</div>
 										</div>
@@ -104,7 +109,7 @@
 									<div class="express-user-list accordion-body in in_visable collapse" id="online">
 										<!-- {foreach from=$express_user_list.list item=list} -->
 											{if $list.online_status eq '1'}
-												<div class="express-user-info exuser_div" >
+												<div class="express-user-info exuser_div"  longitude="{$list.longitude}" latitude="{$list.latitude}" name="{$list.name}" mobile="{$list.mobile}">
 													<div class="imginfo-div">
 			        		                			<div class="express-img">{if $list.avatar}<img src="{$list.avatar}">{else}<img src="{$app_url}/touxiang.png">{/if}</div>
 			        		                			<div class="expressinfo">{$list.name}<br>{$list.mobile}</div>
@@ -117,8 +122,9 @@
 															待配送<span class="ecjia-red">{$list.sending_count}单</span>
 														</div>
 													</div>
-													<div class="assigin-div">
-														<a class="ajaxremove btn btn-gebo" style="background:#F6A618;text-shadow:none;" data-toggle="ajaxremove" data-msg="你确定要删除该买单规则吗？" href='{url path="quickpay/admin/remove" args="id={$quickpay.id}"}' title="删除"><span style="color:#fff;">指派给他</span></a>
+													<div class="assign-div">
+														<a class="ajaxremove btn btn-gebo assign" style="background:#F6A618;text-shadow:none;"  data-toggle="ajaxremove" data-msg="你确定让  【{$list.name}】  去配送？" href='{url path="express/admin/assign_express_order" }' title="删除"><span style="color:#fff;">指派给他</span></a>
+														<input type="hidden" class="selected-express-id" value="{$first_express_order.express_id}"/>
 													</div>
 												</div>
 											{/if}
@@ -129,9 +135,9 @@
 								</div>
 								</div>
 								<div class="control-group control-group-small press-list" style="margin-bottom:0px;">
-									<div class="margin-label online-list" style="margin-top:5px;margin-bottom: 5px;">离线 （{$express_count.offline}）<a class="accordion-toggle acc-in move-mod-head leave-trangle" data-val="0" data-toggle="collapse" data-target="#leave"><b class="triangle1 leaveline"></b></a></div>
+									<div class="margin-label online-list" style="margin-top:5px;margin-bottom: 5px;">离线 （{$express_count.offline}）<a class="accordion-toggle move-mod-head collapsed leave-trangle" data-toggle="collapse" data-target="#leave"><b class="triangle1 leaveline"></b></a></div>
 									<div class="leaveline-express">
-									<div class="express-user-list-leave accordion-body collapse" id="leave">
+									<div class="express-user-list-leave accordion-body" id="leave">
 										<!-- {foreach from=$express_user_list.list item=list} -->
 											{if $list.online_status eq '4'}
 												<div class="express-user-info exuser_div" longitude="{$list.longitude}" latitude="{$list.latitude}" name="{$list.name}" mobile="{$list.mobile}">
@@ -147,7 +153,7 @@
 															待配送<span class="ecjia-red">{$list.sending_count}单</span>
 														</div>
 													</div>
-													<div class="assigin-div">
+													<div class="assign-div">
 														<a class="ajaxremove btn btn-gebo" style="background:#F6A618;text-shadow:none;" data-toggle="ajaxremove" data-msg="你确定要删除该买单规则吗？" href='{url path="quickpay/admin/remove" args="id={$quickpay.id}"}' title="删除"><span style="color:#fff;">指派给他</span></a>
 													</div>
 												</div>

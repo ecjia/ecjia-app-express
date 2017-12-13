@@ -68,7 +68,7 @@ class admin extends ecjia_admin {
 		RC_Script::enqueue_script('admin_express_task', RC_App::apps_url('statics/js/admin_express_task.js', __FILE__));
 		RC_Style::enqueue_style('admin_express_task', RC_App::apps_url('statics/css/admin_express_task.css', __FILE__));
 		RC_Script::enqueue_script('qq_map', 'https://map.qq.com/api/js?v=2.exp');
-		
+		RC_Script::localize_script('express', 'js_lang', RC_Lang::get('express::express.js_lang'));
 		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here('配送调度', RC_Uri::url('express/admin/init')));
 	}
 	
@@ -139,6 +139,7 @@ class admin extends ecjia_admin {
 		$this->assign('search_action', RC_Uri::url('express/admin/init'));
 		$app_url =  RC_App::apps_url('statics/images', __FILE__);
 		$this->assign('app_url', $app_url);
+		$this->assign('first_express_order', $first_express_order);
 		$this->assign('wait_grab_count', $count);
 		$this->assign('wait_grab_list', $wait_grab_list);
 		$this->assign('express_count', $express_user_list['express_count']);
@@ -191,6 +192,14 @@ class admin extends ecjia_admin {
 	
 		return $this->showmessage('', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('express_info' => $express_info));
 	}
+	
+	/**
+	 * 指派订单
+	 */
+	public function assign_express_order() {
+		_dump($_POST, 1);
+	}
+	
 	
 	/**
 	 * 待抢单列表
