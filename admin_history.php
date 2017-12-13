@@ -70,6 +70,7 @@ class admin_history extends ecjia_admin {
 		RC_Style::enqueue_style('datepicker', RC_Uri::admin_url('statics/lib/datepicker/datepicker.css'));
 		
 		RC_Script::enqueue_script('admin_history', RC_App::apps_url('statics/js/admin_history.js', __FILE__));
+		RC_Style::enqueue_style('admin_express', RC_App::apps_url('statics/css/admin_express.css', __FILE__));
 		
 		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here('历史配送', RC_Uri::url('express/admin_history/init')));
 	}
@@ -87,9 +88,60 @@ class admin_history extends ecjia_admin {
 		$data = $this->get_history_list();
 		$this->assign('data', $data);
 		
+		$this->assign('express_detail', RC_Uri::url('express/admin_history/detail'));
 		$this->assign('search_action', RC_Uri::url('express/admin_history/init'));
 
 		$this->display('express_history_list.dwt');
+	}
+	
+	
+	/**
+	 * 查看详情
+	 */
+	public function detail() {
+		$this->admin_priv('express_history_manage');
+	
+		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here('配送详情'));
+		$this->assign('ur_here', '配送详情');
+	
+		$express_id = intval($_POST['express_id']);
+		$express_info = RC_DB::table('express_order')->where('express_id', $express_id)->select('store_id','order_id','user_id','express_sn', 'distance','commision','express_user','express_mobile','from','signed_time','province as eoprovince','city as eocity','district as eodistrict','street as eostreet','address as eoaddress')->first();
+		$store_info = RC_DB::table('store_franchisee')->where('store_id', $express_info['store_id'])->select('merchants_name','contact_mobile','province','city','district','street','address')->first();
+		$users_info = RC_DB::table('users')->where('user_id', $express_info['user_id'])->select('user_name','mobile_phone')->first();
+		$order_info = RC_DB::table('order_info')->where('order_id', $express_info['order_id'])->select('add_time','expect_shipping_time','postscript')->first();
+		$goods_list = RC_DB::TABLE('order_goods')->where('order_id', $express_info['order_id'])->select('goods_id', 'goods_name' ,'goods_price','goods_number')->get();
+		foreach ($goods_list as $key => $val) {
+			$goods_list[$key]['image']  = RC_DB::TABLE('goods')->where('goods_id', $val['goods_id'])->pluck('goods_thumb');
+		}
+		$disk = RC_Filesystem::disk();
+		foreach ($goods_list as $key => $val) {
+			if (!$disk->exists(RC_Upload::upload_path($val['image'])) || empty($val['image'])) {
+				$goods_list[$key]['image'] = RC_Uri::admin_url('statics/images/nopic.png');
+			} else {
+				$goods_list[$key]['image'] = RC_Upload::upload_url($val['image']);
+			}
+		}
+		$content = array_merge($express_info,$store_info,$users_info,$order_info);
+		$content['province']  	  = ecjia_region::getRegionName($content['province']);
+		$content['city']          = ecjia_region::getRegionName($content['city']);
+		$content['district']      = ecjia_region::getRegionName($content['district']);
+		$content['street']        = ecjia_region::getRegionName($content['street']);
+		$content['eoprovince']    = ecjia_region::getRegionName($content['eoprovince']);
+		$content['eocity']        = ecjia_region::getRegionName($content['eocity']);
+		$content['eodistrict']    = ecjia_region::getRegionName($content['eodistrict']);
+		$content['eostreet']      = ecjia_region::getRegionName($content['eostreet']);
+		$content['add_time']  = RC_Time::local_date('Y-m-d H:i', $content['add_time']);
+		$content['signed_time']  = RC_Time::local_date('Y-m-d H:i', $content['signed_time']);
+		$content['expect_shipping_time']  = RC_Time::local_date('Y-m-d H:i', $content['expect_shipping_time']);
+		$content['all_address'] = $content['province'].$content['city'].$content['district'].$content['street'];
+		$content['express_all_address'] = $content['eoprovince'].$content['eocity'].$content['eodistrict'].$content['eostreet'];
+		
+		if($content['from'] == 'grab') {
+			$content['from'] ='抢单';
+		} else {
+			$content['from'] ='派单';
+		}
+		return $this->showmessage('', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS,array('content' => $content,'list'=>$goods_list));
 	}
 	
 	private function get_history_list() {

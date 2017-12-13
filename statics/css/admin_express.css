@@ -45,7 +45,7 @@
 }
 .pickup_info{
 	width:435px;
-	height:150px;
+	height:168px;
 	background-color: #f9fafa;
 	border: 1px solid #f9fafa;
     border-radius: 5px;
@@ -54,7 +54,7 @@
 }
 .delivery_info{
 	width:435px;
-	height:150px;
+	height:168px;
 	background-color: #f9fafa;
 	border: 1px solid #f9fafa;
     border-radius: 5px;
@@ -92,6 +92,7 @@ li {
 .info-left{
     float: left;
 }
+
 .info-right{
 	 margin-left: 70px;
 }
