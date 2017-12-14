@@ -16,6 +16,8 @@
 	</h3>
 </div>
 
+<div class="modal hide fade" id="myModal1" style="height:650px;"></div>
+
 <!-- 批量操作和搜索 -->
 <div class="row-fluid batch" >
 	<ul class="nav nav-pills" style="margin-bottom:5px;">
@@ -37,7 +39,7 @@
 							<div class="accordion-heading">
 								<a class="accordion-toggle acc-in move-mod-head"><strong>待抢单列表</strong></a>
 							</div>
-							<div class="accordion-body in collapse" style="height:606px;overflow:auto;">
+							<div class="accordion-body in collapse" style="height:567px;overflow:auto;">
 								<!-- {foreach from=$wait_grab_list item=wait_grab} -->
 									<div class="accordion-inner order-div" express_id="{$wait_grab.express_id}" express_sn="{$wait_grab.express_sn}" express_start="{$wait_grab.sf_latitude},{$wait_grab.sf_longitude}" express_end="{$wait_grab.latitude},{$wait_grab.longitude}" sf_lng="{$wait_grab.sf_longitude}" sf_lat="{$wait_grab.sf_latitude}" data-url='{url path="express/admin/get_nearest_exuser"}'>
 										<div class="control-group control-group-small border-bottom-line">
@@ -57,8 +59,8 @@
 										</div>
 										<div class="control-group control-group-small">
 											<div class="margin-label btn-a">
-												<a class="data-pjax btn btn-gebo" style="background:#058DC7;" href='{url path="quickpay/admin/init" args="{if $filter.merchant_name}&merchant_name={$filter.merchant_name}{/if}{if $filter.keyword}&keyword={$filter.keyword}{/if}"}'>查看详情</a>
-											</div>
+											  	 <a class="btn btn-gebo express-order-modal" style="background:#058DC7;" data-toggle="modal" href="#myModal1" express-id="{$wait_grab.express_id}" express-order-url='{url path="express/admin/express_order_detail" args="express_id={$wait_grab.express_id}"}'  title="查看详情">查看详情</a>
+								    	  	</div>
 										</div>
 											<input type="hidden" class="nearest_exuser_name" value="{$express_info.name}"/>
 											<input type="hidden" class="nearest_exuser_mobile" value="{$express_info.mobile}"/>
@@ -76,11 +78,11 @@
 			<div class="middle-bar">
 				<div class="control-group">
         			<div class="">
-        				<div class="span6" id="allmap" style="height:640px;width:100%;"></div>
+        				<div class="span6" id="allmap" style="height:600px;width:100%;"></div>
         			</div>
         		</div>
 			</div>
-			<div class="right-bar move-mod" style="height:640px;border:1px solid #dcdcdc;border-radius:4px;">
+			<div class="right-bar move-mod" style="height:600px;border:1px solid #dcdcdc;border-radius:4px;">
 				<div class="foldable-list move-mod-group">
 					<div class="accordion-group">
 						<div class="accordion-heading">

@@ -20,7 +20,7 @@
 	margin-left:1%;
 	border: 1px solid #dcdcdc;
 	border-radius:4px;
-	height:640px;
+	height:600px;
 	float:left;
 }
 
@@ -183,7 +183,7 @@
 	border:1px solid #fff;
 }
 .right-scroll{
-	height:599px;
+	height:540px;
 	overflow:auto;
 }
 .margin-icon{
@@ -207,4 +207,91 @@
 }
 .map-exp-user{
 	display:none;
+}
+
+/*配送订单详情*/
+.modal {
+   width: 930px;
+   margin-left: -350px;
+   margin-top: 40px;
+}
+.modal-body {
+    max-height: 800px;
+}
+
+.express_content{
+	height:575px;
+	overflow:auto;
+}
+.express_order{
+	height:35px;
+	border-bottom: 1px solid #dcdcdc;
+}
+.express_order span{
+	font-size: 16px;
+	margin-right: 35px;
+}
+.pickup_info{
+	width:435px;
+	height:168px;
+	background-color: #f9fafa;
+	border: 1px solid #f9fafa;
+    border-radius: 5px;
+    margin-top: 20px;
+	float:left;
+}
+.delivery_info{
+	width:435px;
+	height:168px;
+	background-color: #f9fafa;
+	border: 1px solid #f9fafa;
+    border-radius: 5px;
+    margin-top: 20px;
+	float:right;
+}
+
+.shipping_info{
+	width:435px;
+	height:150px;
+	background-color: #f9fafa;
+	border: 1px solid #f9fafa;
+    border-radius: 5px;
+    margin-top: 20px;
+	float:left;
+}
+li {
+	list-style: none;
+	margin-top: 5px;
+}
+
+.order_goods{
+	width:881px;
+	background-color: #f9fafa;
+	border: 1px solid #f9fafa;
+    margin-top: 20px;
+	float:left;
+	border-bottom: 1px solid #dcdcdc;
+	border-top-right-radius: 5px;
+	border-top-left-radius: 5px;
+}
+.goods-info{
+	margin-bottom: 15px;
+}
+.info-left{
+    float: left;
+}
+
+.info-right{
+	 margin-left: 70px;
+}
+.goods_number{
+	margin-left:60px;
+}
+.order_desc{
+	width:881px;
+	background-color: #f9fafa;
+	border: 1px solid #f9fafa;
+	float:left;
+	border-bottom-right-radius: 5px;
+	border-bottom-left-radius: 5px;
 }

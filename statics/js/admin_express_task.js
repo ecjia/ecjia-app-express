@@ -32,6 +32,7 @@
               app.admin_express_task.click_order();
               app.admin_express_task.click_exuser();
               app.admin_express_task.assign();
+              app.admin_express_task.express_order_detail();
             },
     
             search_express_user: function () {
@@ -398,6 +399,17 @@
 			});
 		},
 		
+		express_order_detail :function(){
+            $(".express-order-modal").on('click', function (e) {
+            	e.preventDefault();
+                var $this = $(this);
+                var express_id = $this.attr('express-id');
+                var url = $this.attr('express-order-url');
+                $.post(url, {'express_id': express_id}, function (data) {
+                	$('.modal').html(data.data);
+                }, 'json');
+			})
+        }
       };
     
 })(ecjia.admin, jQuery);
