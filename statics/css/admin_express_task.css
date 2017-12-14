@@ -20,7 +20,7 @@
 	margin-left:1%;
 	border: 1px solid #dcdcdc;
 	border-radius:4px;
-	height:685px;
+	height:640px;
 	float:left;
 }
 
@@ -183,7 +183,7 @@
 	border:1px solid #fff;
 }
 .right-scroll{
-	height:645px;
+	height:599px;
 	overflow:auto;
 }
 .margin-icon{

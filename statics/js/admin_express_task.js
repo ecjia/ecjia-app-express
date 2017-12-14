@@ -31,6 +31,7 @@
               app.admin_express_task.map();
               app.admin_express_task.click_order();
               app.admin_express_task.click_exuser();
+              app.admin_express_task.assign();
             },
     
             search_express_user: function () {
@@ -378,48 +379,24 @@
 		 },
 		 
 		assign : function(url){
-			$(".ajaxmenu").on('click', function(e){
-				e.preventDefault();
+			$('.assign').on('click', function() {
 				var $this = $(this);
-				$this.html(js_lang.getting).addClass('disabled');
-				
-				var info = '';
-				var value = $(this).attr('data-value');
-				info = js_lang.get_region_info;
-				var url = $(this).attr('data-url');
-				var message = $(this).attr('data-msg');
-				if (message) {
-					smoke.confirm(message,function(e){
-						e && $.ajax({
-							type: "get",
-							url: url,
-							dataType: "json",
-							success: function(data){
-								$this.html(info).removeClass('disabled');
-								ecjia.admin.showmessage(data); 
-							}
-						});
-					}, {ok:js_lang.ok, cancel:js_lang.cancel});
-				} else { 
-					app.setting.get_userinfo(url);
-				}
-			});	
+				var message = $this.attr('data-msg');
+				var url = $this.attr('data-href');
+				var exp_id = $('.selected-express-id').val();
+				if (message != undefined) {
+					smoke.confirm(message, function(e) {
+						if (e) {
+							$.post(url,{'express_id':exp_id}, function(data){
+								if (data.state == 'success') {
+									ecjia.admin.showmessage(data);
+								}
+							})
+						}
+					}, {ok:"确定", cancel:"取消"});
+				} 
+			});
 		},
-		
-//		get_userinfo : function(url){
-//			$.ajax({
-//				type: "get",
-//				url: url,
-//				dataType: "json",
-//				success: function(data){
-//					ecjia.admin.showmessage(data);
-//					if (data.notice == 1) {
-//						var url = data.url;
-//						app.setting.get_userinfo(url + '&page=' + data.page + '&more=' + data.more);
-//					}
-//				}
-//			});
-//		}
 		
       };
     

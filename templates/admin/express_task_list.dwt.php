@@ -4,7 +4,6 @@
 <!-- {block name="footer"} -->
 <script type="text/javascript">
 	ecjia.admin.admin_express_task.init();
-	//ecjia.admin.express_operate.operate();
 </script>
 
 <!-- {/block} -->
@@ -19,16 +18,14 @@
 
 <!-- 批量操作和搜索 -->
 <div class="row-fluid batch" >
-	<ul class="nav nav-pills">
+	<ul class="nav nav-pills" style="margin-bottom:5px;">
 		<li class="{if $type eq 'wait_grab'}active{/if}"><a class="data-pjax" href='{url path="express/admin/init" args="{if $filter.keyword}&keyword={$filter.keyword}{/if}"}'>待抢单 <span class="badge badge-info">{if $wait_grab_count}{$wait_grab_count}{else}0{/if}</span> </a></li>
 		<li class="{if $type eq 'on_going'}active{/if}"><a class="data-pjax" href='{url path="quickpay/admin/init" args="type=on_going{if $filter.merchant_name}&merchant_name={$filter.merchant_name}{/if}{if $filter.keyword}&keyword={$filter.keyword}{/if}"}'>待取货 <span class="badge badge-info">{if $type_count.on_sale}{$type_count.on_sale}{else}0{/if}</span> </a></li>
 		<li class="{if $type eq 'self'}active{/if}"><a class="data-pjax" href='{url path="quickpay/admin/init" args="type=self{if $filter.merchant_name}&merchant_name={$filter.merchant_name}{/if}{if $filter.keyword}&keyword={$filter.keyword}{/if}"}'>配送中 <span class="badge badge-info">{if $type_count.self}{$type_count.self}{else}0{/if}</span> </a></li>
-		<div class="map-change-remark map-exp-order">注：配送单号&nbsp;&nbsp;<span class="mark order">[{$first_express_order.express_sn}]</span>&nbsp;&nbsp;位置</div>
-		<div class="map-change-remark map-exp-user">注：配送员&nbsp;&nbsp;<span class="mark user">[{$express_info.name}]</span>&nbsp;&nbsp;位置</div>
+		<li class="map-change-remark map-exp-order" style="float:right;margin-top:8px;">注：配送单号&nbsp;&nbsp;<span class="mark order">[{$first_express_order.express_sn}]</span>&nbsp;&nbsp;位置</li>
+		<li class="map-change-remark map-exp-user" style="float:right;margin-top:8px;">注：配送员&nbsp;&nbsp;<span class="mark user">[{$express_info.name}]</span>&nbsp;&nbsp;位置</li>
 	</ul>
 </div>
-
-
 
 <div class="row-fluid">
 	<div class="span12 express-task">
@@ -40,7 +37,7 @@
 							<div class="accordion-heading">
 								<a class="accordion-toggle acc-in move-mod-head"><strong>待抢单列表</strong></a>
 							</div>
-							<div class="accordion-body in collapse" style="height:650px;overflow:auto;">
+							<div class="accordion-body in collapse" style="height:606px;overflow:auto;">
 								<!-- {foreach from=$wait_grab_list item=wait_grab} -->
 									<div class="accordion-inner order-div" express_id="{$wait_grab.express_id}" express_sn="{$wait_grab.express_sn}" express_start="{$wait_grab.sf_latitude},{$wait_grab.sf_longitude}" express_end="{$wait_grab.latitude},{$wait_grab.longitude}" sf_lng="{$wait_grab.sf_longitude}" sf_lat="{$wait_grab.sf_latitude}" data-url='{url path="express/admin/get_nearest_exuser"}'>
 										<div class="control-group control-group-small border-bottom-line">
@@ -79,11 +76,11 @@
 			<div class="middle-bar">
 				<div class="control-group">
         			<div class="">
-        				<div class="span6" id="allmap" style="height:685px;width:100%;"></div>
+        				<div class="span6" id="allmap" style="height:640px;width:100%;"></div>
         			</div>
         		</div>
 			</div>
-			<div class="right-bar move-mod" style="height:685px;border:1px solid #dcdcdc;border-radius:4px;">
+			<div class="right-bar move-mod" style="height:640px;border:1px solid #dcdcdc;border-radius:4px;">
 				<div class="foldable-list move-mod-group">
 					<div class="accordion-group">
 						<div class="accordion-heading">
@@ -123,7 +120,9 @@
 														</div>
 													</div>
 													<div class="assign-div">
-														<a class="ajaxremove btn btn-gebo assign" style="background:#F6A618;text-shadow:none;"  data-toggle="ajaxremove" data-msg="你确定让  【{$list.name}】  去配送？" href='{url path="express/admin/assign_express_order" }' title="删除"><span style="color:#fff;">指派给他</span></a>
+														 <a class="assign"  data-msg="你确定让  【{$list.name}】  去配送？" data-href='{url path="express/admin/assign_express_order" args="staff_id={$list.user_id}"}'  >
+							                       			<button class="btn" type="button" style="background:#F6A618;text-shadow:none;"><span style="color:#fff;">指派给他</span></button>  
+	               										 </a> 
 														<input type="hidden" class="selected-express-id" value="{$first_express_order.express_id}"/>
 													</div>
 												</div>
@@ -154,7 +153,9 @@
 														</div>
 													</div>
 													<div class="assign-div">
-														<a class="ajaxremove btn btn-gebo" style="background:#F6A618;text-shadow:none;" data-toggle="ajaxremove" data-msg="你确定要删除该买单规则吗？" href='{url path="quickpay/admin/remove" args="id={$quickpay.id}"}' title="删除"><span style="color:#fff;">指派给他</span></a>
+														 <a class="assign"  data-msg="你确定让  【{$list.name}】  去配送？" data-href='{url path="express/admin/assign_express_order" args="staff_id={$list.user_id}"}'  >
+							                       			<button class="btn" type="button" style="background:#F6A618;text-shadow:none;"><span style="color:#fff;">指派给他</span></button>  
+	               										 </a> 
 													</div>
 												</div>
 											{/if}

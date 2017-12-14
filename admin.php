@@ -197,7 +197,26 @@ class admin extends ecjia_admin {
 	 * 指派订单
 	 */
 	public function assign_express_order() {
-		_dump($_POST, 1);
+		$this->admin_priv('express_task_manage');
+		
+		$express_id = $_POST['express_id'];
+		$staff_id = $_GET['staff_id'];
+		$staff_user_info = RC_DB::table('staff_user')->where('user_id', $staff_id)->selectRaw('name, mobile, store_id')->first();
+		
+		$data = array(
+				'from' 			=> 'assign',
+				'status'		=> 1,
+				'staff_id'		=> $staff_id,
+				'store_id'		=> $staff_user_info['store_id'],
+				'express_user'	=> $staff_user_info['name'],
+				'express_mobile'=> $staff_user_info['mobile']
+		);
+		
+		$update = RC_DB::table('express_order')->where('express_id', $express_id)->update($data);
+		
+		if ($update) {
+			return $this->showmessage('指派订单成功！', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS);
+		}
 	}
 	
 	
