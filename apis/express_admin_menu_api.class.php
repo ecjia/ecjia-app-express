@@ -58,8 +58,9 @@ class express_admin_menu_api extends Component_Event_Api {
         $submenus = array(
             ecjia_admin::make_admin_menu('01_task_list', '任务中心', RC_Uri::url('express/admin/init', array('type' => 'wait_grab')), 1)->add_purview('express_task_manage'),
         	ecjia_admin::make_admin_menu('02_express_list', '配送员管理', RC_Uri::url('express/admin_express/init'), 2)->add_purview('express_manage'),
-        	ecjia_admin::make_admin_menu('03_match_list', '资金对账', RC_Uri::url('express/admin_match/init'), 3)->add_purview('express_match_manage'),
-        	ecjia_admin::make_admin_menu('04_history_list', '历史配送', RC_Uri::url('express/admin_history/init'), 4)->add_purview('express_history_manage'),
+//         	ecjia_admin::make_admin_menu('03_merchant_list', '商家管理', RC_Uri::url('express/admin_merchant/init'), 3)->add_purview('express_merchant_manage'),
+        	ecjia_admin::make_admin_menu('04_match_list', '资金对账', RC_Uri::url('express/admin_match/init'), 4)->add_purview('express_match_manage'),
+        	ecjia_admin::make_admin_menu('05_history_list', '历史配送', RC_Uri::url('express/admin_history/init'), 5)->add_purview('express_history_manage'),
         );
         
         $menus->add_submenu($submenus);
