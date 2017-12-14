@@ -85,7 +85,7 @@
 				<!-- {/foreach} -->
 			</tbody>
 		</table>
-		<!-- {$log_list.page} -->
+		<!-- {$order_list.page} -->
 	</div>
 </div>
 <!-- {/block} -->

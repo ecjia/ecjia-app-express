@@ -1,7 +1,7 @@
 <?php defined('IN_ECJIA') or exit('No permission resources.');?>
 	<div class="modal-header">
 		<button class="close" data-dismiss="modal">×</button>
-		<h3>配送详情{$content}</h3>
+		<h3>配送详情</h3>
 	</div> 
 	<div class="modal-body">
 		<div class="express_content">
