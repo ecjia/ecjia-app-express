@@ -85,11 +85,13 @@ class admin_merchant extends ecjia_admin {
 		ecjia_screen::get_current_screen()->remove_last_nav_here();
 		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here('商家管理'));
 		$this->assign('ur_here', '商家管理');
-		
+				
 		$type = trim($_GET['type']);
 		$this->assign('type', $type);
+		
 		$data = $this->get_merchant_list($type);
 		$this->assign('data', $data);
+		
 		$this->assign('type_count', $data['count']);
 		
 		$this->assign('search_action', RC_Uri::url('express/admin_merchant/init'));
@@ -98,47 +100,35 @@ class admin_merchant extends ecjia_admin {
 	}
 	
 	private function get_merchant_list($type = '') {
-		$db_data = RC_DB::table('staff_user as su')
-		->leftJoin('express_user as eu', RC_DB::raw('su.user_id'), '=', RC_DB::raw('eu.user_id'));
-	
-		$db_data->where(RC_DB::raw('su.store_id'), 0);
-	
-		$filter['keyword']	 = trim($_GET['keyword']);
-		$filter['work_type'] = trim($_GET['work_type']);
-	
-		if ($filter['keyword']) {
-			$db_data ->whereRaw('(su.name  like  "%'.mysql_like_quote($filter['keyword']).'%"  or su.mobile like "%'.mysql_like_quote($filter['keyword']).'%")');
-		}
-	
-		if ($filter['work_type']) {
-			$db_data ->where('work_type', $filter['work_type']);
-		}
-	
-		$express_count = $db_data->select(RC_DB::raw('count(*) as count'),
-				RC_DB::raw('SUM(IF(su.online_status = 1, 1, 0)) as online'),
-				RC_DB::raw('SUM(IF(su.online_status = 4, 1, 0)) as offline'))->first();
-	
-		if ($type == 'online') {
-			$db_data->where(RC_DB::raw('su.online_status'), 1);
-		}
-	
-		if ($type == 'offline') {
-			$db_data->where(RC_DB::raw('su.online_status'), 4);
-		}
-		$count = $db_data->count();
+		$db_data = RC_DB::table('express_order as eo')
+		->leftJoin('store_franchisee as sf', RC_DB::raw('eo.store_id'), '=', RC_DB::raw('sf.store_id'));
+		$db_data->where(RC_DB::raw('eo.status'), 0)->orWhere(RC_DB::raw('eo.status'), 1)->orWhere(RC_DB::raw('eo.status'), 2);
+				
+		
+		$count = $db_data->count(RC_DB::raw('distinct(eo.store_id)'));
 		$page = new ecjia_page($count, 10, 5);
-	
+		
 		$data = $db_data
-		->selectRaw('eu.*, su.user_id, su.name, su.mobile, su.add_time, su.online_status')
-		->orderby(RC_DB::raw('su.user_id'), 'desc')
+		->selectRaw('distinct eo.store_id,sf.merchants_name,sf.province,sf.city,sf.district,sf.street,sf.address')
+		->orderby(RC_DB::raw('sf.store_id'), 'desc')
 		->take(10)
 		->skip($page->start_id-1)
 		->get();
-	
+		
 		$list = array();
 		if (!empty($data)) {
 			foreach ($data as $row) {
-				$row['add_time']  = RC_Time::local_date('Y-m-d H:i:s', $row['add_time']);
+				$shop_trade_time = RC_DB::table('merchants_config')->where('store_id',$row['store_id'])->where('code', 'shop_trade_time')->pluck('value');
+				$row['img'] = 	RC_DB::table('merchants_config')->where('store_id',$row['store_id'])->where('code', 'shop_logo')->pluck('value');
+				$row['shop_kf_mobile'] = RC_DB::table('merchants_config')->where('store_id',$row['store_id'])->where('code', 'shop_kf_mobile')->pluck('value');
+				$row['shop_trade_time'] = unserialize($shop_trade_time);	
+				$row['province'] = ecjia_region::getRegionName($row['province']);
+				$row['city']     = ecjia_region::getRegionName($row['city']);
+				$row['district'] = ecjia_region::getRegionName($row['district']);
+				$row['street']   = ecjia_region::getRegionName($row['street']);
+				$row['no'] = RC_DB::TABLE('express_order')->where('status', 0)->where('store_id', $row['store_id'])->count();
+				$row['ok']	= RC_DB::TABLE('express_order')->where('status', 1)->where('store_id', $row['store_id'])->count();
+				$row['ing'] = RC_DB::TABLE('express_order')->where('status', 2)->where('store_id', $row['store_id'])->count();
 				$list[] = $row;
 			}
 		}

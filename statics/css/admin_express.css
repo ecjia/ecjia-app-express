@@ -182,7 +182,8 @@ ul.list-mod-briefing li:nth-of-type(4n) .ft {
 	overflow: hidden;
 	margin-bottom: 20px;
 }
-.merchant_list li {
+.merchant_list li{
+	list-style: none;
 	width: 32%;
 	background: #fff;
 	float:left;
