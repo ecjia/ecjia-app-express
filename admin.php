@@ -66,6 +66,7 @@ class admin extends ecjia_admin {
 		RC_Script::enqueue_script('jquery-uniform');
 		RC_Script::enqueue_script('jquery-chosen');
 		RC_Script::enqueue_script('admin_express_task', RC_App::apps_url('statics/js/admin_express_task.js', __FILE__));
+		RC_Script::enqueue_script('admin_express_order_list', RC_App::apps_url('statics/js/admin_express_order_list.js', __FILE__));
 		RC_Style::enqueue_style('admin_express_task', RC_App::apps_url('statics/css/admin_express_task.css', __FILE__));
 		RC_Script::enqueue_script('qq_map', 'https://map.qq.com/api/js?v=2.exp');
 		RC_Script::localize_script('express', 'js_lang', RC_Lang::get('express::express.js_lang'));
@@ -88,12 +89,10 @@ class admin extends ecjia_admin {
 		$this->assign('type', $type);
 		
 		/*待抢单列表*/
-		$wait_grab_list = $this->get_wait_grab_list();
-		
-		$count = count($wait_grab_list);
+		$wait_grab_list = $this->get_wait_grab_list($type);
 		
 		/*第一个订单获取*/
-		$first_express_order = $wait_grab_list['0'];
+		$first_express_order = $wait_grab_list['list']['0'];
 		$start = $first_express_order['sf_latitude'].','.$first_express_order['sf_longitude'];
 		$end = $first_express_order['latitude'].','.$first_express_order['longitude'];
 		$this->assign('start', $start);
@@ -139,8 +138,9 @@ class admin extends ecjia_admin {
 		$this->assign('search_action', RC_Uri::url('express/admin/init'));
 		$app_url =  RC_App::apps_url('statics/images', __FILE__);
 		$this->assign('app_url', $app_url);
+		$this->assign('filter', $wait_grab_list['filter']);
 		$this->assign('first_express_order', $first_express_order);
-		$this->assign('wait_grab_count', $count);
+		$this->assign('express_order_count', $wait_grab_list['express_order_count']);
 		$this->assign('wait_grab_list', $wait_grab_list);
 		$this->assign('express_count', $express_user_list['express_count']);
 		$this->assign('express_user_list', $express_user_list);
@@ -225,6 +225,7 @@ class admin extends ecjia_admin {
 		$this->admin_priv('express_task_manage');
 	
 		$express_id = intval($_GET['express_id']);
+		$type = trim($_GET['type']);
 		
 		$express_info = RC_DB::table('express_order')->where('express_id', $express_id)->select('store_id','order_id','user_id','express_sn', 'distance','commision','express_user','express_mobile','from','signed_time','province as eoprovince','city as eocity','district as eodistrict','street as eostreet','address as eoaddress')->first();
 		$store_info = RC_DB::table('store_franchisee')->where('store_id', $express_info['store_id'])->select('merchants_name','contact_mobile','province','city','district','street','address')->first();
@@ -243,6 +244,7 @@ class admin extends ecjia_admin {
 				$goods_list[$key]['image'] = RC_Upload::upload_url($val['image']);
 			}
 		}
+		
 		$content = array_merge($express_info,$store_info,$users_info,$order_info);
 		$content['province']  	  = ecjia_region::getRegionName($content['province']);
 		$content['city']          = ecjia_region::getRegionName($content['city']);
@@ -258,11 +260,70 @@ class admin extends ecjia_admin {
 		$content['all_address'] = $content['province'].$content['city'].$content['district'].$content['street'];
 		$content['express_all_address'] = $content['eoprovince'].$content['eocity'].$content['eodistrict'].$content['eostreet'];
 	
-	
+		$this->assign('type', $type);
 		$this->assign('content', $content);
 		$this->assign('goods_list', $goods_list);
-	
+		
 		$data = $this->fetch('express_order_detail.dwt');
+		return $this->showmessage('', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('data' => $data));
+	}
+	
+
+	/**
+	 * 待取货和配送中列表
+	 */
+	public function wait_pickup() {
+		$this->admin_priv('express_task_manage');
+	
+		ecjia_screen::get_current_screen()->remove_last_nav_here();
+		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here('任务中心'));
+		$this->assign('ur_here', '任务中心');
+	
+		$type = empty($_GET['type']) ? 'wait_pickup' : trim($_GET['type']);
+		$keywords = empty($_GET['keywords']) ? '' : trim($_GET['keywords']);
+	
+		$this->assign('type', $type);
+	
+		/*待取货列表*/
+		$wait_pickup_list = $this->get_wait_grab_list($type);
+	
+		$this->assign('search_action', RC_Uri::url('express/admin/wait_pickup'));
+		
+		
+		$this->assign('express_order_count', $wait_pickup_list['express_order_count']);
+		$this->assign('filter', $wait_pickup_list['filter']);
+		
+		$this->assign('wait_pickup_list', $wait_pickup_list);
+		$this->display('express_order_wait_pickup.dwt');
+	}
+	
+	/**
+	 * 查看当前位置
+	 */
+	public function express_location() {
+		$this->admin_priv('express_task_manage');
+	
+		$express_id = intval($_GET['express_id']);
+		$store_id = intval($_GET['store_id']);
+		$type = trim($_GET['type']);
+	
+		$express_info = RC_DB::table('express_order as eo')
+							->leftJoin('express_user as eu', RC_DB::raw('eo.staff_id'), '=', RC_DB::raw('eu.user_id'))
+							->where(RC_DB::raw('eo.express_id'), $express_id)	
+							->selectRaw('eo.express_user, eo.express_mobile, eo.longitude as u_longitude, eo.latitude as u_latitude, eu.longitude as eu_longitude, eu.latitude as eu_latitude')
+							->first();
+		
+		$store_info =  RC_DB::table('store_franchisee')->where('store_id', $store_id)->selectRaw('longitude as sf_longitude, latitude as sf_latitude')->first();
+		
+		$content = array_merge($express_info, $store_info);
+		
+		$content['start'] =  $content['sf_latitude'].','.$content['sf_longitude'];
+		$content['end']   =  $content['u_latitude'].','.$content['u_longitude'];
+		
+		$this->assign('content', $content);
+	
+		$data = $this->fetch('express_current_location.dwt');
+		
 		return $this->showmessage('', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('data' => $data));
 	}
 	
@@ -270,27 +331,66 @@ class admin extends ecjia_admin {
 	/**
 	 * 待抢单列表
 	 */
-	private function get_wait_grab_list(){
-		$dbview = RC_DB::table('express_order as eo')->leftJoin('store_franchisee as sf', RC_DB::raw('eo.store_id'), '=', RC_DB::raw('sf.store_id'));
-		$field = 'eo.express_id, eo.express_sn, eo.country, eo.province, eo.city, eo.district, eo.street, eo.address, eo.distance, eo.add_time, 
-				  eo.longitude, eo.latitude, sf.province as sf_province, sf.city as sf_city, sf.longitude as sf_longitude, sf.latitude as sf_latitude, 
+	private function get_wait_grab_list($type){
+		$dbview = RC_DB::table('express_order as eo')
+					->leftJoin('users as u', RC_DB::raw('eo.user_id'), '=', RC_DB::raw('u.user_id'))
+					->leftJoin('store_franchisee as sf', RC_DB::raw('eo.store_id'), '=', RC_DB::raw('sf.store_id'));
+		
+		$field = 'u.user_name, u.mobile_phone as user_mobile, eo.express_id, eo.store_id, eo.express_sn, eo.country, eo.province, eo.city, eo.district, eo.street, eo.address, eo.distance, eo.add_time, 
+				  eo.longitude, eo.latitude, eo.express_user, eo.express_mobile, eo.staff_id, eo.from, eo.receive_time, sf.province as sf_province, sf.city as sf_city, sf.longitude as sf_longitude, sf.latitude as sf_latitude, 
 				  sf.district as sf_district, sf.street as sf_street, sf.address as sf_address';
-		$list = $dbview->where(RC_DB::raw('eo.status'), 0)
-		->select(RC_DB::raw($field))
+		
+		$filter['keywords']	= empty($_GET['keywords']) ? '' : trim($_GET['keywords']);
+		$filter['type'] 	= empty($type) ? 'wait_grab' : $type;
+		
+		$db = RC_DB::table('express_order');
+		if ($type != 'wait_grab') {
+			if (!empty($filter['keywords'])) {
+				$db ->whereRaw('(express_user  like  "%'.mysql_like_quote($filter['keywords']).'%") or (express_mobile like "%'.mysql_like_quote($filter['keywords']).'%")');
+			}
+		}
+		
+		$express_order_count = $db
+		->selectRaw('count(*) as count, SUM(IF(status = 0, 1, 0)) as wait_grab, SUM(IF(status = 1, 1, 0)) as wait_pickup, SUM(IF(status = 2, 1, 0)) as sending')
+		->first();
+		
+	
+		if ($type == 'wait_grab') {
+			$dbview->where(RC_DB::raw('eo.status'), 0);
+		} elseif ($type == 'wait_pickup') {
+			$dbview->where(RC_DB::raw('eo.status'), 1);
+		} elseif ($type == 'sending') {
+			$dbview->where(RC_DB::raw('eo.status'), 1);
+		}
+		
+		if (!empty($filter['keywords'])) {
+			$dbview ->whereRaw('(eo.express_user  like  "%'.mysql_like_quote($filter['keywords']).'%") or (eo.express_mobile like "%'.mysql_like_quote($filter['keywords']).'%")');
+		}
+		
+		$count = $dbview->count();
+		$page = new ecjia_page($count, 10, 5);
+		
+		$list = $dbview->select(RC_DB::raw($field))
 		->orderBy(RC_DB::raw('eo.add_time'), 'desc')
+		->take(10)
+		->skip($page->start_id-1)
 		->get();
+		
 		$data = array();
 		if (!empty($list)) {
 			foreach ($list as $row) {
 				$row['format_add_time'] = RC_Time::local_date(ecjia::config('time_format'), $row['start_time']);
+				$row['format_receive_time'] = RC_Time::local_date(ecjia::config('time_format'), $row['receive_time']);
 				$row['from_address'] 	= ecjia_region::getRegionName($row['sf_province']).ecjia_region::getRegionName($row['sf_city']).ecjia_region::getRegionName($row['sf_district']).ecjia_region::getRegionName($row['sf_street']).ecjia_region::getRegionName($row['sf_address']);
 				$row['to_address']		= ecjia_region::getRegionName($row['province']).ecjia_region::getRegionName($row['city']).ecjia_region::getRegionName($row['district']).ecjia_region::getRegionName($row['street']).ecjia_region::getRegionName($row['address']);
 				$data[] = $row;
 			}
 		}
-	
-		return $data;
+		
+		$res = array('list' => $data, 'filter' => $filter, 'page' => $page->show(5), 'desc' => $page->page_desc(), 'express_order_count' => $express_order_count);
+		return $res;
 	}
+
 	
 	/**
 	 * 配送员列表

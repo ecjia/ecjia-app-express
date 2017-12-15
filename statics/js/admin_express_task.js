@@ -409,7 +409,7 @@
                 	$('.modal').html(data.data);
                 }, 'json');
 			})
-        }
+        },
       };
     
 })(ecjia.admin, jQuery);

@@ -210,12 +210,12 @@
 }
 
 /*配送订单详情*/
-.modal {
+.wait-grab-order-detail .modal {
    width: 930px;
    margin-left: -350px;
    margin-top: 40px;
 }
-.modal-body {
+.order-wait-grab-detail .modal-body {
     max-height: 800px;
 }
 
@@ -259,7 +259,7 @@
     margin-top: 20px;
 	float:left;
 }
-li {
+.express_content li {
 	list-style: none;
 	margin-top: 5px;
 }
@@ -294,4 +294,27 @@ li {
 	float:left;
 	border-bottom-right-radius: 5px;
 	border-bottom-left-radius: 5px;
+}
+
+/*查看当前位置*/
+.express-location-modal{
+	height:700px;
+	width:950px;
+}
+.currnt-location-detail .modal {
+   width: 950px;
+   margin-left: -350px;
+   margin-top: 20px;
+}
+.location-detail .modal-body {
+    max-height: 800px;
+	padding:10px 10px;
+}
+.express_location{
+	height:650px;
+	overflow:auto;
+}
+.map-current-location{
+	height:625px;
+	width:930px;
 }
