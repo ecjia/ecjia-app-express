@@ -36,70 +36,20 @@
 				<li>
 					<div class="bd">
 						<div class="list-top">
-							<img src="{RC_Uri::admin_url('statics/images/test.png')}">
+							<img src="{RC_Uri::admin_url('statics/images/test.png')}"><span>屈臣氏品牌店</span>
 						</div>
 						
 						<div class="list-mid">
-						
+							<p><font class="ecjiafc-red">50</font><br>待抢单</p>
+							<p><font class="ecjiafc-red">50</font><br>待取货</p>
+							<p><font class="ecjiafc-red">50</font><br>配送中</p>
 						</div>
 						
 						<div class="list-bot">
-						
+							<div><label>营业时间：</label>08:00-17:30</div>
+							<div><label>商家电话：</label>021-000-0000</div>
+							<div><label>商家地址：</label>上海市普陀区中山北路3553号301室</div>
 						</div>
-					</div>
-				</li>
-				
-				<li>
-					<div class="bd">
-					
-					</div>
-				</li>
-				
-				<li>
-					<div class="bd">
-					
-					</div>
-				</li>
-				
-				<li>
-					<div class="bd">
-					
-					</div>
-				</li>
-				
-				<li>
-					<div class="bd">
-					
-					</div>
-				</li>
-				
-				<li>
-					<div class="bd">
-					
-					</div>
-				</li>
-				
-				<li>
-					<div class="bd">
-					
-					</div>
-				</li>
-				
-				<li>
-					<div class="bd">
-					
-					</div>
-				</li>
-				
-				<li>
-					<div class="bd">
-					
-					</div>
-				</li>
-				
-				<li>
-					<div class="bd">
-					
 					</div>
 				</li>
 			</ul>
