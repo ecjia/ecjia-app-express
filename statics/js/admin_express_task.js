@@ -191,7 +191,6 @@
             var ex_lng 			= $('.nearest_exuser_lng').val();
             var ex_lat 			= $('.nearest_exuser_lat').val();
             var ex_user_latLng 	= new qq.maps.LatLng(ex_lat, ex_lng);
-            
      		//创建一个Marker(自定义图片)
      	    var ex_user_marker = new qq.maps.Marker({
      	        position: ex_user_latLng, 
@@ -289,10 +288,11 @@
                   		 $('.nearest_exuser_mobile').val(data.express_info.mobile);
                   		 $('.nearest_exuser_lng').val(data.express_info.longitude);
                   		 $('.nearest_exuser_lat').val(data.express_info.latitude);
+                  		app.admin_express_task.map();
+                  	 } else {
+                  		app.admin_express_task.map(); 
                   	 }
                    }, 'json');
-                  
-                  app.admin_express_task.map();
               });
 		 },
 		 

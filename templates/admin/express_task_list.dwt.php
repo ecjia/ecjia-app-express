@@ -136,9 +136,9 @@
 								</div>
 								</div>
 								<div class="control-group control-group-small press-list" style="margin-bottom:0px;">
-									<div class="margin-label online-list" style="margin-top:5px;margin-bottom: 5px;">离线 （{$express_count.offline}）<a class="accordion-toggle move-mod-head collapsed leave-trangle" data-toggle="collapse" data-target="#leave"><b class="triangle1 leaveline"></b></a></div>
+									<div class="margin-label online-list" style="margin-top:5px;margin-bottom: 5px;">离线 （{$express_count.offline}）<a class="accordion-toggle acc-in  move-mod-head collapsed leave-trangle" data-toggle="collapse" data-target="#leave"><b class="triangle1 leaveline"></b></a></div>
 									<div class="leaveline-express">
-									<div class="express-user-list-leave accordion-body" id="leave">
+									<div class="express-user-list-leave accordion-body collapse" id="leave">
 										<!-- {foreach from=$express_user_list.list item=list} -->
 											{if $list.online_status eq '4'}
 												<div class="express-user-info exuser_div" longitude="{$list.longitude}" latitude="{$list.latitude}" name="{$list.name}" mobile="{$list.mobile}">

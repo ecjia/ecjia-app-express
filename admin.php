@@ -207,7 +207,6 @@ class admin extends ecjia_admin {
 				'from' 			=> 'assign',
 				'status'		=> 1,
 				'staff_id'		=> $staff_id,
-				'store_id'		=> $staff_user_info['store_id'],
 				'express_user'	=> $staff_user_info['name'],
 				'express_mobile'=> $staff_user_info['mobile']
 		);
@@ -289,6 +288,7 @@ class admin extends ecjia_admin {
 				$data[] = $row;
 			}
 		}
+	
 		return $data;
 	}
 	
