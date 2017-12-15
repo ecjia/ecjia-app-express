@@ -71,7 +71,7 @@
     margin-top: 20px;
 	float:left;
 }
-li {
+.express_content li {
 	list-style: none;
 	margin-top: 5px;
 }
@@ -182,21 +182,22 @@ ul.list-mod-briefing li:nth-of-type(4n) .ft {
 	overflow: hidden;
 	margin-bottom: 20px;
 }
-.merchant_list li {
+.merchant_list li{
+	list-style: none;
 	width: 32%;
 	background: #fff;
 	float:left;
 	margin:0 8px 18px 5px;
 }
 .merchant_list li .bd {
-	height: 300px;
+	height: 280px;
 	font-size: 16px;
 	border: 1px solid #ccc;
 	border-radius: 5px;
 	padding:20px;
 }
 .bd .list-top{
-	height: 100px;
+	height: 95px;
 }
 .list-top img{
 	width: 65px;
@@ -204,3 +205,37 @@ ul.list-mod-briefing li:nth-of-type(4n) .ft {
 	border: 3px solid #e9e9e9;
     border-radius: 100%;
 }
+.list-top span{
+	margin-left:10px;
+	font-size: 18px;
+}
+.list-mid{
+	height: 65px;
+	border: 1px solid #ccc;
+	border-width: 0 0 1px 0;
+}
+.list-mid p{
+	float:left;
+	text-align: center;
+	width: 60%;
+}
+.list-mid p:first-child{
+ 	width: 20%;
+}
+.list-mid p:last-child{
+ 	width: 20%;
+}
+.list-mid p font{
+	font-weight: bold;
+	line-height: 30px;
+	font-size: 18px;
+}
+.list-bot {
+	margin-top:20px;
+}
+.list-bot label {
+	font-size: 16px;
+    display: inline-block;
+    margin-bottom: 5px;
+}
+

@@ -33,77 +33,29 @@
 	<div class="span12">
 		<div class="merchant_box">
 			<ul class="merchant_list">
+				<!-- {foreach from=$data.list item=list} -->
 				<li>
 					<div class="bd">
 						<div class="list-top">
-							<img src="{RC_Uri::admin_url('statics/images/test.png')}">
+							<img src="{if $list.img}{RC_Upload::upload_url()}/{$list.img}{else}{RC_Uri::admin_url('statics/images/nopic.png')}{/if}"><span>{$list.merchants_name}</span>
 						</div>
-						
 						<div class="list-mid">
-						
+							<p><font class="ecjiafc-red">{$list.no}</font><br>待抢单</p>
+							<p><font class="ecjiafc-red">{$list.ok}</font><br>待取货</p>
+							<p><font class="ecjiafc-red">{$list.ing}</font><br>配送中</p>
 						</div>
 						
 						<div class="list-bot">
-						
+							<div><label>营业时间：</label>{$list.shop_trade_time.start}-17:30{$list.shop_trade_time.end}</div>
+							<div><label>商家电话：</label>{$list.shop_kf_mobile}</div>
+							<div><label>商家地址：</label>{$list.province}{$list.city}{$list.district}{$list.street}{$list.address}</div>
 						</div>
 					</div>
 				</li>
-				
-				<li>
-					<div class="bd">
-					
-					</div>
-				</li>
-				
-				<li>
-					<div class="bd">
-					
-					</div>
-				</li>
-				
-				<li>
-					<div class="bd">
-					
-					</div>
-				</li>
-				
-				<li>
-					<div class="bd">
-					
-					</div>
-				</li>
-				
-				<li>
-					<div class="bd">
-					
-					</div>
-				</li>
-				
-				<li>
-					<div class="bd">
-					
-					</div>
-				</li>
-				
-				<li>
-					<div class="bd">
-					
-					</div>
-				</li>
-				
-				<li>
-					<div class="bd">
-					
-					</div>
-				</li>
-				
-				<li>
-					<div class="bd">
-					
-					</div>
-				</li>
+				<!-- {/foreach} -->
 			</ul>
 		</div>
+		 <!-- {$data.page} -->
 	</div>
 </div>
 <!-- {/block} -->
