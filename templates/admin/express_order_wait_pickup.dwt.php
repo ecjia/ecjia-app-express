@@ -17,10 +17,13 @@
 	</h3>
 </div>
 <div class="wait-grab-order-detail">
-	<div class="modal hide fade" id="myModal1" style="height:650px;"></div>
+	<div class="modal order-detail hide fade" id="myModal1" style="height:590px;"></div>
 </div>
 
-
+<div class="assign-order-detail">
+	<div class="modal express-reassign-modal hide fade" id="myModal2" style="height:590px;"></div>
+</div>
+ 
 <div class="currnt-location-detail">
 	<div class="modal express-location-modal hide fade" id="myModal3"></div>
 </div>
@@ -60,7 +63,7 @@
 					{$wait_pickup.express_sn}
 		     	  	<div class="edit-list">
 					  	 <a  class="express-order-modal" data-toggle="modal" data-backdrop="static" href="#myModal1" express-id="{$wait_pickup.express_id}" express-order-url='{url path="express/admin/express_order_detail" args="express_id={$wait_pickup.express_id}{if $type}&type={$type}{/if}"}'  title="查看详情">查看详情</a>
-					  	 {if $type eq 'wait_pickup'}&nbsp;|&nbsp;<a data-toggle="modal" data-backdrop="static" href="#myModal2" express-id="{$wait_pickup.express_id}" express-url="{$express_detail}"  title="重新指派">重新指派</a>{/if}
+					  	 {if $type eq 'wait_pickup'}&nbsp;|&nbsp;<a class="express-reassign-click" data-toggle="modal" data-backdrop="static" href="#myModal2" express-id="{$wait_pickup.express_id}" express-reassign-url='{url path="express/admin/express_reasign_detail" args="express_id={$wait_pickup.express_id}&store_id={$wait_pickup.store_id}{if $type}&type={$type}{/if}"}'  title="重新指派">重新指派</a>{/if}
 					  	 &nbsp;|&nbsp;<a class="express-location" data-toggle="modal" data-backdrop="static" href="#myModal3" express-id="{$wait_pickup.express_id}" express-location-url='{url path="express/admin/express_location" args="express_id={$wait_pickup.express_id}&store_id={$wait_pickup.store_id}{if $type}&type={$type}{/if}"}'  title="当前位置">当前位置</a>
 		    	  	</div>
 		      	</td>

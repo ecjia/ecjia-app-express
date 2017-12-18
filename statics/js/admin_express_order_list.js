@@ -2,10 +2,58 @@
 ;(function (app, $) {
     app.admin_express_order_list = {
             init: function () {
+                $('.online-triangle').click(function(e) {
+                	var div = ($(".express-user-list").hasClass("in"));
+                	if (div) {
+            			$(".on-tran").addClass("triangle1");
+                		$(".on-tran").removeClass("triangle");
+                		$(".on-tran").removeClass("triangle2");
+                	} else {
+                		$(".on-tran").addClass("triangle2");
+                		$(".on-tran").removeClass("triangle");
+                		$(".on-tran").removeClass("triangle1");
+                	}
+    			});
+                $('.leave-trangle').click(function(e) {
+                	var div = ($(".express-user-list-leave").hasClass("in"));
+                	
+                	if (div) {
+                		$(".leaveline").addClass("triangle1");
+                		$(".leaveline").removeClass("triangle");
+                		$(".leaveline").removeClass("triangle2");
+                	} else {
+                		$(".leaveline").addClass("triangle2");
+                		$(".leaveline").removeClass("triangle");
+                		$(".leaveline").removeClass("triangle1");
+                	}
+    			});
+                
+              app.admin_express_order_list.search_express_user();
               app.admin_express_order_list.order_list_search();
               app.admin_express_order_list.express_order_detail();
               app.admin_express_order_list.order_current_location();
+              app.admin_express_order_list.order_reassign_detail();
             },
+            
+            search_express_user: function () {
+                /* 配送员列表搜索 */
+                $("form[name='express_searchForm'] .express-search-btn").on('click', function (e) {
+                    e.preventDefault();
+                    var url = $("form[name='express_searchForm']").attr('action');
+                    var keyword = $("input[name='keywords']").val();
+                    if (keyword != '') {
+                    	url += '&keywords=' + keyword;
+                    }
+//                    ecjia.pjax(url);
+//                    alert(url);
+                    $.post(url, {'express_id': 1}, function (data) {
+                    	//$('.testaa').hide();
+                    	$('.testaa').css("display","none");
+                    	$('.testbb').html(data.data);
+                    }, 'json');
+                });
+		    },
+            
 	        order_list_search: function() {
 				$("form[name='searchForm']").on('submit', function(e) {
 					e.preventDefault();
@@ -30,7 +78,7 @@
                 var express_id = $this.attr('express-id');
                 var url = $this.attr('express-order-url');
                 $.post(url, {'express_id': express_id}, function (data) {
-                	$('.modal').html(data.data);
+                	$('.order-detail').html(data.data);
                 }, 'json');
 			})
         },
@@ -47,6 +95,19 @@
                  }, 'json');
  			})
         },
+        
+        order_reassign_detail :function(){
+       	 $(".express-reassign-click").on('click', function (e) {
+            	e.preventDefault();
+                var $this = $(this);
+                var express_id = $this.attr('express-id');
+                var url = $this.attr('express-reassign-url');
+                $.post(url, {'express_id': express_id}, function (data) {
+                	$('.express-reassign-modal').html(data.data);
+                	app.admin_express_order_list.map();
+                }, 'json');
+			})
+       },
         
         map: function () {
 	        var map, 
@@ -145,11 +206,16 @@
 	        route_lines = [],
 	        step_line,
 	        route_steps = [];
-	     
+	        
+	        var ex_lng_cen 			= $('.nearest_exuser_lng').val();
+	        var ex_lat_cen 			= $('.nearest_exuser_lat').val();
+	        var cen_latLng = new qq.maps.LatLng(ex_lat_cen, ex_lng_cen);
+	        
 //	    function map_init() {
         map = new qq.maps.Map(document.getElementById("allmap"), {
             // 地图的中心地理坐标。
-            center: new qq.maps.LatLng(39.916527,116.397128)
+        	center: cen_latLng,
+            zoom: 15
         });
         calcRoute();
 //	    }
@@ -251,8 +317,55 @@
         });
         //配送员位置end
 	 },
-        
-      };
+  }
+    app.serach_user_list = {
+    		init : function() {
+    		    $('.online-triangle').click(function(e) {
+                	var div = ($(".express-user-list").hasClass("in"));
+                	if (div) {
+            			$(".on-tran").addClass("triangle1");
+                		$(".on-tran").removeClass("triangle");
+                		$(".on-tran").removeClass("triangle2");
+                	} else {
+                		$(".on-tran").addClass("triangle2");
+                		$(".on-tran").removeClass("triangle");
+                		$(".on-tran").removeClass("triangle1");
+                	}
+    			});
+                $('.leave-trangle').click(function(e) {
+                	var div = ($(".express-user-list-leave").hasClass("in"));
+                	
+                	if (div) {
+                		$(".leaveline").addClass("triangle1");
+                		$(".leaveline").removeClass("triangle");
+                		$(".leaveline").removeClass("triangle2");
+                	} else {
+                		$(".leaveline").addClass("triangle2");
+                		$(".leaveline").removeClass("triangle");
+                		$(".leaveline").removeClass("triangle1");
+                	}
+    			});
+                app.serach_user_list.search_user();
+    		},
+    		
+    		search_user: function () {
+    		      /* 配送员列表搜索 */
+                $("form[name='express_searchForm'] .express-search-btn").on('click', function (e) {
+                    e.preventDefault();
+                    var url = $("form[name='express_searchForm']").attr('action');
+                    var keyword = $("input[name='keywords']").val();
+                    if (keyword != '') {
+                    	url += '&keywords=' + keyword;
+                    }
+//                    ecjia.pjax(url);
+                    $.post(url, {'express_id': 1}, function (data) {
+                    	//$('.testaa').hide();
+                    	$('.testaa').css("display","none");
+                    	$('.testbb').html(data.data);
+                    }, 'json');
+                });
+            }
+    };
     
 })(ecjia.admin, jQuery);
  

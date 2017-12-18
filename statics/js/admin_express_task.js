@@ -2,7 +2,7 @@
 ;(function (app, $) {
     app.admin_express_task = {
             init: function () {
-                $('.online-triangle').click(function(e) {
+                $('.online-triangle').on('click', function(e) {
                 	var div = ($(".express-user-list").hasClass("in"));
                 	if (div) {
             			$(".on-tran").addClass("triangle1");
@@ -14,7 +14,7 @@
                 		$(".on-tran").removeClass("triangle1");
                 	}
     			});
-                $('.leave-trangle').click(function(e) {
+                $('.leave-trangle').on('click', function(e) {
                 	var div = ($(".express-user-list-leave").hasClass("in"));
                 	
                 	if (div) {
@@ -145,12 +145,15 @@
 		        route_lines = [],
 		        step_line,
 		        route_steps = [];
-		     
+		        var start_latLng = document.getElementById("start").value.split(",");
+		        var center_latLng = new qq.maps.LatLng(start_latLng[0], start_latLng[1]);
 //		    function map_init() {
 	        map = new qq.maps.Map(document.getElementById("allmap"), {
 	            // 地图的中心地理坐标。
-	            center: new qq.maps.LatLng(39.916527,116.397128)
+	            center: center_latLng,
+	            zoom: 15
 	        });
+	        
 	        calcRoute();
 //		    }
 		    function calcRoute() {
@@ -159,7 +162,7 @@
 		        var policy = document.getElementById("policy").value;
 		        route_steps = [];
 		            
-		        directionsService.setLocation("北京");
+		        //directionsService.setLocation("北京");
 		        directionsService.setPolicy(qq.maps.DrivingPolicy[policy]);
 		        directionsService.search(new qq.maps.LatLng(start_name[0], start_name[1]), 
 		            new qq.maps.LatLng(end_name[0], end_name[1]));
@@ -316,7 +319,7 @@
               	var latLng = new qq.maps.LatLng(ex_lat, ex_lng);
               	var map = new qq.maps.Map(document.getElementById("allmap"),{
               	    center: latLng,
-              	    zoom: 18
+              	    zoom: 15
               	});
               	
           		//创建一个Marker(自定义图片)

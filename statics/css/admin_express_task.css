@@ -1,3 +1,13 @@
+.main_content .row-fluid + .row-fluid-new{
+	margin-top:5px;
+}
+.main_content .row-fluid + .row-fluid-footer{
+	margin-top:10px;
+}
+.task-heading .heading{
+	padding-bottom:0px;
+	margin-bottom:15px;
+}
 .express-task .editpage-rightbar{
 	width:100%;
 	margin-right:0px;
@@ -20,7 +30,7 @@
 	margin-left:1%;
 	border: 1px solid #dcdcdc;
 	border-radius:4px;
-	height:600px;
+	height:580px;
 	float:left;
 }
 
@@ -41,6 +51,9 @@
 	margin-left: 4px;
     margin-top: 13px;
     margin-bottom: 13px;
+}
+.btn-a{
+	 margin-bottom: 0px;
 }
 .border-bottom-line{
 	border-bottom: 1px dashed #dcdcdc;
@@ -183,7 +196,7 @@
 	border:1px solid #fff;
 }
 .right-scroll{
-	height:540px;
+	height:434px;
 	overflow:auto;
 }
 .margin-icon{
@@ -213,14 +226,14 @@
 .wait-grab-order-detail .modal {
    width: 930px;
    margin-left: -350px;
-   margin-top: 40px;
+   margin-top: 10px;
 }
 .order-wait-grab-detail .modal-body {
     max-height: 800px;
 }
 
 .express_content{
-	height:575px;
+	height:515px;
 	overflow:auto;
 }
 .express_order{
@@ -252,7 +265,7 @@
 
 .shipping_info{
 	width:435px;
-	height:150px;
+	height:99px;
 	background-color: #f9fafa;
 	border: 1px solid #f9fafa;
     border-radius: 5px;
@@ -298,13 +311,13 @@
 
 /*查看当前位置*/
 .express-location-modal{
-	height:700px;
+	height:580px;
 	width:950px;
 }
 .currnt-location-detail .modal {
    width: 950px;
    margin-left: -350px;
-   margin-top: 20px;
+   margin-top: 10px;
 }
 .location-detail .modal-body {
     max-height: 800px;
@@ -315,6 +328,51 @@
 	overflow:auto;
 }
 .map-current-location{
-	height:625px;
-	width:930px;
+	height:523px;
+	width:934px;
+}
+
+/*重新指派订单*/
+.express-assign-modal{
+	height:580px;
+	width:950px;
+}
+.assign-order-detail .modal {
+   width: 995px;
+   margin-left: -395px;
+   margin-top: 10px;
+}
+.assign-detail .modal-body {
+    max-height: 800px;
+	padding:10px 10px;
+}
+.express_reassign{
+	height:650px;
+	overflow:auto;
+}
+.map-reassign{
+	float: left;
+    height: 523px;
+    width: 73%;
+}
+.express_reassign .right-bar{
+	/*border: 1px solid #dcdcdc;*/
+    border-radius: 4px;
+    float: right;
+    height: 523px;
+    margin-right: 0;
+    width: 26%;
+}
+.express_reassign .right-bar .accordion-toggle{
+	background-image:url();
+}
+.express_reassign .accordion-body .accordion-inner {
+	 padding: 9px 7px;
+}
+.text-position{
+	text-align:center;
+}
+.express_reassign .right-scroll{
+	height: 468px;
+    overflow: auto;
 }

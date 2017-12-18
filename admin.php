@@ -257,8 +257,8 @@ class admin extends ecjia_admin {
 		$content['add_time']  = RC_Time::local_date('Y-m-d H:i', $content['add_time']);
 		$content['signed_time']  = RC_Time::local_date('Y-m-d H:i', $content['signed_time']);
 		$content['expect_shipping_time']  = RC_Time::local_date('Y-m-d H:i', $content['expect_shipping_time']);
-		$content['all_address'] = $content['province'].$content['city'].$content['district'].$content['street'];
-		$content['express_all_address'] = $content['eoprovince'].$content['eocity'].$content['eodistrict'].$content['eostreet'];
+		$content['all_address'] = $content['province'].$content['city'].$content['district'].$content['street'].$content['address'];
+		$content['express_all_address'] = $content['eoprovince'].$content['eocity'].$content['eodistrict'].$content['eostreet'].$content['eoaddress'];
 	
 		$this->assign('type', $type);
 		$this->assign('content', $content);
@@ -327,6 +327,64 @@ class admin extends ecjia_admin {
 		return $this->showmessage('', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('data' => $data));
 	}
 	
+	/**
+	 * 订单重新指派
+	 */
+	public function express_reasign_detail() {
+		$this->admin_priv('express_task_manage');
+	
+		$express_id = intval($_GET['express_id']);
+		$store_id = intval($_GET['store_id']);
+		$type = trim($_GET['type']);
+	
+		$express_info = RC_DB::table('express_order as eo')
+		->leftJoin('express_user as eu', RC_DB::raw('eo.staff_id'), '=', RC_DB::raw('eu.user_id'))
+		->where(RC_DB::raw('eo.express_id'), $express_id)
+		->selectRaw('eo.express_user, eo.express_mobile, eo.longitude as u_longitude, eo.latitude as u_latitude, eu.longitude as eu_longitude, eu.latitude as eu_latitude')
+		->first();
+	
+		$store_info =  RC_DB::table('store_franchisee')->where('store_id', $store_id)->selectRaw('longitude as sf_longitude, latitude as sf_latitude')->first();
+	
+		$content = array_merge($express_info, $store_info);
+	
+		$content['start'] =  $content['sf_latitude'].','.$content['sf_longitude'];
+		$content['end']   =  $content['u_latitude'].','.$content['u_longitude'];
+		
+		/*配送员列表*/
+		$express_user_list = $this->get_express_user_list($type);
+		$this->assign('express_user_list', $express_user_list);
+		$this->assign('express_count', $express_user_list['express_count']);
+		$app_url =  RC_App::apps_url('statics/images', __FILE__);
+		$this->assign('app_url', $app_url);
+		
+		$this->assign('content', $content);
+		
+		$this->assign('search_action', RC_Uri::url('express/admin/reassign_search_user', array('type' => $type)));
+		
+		$data = $this->fetch('express_order_reassign.dwt');
+	
+		return $this->showmessage('', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('data' => $data));
+	}
+	
+	/**
+	 * 重新指派页搜索配送员
+	 */
+	
+	public function reassign_search_user() {
+		$type = $_GET['type'];
+ 		/*配送员列表*/
+		$express_user_list = $this->get_express_user_list();
+		$this->assign('express_user_lists', $express_user_list);
+		$this->assign('express_user_off_list', $express_user_list);
+		$this->assign('express_count', $express_user_list['express_count']);
+		$app_url =  RC_App::apps_url('statics/images', __FILE__);
+		$this->assign('app_url', $app_url);
+		
+		$data = $this->fetch('reassign_express_user_list.dwt');
+		
+		return $this->showmessage('', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('data' => $data));
+	}
+	
 	
 	/**
 	 * 待抢单列表
@@ -381,8 +439,8 @@ class admin extends ecjia_admin {
 			foreach ($list as $row) {
 				$row['format_add_time'] = RC_Time::local_date(ecjia::config('time_format'), $row['start_time']);
 				$row['format_receive_time'] = RC_Time::local_date(ecjia::config('time_format'), $row['receive_time']);
-				$row['from_address'] 	= ecjia_region::getRegionName($row['sf_province']).ecjia_region::getRegionName($row['sf_city']).ecjia_region::getRegionName($row['sf_district']).ecjia_region::getRegionName($row['sf_street']).ecjia_region::getRegionName($row['sf_address']);
-				$row['to_address']		= ecjia_region::getRegionName($row['province']).ecjia_region::getRegionName($row['city']).ecjia_region::getRegionName($row['district']).ecjia_region::getRegionName($row['street']).ecjia_region::getRegionName($row['address']);
+				$row['from_address'] 	= ecjia_region::getRegionName($row['sf_province']).ecjia_region::getRegionName($row['sf_city']).ecjia_region::getRegionName($row['sf_district']).ecjia_region::getRegionName($row['sf_street']).$row['sf_address'];
+				$row['to_address']		= ecjia_region::getRegionName($row['province']).ecjia_region::getRegionName($row['city']).ecjia_region::getRegionName($row['district']).ecjia_region::getRegionName($row['street']).$row['address'];
 				$data[] = $row;
 			}
 		}
@@ -397,6 +455,7 @@ class admin extends ecjia_admin {
 	 */
 	private function get_express_user_list() {
 		$keywords = $_GET['keywords'];
+	
 		$express_user_view =  RC_DB::table('staff_user as su')
 		->leftJoin('express_user as eu', RC_DB::raw('su.user_id'), '=', RC_DB::raw('eu.user_id'));
 		$express_user_view->where(RC_DB::raw('su.store_id'), 0);
