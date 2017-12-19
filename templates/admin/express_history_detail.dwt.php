@@ -8,8 +8,8 @@
 			<div class="express_order">
 				<span>配送单号：<font class="ecjiafc-red">{$content.express_sn}</font></span>
 				<span>配送状态：<font class="ecjiafc-red"> 已完成   </font></span>
-				<span>取货距离：<font class="ecjiafc-red">{$content.distance}</font>米</span>
-				<span>运费：<font class="ecjiafc-red">¥{$content.commision}</font>元</span>
+				<span>取货距离：<font class="ecjiafc-red">{$content.distance}</font> m</span>
+				<span>运费：<font class="ecjiafc-red">¥{$content.commision}</font> 元</span>
 			</div>
 			
 			<div class="pickup_info">
