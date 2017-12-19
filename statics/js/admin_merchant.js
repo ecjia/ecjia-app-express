@@ -11,7 +11,21 @@
                 }
                 ecjia.pjax(url);
             });
+            
+            app.merchant_list.detail();
         },
+        
+        detail :function(){
+            $("a[data-toggle='modal']").on('click', function (e) {
+            	e.preventDefault();
+                var $this = $(this);
+                var express_id = $this.attr('express-id');
+                var url = $this.attr('express-url');
+                $.post(url, {'express_id': express_id}, function (data) {
+                	$('.modal').html(data.data);
+                }, 'json');
+			})
+        }
     }
 })(ecjia.admin, jQuery);
  

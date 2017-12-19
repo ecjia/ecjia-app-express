@@ -115,6 +115,8 @@ class admin_merchant extends ecjia_admin {
 		
 		$type = trim($_GET['type']);
 		$this->assign('type', $type);
+		
+		$this->assign('express_detail', RC_Uri::url('express/admin_merchant/order_detail'));
 	
 		$shop_trade_time = RC_DB::table('merchants_config')->where('store_id', $store_id)->where('code', 'shop_trade_time')->pluck('value');
 		$store_info['shop_trade_time'] = unserialize($shop_trade_time);
@@ -168,6 +170,61 @@ class admin_merchant extends ecjia_admin {
 		$this->assign('order_list', $order_list);
 		
 		$this->display('merchant_detail.dwt');
+	}
+	
+
+	/**
+	 * 查看订单详情
+	 */
+	public function order_detail() {
+		$this->admin_priv('express_merchant_manage');
+	
+		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here('配送详情'));
+		$this->assign('ur_here', '配送详情');
+
+		$express_id = intval($_POST['express_id']);
+		$express_info = RC_DB::table('express_order')->where('express_id', $express_id)->select('store_id','order_id','user_id','express_sn', 'distance','commision','express_user','express_mobile','from','signed_time','province as eoprovince','city as eocity','district as eodistrict','street as eostreet','address as eoaddress','status')->first();
+		$store_info = RC_DB::table('store_franchisee')->where('store_id', $express_info['store_id'])->select('merchants_name','contact_mobile','province','city','district','street','address')->first();
+		$users_info = RC_DB::table('users')->where('user_id', $express_info['user_id'])->select('user_name','mobile_phone')->first();
+		$order_info = RC_DB::table('order_info')->where('order_id', $express_info['order_id'])->select('add_time','expect_shipping_time','postscript')->first();
+		$goods_list = RC_DB::TABLE('order_goods')->where('order_id', $express_info['order_id'])->select('goods_id', 'goods_name' ,'goods_price','goods_number')->get();
+		foreach ($goods_list as $key => $val) {
+			$goods_list[$key]['image']  = RC_DB::TABLE('goods')->where('goods_id', $val['goods_id'])->pluck('goods_thumb');
+		}
+		$disk = RC_Filesystem::disk();
+		foreach ($goods_list as $key => $val) {
+			if (!$disk->exists(RC_Upload::upload_path($val['image'])) || empty($val['image'])) {
+				$goods_list[$key]['image'] = RC_Uri::admin_url('statics/images/nopic.png');
+			} else {
+				$goods_list[$key]['image'] = RC_Upload::upload_url($val['image']);
+			}
+		}
+		$content = array_merge($express_info,$store_info,$users_info,$order_info);
+		$content['province']  	  = ecjia_region::getRegionName($content['province']);
+		$content['city']          = ecjia_region::getRegionName($content['city']);
+		$content['district']      = ecjia_region::getRegionName($content['district']);
+		$content['street']        = ecjia_region::getRegionName($content['street']);
+		$content['eoprovince']    = ecjia_region::getRegionName($content['eoprovince']);
+		$content['eocity']        = ecjia_region::getRegionName($content['eocity']);
+		$content['eodistrict']    = ecjia_region::getRegionName($content['eodistrict']);
+		$content['eostreet']      = ecjia_region::getRegionName($content['eostreet']);
+		$content['add_time']  = RC_Time::local_date('Y-m-d H:i', $content['add_time']);
+		$content['signed_time']  = RC_Time::local_date('Y-m-d H:i', $content['signed_time']);
+		$content['expect_shipping_time']  = RC_Time::local_date('Y-m-d H:i', $content['expect_shipping_time']);
+		$content['all_address'] = $content['province'].$content['city'].$content['district'].$content['street'];
+		$content['express_all_address'] = $content['eoprovince'].$content['eocity'].$content['eodistrict'].$content['eostreet'];
+	
+		if($content['from'] == 'grab') {
+			$content['from'] ='抢单';
+		} else {
+			$content['from'] ='派单';
+		}
+	
+		$this->assign('content', $content);
+		$this->assign('goods_list', $goods_list);
+	
+		$data = $this->fetch('merchant_express_detail.dwt');
+		return $this->showmessage('', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('data' => $data));
 	}
 	
 	private function get_merchant_list($type = '') {
