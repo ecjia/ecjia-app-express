@@ -381,7 +381,7 @@ class admin extends ecjia_admin {
 		$this->assign('express_count', $express_user_list['express_count']);
 		$app_url =  RC_App::apps_url('statics/images', __FILE__);
 		$this->assign('app_url', $app_url);
-	
+		$this->assign('search_action', RC_Uri::url('express/admin/waitgrablist_search_user'));
 		$data = $this->fetch('waitgrablist_search_user_list.dwt');
 	
 		return $this->showmessage('', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('data' => $data));
@@ -403,6 +403,8 @@ class admin extends ecjia_admin {
 		$this->assign('express_count', $express_user_list['express_count']);
 		$app_url =  RC_App::apps_url('statics/images', __FILE__);
 		$this->assign('app_url', $app_url);
+		
+		$this->assign('search_action', RC_Uri::url('express/admin/reassign_search_user', array('type' => $type)));
 		
 		$data = $this->fetch('reassign_express_user_list.dwt');
 		
