@@ -7,7 +7,7 @@
 		<div class="express_content">
 			<div class="express_order">
 				<span>配送单号：<font class="ecjiafc-red">{$content.express_sn}</font></span>
-				<span>配送状态：<font class="ecjiafc-red"> 已完成   </font></span>
+				<span>配送状态：<font class="ecjiafc-red">{if $content.status eq 0}<font class="ecjiafc-red">待抢单</font>{elseif $content.status eq 1}<font class="ecjiafc-red">待取货</font>{elseif $content.status eq 2}<font class="ecjiafc-red">配送中</font>{elseif $content.status eq 3}退货中{elseif $content.status eq 4}已拒收{elseif $content.status eq 5}已完成{else}已退回{/if}</font></span>
 				<span>取货距离：<font class="ecjiafc-red">{$content.distance}</font> m</span>
 				<span>运费：<font class="ecjiafc-red">¥{$content.commision}</font> 元</span>
 			</div>
