@@ -99,7 +99,7 @@ class admin extends ecjia_admin {
 		$this->assign('end', $end);
 		
 		/*配送员列表*/
-		$express_user_list = $this->get_express_user_list();
+		$express_user_list = $this->get_express_user_list($type, $keywords);
 
 		/*配送员列表与第一个订单之间的距离数组*/
 		$express_user_dis_data = array();
@@ -135,7 +135,8 @@ class admin extends ecjia_admin {
 			$this->assign('express_info', $express_info);
 		}
 		
-		$this->assign('search_action', RC_Uri::url('express/admin/init'));
+		$this->assign('search_action', RC_Uri::url('express/admin/waitgrablist_search_user'));
+		
 		$app_url =  RC_App::apps_url('statics/images', __FILE__);
 		$this->assign('app_url', $app_url);
 		$this->assign('filter', $wait_grab_list['filter']);
@@ -201,6 +202,7 @@ class admin extends ecjia_admin {
 		
 		$express_id = $_POST['express_id'];
 		$staff_id = $_GET['staff_id'];
+		
 		$staff_user_info = RC_DB::table('staff_user')->where('user_id', $staff_id)->selectRaw('name, mobile, store_id')->first();
 		
 		$data = array(
@@ -367,14 +369,35 @@ class admin extends ecjia_admin {
 	}
 	
 	/**
+	 * 待抢单列表页搜索配送员
+	 */
+	public function waitgrablist_search_user() {
+		$type = $_GET['type'];
+		/*配送员列表*/
+		$express_user_list = $this->get_express_user_list();
+	
+		$this->assign('express_user_list', $express_user_list);
+	
+		$this->assign('express_count', $express_user_list['express_count']);
+		$app_url =  RC_App::apps_url('statics/images', __FILE__);
+		$this->assign('app_url', $app_url);
+	
+		$data = $this->fetch('waitgrablist_search_user_list.dwt');
+	
+		return $this->showmessage('', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('data' => $data));
+	}
+	
+	
+	/**
 	 * 重新指派页搜索配送员
 	 */
-	
 	public function reassign_search_user() {
 		$type = $_GET['type'];
- 		/*配送员列表*/
-		$express_user_list = $this->get_express_user_list();
+		$keywords = $_GET['keywords'];
 		
+ 		/*配送员列表*/
+		$express_user_list = $this->get_express_user_list($type, $keywords);
+	
 		$this->assign('express_user_list', $express_user_list);
 		
 		$this->assign('express_count', $express_user_list['express_count']);
@@ -419,7 +442,7 @@ class admin extends ecjia_admin {
 		} elseif ($type == 'wait_pickup') {
 			$dbview->where(RC_DB::raw('eo.status'), 1);
 		} elseif ($type == 'sending') {
-			$dbview->where(RC_DB::raw('eo.status'), 1);
+			$dbview->where(RC_DB::raw('eo.status'), 2);
 		}
 		
 		if (!empty($filter['keywords'])) {
@@ -454,9 +477,8 @@ class admin extends ecjia_admin {
 	/**
 	 * 配送员列表
 	 */
-	private function get_express_user_list($type) {
+	private function get_express_user_list($type, $keywords) {
 		$keywords = $_GET['keywords'];
-		
 		$express_user_view =  RC_DB::table('staff_user as su')
 		->leftJoin('express_user as eu', RC_DB::raw('su.user_id'), '=', RC_DB::raw('eu.user_id'));
 		$express_user_view->where(RC_DB::raw('su.store_id'), 0);

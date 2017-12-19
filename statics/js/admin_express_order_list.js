@@ -42,7 +42,7 @@
                 $("form[name='express_searchForm'] .express-search-btn").on('click', function (e) {
                     e.preventDefault();
                     var url = $("form[name='express_searchForm']").attr('action');
-                    var keyword = $("input[name='keywords']").val();
+                    var keyword = $(".original-div input[name='keywords']").val();
                     if (keyword != '') {
                     	url += '&keywords=' + keyword;
                     }
