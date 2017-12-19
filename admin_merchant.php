@@ -85,11 +85,12 @@ class admin_merchant extends ecjia_admin {
 		ecjia_screen::get_current_screen()->remove_last_nav_here();
 		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here('商家管理'));
 		$this->assign('ur_here', '商家管理');
-				
-		$type = trim($_GET['type']);
-		$this->assign('type', $type);
+
+		$cat_list = $this->get_cat_list();
+		$this->assign('cat_list', $cat_list);
 		
-		$data = $this->get_merchant_list($type);
+		$cat_id = trim($_GET['cat_id']);
+		$data = $this->get_merchant_list($cat_id);
 		$this->assign('data', $data);
 		
 		$this->assign('type_count', $data['count']);
@@ -227,22 +228,21 @@ class admin_merchant extends ecjia_admin {
 		return $this->showmessage('', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('data' => $data));
 	}
 	
-	private function get_merchant_list($type = '') {
+	private function get_merchant_list($cat_id = '') {
 		$db_data = RC_DB::table('express_order as eo')
 		->leftJoin('store_franchisee as sf', RC_DB::raw('eo.store_id'), '=', RC_DB::raw('sf.store_id'));
-			
-		$db_data->where(RC_DB::raw('eo.status'),"!=", 6)->where(RC_DB::raw('eo.status'),"!=", 5)->where(RC_DB::raw('eo.status'),"!=", 4)->where(RC_DB::raw('eo.status'),"!=", 3);
-	
-		$filter['cat_id'] = trim($_GET['cat_id']);		
-		if ($filter['cat_id']) {
-			$db_data->where(RC_DB::raw('sf.cat_id'), $filter['cat_id']);
+		
+		$db_data->where(RC_DB::raw('eo.status'), 0)->orwhere(RC_DB::raw('eo.status'), 1)->orwhere(RC_DB::raw('eo.status'), 2);
+		
+		if ($cat_id) {
+			$db_data->where(RC_DB::raw('sf.cat_id'), $cat_id);
 		}
 		
-		$count = $db_data->count(RC_DB::raw('distinct(eo.store_id)'));
-		$page = new ecjia_page($count, 15, 5);
+		$count = $db_data->count();
+		$page = new ecjia_page($count, 10, 5);
 		
 		$data = $db_data
-		->selectRaw('distinct eo.store_id,sf.merchants_name,sf.cat_id,sf.province,sf.city,sf.district,sf.street,sf.address')
+		->selectRaw('eo.store_id,sf.merchants_name,sf.cat_id,sf.province,sf.city,sf.district,sf.street,sf.address')
 		->orderby(RC_DB::raw('sf.store_id'), 'desc')
 		->take(10)
 		->skip($page->start_id-1)
@@ -271,6 +271,25 @@ class admin_merchant extends ecjia_admin {
 		$cat_list = array_unique(array_column($list, 'cat_name', 'cat_id'));
 		
 		return array('list' => $list, 'cat_list' => $cat_list , 'page' => $page->show(5), 'desc' => $page->page_desc(),);
+	}
+	
+	
+	/**
+	 * 获取店铺分类表
+	 */
+	private function get_cat_list() {
+		$db_data = RC_DB::table('express_order');
+		$db_data->where('status', 0)->orwhere('status', 1)->orwhere('status', 2);
+		$store_list = $db_data->selectRaw('distinct store_id')->orderBy('store_id', 'asc')->get();
+	
+		foreach ($store_list as $k => $v) {
+			$cat_list[$k]['count'] = $db_data->select(RC_DB::raw('SUM(IF(store_id = '.$v['store_id'].', 1, 0)) as cat_number'))->first();
+			$cat_list[$k]['cat_id'] = RC_DB::TABLE('store_franchisee')->where('store_id', $v['store_id'])->pluck('cat_id');
+		}
+		foreach ($cat_list as $k => $v) {
+			$cat_list[$k]['cat_name'] = RC_DB::TABLE('store_category')->where('cat_id', $v['cat_id'])->pluck('cat_name');
+		}
+		return $cat_list;
 	}
 }
 

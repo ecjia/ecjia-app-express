@@ -17,8 +17,8 @@
 <div class="row-fluid batch" >
 	<ul class="nav nav-pills">
 		 <li class="{if $smarty.get.cat_id eq ''}active{/if}"><a class="data-pjax" href='{url path="express/admin_merchant/init"}'>全部 <span class="badge badge-info">{if $type_count.count}{$type_count.count}{else}0{/if}</span></a></li>
-		 <!-- {foreach from=$data.cat_list key=key item=val} -->
-			<li class="{if $smarty.get.cat_id eq $key}active{/if}"><a class="data-pjax" href='{url path="express/admin_merchant/init" args="cat_id={$key}"}'>{$val}<span class="badge badge-info">{if $type_count.count}{$type_count.count}{else}0{/if}</span></a></li>
+		 <!-- {foreach from=$cat_list item=val} -->
+			<li class="{if $smarty.get.cat_id eq $val.cat_id}active{/if}"><a class="data-pjax" href='{url path="express/admin_merchant/init" args="cat_id={$val.cat_id}"}'>{$val.cat_name}<span class="badge badge-info">{if $val.count.cat_number}{$val.count.cat_number}{else}0{/if}</span></a></li>
 		 <!-- {/foreach} -->
 		 <form method="post" action="{$search_action}{if $type}&type={$type}{/if}" name="searchForm">
 			<div class="choose_list f_r">
