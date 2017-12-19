@@ -48,7 +48,7 @@
 									</div>
 									
 									<div class="list-bot">
-										<div><label>营业时间：</label>{$list.shop_trade_time.start}-17:30{$list.shop_trade_time.end}</div>
+										<div><label>营业时间：</label>{$list.shop_trade_time.start}-{$list.shop_trade_time.end}</div>
 										<div><label>商家电话：</label>{$list.shop_kf_mobile}</div>
 										<div><label>商家地址：</label>{$list.province}{$list.city}{$list.district}{$list.street}{$list.address}</div>
 									</div>
