@@ -231,19 +231,12 @@ class admin_merchant extends ecjia_admin {
 		->leftJoin('store_franchisee as sf', RC_DB::raw('eo.store_id'), '=', RC_DB::raw('sf.store_id'));
 		
 		$db_data->where(RC_DB::raw('eo.status'), 0)->orwhere(RC_DB::raw('eo.status'), 1)->orwhere(RC_DB::raw('eo.status'), 2);
-		
-		$all_count = $db_data->select(RC_DB::raw('count(*) as count'))->first();
-		
-		if ($cat_id) {
-			_dump($cat_id,1);
-			$db_data->where(RC_DB::raw('sf.cat_id'), $cat_id);
-		}
-		
+	
 		$count = $db_data->count();
 		$page = new ecjia_page($count, 10, 5);
 		
 		$data = $db_data
-		->selectRaw('eo.store_id,sf.merchants_name,sf.cat_id,sf.province,sf.city,sf.district,sf.street,sf.address')
+		->selectRaw('distinct eo.store_id,sf.merchants_name,sf.cat_id,sf.province,sf.city,sf.district,sf.street,sf.address')
 		->orderby(RC_DB::raw('sf.store_id'), 'desc')
 		->take(10)
 		->skip($page->start_id-1)
@@ -269,7 +262,7 @@ class admin_merchant extends ecjia_admin {
 		}
 	
 		
-		return array('list' => $list, 'page' => $page->show(5), 'desc' => $page->page_desc(),'count'=>$all_count);
+		return array('list' => $list, 'page' => $page->show(5), 'desc' => $page->page_desc());
 	}
 	
 	
@@ -282,7 +275,6 @@ class admin_merchant extends ecjia_admin {
 		$store_list = $db_data->selectRaw('distinct store_id')->orderBy('store_id', 'asc')->get();
 	
 		foreach ($store_list as $k => $v) {
-			$cat_list[$k]['count'] = $db_data->select(RC_DB::raw('SUM(IF(store_id = '.$v['store_id'].', 1, 0)) as cat_number'))->first();
 			$cat_list[$k]['cat_id'] = RC_DB::TABLE('store_franchisee')->where('store_id', $v['store_id'])->pluck('cat_id');
 		}
 		foreach ($cat_list as $k => $v) {
