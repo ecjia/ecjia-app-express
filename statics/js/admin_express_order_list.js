@@ -58,13 +58,16 @@
 				$('.assign').on('click', function() {
 					//$('.aa-confirm').css('display','block');
 					var $this = $(this);
-					var message = $this.attr('msg');
-					var url = $this.attr('aa-href');
+					var message = $this.attr('data-msg');
+					var url = $this.attr('data-href');
 					var exp_id = $('.selected-express-id').val();
+					
+					alert(smoke);
+					
 					if (message != undefined) {
-						confirm(message, function(e) {
+						smoke.confirm(message, function(e) {
 							if (e) {
-								$('.aa-confirm').css('display','none');
+								//$('.aa-confirm').css('display','none');
 								$.post(url,{'express_id':exp_id}, function(data){
 									if (data.state == 'success') {
 										ecjia.admin.showmessage(data);
