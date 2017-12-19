@@ -16,7 +16,7 @@
 
 <div class="row-fluid batch" >
 	<ul class="nav nav-pills">
-		 <li class="{if $smarty.get.cat_id eq ''}active{/if}"><a class="data-pjax" href='{url path="express/admin_merchant/init"}'>全部 <span class="badge badge-info">{if $type_count.count}{$type_count.count}{else}0{/if}</span></a></li>
+		 <li class="{if $smarty.get.cat_id eq ''}active{/if}"><a class="data-pjax" href='{url path="express/admin_merchant/init"}'>全部 <span class="badge badge-info">{if $data.count.count}{$data.count.count}{else}0{/if}</span></a></li>
 		 <!-- {foreach from=$cat_list item=val} -->
 			<li class="{if $smarty.get.cat_id eq $val.cat_id}active{/if}"><a class="data-pjax" href='{url path="express/admin_merchant/init" args="cat_id={$val.cat_id}"}'>{$val.cat_name}<span class="badge badge-info">{if $val.count.cat_number}{$val.count.cat_number}{else}0{/if}</span></a></li>
 		 <!-- {/foreach} -->
@@ -42,9 +42,9 @@
 										<img src="{if $list.img}{RC_Upload::upload_url()}/{$list.img}{else}{RC_Uri::admin_url('statics/images/nopic.png')}{/if}"><span>{$list.merchants_name}</span>
 									</div>
 									<div class="list-mid">
-										<p><font class="ecjiafc-red">{$list.no}</font><br>待抢单</p>
-										<p><font class="ecjiafc-red">{$list.ok}</font><br>待取货</p>
-										<p><font class="ecjiafc-red">{$list.ing}</font><br>配送中</p>
+										<p><font class="ecjiafc-red">{$list.wait_grab}</font><br>待抢单</p>
+										<p><font class="ecjiafc-red">{$list.wait_pickup}</font><br>待取货</p>
+										<p><font class="ecjiafc-red">{$list.delivery}</font><br>配送中</p>
 									</div>
 									
 									<div class="list-bot">

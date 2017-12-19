@@ -92,9 +92,7 @@ class admin_merchant extends ecjia_admin {
 		$cat_id = trim($_GET['cat_id']);
 		$data = $this->get_merchant_list($cat_id);
 		$this->assign('data', $data);
-		
-		$this->assign('type_count', $data['count']);
-		
+
 		$this->assign('search_action', RC_Uri::url('express/admin_merchant/init'));
 
 		$this->display('merchant_list.dwt');
@@ -138,15 +136,15 @@ class admin_merchant extends ecjia_admin {
 				RC_DB::raw('SUM(IF(eo.status = 1, 1, 0)) as ok'),
 				RC_DB::raw('SUM(IF(eo.status = 2, 1, 0)) as ing'))->first();
 		
-		if ($type == 'no') {
+		if ($type == 'wait_grab') {
 			$db_data->where(RC_DB::raw('eo.status'), 0);
 		}
 		
-		if ($type == 'ok') {
+		if ($type == 'wait_pickup') {
 			$db_data->where(RC_DB::raw('eo.status'), 1);
 		}
 		
-		if ($type == 'ing') {
+		if ($type == 'delivery') {
 			$db_data->where(RC_DB::raw('eo.status'), 2);
 		}
 		
@@ -234,7 +232,10 @@ class admin_merchant extends ecjia_admin {
 		
 		$db_data->where(RC_DB::raw('eo.status'), 0)->orwhere(RC_DB::raw('eo.status'), 1)->orwhere(RC_DB::raw('eo.status'), 2);
 		
+		$all_count = $db_data->select(RC_DB::raw('count(*) as count'))->first();
+		
 		if ($cat_id) {
+			_dump($cat_id,1);
 			$db_data->where(RC_DB::raw('sf.cat_id'), $cat_id);
 		}
 		
@@ -259,18 +260,16 @@ class admin_merchant extends ecjia_admin {
 				$row['city']     = ecjia_region::getRegionName($row['city']);
 				$row['district'] = ecjia_region::getRegionName($row['district']);
 				$row['street']   = ecjia_region::getRegionName($row['street']);
-				$row['no'] = RC_DB::TABLE('express_order')->where('status', 0)->where('store_id', $row['store_id'])->count();
-				$row['ok']	= RC_DB::TABLE('express_order')->where('status', 1)->where('store_id', $row['store_id'])->count();
-				$row['ing'] = RC_DB::TABLE('express_order')->where('status', 2)->where('store_id', $row['store_id'])->count();
-				$row['cat_name'] = RC_DB::TABLE('store_category')->where('cat_id', $row['cat_id'])->pluck('cat_name');
+				$row['wait_grab'] = RC_DB::TABLE('express_order')->where('status', 0)->where('store_id', $row['store_id'])->count();
+				$row['wait_pickup']	= RC_DB::TABLE('express_order')->where('status', 1)->where('store_id', $row['store_id'])->count();
+				$row['delivery'] = RC_DB::TABLE('express_order')->where('status', 2)->where('store_id', $row['store_id'])->count();
 				
 				$list[] = $row;
 			}
 		}
 	
-		$cat_list = array_unique(array_column($list, 'cat_name', 'cat_id'));
 		
-		return array('list' => $list, 'cat_list' => $cat_list , 'page' => $page->show(5), 'desc' => $page->page_desc(),);
+		return array('list' => $list, 'page' => $page->show(5), 'desc' => $page->page_desc(),'count'=>$all_count);
 	}
 	
 	

@@ -42,9 +42,9 @@
 <div class="row-fluid batch" >
 	<ul class="nav nav-pills">
 		<li class="{if $type eq ''}active{/if}"><a class="data-pjax" href='{url path="express/admin_merchant/detail" args="store_id={$store_id}"}'>全部 <span class="badge badge-info">{if $order_list.count.count}{$order_list.count.count}{else}0{/if}</span> </a></li>
-		<li class="{if $type eq 'no'}active{/if}"><a class="data-pjax" href='{url path="express/admin_merchant/detail" args="store_id={$store_id}&type=no"}'>待抢单 <span class="badge badge-info">{if $order_list.count.no}{$order_list.count.no}{else}0{/if}</span> </a></li>
-		<li class="{if $type eq 'ok'}active{/if}"><a class="data-pjax" href='{url path="express/admin_merchant/detail" args="store_id={$store_id}&type=ok"}'>待取货 <span class="badge badge-info">{if $order_list.count.ok}{$order_list.count.ok}{else}0{/if}</span> </a></li>
-		<li class="{if $type eq 'ing'}active{/if}"><a class="data-pjax" href='{url path="express/admin_merchant/detail" args="store_id={$store_id}&type=ing"}'>配送中 <span class="badge badge-info">{if $order_list.count.ing}{$order_list.count.ing}{else}0{/if}</span> </a></li>
+		<li class="{if $type eq 'wait_grab'}active{/if}"><a class="data-pjax" href='{url path="express/admin_merchant/detail" args="store_id={$store_id}&type=wait_grab"}'>待抢单 <span class="badge badge-info">{if $order_list.count.no}{$order_list.count.no}{else}0{/if}</span> </a></li>
+		<li class="{if $type eq 'wait_pickup'}active{/if}"><a class="data-pjax" href='{url path="express/admin_merchant/detail" args="store_id={$store_id}&type=wait_pickup"}'>待取货 <span class="badge badge-info">{if $order_list.count.ok}{$order_list.count.ok}{else}0{/if}</span> </a></li>
+		<li class="{if $type eq 'delivery'}active{/if}"><a class="data-pjax" href='{url path="express/admin_merchant/detail" args="store_id={$store_id}&type=delivery"}'>配送中 <span class="badge badge-info">{if $order_list.count.ing}{$order_list.count.ing}{else}0{/if}</span> </a></li>
 	</ul>
 </div>
 
