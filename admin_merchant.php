@@ -227,36 +227,81 @@ class admin_merchant extends ecjia_admin {
 	}
 	
 	private function get_merchant_list($cat_id = '') {
+		$db_data = RC_DB::table('express_order as eo')
+		->leftJoin('store_franchisee as sf', RC_DB::raw('eo.store_id'), '=', RC_DB::raw('sf.store_id'));
+		$db_data->where(RC_DB::raw('eo.status'), 0)->where(RC_DB::raw('eo.status'), 1)->where(RC_DB::raw('eo.status'),2);
 		
-		$db_data = RC_DB::table('express_order');
-		$db_data->where('status', 0)->orwhere('status', 1)->orwhere('status', 2);
-		$store_list = $db_data->selectRaw('distinct store_id')->orderBy('store_id', 'desc')->get();
-		foreach ($store_list as $k => $v) {
-			$store_list[$k]['store_info']= RC_DB::TABLE('store_franchisee')->where('store_id', $v['store_id'])->select('merchants_name', 'cat_id', 'province', 'city', 'district', 'street', 'address')->first();
-			$store_list[$k]['img'] = 	RC_DB::table('merchants_config')->where('store_id', $v['store_id'])->where('code', 'shop_logo')->pluck('value');
-			$store_list[$k]['shop_kf_mobile']  = RC_DB::table('merchants_config')->where('store_id', $v['store_id'])->where('code', 'shop_kf_mobile')->pluck('value');
-			$store_list[$k]['shop_trade_time'] = RC_DB::table('merchants_config')->where('store_id', $v['store_id'])->where('code', 'shop_trade_time')->pluck('value');
-			
-			$store_list[$k]['wait_grab'] = RC_DB::TABLE('express_order')->where('status', 0)->where('store_id', $v['store_id'])->count();
-			$store_list[$k]['wait_pickup']	= RC_DB::TABLE('express_order')->where('status', 1)->where('store_id', $v['store_id'])->count();
-			$store_list[$k]['delivery'] = RC_DB::TABLE('express_order')->where('status', 2)->where('store_id', $v['store_id'])->count();
+		if ($cat_id) {
+			$db_data->where(RC_DB::raw('sf.cat_id'), $filter['cat_id']);
 		}
-		$count = count($store_list);
-		$page = new ecjia_page($count, 10, 5);
+		
+		$count = $db_data->count(RC_DB::raw('distinct(eo.store_id)'));
+		$page = new ecjia_page($count, 15, 5);
+		
+		$data = $db_data
+		->selectRaw('distinct eo.store_id,sf.merchants_name,sf.cat_id,sf.province,sf.city,sf.district,sf.street,sf.address')
+		->orderby(RC_DB::raw('sf.store_id'), 'desc')
+		->take(10)
+		->skip($page->start_id-1)
+		->get();
 		
 		$list = array();
-		if (!empty($store_list)) {
-			foreach ($store_list as $row) {
-				$row['store_info']['province'] = ecjia_region::getRegionName($row['store_info']['province']);
-				$row['store_info']['city']     = ecjia_region::getRegionName($row['store_info']['city']);
-				$row['store_info']['district'] = ecjia_region::getRegionName($row['store_info']['district']);
-				$row['store_info']['street']   = ecjia_region::getRegionName($row['store_info']['street']);
-				$row['shop_trade_time'] = unserialize($row['shop_trade_time']);
+		if (!empty($data)) {
+			foreach ($data as $row) {
+				$shop_trade_time = RC_DB::table('merchants_config')->where('store_id',$row['store_id'])->where('code', 'shop_trade_time')->pluck('value');
+				$row['img'] = 	RC_DB::table('merchants_config')->where('store_id',$row['store_id'])->where('code', 'shop_logo')->pluck('value');
+				$row['shop_kf_mobile'] = RC_DB::table('merchants_config')->where('store_id',$row['store_id'])->where('code', 'shop_kf_mobile')->pluck('value');
+				$row['shop_trade_time'] = unserialize($shop_trade_time);
+				$row['province'] = ecjia_region::getRegionName($row['province']);
+				$row['city']     = ecjia_region::getRegionName($row['city']);
+				$row['district'] = ecjia_region::getRegionName($row['district']);
+				$row['street']   = ecjia_region::getRegionName($row['street']);
+				$row['no'] = RC_DB::TABLE('express_order')->where('status', 0)->where('store_id', $row['store_id'])->count();
+				$row['ok']	= RC_DB::TABLE('express_order')->where('status', 1)->where('store_id', $row['store_id'])->count();
+				$row['ing'] = RC_DB::TABLE('express_order')->where('status', 2)->where('store_id', $row['store_id'])->count();
+				$row['cat_name'] = RC_DB::TABLE('store_category')->where('cat_id', $row['cat_id'])->pluck('cat_name');
+		
 				$list[] = $row;
 			}
 		}
 		
-		return array('list' => $list, 'page' => $page->show(5), 'desc' => $page->page_desc(), 'count'=>$count);
+		$cat_list = array_unique(array_column($list, 'cat_name', 'cat_id'));
+		
+		return array('list' => $list, 'cat_list' => $cat_list , 'page' => $page->show(5), 'desc' => $page->page_desc(),);
+		
+		
+		
+		
+		
+// 		$db_data = RC_DB::table('express_order');
+// 		$db_data->where('status', 0)->orwhere('status', 1)->orwhere('status', 2);
+// 		$store_list = $db_data->selectRaw('distinct store_id')->orderBy('store_id', 'desc')->get();
+// 		foreach ($store_list as $k => $v) {
+// 			$store_list[$k]['store_info']= RC_DB::TABLE('store_franchisee')->where('store_id', $v['store_id'])->select('merchants_name', 'cat_id', 'province', 'city', 'district', 'street', 'address')->first();
+// 			$store_list[$k]['img'] = 	RC_DB::table('merchants_config')->where('store_id', $v['store_id'])->where('code', 'shop_logo')->pluck('value');
+// 			$store_list[$k]['shop_kf_mobile']  = RC_DB::table('merchants_config')->where('store_id', $v['store_id'])->where('code', 'shop_kf_mobile')->pluck('value');
+// 			$store_list[$k]['shop_trade_time'] = RC_DB::table('merchants_config')->where('store_id', $v['store_id'])->where('code', 'shop_trade_time')->pluck('value');
+			
+// 			$store_list[$k]['wait_grab'] = RC_DB::TABLE('express_order')->where('status', 0)->where('store_id', $v['store_id'])->count();
+// 			$store_list[$k]['wait_pickup']	= RC_DB::TABLE('express_order')->where('status', 1)->where('store_id', $v['store_id'])->count();
+// 			$store_list[$k]['delivery'] = RC_DB::TABLE('express_order')->where('status', 2)->where('store_id', $v['store_id'])->count();
+// 		}
+// 		$count = count($store_list);
+// 		$page = new ecjia_page($count, 10, 5);
+		
+// 		$list = array();
+// 		if (!empty($store_list)) {
+// 			foreach ($store_list as $row) {
+// 				$row['store_info']['province'] = ecjia_region::getRegionName($row['store_info']['province']);
+// 				$row['store_info']['city']     = ecjia_region::getRegionName($row['store_info']['city']);
+// 				$row['store_info']['district'] = ecjia_region::getRegionName($row['store_info']['district']);
+// 				$row['store_info']['street']   = ecjia_region::getRegionName($row['store_info']['street']);
+// 				$row['shop_trade_time'] = unserialize($row['shop_trade_time']);
+// 				$list[] = $row;
+// 			}
+// 		}
+		
+// 		return array('list' => $list, 'page' => $page->show(5), 'desc' => $page->page_desc(), 'count'=>$count);
 	}
 	
 	
@@ -264,19 +309,22 @@ class admin_merchant extends ecjia_admin {
 	 * 获取店铺分类表
 	 */
 	private function get_cat_list() {
-		$db_data = RC_DB::table('express_order');
-		$db_data->where('status', 0)->orwhere('status', 1)->orwhere('status', 2);
-		$store_list = $db_data->selectRaw('distinct store_id')->orderBy('store_id', 'asc')->get();
+		$db_data = RC_DB::table('express_order as eo')
+		->leftJoin('store_franchisee as sf', RC_DB::raw('eo.store_id'), '=', RC_DB::raw('sf.store_id'));
+		$db_data->orwhere(RC_DB::raw('eo.status'), 0)->orwhere(RC_DB::raw('eo.status'), 1)->orwhere(RC_DB::raw('eo.status'),2);
+
+		$store_list = $db_data->selectRaw('distinct eo.store_id,sf.cat_id')->orderby(RC_DB::raw('sf.store_id'), 'desc')->get();
 		$cat_list =array();
 		foreach ($store_list as $k => $v) {
 			$cat_list[$k]['cat_id'] = RC_DB::TABLE('store_franchisee')->where('store_id', $v['store_id'])->pluck('cat_id');
 		}
 		foreach ($cat_list as $k => $v) {
-			
 			$cat_list[$k]['cat_name'] = RC_DB::TABLE('store_category')->where('cat_id', $v['cat_id'])->pluck('cat_name');
+			$cat_list[$k]['number'] = RC_DB::TABLE('store_franchisee')->where('cat_id', $v['cat_id'])->count();
 		}
 		$cat_list = array_unique($cat_list);
 		return $cat_list;
+
 	}
 }
 
