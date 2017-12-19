@@ -453,10 +453,10 @@
     		
 		 search_user: function () {
 		      /* 配送员列表搜索 */
-            $("form[name='express_searchForm'] .express-search-btn").on('click', function (e) {
+            $(".new-div form[name='express_searchForm'] .express-search-btn").on('click', function (e) {
                 e.preventDefault();
-                var url = $("form[name='express_searchForm']").attr('action');
-                var keyword = $("input[name='keywords']").val();
+                var url = $(".new-div form[name='express_searchForm']").attr('action');
+                var keyword = $(".new-div input[name='keywords']").val();
                 if (keyword != '') {
                 	url += '&keywords=' + keyword;
                 }

@@ -453,9 +453,9 @@
        		
    		 search_user: function () {
    		      /* 配送员列表搜索 */
-               $("form[name='express_searchForm'] .express-search-btn").on('click', function (e) {
+               $(".new-user-list form[name='express_searchForm'] .express-search-btn").on('click', function (e) {
                    e.preventDefault();
-                   var url = $("form[name='express_searchForm']").attr('action');
+                   var url = $(".new-user-list form[name='express_searchForm']").attr('action');
                    var keyword = $(".new-user-list input[name='keywords']").val();
     
                    if (keyword != '') {
