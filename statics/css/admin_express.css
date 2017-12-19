@@ -196,6 +196,13 @@ ul.list-mod-briefing li:nth-of-type(4n) .ft {
 	border-radius: 5px;
 	padding:20px;
 }
+.merchant_list li a {
+	text-decoration:none; 
+	color:#000000;
+}
+.merchant_list li a:hover{
+	color:#000000;
+}
 .bd .list-top{
 	height: 95px;
 }
@@ -238,4 +245,34 @@ ul.list-mod-briefing li:nth-of-type(4n) .ft {
     display: inline-block;
     margin-bottom: 5px;
 }
+
+
+
+/* 
+ * …Ãº“œÍ«È
+ */
+.store_detail{
+	height:105px;
+	padding:30px;
+	border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 15px;
+    font-weight: 200;
+	
+}
+.store_detail ul{
+	margin:-6px 0 0 -17px;
+}
+.store_detail ul li{
+	list-style: none;
+	margin-top:6px;
+    color:#000000;
+}
+.store_detail img{
+	width: 100px;
+	height: 100px;
+	border: 3px solid #e9e9e9;
+    border-radius: 100%;
+}
+
 

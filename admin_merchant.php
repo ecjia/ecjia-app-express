@@ -99,6 +99,22 @@ class admin_merchant extends ecjia_admin {
 		$this->display('merchant_list.dwt');
 	}
 	
+
+	/**
+	 * 商家详情
+	 */
+	public function detail() {
+		$this->admin_priv('express_merchant_manage');
+	
+		ecjia_screen::get_current_screen()->remove_last_nav_here();
+		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here('商家详情'));
+		$this->assign('ur_here', '商家详情');
+	
+		$store_id = trim($_GET['store_id']);
+	
+		$this->display('merchant_detail.dwt');
+	}
+	
 	private function get_merchant_list($type = '') {
 		$db_data = RC_DB::table('express_order as eo')
 		->leftJoin('store_franchisee as sf', RC_DB::raw('eo.store_id'), '=', RC_DB::raw('sf.store_id'));
