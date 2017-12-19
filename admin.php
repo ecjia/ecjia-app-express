@@ -374,8 +374,9 @@ class admin extends ecjia_admin {
 		$type = $_GET['type'];
  		/*配送员列表*/
 		$express_user_list = $this->get_express_user_list();
-		$this->assign('express_user_lists', $express_user_list);
-		$this->assign('express_user_off_list', $express_user_list);
+		
+		$this->assign('express_user_list', $express_user_list);
+		
 		$this->assign('express_count', $express_user_list['express_count']);
 		$app_url =  RC_App::apps_url('statics/images', __FILE__);
 		$this->assign('app_url', $app_url);
@@ -453,9 +454,9 @@ class admin extends ecjia_admin {
 	/**
 	 * 配送员列表
 	 */
-	private function get_express_user_list() {
+	private function get_express_user_list($type) {
 		$keywords = $_GET['keywords'];
-	
+		
 		$express_user_view =  RC_DB::table('staff_user as su')
 		->leftJoin('express_user as eu', RC_DB::raw('su.user_id'), '=', RC_DB::raw('eu.user_id'));
 		$express_user_view->where(RC_DB::raw('su.store_id'), 0);
@@ -463,8 +464,24 @@ class admin extends ecjia_admin {
 		if (!empty($keywords)) {
 			$express_user_view ->whereRaw('(su.name  like  "%'.mysql_like_quote($keywords).'%")');
 		}
-		$express_user_count = RC_DB::table('staff_user as su')
-								->leftJoin('express_user as eu', RC_DB::raw('su.user_id'), '=', RC_DB::raw('eu.user_id'))
+		
+		$db = RC_DB::table('staff_user as su')
+								->leftJoin('express_user as eu', RC_DB::raw('su.user_id'), '=', RC_DB::raw('eu.user_id'));
+		if (!empty($keywords)) {
+			$db ->whereRaw('(su.name  like  "%'.mysql_like_quote($keywords).'%")');
+		}
+		
+		if (!empty($type)) {
+			if ($type == 'online') {
+				$express_user_view->where(RC_DB::raw('su.online_status'), 1);
+				$db->where(RC_DB::raw('su.online_status'), 1);
+			} elseif ($type == 'offline') {
+				$express_user_view->where(RC_DB::raw('su.online_status'), 4);
+				$db->where(RC_DB::raw('su.online_status'), 1);
+			}
+		}
+		
+		$express_user_count = $db
 								->where(RC_DB::raw('su.store_id'), 0)
 								->select(RC_DB::raw('count(*) as count'),RC_DB::raw('SUM(IF(su.online_status = 1, 1, 0)) as online'),RC_DB::raw('SUM(IF(su.online_status = 4, 1, 0)) as offline'))
 								->first();

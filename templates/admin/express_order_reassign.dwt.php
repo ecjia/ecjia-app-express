@@ -10,10 +10,10 @@
 		<div class="modal-body">
 		<div class="express_reassign">
 			<div class="map-reassign"id="allmap"></div>
-			<div class="testaa">
+			<div class="original-div">
 				<!-- #BeginLibraryItem "/library/reassign_express_user_list.lbi" --><!-- #EndLibraryItem -->
 			</div>
-			<div class="testbb">
+			<div class="new-div">
 				
 			</div>
 			<input id="start" class="span9" type="hidden" value="{$content.start}"/>
