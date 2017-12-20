@@ -5,6 +5,13 @@
 <script type="text/javascript">
 	ecjia.admin.admin_express_task.init();
 </script>
+
+<script type="text/javascript">
+	setInterval(function(){
+		window.location.reload();
+	}, 60000);
+</script>
+
 <style>
 .breadCrumb{
 	margin:0 0 10px;
