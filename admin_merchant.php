@@ -82,6 +82,13 @@ class admin_merchant extends ecjia_admin {
 	public function init() {
 		$this->admin_priv('express_merchant_manage');
 		
+		ecjia_screen::$current_screen->add_help_tab(array(
+			'id'		=> 'overview',
+			'title'		=> '温馨提示',
+			'content'	=>
+			'<p>商家管理列表只展示未完成配送订单的商家以及分类</p>'
+		));
+				
 		ecjia_screen::get_current_screen()->remove_last_nav_here();
 		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here('商家管理'));
 		$this->assign('ur_here', '商家管理');
@@ -89,6 +96,10 @@ class admin_merchant extends ecjia_admin {
 		$cat_id = trim($_GET['cat_id']);
 		$data = $this->get_merchant_list($cat_id);
 		$this->assign('data', $data);
+		
+		$cat_arr = $this->get_cat_list();
+		$this->assign('cat_list', $cat_arr['list']);
+		$this->assign('allnumber', $cat_arr['allnumber']);
 		
 		$this->assign('search_action', RC_Uri::url('express/admin_merchant/init'));
 
@@ -237,19 +248,20 @@ class admin_merchant extends ecjia_admin {
 		if ($cat_id) {
 			$db_data ->where(RC_DB::raw('sf.cat_id'), $cat_id);
 		}
+		
 		$keyword = trim($_GET['keyword']);
 		if ($keyword) {
 			$db_data ->whereRaw('(sf.merchants_name  like  "%'.mysql_like_quote($keyword).'%")');
 		}
+
 		$count = $db_data->count(RC_DB::raw('distinct(eo.store_id)'));
-		
 		$page = new ecjia_page($count, 15, 5);
 
-		$keywords = trim($_GET['keyword']);
 		$data = $db_data
             ->take(10)
             ->skip($page->start_id-1)
 			->get();
+		
 		$list = array();
 		if (!empty($data)) {
 			foreach ($data as $row) {
@@ -267,19 +279,20 @@ class admin_merchant extends ecjia_admin {
 				$list[] = $row;
 			}
 		}
-		
-		
-		$db_data2 = RC_DB::table('express_order as eo')
+			
+		return array('list' => $list, 'page' => $page->show(5), 'desc' => $page->page_desc(), 'count' => $count);
+	}
+	
+	
+	/**
+	 * 获取店铺分类表
+	 */
+	private function get_cat_list() {
+		$db_data = RC_DB::table('express_order as eo')
 		->leftJoin('store_franchisee as sf', RC_DB::raw('eo.store_id'), '=', RC_DB::raw('sf.store_id'));
-		$db_data2->Where(function ($query) {
-			$query->orwhere(RC_DB::raw('eo.status'), 0)->orwhere(RC_DB::raw('eo.status'), 1)->orwhere(RC_DB::raw('eo.status'),2);
-		});
-		$keyword = trim($_GET['keyword']);
-		if ($keyword) {
-			$db_data2 ->whereRaw('(sf.merchants_name  like  "%'.mysql_like_quote($keyword).'%")');
-		}
-		$store_list = $db_data2->selectRaw('distinct eo.store_id,sf.cat_id')->orderby(RC_DB::raw('sf.store_id'), 'desc')->get();
-
+		$db_data->orwhere(RC_DB::raw('eo.status'), 0)->orwhere(RC_DB::raw('eo.status'), 1)->orwhere(RC_DB::raw('eo.status'),2);
+	
+		$store_list = $db_data->selectRaw('distinct eo.store_id,sf.cat_id')->orderby(RC_DB::raw('sf.store_id'), 'desc')->get();
 		$cat_list =array();
 		foreach ($store_list as $k => $v) {
 			$cat_list[$k]['cat_id'] = RC_DB::TABLE('store_franchisee')->where('store_id', $v['store_id'])->pluck('cat_id');
@@ -288,11 +301,13 @@ class admin_merchant extends ecjia_admin {
 			$cat_list[$k]['cat_name'] = RC_DB::TABLE('store_category')->where('cat_id', $v['cat_id'])->pluck('cat_name');
 			$cat_list[$k]['number'] = RC_DB::TABLE('store_franchisee')->where('cat_id', $v['cat_id'])->count();
 		}
-		_dump($cat_list,1);
+		$cat_list = array_unique($cat_list);
 
-// 		$cat_list = array_unique($cat_list);
-		
-		return array('list' => $list, 'cat_list' => $cat_list, 'page' => $page->show(5), 'desc' => $page->page_desc(), 'count' => $count);
+		$allnumber = 0;
+        foreach($cat_list as $key=>$value){ 
+           $allnumber+= $value['number']; 
+        } 
+		return array('list' => $cat_list, 'allnumber' => $allnumber);
 	}
 }
 

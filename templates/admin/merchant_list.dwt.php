@@ -14,15 +14,22 @@
 	</h3>
 </div>
 
+
 <div class="row-fluid batch" >
 	<ul class="nav nav-pills">
-		 <li class="{if $smarty.get.cat_id eq ''}active{/if}"><a class="data-pjax" href='{url path="express/admin_merchant/init"}'>全部 <span class="badge badge-info">{if $data.count}{$data.count}{else}0{/if}</span></a></li>
-		 
-		 <!-- {foreach from=$data.cat_list item=val} -->
-			<li class="{if $smarty.get.cat_id eq $val.cat_id}active{/if}"><a class="data-pjax" href='{url path="express/admin_merchant/init" args="cat_id={$val.cat_id}"}'>{$val.cat_name}<span class="badge badge-info">{if $val.number}{$val.number}{else}0{/if}</span></a></li>
-		 <!-- {/foreach} -->
-		 
-		 <form method="post" action="{$search_action}" name="searchForm">
+		<li class="{if $smarty.get.cat_id eq ''}active{/if}">
+			<a class="data-pjax" href='{url path="express/admin_merchant/init"}'>全部 
+				<span class="badge badge-info">{if $smarty.get.keyword}{if $data.count}{$data.count}{else}0{/if}{else}{if $allnumber}{$allnumber}{else}0{/if}{/if}</span>
+			</a>
+		</li>
+
+		<!-- {foreach from=$cat_list item=val} -->
+			<li class="{if $smarty.get.cat_id eq $val.cat_id}active{/if}">
+				<a class="data-pjax" href='{url path="express/admin_merchant/init" args="cat_id={$val.cat_id}"}'>{$val.cat_name}</a>
+			</li>
+		<!-- {/foreach} -->
+			 
+		<form method="post" action="{$search_action}" name="searchForm">
 			<div class="choose_list f_r">
 				<input type="text" name="keyword" value="{$smarty.get.keyword}" placeholder="请输入商家名称"/> 
 				<button class="btn search_merchant" type="button">搜索</button>
