@@ -18,29 +18,28 @@
 					<div class="control-group control-group-small press-list" style="margin-bottom:0px;">
 						<div class="margin-label online-list" style="margin-top:5px;margin-bottom: 5px;">在线 （{$express_count.online}）<a class="accordion-toggle acc-in move-mod-head online-triangle" data-toggle="collapse" data-target="#online"><b class="triangle on-tran"></b></a></div>
 						<div class="online open">
-						<div class="express-user-list accordion-body in collapse" id="online">
+						<div class="express-user-list assign-operate accordion-body in collapse" id="online">
 							<!-- {foreach from=$express_user_list.list item=list} -->
 								{if $list.online_status eq '1'}
-									<div class="express-user-info exuser_div"  longitude="{$list.longitude}" latitude="{$list.latitude}" name="{$list.name}" mobile="{$list.mobile}">
-										<div class="imginfo-div">
-        		                			<div class="express-img">{if $list.avatar}<img src="{$list.avatar}">{else}<img src="{$app_url}/touxiang.png">{/if}</div>
-        		                			<div class="expressinfo">{$list.name}<br>{$list.mobile}</div>
-										</div>
-										<div class="express-order-div">
-											<div class="waitfor-pickup">
-												待取货<span class="ecjia-red">{if $list.wait_pickup_count}{$list.wait_pickup_count}{else}0{/if}单</span>
+									<div class="express-user-info">
+										<div class="exuser_div" longitude="{$list.longitude}" latitude="{$list.latitude}" name="{$list.name}" mobile="{$list.mobile}">
+											<div class="imginfo-div">
+	        		                			<div class="express-img">{if $list.avatar}<img src="{$list.avatar}">{else}<img src="{$app_url}/touxiang.png">{/if}</div>
+	        		                			<div class="expressinfo">{$list.name}<br>{$list.mobile}</div>
 											</div>
-											<div class="wait-sending">
-												待配送<span class="ecjia-red">{if $list.sending_count}{$list.sending_count}{else}0{/if}单</span>
+											<div class="express-order-div">
+												<div class="waitfor-pickup">
+													待取货<span class="ecjia-red">{if $list.wait_pickup_count}{$list.wait_pickup_count}{else}0{/if}单</span>
+												</div>
+												<div class="wait-sending">
+													待配送<span class="ecjia-red">{if $list.sending_count}{$list.sending_count}{else}0{/if}单</span>
+												</div>
 											</div>
 										</div>
 										<div class="assign-div">
-											 <a class="assign"  data-msg="是否确定让  【{$list.name}】  去配送？" data-href='{url path="express/admin/assign_express_order" args="staff_id={$list.user_id}"}'  >
-				                       			<button class="btn" type="button" style="background:#F6A618;text-shadow:none;"><span style="color:#fff;">指派给他</span></button>  
-               										 </a> 
-													<input type="hidden" class="selected-express-id" value="{$first_express_order.express_id}"/>
-												</div>
-											</div>
+			                       			<a class="assign btn" type="button" style="background:#F6A618;text-shadow:none;" notice="是否确定让  【{$list.name}】  去配送？" assign-url='{url path="express/admin/assign_express_order" args="staff_id={$list.user_id}"}'><span style="color:#fff;">指派给他</span></a>  
+										</div>
+									</div>
 										{/if}
 									<!-- {foreachelse} -->
 								<div class="text-position">暂无任何记录!</div>
@@ -51,28 +50,28 @@
 					<div class="control-group control-group-small press-list" style="margin-bottom:0px;">
 						<div class="margin-label online-list" style="margin-top:5px;margin-bottom: 5px;">离线 （{$express_count.offline}）<a class="accordion-toggle acc-in  move-mod-head collapsed leave-trangle" data-toggle="collapse" data-target="#leave"><b class="triangle1 leaveline"></b></a></div>
 						<div class="leaveline-express">
-						<div class="express-user-list-leave accordion-body collapse" id="leave">
+						<div class="express-user-list-leave assign-operate accordion-body collapse" id="leave">
 							<!-- {foreach from=$express_user_list.list item=list} -->
 								{if $list.online_status eq '4'}
-									<div class="express-user-info exuser_div" longitude="{$list.longitude}" latitude="{$list.latitude}" name="{$list.name}" mobile="{$list.mobile}">
-										<div class="imginfo-div">
-        		                			<div class="express-img">{if $list.avatar}<img src="{$list.avatar}">{else}<img src="{$app_url}/touxiang.png">{/if}</div>
-        		                			<div class="expressinfo">{$list.name}<br>{$list.mobile}</div>
-										</div>
-										<div class="express-order-div">
-											<div class="waitfor-pickup">
-												待取货<span class="ecjia-red">{if $list.wait_pickup_count}{$list.wait_pickup_count}{else}0{/if}单</span>
+									<div class="express-user-info">
+										<div class="exuser_div" longitude="{$list.longitude}" latitude="{$list.latitude}" name="{$list.name}" mobile="{$list.mobile}">
+											<div class="imginfo-div">
+	        		                			<div class="express-img">{if $list.avatar}<img src="{$list.avatar}">{else}<img src="{$app_url}/touxiang.png">{/if}</div>
+	        		                			<div class="expressinfo">{$list.name}<br>{$list.mobile}</div>
 											</div>
-											<div class="wait-sending">
-												待配送<span class="ecjia-red">{if $list.sending_count}{$list.sending_count}{else}0{/if}单</span>
+											<div class="express-order-div">
+												<div class="waitfor-pickup">
+													待取货<span class="ecjia-red">{if $list.wait_pickup_count}{$list.wait_pickup_count}{else}0{/if}单</span>
+												</div>
+												<div class="wait-sending">
+													待配送<span class="ecjia-red">{if $list.sending_count}{$list.sending_count}{else}0{/if}单</span>
+												</div>
 											</div>
 										</div>
 										<div class="assign-div">
-											 <a class="assign"  data-msg="你确定让  【{$list.name}】  去配送？" data-href='{url path="express/admin/assign_express_order" args="staff_id={$list.user_id}"}'  >
-				                       			<button class="btn" type="button" style="background:#F6A618;text-shadow:none;"><span style="color:#fff;">指派给他</span></button>  
-               										 </a> 
-												</div>
-											</div>
+											 <button class="assign btn" type="button" style="background:#F6A618;text-shadow:none;" data-toggle="modal" href="#assignmodel" notice="是否确定让  【{$list.name}】  去配送？" assign-url='{url path="express/admin/assign_express_order" args="staff_id={$list.user_id}"}'><span style="color:#fff;">指派给他</span></button>  
+										</div>
+									</div>
 										{/if}
 									<!-- {foreachelse} -->
 								<div class="text-position">暂无任何记录!</div>
@@ -85,3 +84,23 @@
 		</div>
 	</div>
 </div>
+
+
+<!-- 指派开始 -->
+<div class="re-assign-model">
+	<div class="modal " style="width:530px;">
+		 <div class="modal-body">
+			<div class="control-group formSep control-group-small">
+				<div class="controls">
+					<div class="notice-message"></div>
+				</div>
+			</div>
+			<div class="control-group t_c">
+				<button class="btn cancel-btn">取消</button>&nbsp;&nbsp;
+				<button class="btn ok-btn">确定</button>
+			</div>
+		  </div>
+	</div>
+</div>
+	
+<!--指派结束 -->

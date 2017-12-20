@@ -24,6 +24,7 @@
 			<input type="hidden" class="nearest_exuser_mobile" value="{$content.express_mobile}"/>
 			<input type="hidden" class="nearest_exuser_lng" value="{$content.eu_longitude}"/>
 			<input type="hidden" class="nearest_exuser_lat" value="{$content.eu_latitude}"/>
+			<input type="hidden" class="selected-express-id" value="{$express_id}"/>
 		</div>
 	</div>
 	</div>

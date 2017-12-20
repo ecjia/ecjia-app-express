@@ -55,27 +55,27 @@
 		    },
             
 		    assign : function(url){
-				$('.assign').on('click', function() {
-					//$('.aa-confirm').css('display','block');
+				$(".assign").on('click', function() {	
+					$('.re-assign-model').css('display', 'block');
 					var $this = $(this);
-					var message = $this.attr('data-msg');
-					var url = $this.attr('data-href');
+					var message = $this.attr('notice');
+					$('.notice-message').html(message);
+					var url = $this.attr('assign-url');
 					var exp_id = $('.selected-express-id').val();
 					
-					alert(smoke);
-					
 					if (message != undefined) {
-						smoke.confirm(message, function(e) {
-							if (e) {
-								//$('.aa-confirm').css('display','none');
-								$.post(url,{'express_id':exp_id}, function(data){
-									if (data.state == 'success') {
-										ecjia.admin.showmessage(data);
-									}
-								})
-							}
-						}, {ok:"确定", cancel:"取消"});
-					} 
+						$('.cancel-btn').on('click', function() {
+							$('.re-assign-model').css('display', 'none');
+						});
+						$('.ok-btn').on('click', function() {
+							$('.re-assign-model').css('display', 'none');
+							$.post(url,{'express_id':exp_id}, function(data){
+								if (data.state == 'success') {
+									ecjia.admin.showmessage(data);
+								}
+							})
+						});
+					}
 				});
 			 },
 		    
@@ -203,12 +203,12 @@
             	e.preventDefault();
                 var $this = $(this);
                 var express_id = $this.attr('express-id');
+                //express_id替换；供指派使用
+                $(".selected-express-id").val(express_id);
                 var url = $this.attr('express-reassign-url');
                 $.post(url, {'express_id': express_id}, function (data) {
                 	$('.express-reassign-modal').html(data.data);
                 	app.admin_express_order_list.map();
-                	 //express_id替换；供指派使用
-                    $(".selected-express-id").val(express_id);
                 }, 'json');
 			})
        },
@@ -472,22 +472,27 @@
          },
          
      	 re_assign : function(url){
-			$('.re-assign').on('click', function() {
+     		$(".re-assign").on('click', function() {	
+				$('.after-search-re-assign-model').css('display', 'block');
 				var $this = $(this);
-				var message = $this.attr('data-msg');
-				var url = $this.attr('data-href');
+				var message = $this.attr('notice');
+				$('.notice-message').html(message);
+				var url = $this.attr('assign-url');
 				var exp_id = $('.selected-express-id').val();
+				
 				if (message != undefined) {
-					smoke.confirm(message, function(e) {
-						if (e) {
-							$.post(url,{'express_id':exp_id}, function(data){
-								if (data.state == 'success') {
-									ecjia.admin.showmessage(data);
-								}
-							})
-						}
-					}, {ok:"确定", cancel:"取消"});
-				} 
+					$('.cancel-btn').on('click', function() {
+						$('.after-search-re-assign-model').css('display', 'none');
+					});
+					$('.ok-btn').on('click', function() {
+						$('.after-search-re-assign-model').css('display', 'none');
+						$.post(url,{'express_id':exp_id}, function(data){
+							if (data.state == 'success') {
+								ecjia.admin.showmessage(data);
+							}
+						})
+					});
+				}
 			});
 		 },
          

@@ -376,3 +376,23 @@
 	height: 468px;
     overflow: auto;
 }
+
+/*重新指派弹框页指派操作*/
+.re-assign-model{
+	display:none;
+}
+.re-assign-model .modal{
+	margin-left: -166px;
+    margin-top: 220px;
+}
+.re-assign-model .formSep{
+	border-bottom:none;
+	margin-bottom:10px;
+	padding-bottom:0px;
+}
+.re-assign-model .notice-message{
+	padding: 10px;
+	font-size: 16px;
+	font-weight: normal;
+	text-align:center;
+}
