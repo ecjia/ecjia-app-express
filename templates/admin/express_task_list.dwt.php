@@ -14,7 +14,7 @@
 
 <style>
 .breadCrumb{
-	margin:0 0 10px;
+	margin:0 0 20px;
 }
 </style>
 <!-- {/block} -->
@@ -24,6 +24,7 @@
 <div class="task-heading">
 	<h3 class="heading">
 		<!-- {if $ur_here}{$ur_here}{/if} -->
+		<a class="btn plus_or_reply sidebar-ckeck " key="0" href="javascript:;"  id="sticky_a">全屏查看</a>
 	</h3>
 </div>
 

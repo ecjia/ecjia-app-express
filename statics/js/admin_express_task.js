@@ -33,6 +33,7 @@
               app.admin_express_task.click_exuser();
               app.admin_express_task.assign();
               app.admin_express_task.express_order_detail();
+              app.admin_express_task.hide_sidebar();
             },
     
             search_express_user: function () {
@@ -49,6 +50,21 @@
                        	$('.original-user-list').css("display","none");
                        	$('.new-user-list').html(data.data);
                     }, 'json');
+                });
+		    },
+		    
+		    hide_sidebar: function () {
+                $(".sidebar-ckeck").on('click', function (e) {
+                    e.preventDefault();
+                    var $this = $(this);
+                    var key = $(this).attr('key');
+                    if (key == 0) {
+                    	$("body").removeClass("sidebar_hidden");
+                    	$(this).attr("key","1");
+                    } else {
+                    	$("body").addClass("sidebar_hidden");
+                    	$(this).attr("key","0");
+                    }
                 });
 		    },
 		    
