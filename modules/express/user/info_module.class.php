@@ -87,7 +87,7 @@ class info_module extends api_admin implements api_interface {
         	'mobile'		        => $staff_user['mobile'],
         	'email'			        => $staff_user['email'],
         	'delivery_count'		=> !empty($express_count_stats) ? $express_count_stats['delivery_count'] : 0,
-        	'sum_delivery_money'	=> RC_DB::table('express_order')->where('staff_id', $_SESSION['staff_id'])->where('status', 5)->sum('commision'),
+        	'sum_delivery_money'	=> RC_DB::table('express_order')->where('staff_id', $_SESSION['staff_id'])->where('status', 5)->where('commision_status', 1)->sum('commision'),
         	'sum_delivery_distance'	=> !empty($express_count_stats) ? $express_count_stats['delivery_distance'] : 0,
         	'express_type_stats'	=> array(
         		'assign_count'		=> $assign_count,
