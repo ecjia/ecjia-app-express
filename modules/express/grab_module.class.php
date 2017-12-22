@@ -70,7 +70,7 @@ class grab_module extends api_admin implements api_interface {
 		$express_order_info   = $express_order_db->where($where)->find();
 		
 		if (!empty($express_order_info)) {
-			$update_date                     = array('staff_id' => $_SESSION['staff_id'], 'from' => 'grab', 'status' => 1, 'commision_status' => 2, 'receive_time' => RC_Time::gmtime());
+			$update_date                     = array('staff_id' => $_SESSION['staff_id'], 'from' => 'grab', 'status' => 1, 'commision_status' => 0, 'receive_time' => RC_Time::gmtime());
 			$update_date['express_user']	 = $_SESSION['staff_name'];
 			$update_date['express_mobile']	 = $_SESSION['staff_mobile'];
 			
