@@ -120,7 +120,7 @@ class grab_module extends api_admin implements api_interface {
 					'order_time'	=> RC_Time::local_date(ecjia::config('time_format'), $express_order_info['add_time']),
 					'pay_time'		=> empty($express_order_info['pay_time']) ? '' : RC_Time::local_date(ecjia::config('time_format'), $express_order_info['pay_time']),
 					'best_time'		=> empty($express_order_info['best_time']) ? '' : RC_Time::local_date(ecjia::config('time_format'), $express_order_info['best_time']),
-					'shipping_fee'	=> $express_order_info['shipping_fee'],
+					'shipping_fee'	=> $update_date['commision'],
 					'order_amount'	=> $express_order_info['order_amount'],
 				),
 			);
