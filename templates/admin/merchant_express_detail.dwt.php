@@ -17,7 +17,7 @@
 					<li><h3>取货信息</h3></li><li>商家名称：<span>{$content.merchants_name}</span></li>
 					<li>商家电话：<span>{$content.contact_mobile}</span></li>
 					<li>下单时间：<span>{$content.add_time}</span></li>
-					<li>取货地址：<span>{$content.all_address}<br>{$content.address}</span></li>
+					<li>取货地址：<span>{$content.all_address}&nbsp;&nbsp;&nbsp;&nbsp;{$content.address}</span></li>
 				</ul>
 			</div>
 			
@@ -27,10 +27,10 @@
 					<li>用户名称：<span>{$content.user_name}</span></li>
 					<li>用户电话：<span>{$content.mobile_phone}</span></li>
 					<li>期望送达时间：<span>{$content.expect_shipping_time}</span></li>
-					<li>送货地址：<span>{$content.express_all_address}<br>{$content.eoaddress}</span></li>
+					<li>送货地址：<span>{$content.express_all_address}&nbsp;&nbsp;&nbsp;&nbsp;{$content.eoaddress}</span></li>
 				</ul>
 			</div>
-			
+			{if $content.status neq 0}
 			<div class="shipping_info">
 				<ul>
 					<li><h3>配送信息</h3></li>
@@ -40,7 +40,7 @@
 					<li>完成时间：<span>{$content.signed_time}</span></li>
 				</ul>
 			</div>
-			
+			{/if}
 			<div class="order_goods">
 				<ul>
 		         	<li><h3>订单商品</h3></li>

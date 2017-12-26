@@ -55,7 +55,7 @@
 			<thead>
 				<tr>
 				    <th class="w150">配送单号</th>
-				    <th class="w250">购买者信息</th>
+				    <th class="w250">收货人信息</th>
 				    <th class="w150">收货地址</th>
 				    <th class="w150">下单时间</th>
 				    <th class="w50">配送费用</th>
@@ -70,8 +70,8 @@
 					  	 <a data-toggle="modal" data-backdrop="static" href="#myModal1" express-id="{$express.express_id}" express-url="{$express_detail}"  title="查看详情">查看详情</a>
 		    	  	</div>
 		      	</td>
-		      	<td>{$express.user_name}[TEL:{$express.mobile_phone}]</td>
-		      	<td>{$express.address}</td>
+		      	<td>{$express.consignee}[TEL:{$express.mobile}]</td>
+		      	<td>{$express.consignee_address}</td>
 		      	<td>{$express.add_time}</td>
 		      	<td>¥ {$express.commision}</td>
 		      	<td>{if $express.status eq 0}<font class="ecjiafc-red">待抢单</font>{elseif $express.status eq 1}<font class="ecjiafc-red">待取货</font>{elseif $express.status eq 2}<font class="ecjiafc-red">配送中</font>{elseif $express.status eq 3}退货中{elseif $express.status eq 4}已拒收{elseif $express.status eq 5}已完成{else}已退回{/if}</td>

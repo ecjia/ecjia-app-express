@@ -160,7 +160,7 @@ class admin_merchant extends ecjia_admin {
 		$page = new ecjia_page($count, 10, 5);
 		
 		$data = $db_data
-		->selectRaw('eo.express_id,eo.order_id,eo.express_sn,eo.commision,eo.status,eo.address,user.user_name,user.mobile_phone')
+		->selectRaw('eo.express_id,eo.order_id,eo.express_sn,eo.commision,eo.status,eo.country,eo.province, eo.city, eo.district, eo.street, eo.address, eo.consignee, eo.mobile')
 		->orderby(RC_DB::raw('eo.express_id'), 'desc')
 		->take(10)
 		->skip($page->start_id-1)
@@ -169,7 +169,8 @@ class admin_merchant extends ecjia_admin {
 		$list = array();
 		if (!empty($data)) {
 			foreach ($data as $row) {
-				$row['add_time'] = RC_Time::local_date('Y-m-d H:i:s', RC_DB::table('order_info')->where('order_id', $row['order_id'])->pluck('add_time'));
+				$row['add_time'] 			= RC_Time::local_date('Y-m-d H:i:s', RC_DB::table('order_info')->where('order_id', $row['order_id'])->pluck('add_time'));
+				$row['consignee_address'] 	= ecjia_region::getRegionName($row['province']).ecjia_region::getRegionName($row['city']).ecjia_region::getRegionName($row['district']).ecjia_region::getRegionName($row['street']).$row['address'];
 				$list[] = $row;
 			}
 		}
