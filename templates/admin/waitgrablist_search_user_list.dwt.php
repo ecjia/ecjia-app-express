@@ -85,7 +85,7 @@
 										</div>
 										
 										<div class="assign-div">
-											 <a class="{if $express_order_count.wait_grab || $express_order_count.wait_pickup} re-assign {/if}"  data-msg="你确定让  【{$list.name}】  去配送？" data-href='{url path="express/admin/assign_express_order" args="staff_id={$list.user_id}&type={$type}"}'  >
+											 <a class="{if $express_order_count.wait_grab} re-assign {/if}"  data-msg="你确定让  【{$list.name}】  去配送？" data-href='{url path="express/admin/assign_express_order" args="staff_id={$list.user_id}&type={$type}"}'  >
 				                       			{if $express_order_count.wait_grab}
 				                       				<button class="btn" type="button" style="background:#F6A618;text-shadow:none;"><span style="color:#fff;">指派给他</span></button>  
                									{else}

@@ -229,14 +229,11 @@ class admin extends ecjia_admin {
 	
 		$update = RC_DB::table('express_order')->where('express_id', $express_id)->update($data);
 		
-// 		if ($update) {
-			return $this->showmessage('指派订单成功！', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS);
-// 			if ($type == 'wait_grab') {
-// 				return $this->showmessage('指派订单成功！', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('pjaxurl' => RC_Uri::url('express/admin/init', array('type' => $type))));
-// 			} else {
-// 				return $this->showmessage('指派订单成功！', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS , array('pjaxurl' => RC_Uri::url('express/admin/wait_pickup', array('type' => $type))));
-// 			}
-// 		}
+		if ($type == 'wait_grab') {
+			return $this->showmessage('指派订单成功！', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('pjaxurl' => RC_Uri::url('express/admin/init', array('type' => $type))));
+		} else {
+			return $this->showmessage('指派订单成功！', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS , array('pjaxurl' => RC_Uri::url('express/admin/wait_pickup', array('type' => $type))));
+		}
 	}
 	
 	/**
@@ -357,7 +354,8 @@ class admin extends ecjia_admin {
 		$express_id = intval($_GET['express_id']);
 		$store_id = intval($_GET['store_id']);
 		$type = trim($_GET['type']);
-	
+		
+		
 		$express_info = RC_DB::table('express_order as eo')
 		->leftJoin('express_user as eu', RC_DB::raw('eo.staff_id'), '=', RC_DB::raw('eu.user_id'))
 		->where(RC_DB::raw('eo.express_id'), $express_id)
@@ -377,7 +375,7 @@ class admin extends ecjia_admin {
 		$this->assign('express_count', $express_user_list['express_count']);
 		$app_url =  RC_App::apps_url('statics/images', __FILE__);
 		$this->assign('app_url', $app_url);
-		
+		$this->assign('type', $type);
 		$this->assign('content', $content);
 		$this->assign('express_id', $express_id);
 		
@@ -393,20 +391,21 @@ class admin extends ecjia_admin {
 	 */
 	public function waitgrablist_search_user() {
 		$type = $_GET['type'];
+		
 		/*配送员列表*/
 		$express_user_list = $this->get_express_user_list();
 	
 		$this->assign('express_user_list', $express_user_list);
 
-		$wait_pickup_list = $this->get_wait_grab_list();
-
-		$this->assign('express_order_count', $wait_grab_list['express_order_count']);
+		$wait_pickup_list = $this->get_wait_grab_list($type);
+		
+		$this->assign('express_order_count', $wait_pickup_list['express_order_count']);
 	
 		$this->assign('express_count', $express_user_list['express_count']);
 		$app_url =  RC_App::apps_url('statics/images', __FILE__);
 		$this->assign('app_url', $app_url);
 		$this->assign('type', $type);
-		$this->assign('search_action', RC_Uri::url('express/admin/waitgrablist_search_user'));
+		$this->assign('search_action', RC_Uri::url('express/admin/waitgrablist_search_user', array('type' => $type)));
 		$data = $this->fetch('waitgrablist_search_user_list.dwt');
 	
 		return $this->showmessage('', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('data' => $data));

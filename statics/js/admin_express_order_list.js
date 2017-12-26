@@ -68,6 +68,7 @@
 							$('.re-assign-model').css('display', 'none');
 						});
 						$('.ok-btn').on('click', function() {
+							$('#myModal2').modal('hide');
 							$('.re-assign-model').css('display', 'none');
 							$.post(url,{'express_id':exp_id}, function(data){
 								if (data.state == 'success') {
@@ -485,6 +486,7 @@
 						$('.after-search-re-assign-model').css('display', 'none');
 					});
 					$('.ok-btn').on('click', function() {
+						$('#myModal2').modal('hide');
 						$('.after-search-re-assign-model').css('display', 'none');
 						$.post(url,{'express_id':exp_id}, function(data){
 							if (data.state == 'success') {
