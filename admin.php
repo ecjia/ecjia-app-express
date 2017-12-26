@@ -91,6 +91,7 @@ class admin extends ecjia_admin {
 		/*待抢单列表*/
 		$wait_grab_list = $this->get_wait_grab_list($type);
 		
+
 		/*第一个订单获取*/
 		$first_express_order = $wait_grab_list['list']['0'];
 		$start = $first_express_order['sf_latitude'].','.$first_express_order['sf_longitude'];
@@ -201,17 +202,29 @@ class admin extends ecjia_admin {
 		$this->admin_priv('express_task_manage');
 
 		$express_id = $_POST['express_id'];
+
+		if (empty($express_id)) {
+			return $this->showmessage('暂无可指派的订单！', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+		}
+
 		$staff_id = $_GET['staff_id'];
 		$type = $_GET['type'];
 		
-		$staff_user_info = RC_DB::table('staff_user')->where('user_id', $staff_id)->selectRaw('name, mobile, store_id')->first();
-		
+		$shipping_fee = RC_DB::table('express_order')->where('express_id', $express_id)->pluck('shipping_fee');
+
+		$staff_user_info = RC_DB::table('staff_user as su')->leftJoin('express_user as eu', RC_DB::raw('su.user_id'), '=', RC_DB::raw('eu.user_id'))
+							->where(RC_DB::raw('su.user_id'), $staff_id)
+							->selectRaw('su.name, su.mobile, su.store_id, eu.shippingfee_percent')->first();
+
+		$commision = $staff_user_info['shippingfee_percent']/100 * $shipping_fee;
+		$commision = sprintf("%.2f", $commision);
 		$data = array(
 				'from' 			=> 'assign',
 				'status'		=> 1,
 				'staff_id'		=> $staff_id,
 				'express_user'	=> $staff_user_info['name'],
-				'express_mobile'=> $staff_user_info['mobile']
+				'express_mobile'=> $staff_user_info['mobile'],
+				'commision'		=> $commision
 		);
 	
 		$update = RC_DB::table('express_order')->where('express_id', $express_id)->update($data);
@@ -235,9 +248,9 @@ class admin extends ecjia_admin {
 		$express_id = intval($_GET['express_id']);
 		$type = trim($_GET['type']);
 		
-		$express_info = RC_DB::table('express_order')->where('express_id', $express_id)->select('store_id','order_id','user_id','express_sn', 'distance','commision','express_user','express_mobile','from','signed_time','province as eoprovince','city as eocity','district as eodistrict','street as eostreet','address as eoaddress')->first();
+		$express_info = RC_DB::table('express_order')->where('express_id', $express_id)->select('store_id','order_id','user_id', 'mobile', 'consignee', 'express_sn', 'distance', 'shipping_fee', 'commision','express_user','express_mobile','from','signed_time','province as eoprovince','city as eocity','district as eodistrict','street as eostreet','address as eoaddress')->first();
 		$store_info = RC_DB::table('store_franchisee')->where('store_id', $express_info['store_id'])->select('merchants_name','contact_mobile','province','city','district','street','address')->first();
-		$users_info = RC_DB::table('users')->where('user_id', $express_info['user_id'])->select('user_name','mobile_phone')->first();
+		//$users_info = RC_DB::table('users')->where('user_id', $express_info['user_id'])->select('user_name','mobile_phone')->first();
 		$order_info = RC_DB::table('order_info')->where('order_id', $express_info['order_id'])->select('add_time','expect_shipping_time','postscript')->first();
 		$goods_list = RC_DB::table('order_goods')->where('order_id', $express_info['order_id'])->select('goods_id', 'goods_name' ,'goods_price','goods_number')->get();
 		
@@ -253,7 +266,7 @@ class admin extends ecjia_admin {
 			}
 		}
 		
-		$content = array_merge($express_info,$store_info,$users_info,$order_info);
+		$content = array_merge($express_info,$store_info,$order_info);
 		$content['province']  	  = ecjia_region::getRegionName($content['province']);
 		$content['city']          = ecjia_region::getRegionName($content['city']);
 		$content['district']      = ecjia_region::getRegionName($content['district']);
@@ -265,8 +278,8 @@ class admin extends ecjia_admin {
 		$content['add_time']  = RC_Time::local_date('Y-m-d H:i', $content['add_time']);
 		$content['signed_time']  = RC_Time::local_date('Y-m-d H:i', $content['signed_time']);
 		$content['expect_shipping_time']  = RC_Time::local_date('Y-m-d H:i', $content['expect_shipping_time']);
-		$content['all_address'] = $content['province'].$content['city'].$content['district'].$content['street'].$content['address'];
-		$content['express_all_address'] = $content['eoprovince'].$content['eocity'].$content['eodistrict'].$content['eostreet'].$content['eoaddress'];
+		$content['all_address'] = $content['province'].$content['city'].$content['district'].$content['street'];
+		$content['express_all_address'] = $content['eoprovince'].$content['eocity'].$content['eodistrict'].$content['eostreet'];
 	
 		$this->assign('type', $type);
 		$this->assign('content', $content);
@@ -384,6 +397,10 @@ class admin extends ecjia_admin {
 		$express_user_list = $this->get_express_user_list();
 	
 		$this->assign('express_user_list', $express_user_list);
+
+		$wait_pickup_list = $this->get_wait_grab_list();
+
+		$this->assign('express_order_count', $wait_grab_list['express_order_count']);
 	
 		$this->assign('express_count', $express_user_list['express_count']);
 		$app_url =  RC_App::apps_url('statics/images', __FILE__);
