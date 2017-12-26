@@ -46,10 +46,10 @@
 		    	  	</div>
 		      	</td>
 		      	<td>{$match.mobile}</td>
-		      	<td>{$match.order_number}</td>
-		      	<td>¥{$match.money.all_money}</td>
-		      	<td>¥{$match.money.store_money} </td>
-		      	<td>¥{$match.money.express_money} </td>
+		      	<td>{if $match.order_number}{$match.order_number}{else}0{/if}</td>
+		      	<td>{$match.money.all_money}</td>
+		      	<td>{$match.money.store_money} </td>
+		      	<td>{$match.money.express_money} </td>
 		    </tr>
 		    <!-- {foreachelse} -->
 	        <tr><td class="no-records" colspan="6">{lang key='system::system.no_records'}</td></tr>
