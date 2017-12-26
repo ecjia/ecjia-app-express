@@ -50,7 +50,7 @@
 				<tr>
 				    <th class="w250">配送单号</th>
 				    <th class="w150">配送员</th>
-				    <th class="w150">下单用户</th>
+				    <th class="w150">收货人信息</th>
 				    <th class="w500">取/送货地址</th>
 				    <th class="w100">任务类型</th>
 				    <th class="w200">接单时间</th>
@@ -64,11 +64,11 @@
 		     	  	<div class="edit-list">
 					  	 <a  class="express-order-modal" data-toggle="modal" data-backdrop="static" href="#myModal1" express-id="{$wait_pickup.express_id}" express-order-url='{url path="express/admin/express_order_detail" args="express_id={$wait_pickup.express_id}{if $type}&type={$type}{/if}"}'  title="查看详情">查看详情</a>
 					  	 {if $type eq 'wait_pickup'}&nbsp;|&nbsp;<a class="express-reassign-click" data-toggle="modal" data-backdrop="static" href="#myModal2" express-id="{$wait_pickup.express_id}" express-reassign-url='{url path="express/admin/express_reasign_detail" args="express_id={$wait_pickup.express_id}&store_id={$wait_pickup.store_id}{if $type}&type={$type}{/if}"}'  title="重新指派">重新指派</a>{/if}
-					  	 &nbsp;|&nbsp;<a class="express-location" data-toggle="modal" data-backdrop="static" href="#myModal3" express-id="{$wait_pickup.express_id}" express-location-url='{url path="express/admin/express_location" args="express_id={$wait_pickup.express_id}&store_id={$wait_pickup.store_id}{if $type}&type={$type}{/if}"}'  title="当前位置">当前位置</a>
+					  	 {if $wait_pickup.online_status eq '1'}&nbsp;|&nbsp;<a class="express-location" data-toggle="modal" data-backdrop="static" href="#myModal3" express-id="{$wait_pickup.express_id}" express-location-url='{url path="express/admin/express_location" args="express_id={$wait_pickup.express_id}&store_id={$wait_pickup.store_id}{if $type}&type={$type}{/if}"}'  title="当前位置">当前位置</a>{/if}
 		    	  	</div>
 		      	</td>
 		      	<td>{$wait_pickup.express_user}<br>{if $wait_pickup.express_mobile}[{$wait_pickup.express_mobile}]{/if}</td>
-		      	<td>{$wait_pickup.user_name}<br>{if $wait_pickup.user_mobile}[{$wait_pickup.user_mobile}]{/if}</td>
+		      	<td>{$wait_pickup.consignee}<br>{if $wait_pickup.consignee_mobile}[{$wait_pickup.consignee_mobile}]{/if}</td>
 		      	<td>取：{$wait_pickup.from_address}<br>
 					送：{$wait_pickup.to_address}
 		      	</td>

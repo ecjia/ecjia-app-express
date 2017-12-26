@@ -224,7 +224,8 @@ class admin extends ecjia_admin {
 				'staff_id'		=> $staff_id,
 				'express_user'	=> $staff_user_info['name'],
 				'express_mobile'=> $staff_user_info['mobile'],
-				'commision'		=> $commision
+				'commision'		=> $commision,
+				'receive_time'	=> RC_Time::gmtime()
 		);
 	
 		$update = RC_DB::table('express_order')->where('express_id', $express_id)->update($data);
@@ -306,7 +307,6 @@ class admin extends ecjia_admin {
 		$wait_pickup_list = $this->get_wait_grab_list($type);
 	
 		$this->assign('search_action', RC_Uri::url('express/admin/wait_pickup'));
-		
 		
 		$this->assign('express_order_count', $wait_pickup_list['express_order_count']);
 		$this->assign('filter', $wait_pickup_list['filter']);
@@ -441,10 +441,10 @@ class admin extends ecjia_admin {
 	 */
 	private function get_wait_grab_list($type){
 		$dbview = RC_DB::table('express_order as eo')
-					->leftJoin('users as u', RC_DB::raw('eo.user_id'), '=', RC_DB::raw('u.user_id'))
+					//->leftJoin('users as u', RC_DB::raw('eo.user_id'), '=', RC_DB::raw('u.user_id'))
 					->leftJoin('store_franchisee as sf', RC_DB::raw('eo.store_id'), '=', RC_DB::raw('sf.store_id'));
 		
-		$field = 'u.user_name, u.mobile_phone as user_mobile, eo.express_id, eo.store_id, eo.express_sn, eo.country, eo.province, eo.city, eo.district, eo.street, eo.address, eo.distance, eo.add_time, 
+		$field = 'eo.consignee, eo.mobile as consignee_mobile, eo.express_id, eo.store_id, eo.express_sn, eo.country, eo.province, eo.city, eo.district, eo.street, eo.address, eo.distance, eo.add_time, 
 				  eo.longitude, eo.latitude, eo.express_user, eo.express_mobile, eo.staff_id, eo.from, eo.receive_time, sf.province as sf_province, sf.city as sf_city, sf.longitude as sf_longitude, sf.latitude as sf_latitude, 
 				  sf.district as sf_district, sf.street as sf_street, sf.address as sf_address';
 		
@@ -487,6 +487,11 @@ class admin extends ecjia_admin {
 		$data = array();
 		if (!empty($list)) {
 			foreach ($list as $row) {
+				if ($type !='wait_grab') {
+					if ($row['staff_id'] > 0) {
+						$row['online_status'] = RC_DB::table('staff_user')->where('user_id', $row['staff_id'])->pluck('online_status');
+					}
+				}
 				$row['format_add_time'] = RC_Time::local_date(ecjia::config('time_format'), $row['start_time']);
 				$row['format_receive_time'] = RC_Time::local_date(ecjia::config('time_format'), $row['receive_time']);
 				$row['from_address'] 	= ecjia_region::getRegionName($row['sf_province']).ecjia_region::getRegionName($row['sf_city']).ecjia_region::getRegionName($row['sf_district']).ecjia_region::getRegionName($row['sf_street']).$row['sf_address'];
