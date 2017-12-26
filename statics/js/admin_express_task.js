@@ -412,9 +412,9 @@
 					smoke.confirm(message, function(e) {
 						if (e) {
 							$.post(url,{'express_id':exp_id}, function(data){
-								if (data.state == 'success') {
+								// if (data.state == 'success') {
 									ecjia.admin.showmessage(data);
-								}
+								// }
 							})
 						}
 					}, {ok:"确定", cancel:"取消"});
