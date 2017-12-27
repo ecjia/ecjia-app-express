@@ -48,7 +48,7 @@
 				<tr>
 				    <th class="w150">配送单号</th>
 				    <th class="w150">配送员</th>
-				    <th class="w150">下单用户</th>
+				    <th class="w150">收货人信息</th>
 				    <th class="w500">取/送货地址</th>
 				    <th class="w100">任务类型</th>
 				    <th class="w200">完成时间</th>
@@ -64,7 +64,7 @@
 		    	  	</div>
 		      	</td>
 		      	<td>{$history.express_user}<br>[{$history.express_mobile}]</td>
-		      	<td>{$history.user_name}<br>[{$history.mobile_phone}]</td>
+		      	<td>{$history.consignee}<br>[{$history.mobile}]</td>
 		      	<td>取：{$history.province}{$history.city}{$history.district}{$history.street}{$history.address}<br>
 					送：{$history.eoprovince}{$history.eocity}{$history.eodistrict}{$history.eostreet}{$history.eoaddress}
 		      	</td>

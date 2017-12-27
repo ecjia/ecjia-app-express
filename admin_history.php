@@ -178,7 +178,7 @@ class admin_history extends ecjia_admin {
 		$page = new ecjia_page($count, 10, 5);
 		
 		$data = $db_data
-		->selectRaw('eo.express_id,eo.order_sn,eo.from,eo.express_user,eo.express_mobile,eo.signed_time,eo.status,eo.province as eoprovince,eo.city as eocity,eo.district as eodistrict,eo.street as eostreet,eo.address as eoaddress,user.user_name,user.mobile_phone,sf.province,sf.city,sf.district,sf.street,sf.address')
+		->selectRaw('eo.express_id,eo.order_sn,eo.from,eo.express_user,eo.express_mobile,eo.signed_time,eo.status,eo.consignee,eo.mobile,eo.province as eoprovince,eo.city as eocity,eo.district as eodistrict,eo.street as eostreet,eo.address as eoaddress,sf.province,sf.city,sf.district,sf.street,sf.address')
 		->orderby(RC_DB::raw('eo.signed_time'), 'desc')
 		->take(10)
 		->skip($page->start_id-1)
