@@ -30,8 +30,8 @@
 			
 				<select class="w100 " name="work_type" id="select-work">
 					<option value="0">工作类型</option>
-					<option value="assign" {if $smarty.get.from eq 'assign'}selected{/if}>派单</option>
-					<option value="grab" {if $smarty.get.from eq 'grab'}selected{/if}>抢单</option>
+					<option value="assign" {if $smarty.get.work_type eq 'assign'}selected{/if}>派单</option>
+					<option value="grab" {if $smarty.get.work_type eq 'grab'}selected{/if}>抢单</option>
 				</select>
 				
 				<input type="text" name="keyword" value="{$smarty.get.keyword}" placeholder="请输入配送员名称或手机号"/> 
@@ -58,7 +58,7 @@
 			<!-- {foreach from=$data.list item=history} -->
 		    <tr>
 		      	<td class="hide-edit-area">
-					{$history.order_sn}
+					{$history.express_sn}
 		     	  	<div class="edit-list">
 					  	 <a data-toggle="modal" data-backdrop="static" href="#myModal1" express-id="{$history.express_id}" express-url="{$express_detail}"  title="查看详情">查看详情</a>
 		    	  	</div>
