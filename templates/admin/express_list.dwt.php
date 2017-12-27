@@ -33,9 +33,6 @@
 		<li class="{if $type eq ''}active{/if}"><a class="data-pjax" href='{url path="express/admin_express/init" args="{if $filter.keyword}&keyword={$filter.keyword}{/if}"}'>全部 <span class="badge badge-info">{if $type_count.count}{$type_count.count}{else}0{/if}</span> </a></li>
 		<li class="{if $type eq 'online'}active{/if}"><a class="data-pjax" href='{url path="express/admin_express/init" args="type=online{if $filter.keyword}&keyword={$filter.keyword}{/if}"}'>在线 <span class="badge badge-info">{if $type_count.online}{$type_count.online}{else}0{/if}</span> </a></li>
 		<li class="{if $type eq 'offline'}active{/if}"><a class="data-pjax" href='{url path="express/admin_express/init" args="type=offline{if $filter.keyword}&keyword={$filter.keyword}{/if}"}'>离线 <span class="badge badge-info">{if $type_count.offline}{$type_count.offline}{else}0{/if}</span> </a></li>
-		<!-- {foreach from=$city_list item=val} -->
-			<li class="{if $city_id eq $val.city_id}active{/if}"><a class="data-pjax" href='{url path="adsense/admin_position/init" args="city_id={$val.city_id}"}'>{$val.city_name}<span class="badge badge-info"></span></a></li>
-		<!-- {/foreach} -->
 	</ul>
 	
 	<form method="post" action="{$search_action}{if $type}&type={$type}{/if}" name="searchForm">
