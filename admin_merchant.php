@@ -129,9 +129,9 @@ class admin_merchant extends ecjia_admin {
 		$store_info['shop_trade_time'] = unserialize($shop_trade_time);
 		$store_info['img'] = RC_DB::table('merchants_config')->where('store_id', $store_id)->where('code', 'shop_logo')->pluck('value');
 		$store_info['shop_kf_mobile'] = RC_DB::table('merchants_config')->where('store_id', $store_id)->where('code', 'shop_kf_mobile')->pluck('value');
-		$info = RC_DB::TABLE('store_franchisee')->where('store_id', $store_id)->select('merchants_name', 'province', 'city', 'district', 'street', 'address')->first();
+		$info = RC_DB::TABLE('store_franchisee')->where('store_id', $store_id)->select('merchants_name','district', 'street', 'address')->first();
 		$store_info['merchants_name'] = $info['merchants_name'];
-		$store_info['merchants_all_address'] = ecjia_region::getRegionName($info['province']).ecjia_region::getRegionName($info['city']).ecjia_region::getRegionName($info['district']).ecjia_region::getRegionName($info['street']).$info['address'];
+		$store_info['merchants_all_address'] = ecjia_region::getRegionName($info['district']).ecjia_region::getRegionName($info['street']).$info['address'];
 		$this->assign('store_info', $store_info);
 		
 		$db_data = RC_DB::table('express_order as eo')
@@ -160,17 +160,16 @@ class admin_merchant extends ecjia_admin {
 		$page = new ecjia_page($count, 10, 5);
 		
 		$data = $db_data
-		->selectRaw('eo.express_id,eo.order_id,eo.express_sn,eo.commision,eo.status,eo.country,eo.province, eo.city, eo.district, eo.street, eo.address, eo.consignee, eo.mobile')
+		->selectRaw('eo.express_id,eo.order_id,eo.express_sn,eo.commision,eo.status,eo.district, eo.street, eo.address, eo.consignee, eo.mobile')
 		->orderby(RC_DB::raw('eo.express_id'), 'desc')
 		->take(10)
 		->skip($page->start_id-1)
 		->get();
-		
 		$list = array();
 		if (!empty($data)) {
 			foreach ($data as $row) {
 				$row['add_time'] 			= RC_Time::local_date('Y-m-d H:i:s', RC_DB::table('order_info')->where('order_id', $row['order_id'])->pluck('add_time'));
-				$row['consignee_address'] 	= ecjia_region::getRegionName($row['province']).ecjia_region::getRegionName($row['city']).ecjia_region::getRegionName($row['district']).ecjia_region::getRegionName($row['street']).$row['address'];
+				$row['consignee_address'] 	= ecjia_region::getRegionName($row['district']).ecjia_region::getRegionName($row['street']).$row['address'];
 				$list[] = $row;
 			}
 		}
@@ -191,8 +190,8 @@ class admin_merchant extends ecjia_admin {
 		$this->assign('ur_here', '配送详情');
 
 		$express_id = intval($_POST['express_id']);
-		$express_info = RC_DB::table('express_order')->where('express_id', $express_id)->select('store_id','consignee','mobile','order_id','user_id','express_sn', 'distance','commision','express_user','express_mobile','from','signed_time','province as eoprovince','city as eocity','district as eodistrict','street as eostreet','address as eoaddress','status')->first();
-		$store_info = RC_DB::table('store_franchisee')->where('store_id', $express_info['store_id'])->select('merchants_name','contact_mobile','province','city','district','street','address')->first();
+		$express_info = RC_DB::table('express_order')->where('express_id', $express_id)->select('store_id','consignee','mobile','order_id','user_id','express_sn', 'distance','commision','express_user','express_mobile','from','signed_time','district as eodistrict','street as eostreet','address as eoaddress','status')->first();
+		$store_info = RC_DB::table('store_franchisee')->where('store_id', $express_info['store_id'])->select('merchants_name','contact_mobile','district','street','address')->first();
 		$order_info = RC_DB::table('order_info')->where('order_id', $express_info['order_id'])->select('add_time','expect_shipping_time','postscript')->first();
 		$goods_list = RC_DB::TABLE('order_goods')->where('order_id', $express_info['order_id'])->select('goods_id', 'goods_name' ,'goods_price','goods_number')->get();
 		foreach ($goods_list as $key => $val) {
@@ -207,19 +206,15 @@ class admin_merchant extends ecjia_admin {
 			}
 		}
 		$content = array_merge($express_info,$store_info,$order_info);
-		$content['province']  	  = ecjia_region::getRegionName($content['province']);
-		$content['city']          = ecjia_region::getRegionName($content['city']);
 		$content['district']      = ecjia_region::getRegionName($content['district']);
 		$content['street']        = ecjia_region::getRegionName($content['street']);
-		$content['eoprovince']    = ecjia_region::getRegionName($content['eoprovince']);
-		$content['eocity']        = ecjia_region::getRegionName($content['eocity']);
 		$content['eodistrict']    = ecjia_region::getRegionName($content['eodistrict']);
 		$content['eostreet']      = ecjia_region::getRegionName($content['eostreet']);
 		$content['add_time']  = RC_Time::local_date('Y-m-d H:i:s', $content['add_time']);
 		$content['signed_time']  = RC_Time::local_date('Y-m-d H:i:s', $content['signed_time']);
 		$content['expect_shipping_time']  = RC_Time::local_date('Y-m-d H:i:s', $content['expect_shipping_time']);
-		$content['all_address'] = $content['province'].$content['city'].$content['district'].$content['street'];
-		$content['express_all_address'] = $content['eoprovince'].$content['eocity'].$content['eodistrict'].$content['eostreet'];
+		$content['all_address'] = $content['district'].$content['street'];
+		$content['express_all_address'] = $content['eodistrict'].$content['eostreet'];
 	
 		if($content['from'] == 'grab') {
 			$content['from'] ='抢单';
@@ -238,7 +233,7 @@ class admin_merchant extends ecjia_admin {
 		$db_data = RC_DB::table('express_order as eo')
 		->leftJoin('store_franchisee as sf', RC_DB::raw('eo.store_id'), '=', RC_DB::raw('sf.store_id'));
 		
-		$db_data->selectRaw('distinct eo.store_id,sf.merchants_name,sf.cat_id,sf.province,sf.city,sf.district,sf.street,sf.address')
+		$db_data->selectRaw('distinct eo.store_id,sf.merchants_name,sf.cat_id,sf.district,sf.street,sf.address')
 		->orderby(RC_DB::raw('sf.store_id'), 'desc')->get();
 		
 		$db_data->Where(function ($query) {
@@ -269,8 +264,6 @@ class admin_merchant extends ecjia_admin {
 				$row['img'] = 	RC_DB::table('merchants_config')->where('store_id',$row['store_id'])->where('code', 'shop_logo')->pluck('value');
 				$row['shop_kf_mobile'] = RC_DB::table('merchants_config')->where('store_id',$row['store_id'])->where('code', 'shop_kf_mobile')->pluck('value');
 				$row['shop_trade_time'] = unserialize($shop_trade_time);
-				$row['province'] = ecjia_region::getRegionName($row['province']);
-				$row['city']     = ecjia_region::getRegionName($row['city']);
 				$row['district'] = ecjia_region::getRegionName($row['district']);
 				$row['street']   = ecjia_region::getRegionName($row['street']);
 				$row['wait_grab'] = RC_DB::TABLE('express_order')->where('status', 0)->where('store_id', $row['store_id'])->count();

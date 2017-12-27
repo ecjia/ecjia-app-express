@@ -117,8 +117,8 @@
 									<td>{$list.express_sn}</td>
 									<td>{$list.merchants_name}</td>
 									<td>
-										取：{$list.province}{$list.city}{$list.district}{$list.street}{$list.address}<br>
-										送：{$list.eoprovince}{$list.eocity}{$list.eodistrict}{$list.eostreet}{$list.eoaddress}
+										取：{$list.district}{$list.street}{$list.address}<br>
+										送：{$list.eodistrict}{$list.eostreet}{$list.eoaddress}
 									</td>
 									<td>
 										{$list.receive_time}

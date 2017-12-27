@@ -65,8 +65,8 @@
 		      	</td>
 		      	<td>{$history.express_user}<br>[{$history.express_mobile}]</td>
 		      	<td>{$history.consignee}<br>[{$history.mobile}]</td>
-		      	<td>取：{$history.province}{$history.city}{$history.district}{$history.street}{$history.address}<br>
-					送：{$history.eoprovince}{$history.eocity}{$history.eodistrict}{$history.eostreet}{$history.eoaddress}
+		      	<td>取：{$history.district}{$history.street}{$history.address}<br>
+					送：{$history.eodistrict}{$history.eostreet}{$history.eoaddress}
 		      	</td>
 		      	<td>{if $history.from eq 'assign'}派单{else}抢单{/if}</td>
 		      	<td>{$history.signed_time}</td>

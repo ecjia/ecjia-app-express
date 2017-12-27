@@ -105,8 +105,8 @@ class admin_history extends ecjia_admin {
 		$this->assign('ur_here', '配送详情');
 	
 		$express_id = intval($_POST['express_id']);
-		$express_info = RC_DB::table('express_order')->where('express_id', $express_id)->select('store_id','order_id','mobile','consignee','user_id','express_sn', 'distance','commision','express_user','express_mobile','from','signed_time','province as eoprovince','city as eocity','district as eodistrict','street as eostreet','address as eoaddress')->first();
-		$store_info = RC_DB::table('store_franchisee')->where('store_id', $express_info['store_id'])->select('merchants_name','contact_mobile','province','city','district','street','address')->first();
+		$express_info = RC_DB::table('express_order')->where('express_id', $express_id)->select('store_id','order_id','mobile','consignee','user_id','express_sn', 'distance','commision','express_user','express_mobile','from','signed_time','district as eodistrict','street as eostreet','address as eoaddress')->first();
+		$store_info = RC_DB::table('store_franchisee')->where('store_id', $express_info['store_id'])->select('merchants_name','contact_mobile','district','street','address')->first();
 		$order_info = RC_DB::table('order_info')->where('order_id', $express_info['order_id'])->select('add_time','expect_shipping_time','postscript')->first();
 		$goods_list = RC_DB::TABLE('order_goods')->where('order_id', $express_info['order_id'])->select('goods_id', 'goods_name' ,'goods_price','goods_number')->get();
 		foreach ($goods_list as $key => $val) {
@@ -121,19 +121,15 @@ class admin_history extends ecjia_admin {
 			}
 		}
 		$content = array_merge($express_info,$store_info,$order_info);
-		$content['province']  	  = ecjia_region::getRegionName($content['province']);
-		$content['city']          = ecjia_region::getRegionName($content['city']);
 		$content['district']      = ecjia_region::getRegionName($content['district']);
 		$content['street']        = ecjia_region::getRegionName($content['street']);
-		$content['eoprovince']    = ecjia_region::getRegionName($content['eoprovince']);
-		$content['eocity']        = ecjia_region::getRegionName($content['eocity']);
 		$content['eodistrict']    = ecjia_region::getRegionName($content['eodistrict']);
 		$content['eostreet']      = ecjia_region::getRegionName($content['eostreet']);
 		$content['add_time']  = RC_Time::local_date('Y-m-d H:i:s', $content['add_time']);
 		$content['signed_time']  = RC_Time::local_date('Y-m-d H:i:s', $content['signed_time']);
 		$content['expect_shipping_time']  = RC_Time::local_date('Y-m-d H:i:s', $content['expect_shipping_time']);
-		$content['all_address'] = $content['province'].$content['city'].$content['district'].$content['street'];
-		$content['express_all_address'] = $content['eoprovince'].$content['eocity'].$content['eodistrict'].$content['eostreet'];
+		$content['all_address'] = $content['district'].$content['street'];
+		$content['express_all_address'] = $content['eodistrict'].$content['eostreet'];
 		
 		if($content['from'] == 'grab') {
 			$content['from'] ='抢单';
@@ -177,7 +173,7 @@ class admin_history extends ecjia_admin {
 		$page = new ecjia_page($count, 10, 5);
 		
 		$data = $db_data
-		->selectRaw('eo.express_id,eo.order_sn,eo.express_sn,eo.from,eo.express_user,eo.express_mobile,eo.signed_time,eo.status,eo.consignee,eo.mobile,eo.province as eoprovince,eo.city as eocity,eo.district as eodistrict,eo.street as eostreet,eo.address as eoaddress,sf.province,sf.city,sf.district,sf.street,sf.address')
+		->selectRaw('eo.express_id,eo.order_sn,eo.express_sn,eo.from,eo.express_user,eo.express_mobile,eo.signed_time,eo.status,eo.consignee,eo.mobile,eo.district as eodistrict,eo.street as eostreet,eo.address as eoaddress,sf.district,sf.street,sf.address')
 		->orderby(RC_DB::raw('eo.signed_time'), 'desc')
 		->take(10)
 		->skip($page->start_id-1)
@@ -187,12 +183,8 @@ class admin_history extends ecjia_admin {
 		if (!empty($data)) {
 			foreach ($data as $row) {
 				$row['signed_time']  = RC_Time::local_date('Y-m-d H:i:s', $row['signed_time']);
-				$row['province']  	  = ecjia_region::getRegionName($row['province']);
-				$row['city']          = ecjia_region::getRegionName($row['city']);
 				$row['district']      = ecjia_region::getRegionName($row['district']);
 				$row['street']        = ecjia_region::getRegionName($row['street']);
-				$row['eoprovince']    = ecjia_region::getRegionName($row['eoprovince']);
-				$row['eocity']        = ecjia_region::getRegionName($row['eocity']);
 				$row['eodistrict']    = ecjia_region::getRegionName($row['eodistrict']);
 				$row['eostreet']      = ecjia_region::getRegionName($row['eostreet']);
 				$list[] = $row;

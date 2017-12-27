@@ -55,8 +55,8 @@
 			<thead>
 				<tr>
 				    <th class="w150">配送单号</th>
-				    <th class="w250">收货人信息</th>
-				    <th class="w150">收货地址</th>
+				    <th class="w150">收货人信息</th>
+				    <th class="w250">收货地址</th>
 				    <th class="w150">下单时间</th>
 				    <th class="w50">配送费用</th>
 				    <th class="w50">订单状态</th>
