@@ -117,19 +117,22 @@ class admin_match extends ecjia_admin {
 		$this->assign('start_date',		RC_Time::local_date('Y-m-d', $start_date));
 		$this->assign('end_date',		RC_Time::local_date('Y-m-d', $end_date));
 		
-		$order_number= RC_DB::TABLE('express_order')->where('staff_id', $user_id)->count();
-		$money= RC_DB::TABLE('express_order')->where('staff_id', $user_id)->select(RC_DB::raw('sum(shipping_fee) as all_money'),RC_DB::raw('sum(commision) as express_money'),RC_DB::raw('sum(shipping_fee-commision) as store_money'))->first();
+		
+		$db_data = RC_DB::table('express_order');
+		$db_data->where(RC_DB::raw('staff_id'), $user_id);
+		$db_data->where('receive_time', '>=', $start_date);
+		$db_data->where('receive_time', '<', $end_date + 86400);
+		
+		
+		$order_number= $db_data->where('staff_id', $user_id)->count();
+		$money= $db_data->where('staff_id', $user_id)->select(RC_DB::raw('sum(shipping_fee) as all_money'),RC_DB::raw('sum(commision) as express_money'),RC_DB::raw('sum(shipping_fee-commision) as store_money'))->first();
 		$money['all_money'] = price_format($money['all_money']);
 		$money['express_money'] = price_format($money['express_money']);
 		$money['store_money'] = price_format($money['store_money']);
 		
 		$this->assign('order_number', $order_number);
 		$this->assign('money', $money);
-	
-		$db_data = RC_DB::table('express_order');
-		$db_data->where(RC_DB::raw('staff_id'), $user_id);
-		$db_data->where('receive_time', '>=', $start_date);
-		$db_data->where('receive_time', '<', $end_date + 86400);
+
 		$count = $db_data->count();
 		$page = new ecjia_page($count, 10, 5);
 		
