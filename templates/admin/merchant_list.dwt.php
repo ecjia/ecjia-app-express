@@ -31,7 +31,7 @@
 			</li>
 		<!-- {/foreach} -->
 	
-		<form method="post" action="{$search_action}" name="searchForm">
+		<form method="post" action="{$search_action}{if $smarty.get.cat_id}&cat_id={$smarty.get.cat_id}{/if}" name="searchForm">
 			<div class="choose_list f_r">
 				<input type="text" name="keyword" value="{$smarty.get.keyword}" placeholder="请输入商家名称"/> 
 				<button class="btn search_merchant" type="button">搜索</button>
