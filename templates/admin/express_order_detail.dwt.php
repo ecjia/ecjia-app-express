@@ -27,7 +27,7 @@
 						<li><h3>送货信息</h3></li>
 						<li>用户名称：<span>{$content.consignee}</span></li>
 						<li>用户电话：<span>{$content.mobile}</span></li>
-						<li>期望送达时间：<span>{$content.expect_shipping_time}</span></li>
+						<li>期望送达时间：<span>{if $content.expect_shipping_time}{$content.expect_shipping_time}{else}暂无{/if}</span></li>
 						<li>送货地址：<span>{$content.express_all_address}&nbsp;&nbsp;&nbsp;&nbsp;{$content.eoaddress}</span></li>
 					</ul>
 				</div>

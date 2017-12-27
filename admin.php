@@ -342,19 +342,16 @@ class admin extends ecjia_admin {
 		}
 		
 		$content = array_merge($express_info,$store_info,$order_info);
-		$content['province']  	  = ecjia_region::getRegionName($content['province']);
-		$content['city']          = ecjia_region::getRegionName($content['city']);
-		$content['district']      = ecjia_region::getRegionName($content['district']);
-		$content['street']        = ecjia_region::getRegionName($content['street']);
-		$content['eoprovince']    = ecjia_region::getRegionName($content['eoprovince']);
-		$content['eocity']        = ecjia_region::getRegionName($content['eocity']);
-		$content['eodistrict']    = ecjia_region::getRegionName($content['eodistrict']);
-		$content['eostreet']      = ecjia_region::getRegionName($content['eostreet']);
-		$content['add_time']  = RC_Time::local_date('Y-m-d H:i', $content['add_time']);
-		$content['signed_time']  = RC_Time::local_date('Y-m-d H:i', $content['signed_time']);
-		$content['expect_shipping_time']  = RC_Time::local_date('Y-m-d H:i', $content['expect_shipping_time']);
-		$content['all_address'] = $content['province'].$content['city'].$content['district'].$content['street'];
-		$content['express_all_address'] = $content['eoprovince'].$content['eocity'].$content['eodistrict'].$content['eostreet'];
+		$content['district']      		= ecjia_region::getRegionName($content['district']);
+		$content['street']        		= ecjia_region::getRegionName($content['street']);
+		$content['eoprovince']    		= ecjia_region::getRegionName($content['eoprovince']);
+		$content['eocity']        		= ecjia_region::getRegionName($content['eocity']);
+		$content['eodistrict']    		= ecjia_region::getRegionName($content['eodistrict']);
+		$content['eostreet']      		= ecjia_region::getRegionName($content['eostreet']);
+		$content['add_time']  	  		= RC_Time::local_date('Y-m-d H:i', $content['add_time']);
+		$content['signed_time']   		= RC_Time::local_date('Y-m-d H:i', $content['signed_time']);
+		$content['all_address'] 		= $content['district'].$content['street'];
+		$content['express_all_address'] = $content['eodistrict'].$content['eostreet'];
 	
 		$this->assign('type', $type);
 		$this->assign('content', $content);
@@ -571,8 +568,8 @@ class admin extends ecjia_admin {
 				}
 				$row['format_add_time'] = RC_Time::local_date(ecjia::config('time_format'), $row['add_time']);
 				$row['format_receive_time'] = RC_Time::local_date(ecjia::config('time_format'), $row['receive_time']);
-				$row['from_address'] 	= ecjia_region::getRegionName($row['sf_province']).ecjia_region::getRegionName($row['sf_city']).ecjia_region::getRegionName($row['sf_district']).ecjia_region::getRegionName($row['sf_street']).$row['sf_address'];
-				$row['to_address']		= ecjia_region::getRegionName($row['province']).ecjia_region::getRegionName($row['city']).ecjia_region::getRegionName($row['district']).ecjia_region::getRegionName($row['street']).$row['address'];
+				$row['from_address'] 	= ecjia_region::getRegionName($row['sf_district']).ecjia_region::getRegionName($row['sf_street']).$row['sf_address'];
+				$row['to_address']		= ecjia_region::getRegionName($row['district']).ecjia_region::getRegionName($row['street']).$row['address'];
 				$data[] = $row;
 			}
 		}
