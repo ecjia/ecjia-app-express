@@ -569,7 +569,7 @@ class admin extends ecjia_admin {
 						$row['online_status'] = RC_DB::table('staff_user')->where('user_id', $row['staff_id'])->pluck('online_status');
 					}
 				}
-				$row['format_add_time'] = RC_Time::local_date(ecjia::config('time_format'), $row['start_time']);
+				$row['format_add_time'] = RC_Time::local_date(ecjia::config('time_format'), $row['add_time']);
 				$row['format_receive_time'] = RC_Time::local_date(ecjia::config('time_format'), $row['receive_time']);
 				$row['from_address'] 	= ecjia_region::getRegionName($row['sf_province']).ecjia_region::getRegionName($row['sf_city']).ecjia_region::getRegionName($row['sf_district']).ecjia_region::getRegionName($row['sf_street']).$row['sf_address'];
 				$row['to_address']		= ecjia_region::getRegionName($row['province']).ecjia_region::getRegionName($row['city']).ecjia_region::getRegionName($row['district']).ecjia_region::getRegionName($row['street']).$row['address'];

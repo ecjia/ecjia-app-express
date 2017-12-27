@@ -208,9 +208,13 @@
 }
 .map-change-remark{
 	height:32px;
-	width:300px;
-	float:right;
-	margin-right:255px;
+	float:left;
+	padding-left:255px;
+}
+.countdown{
+	height:32px;
+	float:left;
+	margin-top:8px;
 }
 .mark{
 	color:#c62626;

@@ -435,6 +435,22 @@
         },
       }
     
+    app.task_list_fresh = {
+		 init : function() {
+			 
+			 var num=120;
+				var interval =  setInterval(function(){
+					
+					numDiv.innerHTML = num--;
+					
+					if(num == 0){
+						clearInterval(interval);
+						window.location.reload();
+					}
+				},1000);
+		 },	
+    }
+    
     app.serachuser_list = {
    		 init : function() {
    		    $('.online-click').click(function(e) {
