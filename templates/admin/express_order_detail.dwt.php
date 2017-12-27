@@ -60,7 +60,7 @@
 				<div class="order_desc">
 					<ul>
 			         	<li><h3>订单备注</h3></li>
-			            <li>{if $content.postscript}{$content.postscript}{else}暂无订单信息{/if}</li>
+			            <li>{if $content.postscript}{$content.postscript}{else}此用户没有填写备注内容{/if}</li>
 			        </ul>
 				</div>
 			</div>
