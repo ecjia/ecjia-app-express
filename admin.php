@@ -138,6 +138,8 @@ class admin extends ecjia_admin {
 			
 			$this->assign('express_info', $express_info);
 			$this->assign('has_staff', 1);
+		} else {
+			$this->assign('has_staff', 0);
 		}
 		
 		$this->assign('search_action', RC_Uri::url('express/admin/waitgrablist_search_user', array('type' => $type)));

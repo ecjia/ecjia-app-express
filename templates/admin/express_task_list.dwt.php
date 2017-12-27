@@ -80,6 +80,7 @@
 										<input type="hidden" class="nearest_exuser_mobile" value="{$express_info.mobile}"/>
 										<input type="hidden" class="nearest_exuser_lng" value="{$express_info.longitude}"/>
 										<input type="hidden" class="nearest_exuser_lat" value="{$express_info.latitude}"/>
+										<input type="hidden" class="hasstaff" value="{$has_staff}"/>
 									</div>
 								<!-- {foreachelse} -->
 									<div class="norecord">暂无任何记录!</div>
