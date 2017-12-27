@@ -92,7 +92,6 @@ class admin extends ecjia_admin {
 		/*待抢单列表*/
 		$wait_grab_list = $this->get_wait_grab_list($type);
 		
-
 		/*第一个订单获取*/
 		$first_express_order = $wait_grab_list['list']['0'];
 		$start = $first_express_order['sf_latitude'].','.$first_express_order['sf_longitude'];
@@ -102,23 +101,26 @@ class admin extends ecjia_admin {
 		
 		/*配送员列表*/
 		$express_user_list = $this->get_express_user_list($type, $keywords);
-
+		
 		/*配送员列表与第一个订单之间的距离数组*/
 		$express_user_dis_data = array();
 		if (!empty($express_user_list['list']) && !empty($first_express_order)) {
 			foreach ($express_user_list['list'] as $k => $v) {
-				if (!empty($first_express_order['sf_latitude']) && !empty($first_express_order['sf_longitude'])) {
-					//腾讯地图api距离计算
-					$keys = ecjia::config('map_qq_key');
-					$url = "http://apis.map.qq.com/ws/distance/v1/?mode=driving&from=".$first_express_order['sf_latitude'].",".$first_express_order['sf_longitude']."&to=".$v['latitude'].",".$v['longitude']."&key=".$keys;
-					$distance_json = file_get_contents($url);
-					$distance_info = json_decode($distance_json, true);
-					$v['distance'] = isset($distance_info['result']['elements'][0]['distance']) ? $distance_info['result']['elements'][0]['distance'] : 0;
-					$express_user_dis_data[] = $v;
+				if ($v['online_status'] == '1') {
+					if (!empty($first_express_order['sf_latitude']) && !empty($first_express_order['sf_longitude'])) {
+						//腾讯地图api距离计算
+						$keys = ecjia::config('map_qq_key');
+						$url = "http://apis.map.qq.com/ws/distance/v1/?mode=driving&from=".$first_express_order['sf_latitude'].",".$first_express_order['sf_longitude']."&to=".$v['latitude'].",".$v['longitude']."&key=".$keys;
+						$distance_json = file_get_contents($url);
+						$distance_info = json_decode($distance_json, true);
+						$v['distance'] = isset($distance_info['result']['elements'][0]['distance']) ? $distance_info['result']['elements'][0]['distance'] : 0;
+						$express_user_dis_data[] = $v;
+					}
 				}
 			}
 		}
 		/*获取离第一个订单最近的配送员的id*/
+		$express_user_dis_data_new = array();
 		if ($express_user_dis_data) {
 			foreach ($express_user_dis_data as $a => $b) {
 				$express_user_dis_data_new[$b['user_id']] =  $b['distance'];
@@ -135,6 +137,7 @@ class admin extends ecjia_admin {
 								->first();
 			
 			$this->assign('express_info', $express_info);
+			$this->assign('has_staff', 1);
 		}
 		
 		$this->assign('search_action', RC_Uri::url('express/admin/waitgrablist_search_user', array('type' => $type)));
