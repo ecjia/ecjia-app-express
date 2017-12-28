@@ -29,7 +29,7 @@
 						<div class="express-user-list-on accordion-body in collapse" id="waitgrab_online">
 							<!-- {foreach from=$express_user_list.list item=list} -->
 								{if $list.online_status eq '1'}
-									<div class="express-user-info">
+									<div class="express-user-info ex-user-div{$list.user_id}" staff_user_id="{$list.user_id}">
 										<div class="reassign_exuser_div" longitude="{$list.longitude}" latitude="{$list.latitude}" name="{$list.name}" mobile="{$list.mobile}">
 											<div class="imginfo-div">
 	        		                			<div class="express-img">{if $list.avatar}<img src="{$list.avatar}">{else}<img src="{$app_url}/touxiang.png">{/if}</div>
@@ -53,6 +53,7 @@
 				                       			{/if}
                								 </a> 
 											<input type="hidden" class="selected-express-id" value="{$first_express_order.express_id}"/>
+											<input type="hidden" class="ex-u-id" value=""/>
 										</div>
 									</div>
 										{/if}

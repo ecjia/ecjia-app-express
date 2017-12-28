@@ -110,6 +110,26 @@
         },
         
 		 click_exuser: function () {
+			 $(".express-user-info").on('click', function(e) {
+				  e.preventDefault();
+				  var $this = $(this);
+				  var staff_user_id = $this.attr('staff_user_id');
+	              var express_userid  = $('.ex-u-id').val();
+	             
+	              //选中配送员边框变色start
+	              var current_click_user = 'ex-user-div'+ staff_user_id;
+	              
+	              if (express_userid == '') {
+	            	  $this.css("border","1px solid #009ACD");
+	           	  	  $('.ex-u-id').val(staff_user_id);
+	              } else {
+	           	  	 var last_click_user = 'ex-user-div'+ express_userid;
+	           	  	 $('.' + last_click_user).css("border","1px solid #dcdcdc");
+	           	   $this.css("border","1px solid #009ACD");
+	           	  	 $('.ex-u-id').val(staff_user_id);
+	             }
+	            //选中配送员边框变色end
+			  });
 			  $(".exuser_div").on('click', function (e) {
 	            e.preventDefault();
 	            var $this = $(this);
@@ -390,7 +410,7 @@
         Label.prototype.construct = function() {
              this.dom = document.createElement('div');
              this.dom.style.cssText =
-                  'background:url("content/apps/express/statics/images/lable_text.png") no-repeat;width:130px;height:60px;margin-top:-98px;margin-left:-38px;position:absolute;' +
+                  'background:url("content/apps/express/statics/images/lable_text.png") no-repeat;width:130px;height:60px;margin-top:-98px;margin-left:-38px;position:absolute;z-index:1;' +
                   'text-align:left;color:white;padding-left:25px;padding-top:8px;';
              this.dom.innerHTML = ex_name +'<br>'+ex_mobile;
              //将dom添加到覆盖物层，overlayLayer的顺序为容器 1，此容器中包含Polyline、Polygon、GroundOverlay等
@@ -499,6 +519,26 @@
 		 },
          
 		 click_reassign_exuser: function () {
+			 $(".express-user-info").on('click', function(e) {
+				  e.preventDefault();
+				  var $this = $(this);
+				  var staff_user_id = $this.attr('staff_user_id');
+	              var express_userid  = $('.ex-u-id').val();
+	             
+	              //选中配送员边框变色start
+	              var current_click_user = 'ex-user-div'+ staff_user_id;
+	              
+	              if (express_userid == '') {
+	            	  $this.css("border","1px solid #009ACD");
+	           	  	  $('.ex-u-id').val(staff_user_id);
+	              } else {
+	           	  	 var last_click_user = 'ex-user-div'+ express_userid;
+	           	  	 $('.' + last_click_user).css("border","1px solid #dcdcdc");
+	           	   $this.css("border","1px solid #009ACD");
+	           	  	 $('.ex-u-id').val(staff_user_id);
+	             }
+	            //选中配送员边框变色end
+			  });
 			  $(".reassign_exuser_div").on('click', function (e) {
 	            e.preventDefault();
 	            var $this = $(this);
