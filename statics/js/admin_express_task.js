@@ -245,7 +245,7 @@
 		            Label.prototype.construct = function() {
 		                 this.dom = document.createElement('div');
 		                 this.dom.style.cssText =
-		                      'background:url("content/apps/express/statics/images/lable_text.png") no-repeat;width:130px;height:60px;margin-top:-98px;margin-left:-38px;position:absolute;' +
+		                      'background:url("content/apps/express/statics/images/lable_text.png") no-repeat;width:130px;height:60px;margin-top:-98px;margin-left:-38px;position:absolute;z-index:1;' +
 		                      'text-align:left;color:white;padding-left:25px;padding-top:8px;';
 		                 this.dom.innerHTML = ex_name +'<br>'+ex_mobile;
 		                 //将dom添加到覆盖物层，overlayLayer的顺序为容器 1，此容器中包含Polyline、Polygon、GroundOverlay等
@@ -315,7 +315,7 @@
                   		 $('.nearest_exuser_mobile').val(data.express_info.mobile);
                   		 $('.nearest_exuser_lng').val(data.express_info.longitude);
                   		 $('.nearest_exuser_lat').val(data.express_info.latitude);
-                  		$('.hasstaff').val(data.express_info.has_staff);
+                  		 $('.hasstaff').val(data.express_info.has_staff);
                   		app.admin_express_task.map();
                   	 } else {
                   		app.admin_express_task.map(); 
