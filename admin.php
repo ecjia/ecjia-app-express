@@ -119,6 +119,14 @@ class admin extends ecjia_admin {
 				}
 			}
 		}
+		
+		/*过滤掉5公里以外的配送员*/
+		foreach ($express_user_dis_data as $key => $val) {
+			if ($val['distance'] > 5000) {
+				unset($express_user_dis_data[$key]);
+			}
+		}
+		
 		/*获取离第一个订单最近的配送员的id*/
 		$express_user_dis_data_new = array();
 		if ($express_user_dis_data) {
@@ -168,18 +176,29 @@ class admin extends ecjia_admin {
 		$express_user_dis_data = array();
 		if (!empty($express_user_list['list']) && !empty($sf_lng) && !empty($sf_lat)) {
 			foreach ($express_user_list['list'] as $k => $v) {
-				if (!empty($sf_lat) && !empty($sf_lng)) {
-					//腾讯地图api距离计算
-					$keys = ecjia::config('map_qq_key');
-					$url = "http://apis.map.qq.com/ws/distance/v1/?mode=driving&from=".$sf_lat.",".$sf_lng."&to=".$v['latitude'].",".$v['longitude']."&key=".$keys;
-					$distance_json = file_get_contents($url);
-					$distance_info = json_decode($distance_json, true);
-					$v['distance'] = isset($distance_info['result']['elements'][0]['distance']) ? $distance_info['result']['elements'][0]['distance'] : 0;
-					$express_user_dis_data[] = $v;
+				if ($v['online_status'] == '1') {
+					if (!empty($sf_lat) && !empty($sf_lng)) {
+						//腾讯地图api距离计算
+						$keys = ecjia::config('map_qq_key');
+						$url = "http://apis.map.qq.com/ws/distance/v1/?mode=driving&from=".$sf_lat.",".$sf_lng."&to=".$v['latitude'].",".$v['longitude']."&key=".$keys;
+						$distance_json = file_get_contents($url);
+						$distance_info = json_decode($distance_json, true);
+						$v['distance'] = isset($distance_info['result']['elements'][0]['distance']) ? $distance_info['result']['elements'][0]['distance'] : 0;
+						$express_user_dis_data[] = $v;
+					}
 				}
 			}
 		}
+		
+		/*过滤掉5公里以外的配送员*/
+		foreach ($express_user_dis_data as $key => $val) {
+			if ($val['distance'] > 5000) {
+				unset($express_user_dis_data[$key]);
+			}
+		}
+		
 		/*获取离当前订单最近的配送员的id*/
+		$express_user_dis_data_new = array();
 		if ($express_user_dis_data) {
 			foreach ($express_user_dis_data as $a => $b) {
 				$express_user_dis_data_new[$b['user_id']] =  $b['distance'];
@@ -196,6 +215,9 @@ class admin extends ecjia_admin {
 			->selectRaw('eu.*, su.mobile, su.name')
 			->where(RC_DB::raw('su.user_id'), $key)
 			->first();
+			$express_info['has_staff'] = 1;
+		} else {
+			$express_info['has_staff'] = 0;
 		}
 	
 		return $this->showmessage('', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('express_info' => $express_info));

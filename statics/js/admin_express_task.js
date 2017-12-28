@@ -315,6 +315,7 @@
                   		 $('.nearest_exuser_mobile').val(data.express_info.mobile);
                   		 $('.nearest_exuser_lng').val(data.express_info.longitude);
                   		 $('.nearest_exuser_lat').val(data.express_info.latitude);
+                  		$('.hasstaff').val(data.express_info.has_staff);
                   		app.admin_express_task.map();
                   	 } else {
                   		app.admin_express_task.map(); 

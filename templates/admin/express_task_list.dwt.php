@@ -39,7 +39,7 @@
 			<li class="map-change-remark map-exp-user" style="float:left;margin-top:8px;">注：配送员&nbsp;&nbsp;<span class="mark user">[{$express_info.name}]</span>&nbsp;&nbsp;位置</li>
 		<!--{/if} -->
 		
-		<li class="countdown" style="float:left;padding-left:60px;"><span style="color:#c62626;" id='numDiv'>120</span>&nbsp;&nbsp;秒后自动刷新 </li><a class="btn" style="background: #058DC7;text-shadow:none;margin-left:17px;margin-top:4px;" href='{url path="express/admin/init" args="type=wait_grab"}'><span style="color:#fff;">手动刷新</span> </a>
+		<li class="countdown" style="float:left;padding-left:7%;"><span style="color:#c62626;" id='numDiv'>120</span>&nbsp;&nbsp;秒后自动刷新 </li><a class="btn" style="background: #058DC7;text-shadow:none;margin-left:1%;margin-top:4px;" href='{url path="express/admin/init" args="type=wait_grab"}'><span style="color:#fff;">手动刷新</span> </a>
 	</ul>
 </div>
 
@@ -55,7 +55,7 @@
 							</div>
 							<div class="accordion-body in collapse" style="height:547px;overflow:auto;">
 								<!-- {foreach from=$wait_grab_list.list item=wait_grab} -->
-									<div class="accordion-inner order-div" express_id="{$wait_grab.express_id}" express_sn="{$wait_grab.express_sn}" express_start="{$wait_grab.sf_latitude},{$wait_grab.sf_longitude}" express_end="{$wait_grab.latitude},{$wait_grab.longitude}" sf_lng="{$wait_grab.sf_longitude}" sf_lat="{$wait_grab.sf_latitude}" data-url='{url path="express/admin/get_nearest_exuser"}'>
+									<div class="accordion-inner order-div select-border" express_id="{$wait_grab.express_id}" express_sn="{$wait_grab.express_sn}" express_start="{$wait_grab.sf_latitude},{$wait_grab.sf_longitude}" express_end="{$wait_grab.latitude},{$wait_grab.longitude}" sf_lng="{$wait_grab.sf_longitude}" sf_lat="{$wait_grab.sf_latitude}" data-url='{url path="express/admin/get_nearest_exuser"}'>
 										<div class="control-group control-group-small border-bottom-line">
 											<div class="margin-label">配送单号：{$wait_grab.express_sn}</div>
 										</div>
