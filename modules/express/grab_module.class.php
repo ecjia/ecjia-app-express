@@ -64,7 +64,14 @@ class grab_module extends api_admin implements api_interface {
 		if (empty($express_id)) {
 			return new ecjia_error('invalid_parameter', RC_Lang::get ('system::system.invalid_parameter' ));
 		}
-		$where                = array('store_id' => $_SESSION['store_id'], 'staff_id' => 0, 'express_id' => $express_id);
+		
+		//$where                = array('store_id' => $_SESSION['store_id'], 'staff_id' => 0, 'express_id' => $express_id);
+		$where = array();
+		$where['staff_id'] = 0;
+		$where['express_id'] = $express_id;
+		if (!empty($_SESSION['store_id'])) {
+			$where['store_id'] = $_SESSION['store_id'];
+		}
 		
 		$express_order_db     = RC_Model::model('express/express_order_model');
 		$express_order_info   = $express_order_db->where($where)->find();
