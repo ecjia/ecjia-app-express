@@ -25,8 +25,8 @@
 						<div class="express-user-list accordion-body in in_visable collapse" id="online">
 							<!-- {foreach from=$express_user_list.list item=list} -->
 								{if $list.online_status eq '1'}
-									<div class="express-user-info ">
-										<div class="{if $express_order_count.wait_grab} exuser_div {/if}" longitude="{$list.longitude}" latitude="{$list.latitude}" name="{$list.name}" mobile="{$list.mobile}">
+									<div class="express-user-info ex-user-div{$list.user_id}" staff_user_id="{$list.user_id}">
+										<div class="{if $express_order_count.wait_grab} exuser_div {/if} " longitude="{$list.longitude}" latitude="{$list.latitude}" name="{$list.name}" mobile="{$list.mobile}" >
 											<div class="imginfo-div">
 	        		                			<div class="express-img">{if $list.avatar}<img src="{$list.avatar}">{else}<img src="{$app_url}/touxiang.png">{/if}</div>
 	        		                			<div class="expressinfo">{$list.name}<br>{$list.mobile}</div>
@@ -49,6 +49,7 @@
 				                       			{/if}
                								 </a> 
 											 <input type="hidden" class="selected-express-id" value="{$first_express_order.express_id}"/>
+											 <input type="hidden" class="ex-u-id" value=""/>
 										</div>
 									</div>
 										{/if}
