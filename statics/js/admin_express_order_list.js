@@ -410,7 +410,7 @@
         Label.prototype.construct = function() {
              this.dom = document.createElement('div');
              this.dom.style.cssText =
-                  'background:url("content/apps/express/statics/images/lable_text.png") no-repeat;width:130px;height:60px;margin-top:-98px;margin-left:-38px;position:absolute;' +
+                  'background:url("content/apps/express/statics/images/lable_text.png") no-repeat;width:130px;height:60px;margin-top:-98px;margin-left:-38px;position:absolute;z-index:1;' +
                   'text-align:left;color:white;padding-left:25px;padding-top:8px;';
              this.dom.innerHTML = ex_name +'<br>'+ex_mobile;
              //将dom添加到覆盖物层，overlayLayer的顺序为容器 1，此容器中包含Polyline、Polygon、GroundOverlay等
