@@ -289,8 +289,19 @@
                   var ends 	 = $this.attr('express_end');
                   var ex_sn  = $this.attr('express_sn');
                   var exp_id  = $this.attr('express_id');
-                
-                  //$this.css("border","1px solid #009ACD");
+                  var order_express_id  = $('.order_express_id').val();
+                  
+                  //选中订单边框变色start
+                  if (order_express_id == '') {
+                	  $this.css("border","1px solid #009ACD");
+                	  $('.order_express_id').val(exp_id);
+                  } else {
+                	  var last_click_div = 'div'+ order_express_id;
+                	  $('.' + last_click_div).css("border","1px solid #dcdcdc");
+                	  $this.css("border","1px solid #009ACD");
+                	  $('.order_express_id').val(exp_id);
+                  }
+                 //选中订单边框变色end
                   
                   $("#start").val(starts);
                   $("#end").val(ends);
