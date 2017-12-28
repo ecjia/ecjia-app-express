@@ -61,7 +61,7 @@
 					<th class="w150">下单时间</th>
 					<th>配送单号</th>
 					<th class="w100">任务类型</th>
-					<th class="w100">配送费用</th>
+					<th class="w100">配送总费用</th>
 					<th class="w100">平台应得</th>
 					<th class="w100">配送员应得</th>
 					<th class="w100">结算状态</th>
