@@ -37,6 +37,7 @@
 						<li><h3>配送信息</h3></li>
 						<li>配送员名称：<span>{$content.express_user}</span></li>
 						<li>配送员电话：<span>{$content.express_mobile}</span></li>
+						<li>任务类型：<span>{if $content.from eq 'assign'}派单{elseif $content.from eq 'grab'}抢单{/if}</span></li>
 					</ul>
 				</div>
 				{/if}
