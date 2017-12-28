@@ -122,16 +122,21 @@ class admin_match extends ecjia_admin {
 		$db_data->where(RC_DB::raw('staff_id'), $user_id);
 		$db_data->where('receive_time', '>=', $start_date);
 		$db_data->where('receive_time', '<', $end_date + 86400);
-		
-		
 		$order_number= $db_data->where('staff_id', $user_id)->count();
-		$money= $db_data->where('staff_id', $user_id)->select(RC_DB::raw('sum(shipping_fee) as all_money'),RC_DB::raw('sum(commision) as express_money'),RC_DB::raw('sum(shipping_fee-commision) as store_money'))->first();
+		$this->assign('order_number', $order_number);
+		
+		$money= $db_data->where('staff_id', $user_id)->select(RC_DB::raw('sum(shipping_fee) as all_money'),RC_DB::raw('sum(commision) as express_money'))->first();
 		$money['all_money'] = price_format($money['all_money']);
 		$money['express_money'] = price_format($money['express_money']);
-		$money['store_money'] = price_format($money['store_money']);
-		
-		$this->assign('order_number', $order_number);
 		$this->assign('money', $money);
+		
+		$account_money= RC_DB::table('express_order')->where('receive_time', '>=', $start_date)->where('receive_time', '<', $end_date + 86400)->where('staff_id', $user_id)->where('commision_status', 1)->select(RC_DB::raw('sum(commision) as account_money'))->first();
+		$account_money = price_format($account_money['account_money']);
+		$this->assign('account_money', $account_money);
+		
+		
+		
+		
 
 		$count = $db_data->count();
 		$page = new ecjia_page($count, 10, 5);

@@ -37,7 +37,7 @@
 		<div class="move-mod-group" id="widget_admin_dashboard_briefing">
 			<ul class="list-mod list-mod-briefing move-mod-head">
 				<li class="span3">
-					<div class="bd">{if order_number}{$order_number}{else}0{/if}<span class="f_s14"> 单</span></div>
+					<div class="bd">{if $order_number}{$order_number}{else}0{/if}<span class="f_s14"> 单</span></div>
 					<div class="ft"><i class="fontello-icon-chart-bar"></i>订单数量</div>
 				</li>
 				<li class="span3">
@@ -45,12 +45,12 @@
 					<div class="ft"><i class="fontello-icon-truck"></i>配送总费用</div>
 				</li>
 				<li class="span3">
-					<div class="bd">{$money.store_money}<span class="f_s14"> 元</span></div>
-					<div class="ft"><i class="fontello-icon-yen"></i>平台应得</div>
+					<div class="bd">{$money.express_money}<span class="f_s14"> 元</span></div>
+					<div class="ft"><i class="fontello-icon-yen"></i>配送员应得</div>
 				</li>
 				<li class="span3">
-					<div class="bd">{$money.express_money}<span class="f_s14"> 元</span></div>
-					<div class="ft"><i class="fontello-icon-user"></i>配送员应得</div>
+					<div class="bd">{$account_money}<span class="f_s14"> 元</span></div>
+					<div class="ft"><i class="fontello-icon-user"></i>已结算费用</div>
 				</li>
 			</ul>
 		</div>
