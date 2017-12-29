@@ -18,14 +18,14 @@
 <div class="row-fluid batch" >
 	<ul class="nav nav-pills">
 		<li class="{if $smarty.get.cat_id eq ''}active{/if}">
-			<a class="data-pjax" href='{url path="express/admin_merchant/init"}'>全部 
+			<a class="data-pjax" href='{url path="express/admin_merchant/init" args="{if $smarty.get.keyword}keyword={$smarty.get.keyword}{/if}"}'>全部 
 				<span class="badge badge-info">{if $allnumber}{$allnumber}{else}0{/if}</span>
 			</a>
 		</li>
 		
 		<!-- {foreach from=$cat_list item=val} -->
 			<li class="{if $smarty.get.cat_id eq $val.cat_id}active{/if}">
-				<a class="data-pjax" href='{url path="express/admin_merchant/init" args="cat_id={$val.cat_id}"}'>{$val.cat_name}
+				<a class="data-pjax" href='{url path="express/admin_merchant/init" args="cat_id={$val.cat_id}{if $smarty.get.keyword}&keyword={$smarty.get.keyword}{/if}"}'>{$val.cat_name}
 					<span class="badge badge-info">{if $val.number}{$val.number}{else}0{/if}</span>
 				</a>
 			</li>

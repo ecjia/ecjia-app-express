@@ -305,11 +305,43 @@ class admin_merchant extends ecjia_admin {
 			}
 		}
 		$cat_list = array_unique($cat_list);
-		
+	
+		if ($keyword) {
+			foreach ($cat_list as $k => $v) {
+				$cat_list[$k]['number'] = 0;
+			}
+			
+			$db_data ->whereRaw('(sf.merchants_name  like  "%'.mysql_like_quote($keyword).'%")');
+			$store_list = $db_data->selectRaw('distinct eo.store_id,sf.cat_id')->orderby(RC_DB::raw('sf.store_id'), 'desc')->get();
+			
+			$cat_list_keyword =array();
+			foreach ($store_list as $k => $v) {
+				$cat_list_keyword[$v['cat_id']]['cat_id'] = RC_DB::TABLE('store_franchisee')->where('store_id', $v['store_id'])->pluck('cat_id');
+			}
+			foreach ($cat_list_keyword as $k => $v) {
+				foreach ($cat_list_keyword as $key => $value) {
+					$cat_list_keyword[$value['cat_id']]['cat_name'] = RC_DB::TABLE('store_category')->where('cat_id', $value['cat_id'])->pluck('cat_name');
+					$count_cat = array_count_values(array_column($store_list,"cat_id"));
+					foreach ($count_cat as $k => $v) {
+						if($k == $value['cat_id']){
+							$cat_list_keyword[$value['cat_id']]['number'] = $v;
+						}
+					}
+				}
+			}
+			$cat_list_keyword = array_unique($cat_list_keyword);
+			foreach ($cat_list as $k => $v) {
+				$cat_id = $v['cat_id'];
+				$number = $cat_list_keyword[$cat_id]['number'];
+				$cat_list[$k]['number'] = $number;
+			}
+			
+		}
+
 		$allnumber = 0;
-        foreach($cat_list as $key=>$value){ 
-           $allnumber+= $value['number']; 
-        } 
+		foreach($cat_list as $key=>$value){
+			$allnumber+= $value['number'];
+		}
 		return array('list' => $cat_list, 'allnumber' => $allnumber);
 	}
 }
