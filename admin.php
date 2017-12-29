@@ -238,13 +238,13 @@ class admin extends ecjia_admin {
 		$staff_id = $_GET['staff_id'];
 		$type = $_GET['type'];
 		
-		$field = 'eo.*, oi.add_time as order_time, oi.pay_time,  oi.expect_shipping_time, oi.order_amount, oi.pay_name, sf.merchants_name, sf.address as merchant_address, sf.longitude as merchant_longitude, sf.latitude as merchant_latitude';
-		$dbview = RC_DB::table('express_order as eo')
-								->leftJoin('store_franchisee as sf', RC_DB::raw('sf.store_id'), '=', RC_DB::raw('eo.store_id'))
-								->leftJoin('order_info as oi', RC_DB::raw('eo.order_id'), '=', RC_DB::raw('oi.order_id'));
-		
+		$field = 'eo.*, oi.add_time as order_time, oi.pay_time,  oi.expect_shipping_time, oi.order_amount, oi.pay_name, sf.merchants_name, sf.district as sf_district, sf.street as sf_street, sf.address as merchant_address, sf.longitude as sf_longitude, sf.latitude as sf_latitude';
+			$dbview = RC_DB::table('express_order as eo')
+			->leftJoin('store_franchisee as sf', RC_DB::raw('sf.store_id'), '=', RC_DB::raw('eo.store_id'))
+			->leftJoin('order_info as oi', RC_DB::raw('eo.order_id'), '=', RC_DB::raw('oi.order_id'));
+			
 		$express_order_info	= $dbview->where(RC_DB::raw('eo.express_id'), $express_id)->selectRaw($field)->first();
-		
+			
 		$staff_user_info = RC_DB::table('staff_user as su')->leftJoin('express_user as eu', RC_DB::raw('su.user_id'), '=', RC_DB::raw('eu.user_id'))
 							->where(RC_DB::raw('su.user_id'), $staff_id)
 							->selectRaw('su.name, su.mobile, su.store_id, eu.shippingfee_percent')->first();
@@ -298,6 +298,9 @@ class admin extends ecjia_admin {
 			
 			
 			//消息通知
+			$express_from_address = ecjia_region::getRegionName($express_order_info['sf_district']).ecjia_region::getRegionName($express_order_info['sf_street']).ecjia_region::getRegionName($express_order_info['merchant_address']);
+			$express_to_address = ecjia_region::getRegionName($express_order_info['district']).ecjia_region::getRegionName($express_order_info['street']).ecjia_region::getRegionName($express_order_info['address']);
+				
 			$notification_express_data = array(
 					'title'	=> '系统派单',
 					'body'	=> '有单啦！系统已分配配送单到您账户，赶快行动起来吧！',
@@ -308,12 +311,12 @@ class admin extends ecjia_admin {
 							'label_express_type'	=> $express_order_info['from'] == 'assign' ? '系统派单' : '抢单',
 							'order_sn'				=> $express_order_info['order_sn'],
 							'payment_name'			=> $express_order_info['pay_name'],
-							'express_from_address'	=> '【'.$express_order_info['merchants_name'].'】'. $express_order_info['merchant_address'],
+							'express_from_address'	=> '【'.$express_order_info['merchants_name'].'】'. $express_from_address,
 							'express_from_location'	=> array(
 									'longitude' => $express_order_info['merchant_longitude'],
 									'latitude'	=> $express_order_info['merchant_latitude'],
 							),
-							'express_to_address'	=> $express_order_info['address'],
+							'express_to_address'	=> $express_to_address,
 							'express_to_location'	=> array(
 									'longitude' => $express_order_info['longitude'],
 									'latitude'	=> $express_order_info['latitude'],

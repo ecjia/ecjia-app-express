@@ -186,8 +186,8 @@ class express_auto_assign_expressOrder_api extends Component_Event_Api {
 					
 					
 					//消息通知
-					$express_from_address = ecjia_region::getRegionName($row['sf_district']).ecjia_region::getRegionName($row['sf_street']).ecjia_region::getRegionName($row['merchant_address']);
-					$express_to_address = ecjia_region::getRegionName($row['district']).ecjia_region::getRegionName($row['street']).ecjia_region::getRegionName($row['address']);
+					$express_from_address = ecjia_region::getRegionName($express_order_info['sf_district']).ecjia_region::getRegionName($express_order_info['sf_street']).ecjia_region::getRegionName($express_order_info['merchant_address']);
+					$express_to_address = ecjia_region::getRegionName($express_order_info['district']).ecjia_region::getRegionName($express_order_info['street']).ecjia_region::getRegionName($express_order_info['address']);
 					
 					$notification_express_data = array(
 							'title'	=> '系统派单',
@@ -258,7 +258,7 @@ class express_auto_assign_expressOrder_api extends Component_Event_Api {
 		
 		$express_order_count = $db
 		->where('staff_id', $user_id)
-		->selectRaw('SUM(SUM(IF(status = 1, 1, 0)) as wait_pickup, SUM(IF(status = 2, 1, 0)) as sending')
+		->selectRaw('SUM(IF(status = 1, 1, 0)) as wait_pickup, SUM(IF(status = 2, 1, 0)) as sending')
 		->first();
 		
 		return $express_order_count;
