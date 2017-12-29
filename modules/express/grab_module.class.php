@@ -82,7 +82,7 @@ class grab_module extends api_admin implements api_interface {
 			$update_date['express_mobile']	 = $_SESSION['staff_mobile'];
 			
 			/*配送员可得配送费处理*/
-			if ($express_order_info['store_id'] > 0) {
+			if ($_SESSION['store_id'] > 0) {
 				//商家
 				$update_date['commision'] = '5.00';
 			} else {

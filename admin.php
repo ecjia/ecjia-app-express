@@ -258,6 +258,7 @@ class admin extends ecjia_admin {
 				'express_user'	=> $staff_user_info['name'],
 				'express_mobile'=> $staff_user_info['mobile'],
 				'commision'		=> $commision,
+				'commision_status'	=> 0,
 				'receive_time'	=> RC_Time::gmtime()
 		);
 	

@@ -139,7 +139,7 @@ class express_auto_assign_expressOrder_api extends Component_Event_Api {
 								->where('user_id', $staff_id)->first();
 				
 				$commision = $ex_u_info['shippingfee_percent']/100*$express_order_info['shipping_fee'];
-				
+				$commision = sprintf("%.2f", $commision);
 				$assign_data = array(
 					'from'				=> 'assign',
 					'status'			=> 1,
