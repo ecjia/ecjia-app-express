@@ -97,7 +97,8 @@ class admin_merchant extends ecjia_admin {
 		$data = $this->get_merchant_list($cat_id);
 		$this->assign('data', $data);
 		
-		$cat_arr = $this->get_cat_list();
+		$keyword = trim($_GET['keyword']);
+		$cat_arr = $this->get_cat_list($keyword);
 		$this->assign('cat_list', $cat_arr['list']);
 		$this->assign('allnumber', $cat_arr['allnumber']);
 		
@@ -280,22 +281,31 @@ class admin_merchant extends ecjia_admin {
 	/**
 	 * 获取店铺分类表
 	 */
-	private function get_cat_list() {
+	private function get_cat_list($keyword = '') {
 		$db_data = RC_DB::table('express_order as eo')
 		->leftJoin('store_franchisee as sf', RC_DB::raw('eo.store_id'), '=', RC_DB::raw('sf.store_id'));
-		$db_data->orwhere(RC_DB::raw('eo.status'), 0)->orwhere(RC_DB::raw('eo.status'), 1)->orwhere(RC_DB::raw('eo.status'),2);
-	
+		$db_data->Where(function ($query) {
+			$query->orwhere(RC_DB::raw('eo.status'), 0)->orwhere(RC_DB::raw('eo.status'), 1)->orwhere(RC_DB::raw('eo.status'),2);
+		});
 		$store_list = $db_data->selectRaw('distinct eo.store_id,sf.cat_id')->orderby(RC_DB::raw('sf.store_id'), 'desc')->get();
+
 		$cat_list =array();
 		foreach ($store_list as $k => $v) {
 			$cat_list[$k]['cat_id'] = RC_DB::TABLE('store_franchisee')->where('store_id', $v['store_id'])->pluck('cat_id');
 		}
 		foreach ($cat_list as $k => $v) {
-			$cat_list[$k]['cat_name'] = RC_DB::TABLE('store_category')->where('cat_id', $v['cat_id'])->pluck('cat_name');
-			$cat_list[$k]['number'] = RC_DB::TABLE('store_franchisee')->where('cat_id', $v['cat_id'])->count();
+			foreach ($cat_list as $key => $value) {
+				$cat_list[$key]['cat_name'] = RC_DB::TABLE('store_category')->where('cat_id', $value['cat_id'])->pluck('cat_name');
+				$count_cat = array_count_values(array_column($store_list,"cat_id"));
+				foreach ($count_cat as $k => $v) {
+					if($k == $value['cat_id']){
+						$cat_list[$key]['number'] = $v;
+					}
+				}
+			}
 		}
 		$cat_list = array_unique($cat_list);
-
+		
 		$allnumber = 0;
         foreach($cat_list as $key=>$value){ 
            $allnumber+= $value['number']; 
