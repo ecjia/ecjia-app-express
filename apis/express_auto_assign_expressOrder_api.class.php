@@ -135,8 +135,8 @@ class express_auto_assign_expressOrder_api extends Component_Event_Api {
 			if ($staff_id) {
 				$ex_u_info = RC_DB::table('staff_user as su')
 								->leftJoin('express_user as eu', RC_DB::raw('su.user_id'), '=', RC_DB::raw('eu.user_id'))
-								->selectRaw('su.*, eu.shippingfee_percent,')
-								->where('user_id', $staff_id)->first();
+								->selectRaw('su.*, eu.shippingfee_percent')
+								->where(RC_DB::raw('su.user_id'), $staff_id)->first();
 				
 				$commision = $ex_u_info['shippingfee_percent']/100*$express_order_info['shipping_fee'];
 				$commision = sprintf("%.2f", $commision);
@@ -151,9 +151,14 @@ class express_auto_assign_expressOrder_api extends Component_Event_Api {
 					'commision_status'	=> 0
 				);
 				
+				RC_Logger::getLogger('error-test')->info($staff_id);
+				RC_Logger::getLogger('error-test')->info($assign_data);
+				RC_Logger::getLogger('error-test')->info($express_id);
+				
 				$query = RC_DB::table('express_order')->where('express_id', $express_id)->update($assign_data);
 				
 				if ($query) {
+					RC_Logger::getLogger('error-test')->info('test1111');
 					/* 消息插入 */
 					$orm_staff_user_db = RC_Model::model('orders/orm_staff_user_model');
 					$user = $orm_staff_user_db->find($staff_id);
@@ -231,7 +236,6 @@ class express_auto_assign_expressOrder_api extends Component_Event_Api {
 	}
 	
 	
-	
 	/**
 	 * 获取配送员列表
 	 */
@@ -248,7 +252,6 @@ class express_auto_assign_expressOrder_api extends Component_Event_Api {
 		return $list;
 	}
 	
-
 	
 	/**
 	 * 获取配送员待取货和配送中的配送单数量

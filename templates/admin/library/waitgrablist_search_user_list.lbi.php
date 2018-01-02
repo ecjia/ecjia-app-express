@@ -20,7 +20,7 @@
 						</div>
 					</div>
 					<div class="control-group control-group-small press-list" style="margin-bottom:0px;">
-						<div class="margin-label online-list" style="margin-top:5px;margin-bottom: 5px;">在线 （{$express_count.online}）<a class="accordion-toggle acc-in move-mod-head online-triangle" data-toggle="collapse" data-target="#online"><b class="triangle on-tran"></b></a></div>
+						<div class="margin-label online-list" style="margin-top:5px;margin-bottom: 5px;">在线 （{if $express_count.online}{$express_count.online}{else}0{/if}）<a class="accordion-toggle acc-in move-mod-head online-triangle" data-toggle="collapse" data-target="#online"><b class="triangle on-tran"></b></a></div>
 						<div class="online open">
 						<div class="express-user-list accordion-body in in_visable collapse" id="online">
 							<!-- {foreach from=$express_user_list.list item=list} -->
@@ -60,7 +60,7 @@
 					</div>
 					</div>
 					<div class="control-group control-group-small press-list" style="margin-bottom:0px;">
-						<div class="margin-label online-list" style="margin-top:5px;margin-bottom: 5px;">离线 （{$express_count.offline}）<a class="accordion-toggle acc-in  move-mod-head collapsed leave-trangle" data-toggle="collapse" data-target="#leave"><b class="triangle1 leaveline"></b></a></div>
+						<div class="margin-label online-list" style="margin-top:5px;margin-bottom: 5px;">离线 （{if $express_count.offline}{$express_count.offline}{else}0{/if}）<a class="accordion-toggle acc-in  move-mod-head collapsed leave-trangle" data-toggle="collapse" data-target="#leave"><b class="triangle1 leaveline"></b></a></div>
 						<div class="leaveline-express">
 						<div class="express-user-list-leave accordion-body collapse" id="leave">
 							<!-- {foreach from=$express_user_list.list item=list} -->
