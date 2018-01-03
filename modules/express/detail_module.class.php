@@ -81,6 +81,26 @@ class detail_module extends api_admin implements api_interface {
 		$sf_street_name = ecjia_region::getRegionName($express_order_info['sf_street']);
 		$district_name = ecjia_region::getRegionName($express_order_info['district']);
 		$street_name = ecjia_region::getRegionName($express_order_info['street']);
+		$express_avatar = '';
+		
+		if ($express_order_info['staff_id'] > 0) {
+			$express_avatar = RC_DB::table('staff_user')->where('user_id', $express_order_info['staff_id'])->pluck('avatar');
+		}
+		
+		switch ($express_order_info['status']) {
+			case '1' :
+				$status = 'wait_pickup';
+				$label_express_status = '待取货';
+				break;
+			case '2' :
+				$status = 'sending';
+				$label_express_status = '配送中';
+				break;
+			case '5' :
+				$status = 'finished';
+				$label_express_status = '已完成';
+				break;
+		}
 		
     	$express_order = array(
     		'express_id'	        => $express_order_info['express_id'],
@@ -110,6 +130,12 @@ class detail_module extends api_admin implements api_interface {
     		'signed_time'	=> $express_order_info['signed_time'] > 0 ? RC_Time::local_date(ecjia::config('time_format'), $express_order_info['signed_time']) : '',
     		'shipping_fee'	=> $express_order_info['commision'],
     		'order_amount'	=> $express_order_info['order_amount'],
+    		'staff_id'		=> $express_order_info['staff_id'],
+    		'express_user'	=> $express_order_info['express_user'],
+    		'express_mobile'=> $express_order_info['express_mobile'],
+    		'express_avatar'=> empty($express_avatar) ? '' : RC_Upload::upload_url($express_avatar),
+    		'express_status'=> $status,
+    		'label_express_status' => $label_express_status,
     		'goods_items'	=> array(),
     	);
     	
@@ -121,10 +147,12 @@ class detail_module extends api_admin implements api_interface {
     	
     	if (!empty($goods_items)) {
     		foreach ($goods_items as $val) {
+    			$goods_attr = RC_DB::table('order_goods')->where('order_id', $express_order_info['order_id'])->where('goods_id', $val['goods_id'])->pluck('goods_attr');
     			$express_order['goods_items'][] = array(
     				'goods_id'	            => $val['goods_id'],
     				'name'		            => $val['goods_name'],
     				'goods_number'	        => $val['send_number'],
+    				'goods_attr'			=> empty($goods_attr) ? '' : $goods_attr,
     				'formatted_shop_price'	=> price_format($val['shop_price']),
     				'img'		            => array(
     					'small'	=> !empty($val['goods_thumb']) ? RC_Upload::upload_url($val['goods_thumb']) : '',
