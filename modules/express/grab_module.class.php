@@ -88,7 +88,7 @@ class grab_module extends api_admin implements api_interface {
 			} else {
 				//平台
 				$shippingfee_percent = RC_DB::table('express_user')->where('user_id', $_SESSION['staff_id'])->pluck('shippingfee_percent');
-				$update_date['commision'] = $shippingfee_percent*$express_order_info['shipping_fee'];
+				$update_date['commision'] = $shippingfee_percent/100*$express_order_info['shipping_fee'];
 			}
 			
 			$result                  = $express_order_db->where($where)->update($update_date);
