@@ -138,7 +138,8 @@
 	float:left;
 	clear:both;
 	position:relative;
-	width:40%;
+	width:35%;
+	margin-left:4%;
 }
 .express-user-info .express-img img{
 	width:60px;
@@ -148,11 +149,11 @@
 }
 .express-user-info .imginfo-div .expressinfo{
 	float: right;
-    margin-right: 10%;
+    margin-right: 8%;
     height: 44px;
     line-height: 22px;
     margin-top: 15px;
-	width:50%;
+	width:52%;
 }
 .express-order-div{
 	width:100%;
@@ -162,7 +163,7 @@
 	clear:both;
 }
 .express-order-div .waitfor-pickup{
-	padding-left: 6%;
+	padding-left: 6.99999%;
     width: 45%;
     float: left;
 }
@@ -183,12 +184,12 @@
 }
 
 .express-user-info .assign-div{
-	width:100%;
+	width:96%;
 	float:left;
 	margin-top: 0px;
     margin-bottom: 7px;
 	clear:both;
-	margin-left:5px;
+	margin-left:15px;
 }
 .press-list{
 	border:1px solid #fff;
@@ -208,9 +209,16 @@
     margin-top: 290px;
 }
 .map-change-remark{
-	height:32px;
 	float:left;
-	padding-left:14%;
+	margin-top:8px;
+	width:58%;
+}
+.numcolor{
+	color:#c62626;
+}
+.fresh{
+	float:left;
+	width:40%;
 }
 .countdown{
 	height:32px;
