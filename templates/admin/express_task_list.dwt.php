@@ -30,7 +30,7 @@
 
 <!-- 批量操作和搜索 -->
 <div class="row-fluid batch">
-	<ul class="nav nav-pills " style="margin-bottom:0px;">
+	<ul class="nav nav-pills " style="margin-bottom:5px;">
 		<li class="{if $type eq 'wait_grab'}active{/if}"><a  href='{url path="express/admin/init" args="type=wait_grab"}'>待抢单 <span class="badge badge-info">{if $express_order_count.wait_grab}{$express_order_count.wait_grab}{else}0{/if}</span> </a></li>
 		<li class="{if $type eq 'wait_pickup'}active{/if}"><a  href='{url path="express/admin/wait_pickup" args="type=wait_pickup"}'>待取货 <span class="badge badge-info">{if $express_order_count.wait_pickup}{$express_order_count.wait_pickup}{else}0{/if}</span> </a></li>
 		<li class="{if $type eq 'sending'}active{/if}"><a  href='{url path="express/admin/wait_pickup" args="type=sending"}'>配送中 <span class="badge badge-info">{if $express_order_count.sending}{$express_order_count.sending}{else}0{/if}</span> </a></li>
