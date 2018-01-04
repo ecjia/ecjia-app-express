@@ -55,11 +55,14 @@
 			<thead>
 				<tr>
 				    <th class="w150">配送单号</th>
+				   	<!--  {if $type eq 'wait_pickup' or $type eq 'delivery'} -->
+				   	<th class="w50">配送员</th>
+				    <!-- {/if} -->
 				    <th class="w150">收货人信息</th>
 				    <th class="w250">收货地址</th>
 				    <th class="w150">下单时间</th>
-				    <th class="w50">配送费用</th>
-				    <th class="w50">订单状态</th>
+				    <th class="w100">配送费用</th>
+				    <th class="w100">订单状态</th>
 			  	</tr>
 			</thead>
 			<!-- {foreach from=$order_list.list item=express} -->
@@ -70,7 +73,10 @@
 					  	 <a data-toggle="modal" data-backdrop="static" href="#myModal1" express-id="{$express.express_id}" express-url="{$express_detail}"  title="查看详情">查看详情</a>
 		    	  	</div>
 		      	</td>
-		      	<td>{$express.consignee}[TEL:{$express.mobile}]</td>
+		      	<!--  {if $type eq 'wait_pickup' or $type eq 'delivery'} -->
+		      	<td>{$express.express_user}<br>[TEL:{$express.express_mobile}]</td>
+		      	<!-- {/if} -->
+		      	<td>{$express.consignee}<br>[TEL:{$express.mobile}]</td>
 		      	<td>{$express.consignee_address}</td>
 		      	<td>{$express.add_time}</td>
 		      	<td>¥ {$express.commision}</td>

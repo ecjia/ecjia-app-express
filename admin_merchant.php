@@ -161,7 +161,7 @@ class admin_merchant extends ecjia_admin {
 		$page = new ecjia_page($count, 10, 5);
 		
 		$data = $db_data
-		->selectRaw('eo.express_id,eo.order_id,eo.express_sn,eo.commision,eo.status,eo.district, eo.street, eo.address, eo.consignee, eo.mobile')
+		->selectRaw('eo.express_id,eo.order_id,eo.express_sn,eo.commision,eo.status,eo.district, eo.street, eo.address, eo.consignee, eo.mobile,eo.express_user,eo.express_mobile')
 		->orderby(RC_DB::raw('eo.express_id'), 'desc')
 		->take(10)
 		->skip($page->start_id-1)
