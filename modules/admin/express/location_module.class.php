@@ -50,7 +50,7 @@ defined('IN_ECJIA') or exit('No permission resources.');
  * 查看配送订单配送员位置
  * @author zrl
  */
-class info_module extends api_admin implements api_interface {
+class location_module extends api_admin implements api_interface {
     public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {	
     	
     	if ($_SESSION['staff_id'] <= 0) {
@@ -64,7 +64,7 @@ class info_module extends api_admin implements api_interface {
         }
         
         $dbview = RC_DB::table('staff_user as su')
-        			->leftJoin('express_user as eu', RC_DB::raw('su.usr_id'), '=', RC_DB::raw('eu.usr_id'));
+        			->leftJoin('express_user as eu', RC_DB::raw('su.user_id'), '=', RC_DB::raw('eu.user_id'));
         
         $dbview->where(RC_DB::raw('su.user_id'), $staff_id);
         
@@ -73,11 +73,12 @@ class info_module extends api_admin implements api_interface {
         if (empty($express_user_info)) {
         	return new ecjia_error('not_exists_expressinfo', '配送员信息不存在');
         }
+        $app_url =  RC_App::apps_url('statics/images', __FILE__);
         
         $express_user_info = array(
         	'express_user'	        => empty($express_user_info['name']) ? 	'' 	: $express_user_info['name'],
         	'express_mobile'		=> empty($express_user_info['mobile']) ? '' : $express_user_info['mobile'],
-        	'avatar'	        	=> !empty($express_user_info['avatar']) ? RC_Upload::upload_url($express_user_info['avatar']) : '',
+        	'avatar'	        	=> !empty($express_user_info['avatar']) ? RC_Upload::upload_url($express_user_info['avatar']) : $app_url.'/touxiang.png',
         	'express_user_location'	=> array(
         		'longitude'			=> empty($express_user_info['longitude']) ? '' : $express_user_info['longitude'],
         		'latitude'			=> empty($express_user_info['latitude']) ? '' : $express_user_info['latitude'],

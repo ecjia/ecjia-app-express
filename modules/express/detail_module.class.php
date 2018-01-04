@@ -87,6 +87,8 @@ class detail_module extends api_admin implements api_interface {
 			$express_avatar = RC_DB::table('staff_user')->where('user_id', $express_order_info['staff_id'])->pluck('avatar');
 		}
 		
+		$app_url =  RC_App::apps_url('statics/images', __FILE__);
+		
 		switch ($express_order_info['status']) {
 			case '1' :
 				$status = 'wait_pickup';
@@ -134,7 +136,7 @@ class detail_module extends api_admin implements api_interface {
     		'staff_id'		=> $express_order_info['staff_id'],
     		'express_user'	=> $express_order_info['express_user'],
     		'express_mobile'=> $express_order_info['express_mobile'],
-    		'express_avatar'=> empty($express_avatar) ? '' : RC_Upload::upload_url($express_avatar),
+    		'express_avatar'=> empty($express_avatar) ? $app_url.'/touxiang.png' : RC_Upload::upload_url($express_avatar),
     		'express_status'=> $status,
     		'label_express_status' => $label_express_status,
     		'goods_items'	=> array(),
