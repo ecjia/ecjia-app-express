@@ -81,6 +81,7 @@ class task_module extends api_admin implements api_interface {
 			} elseif ($express_type == 'finished') {
 				$status = 5;
 			}
+			$dbview->where(RC_DB::raw('eo.status'), $status);
 		}
 		
 		if (!empty($keywords)) {
