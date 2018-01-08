@@ -97,7 +97,7 @@ class task_module extends api_admin implements api_interface {
 		$page_row = new ecjia_page($count, $size, 6, '', $page);
 		
 		$field = 'eo.*, oi.expect_shipping_time, oi.add_time as order_time, oi.pay_time, oi.order_amount, oi.pay_name, sf.merchants_name, sf.district as sf_district, sf.street as sf_street, sf.address as merchant_address, sf.longitude as merchant_longitude, sf.latitude as merchant_latitude';
-		$express_order_result = $dbview->selectRaw($field)->get();
+		$express_order_result = $dbview->selectRaw($field)->orderBy('add_time', 'desc')->get();
 		
 		$express_order_list = array();
 		if (!empty($express_order_result)) {
