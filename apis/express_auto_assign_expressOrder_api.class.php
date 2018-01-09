@@ -131,8 +131,7 @@ class express_auto_assign_expressOrder_api extends Component_Event_Api {
 				$hots = $express_user_dis;
 				$staff_id = array_search(min($hots),$hots);
 			}
-			RC_Logger::getLogger('error-test')->info('test1111');
-			RC_Logger::getLogger('error')->info($staff_id);
+	
 			if ($staff_id) {
 				$ex_u_info = RC_DB::table('staff_user as su')
 								->leftJoin('express_user as eu', RC_DB::raw('su.user_id'), '=', RC_DB::raw('eu.user_id'))
