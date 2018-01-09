@@ -298,8 +298,8 @@ class admin extends ecjia_admin {
 			
 			
 			//消息通知
-			$express_from_address = ecjia_region::getRegionName($express_order_info['sf_district']).ecjia_region::getRegionName($express_order_info['sf_street']).ecjia_region::getRegionName($express_order_info['merchant_address']);
-			$express_to_address = ecjia_region::getRegionName($express_order_info['district']).ecjia_region::getRegionName($express_order_info['street']).ecjia_region::getRegionName($express_order_info['address']);
+			$express_from_address = ecjia_region::getRegionName($express_order_info['sf_district']).ecjia_region::getRegionName($express_order_info['sf_street']).$express_order_info['merchant_address'];
+			$express_to_address = ecjia_region::getRegionName($express_order_info['district']).ecjia_region::getRegionName($express_order_info['street']).$express_order_info['address'];
 				
 			$notification_express_data = array(
 					'title'	=> '系统派单',

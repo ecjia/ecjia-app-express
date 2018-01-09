@@ -133,8 +133,8 @@ class finished_module extends api_admin implements api_interface {
 				RC_Api::api('push', 'push_event_send', $options);
 				
 				//消息通知
-				$express_from_address = ecjia_region::getRegionName($express_order_info['sf_district']).ecjia_region::getRegionName($express_order_info['sf_street']).ecjia_region::getRegionName($express_order_info['merchant_address']);
-				$express_to_address = ecjia_region::getRegionName($express_order_info['district']).ecjia_region::getRegionName($express_order_info['street']).ecjia_region::getRegionName($express_order_info['address']);
+				$express_from_address = ecjia_region::getRegionName($express_order_info['sf_district']).ecjia_region::getRegionName($express_order_info['sf_street']).$express_order_info['merchant_address'];
+				$express_to_address = ecjia_region::getRegionName($express_order_info['district']).ecjia_region::getRegionName($express_order_info['street']).$express_order_info['address'];
 					
 				$express_data = array(
 						'title'     => '配送成功',

@@ -82,8 +82,8 @@ class pickup_module extends api_admin implements api_interface {
     	
     	
     	//消息通知
-    	$express_from_address = ecjia_region::getRegionName($express_order_info['sf_district']).ecjia_region::getRegionName($express_order_info['sf_street']).ecjia_region::getRegionName($express_order_info['merchant_address']);
-    	$express_to_address = ecjia_region::getRegionName($express_order_info['district']).ecjia_region::getRegionName($express_order_info['street']).ecjia_region::getRegionName($express_order_info['address']);
+    	$express_from_address = ecjia_region::getRegionName($express_order_info['sf_district']).ecjia_region::getRegionName($express_order_info['sf_street']).$express_order_info['merchant_address'];
+    	$express_to_address = ecjia_region::getRegionName($express_order_info['district']).ecjia_region::getRegionName($express_order_info['street']).$express_order_info['address'];
     	
     	$express_order = array(
     		'express_id'	        => $express_order_info['express_id'],
