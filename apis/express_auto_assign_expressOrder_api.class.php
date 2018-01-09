@@ -151,14 +151,9 @@ class express_auto_assign_expressOrder_api extends Component_Event_Api {
 					'commision_status'	=> 0
 				);
 				
-				RC_Logger::getLogger('error')->info($assign_data);
-				RC_Logger::getLogger('error')->info($express_id);
-				RC_Logger::getLogger('error')->info('test2222');
-				
 				$query = RC_DB::table('express_order')->where('express_id', $express_id)->update($assign_data);
 				
 				if ($query) {
-					RC_Logger::getLogger('error')->info('test3333');
 					/* 消息插入 */
 					$orm_staff_user_db = RC_Model::model('orders/orm_staff_user_model');
 					$user = $orm_staff_user_db->find($staff_id);
