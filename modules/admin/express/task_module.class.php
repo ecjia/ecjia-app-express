@@ -85,7 +85,7 @@ class task_module extends api_admin implements api_interface {
 		}
 		
 		if (!empty($keywords)) {
-			$dbview ->whereRaw('(eo.express_sn  like  "%'.mysql_like_quote($keywords).'%") or (eo.express_user like "%'.mysql_like_quote($keywords).'%") or (eo.express_mobile like "%'.mysql_like_quote($keywords).'%")');
+			$dbview ->whereRaw('((eo.express_sn  like  "%'.mysql_like_quote($keywords).'%") or (eo.express_user like "%'.mysql_like_quote($keywords).'%") or (eo.express_mobile like "%'.mysql_like_quote($keywords).'%"))');
 		}
 		
 		//if (!empty($type) && in_array($type, array('assign', 'grab'))) {
