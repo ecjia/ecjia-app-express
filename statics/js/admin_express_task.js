@@ -477,17 +477,24 @@
     
     app.task_list_fresh = {
 		 init : function() {
+			 var InterValObj; 	//timer变量，控制时间
+			 var count = 120; 	//间隔函数，1秒执行
+			 InterValObj = window.setInterval(SetRemainTime, 1000); //启动计时器，1秒执行一次
 			 
-			 var num=120;
-				var interval =  setInterval(function(){
-					
-					numDiv.innerHTML = num--;
-					
-					if(num == 0){
-						clearInterval(interval);
-						window.location.reload();
-					}
-				},1000);
+			//timer处理函数
+			function SetRemainTime() {
+				if (count == 0) {
+					window.clearInterval(InterValObj);		//停止计时器
+					$('.auto-refresh').html('<span class="numcolor">120</span>秒后自动刷新');
+					ecjia.pjax(location.href);
+				} else {
+					count--;
+					$('.auto-refresh').html('<span class="numcolor">'+ count + '</span>' + "秒后自动刷新");
+				}
+			};
+			$(document).on('pjax:start', function () {
+				window.clearInterval(InterValObj);
+			});
 		 },	
     }
     

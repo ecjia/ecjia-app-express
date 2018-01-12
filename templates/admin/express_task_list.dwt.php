@@ -39,7 +39,7 @@
 				<div class="map-change-remark map-exp-order">注：配送单号&nbsp;&nbsp;<span class="mark order">[{$first_express_order.express_sn}]</span>&nbsp;&nbsp;位置</div>
 				<div class="map-change-remark map-exp-user">注：配送员&nbsp;&nbsp;<span class="mark user">[{$express_info.name}]</span>&nbsp;&nbsp;位置</div>
 			<!--{/if} -->
-			<div class="fresh"><span class="numcolor" id='numDiv'>120</span>&nbsp;&nbsp;秒后自动刷新<a class="btn" style="background: #058DC7;text-shadow:none;margin-left:3%;margin-top:1px;" href='{url path="express/admin/init" args="type=wait_grab"}'><span style="color:#fff;">手动刷新</span> </a></div>
+			<div class="fresh"><span class="auto-refresh"><span class="numcolor">120</span>秒后自动刷新</span><a class="btn data-pjax" style="background: #058DC7;text-shadow:none;margin-left:3%;margin-top:1px;" href='{url path="express/admin/init" args="type=wait_grab"}'><span style="color:#fff;">手动刷新</span> </a></div>
 		</form>
 	</ul>
 </div>
