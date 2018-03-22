@@ -47,26 +47,33 @@
 defined('IN_ECJIA') or exit('No permission resources.');
 
 /**
- * 获取配送总数
- * @author chenzhejun@ecmoban.com
- * @param   array	 $options
- * @return  array   商家活动数组
+ * 配送员资金账户变动
  */
-class express_express_order_count_api extends Component_Event_Api {
-    
-    public function call(&$options) {
-    	if (!is_array($options)) {
-    		return new ecjia_error('invalid_parameter', '参数无效');
-    	}
-    	
-    	$db    = RC_DB::table('express_order');
-    	$where = array();
-    	
-    	if (isset($_SESSION['store_id']) && $_SESSION['store_id']) {
-    		$db->where('store_id', $_SESSION['store_id']);
-    	}
-    	return $db->count();
-    }
-}
+class express_account_change {
+	
+	/**
+	 * 配送员资金变动记录
+	 */
+	public static function express_account_change_log($options){
+		/*插入配送员帐户变动记录 */
+		 $account_log = array (
+            'staff_user_id'		=> $options['staff_user_id'],
+            'user_money'		=> $options['user_money'],
+            'frozen_money'		=> $options['frozen_money'],
+            'change_time'		=> RC_Time::gmtime(),
+            'change_desc'		=> $options['change_desc'],
+            'change_type'		=> $options['change_type']
+        );
+		 
+		RC_DB::table('express_user_account_log')->insert($account_log);
+		
+		/*更新配送员账户信息 */
+		RC_DB::table('express_user')->where('user_id', $options['staff_user_id'])->increment('user_money', $options['user_money']);
+		
+		return true;
+	}
+
+}	
+
 
 // end

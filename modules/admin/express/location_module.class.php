@@ -47,33 +47,45 @@
 defined('IN_ECJIA') or exit('No permission resources.');
 
 /**
- * 后台配送菜单API
- * @author 
+ * 查看配送订单配送员位置
+ * @author zrl
  */
-class express_admin_menu_api extends Component_Event_Api {
-
-    public function call(&$options) {
-//         $menus = ecjia_admin::make_admin_menu('09_content', RC_Lang::get('article::article.article_manage'), '', 9);
+class location_module extends api_admin implements api_interface {
+    public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {	
+    	
+    	if ($_SESSION['staff_id'] <= 0) {
+            return new ecjia_error(100, 'Invalid session');
+        }
+		
+        $staff_id = $this->requestData('staff_id');
         
-//         $submenus = array(
-//             ecjia_admin::make_admin_menu('01_article_list', RC_Lang::get('article::article.article_list'), RC_Uri::url('article/admin/init'), 1)->add_purview('article_manage'),
-//         	ecjia_admin::make_admin_menu('02_article_add', RC_Lang::get('article::article.add_article'), RC_Uri::url('article/admin/add'), 2)->add_purview('article_update'),
-//             ecjia_admin::make_admin_menu('03_articlecat_list', RC_Lang::get('article::article.cat'), RC_Uri::url('article/admin_articlecat/init'), 3)->add_purview('article_cat_manage'),
-//             ecjia_admin::make_admin_menu('divider', '', '', 4)->add_purview(array('shophelp_manage', 'shopinfo_manage')),
-//             ecjia_admin::make_admin_menu('05_article_help', RC_Lang::get('article::article.shop_help'), RC_Uri::url('article/admin_shophelp/init'), 5)->add_purview('shophelp_manage'),
-//             ecjia_admin::make_admin_menu('06_article_info', RC_Lang::get('article::article.shop_info'), RC_Uri::url('article/admin_shopinfo/init'), 6)->add_purview('shopinfo_manage'),
-//         	ecjia_admin::make_admin_menu('divider', '', '', 7)->add_purview(array('article_auto_manage')),
-//         	ecjia_admin::make_admin_menu('08_article_info', __('文章自动发布'), RC_Uri::url('article/admin_article_auto/init'), 8)->add_purview('article_auto_manage'),
-//         );
+        if (empty($staff_id)) {
+        	return new ecjia_error('invalid_parameter', RC_Lang::get('orders::order.invalid_parameter'));
+        }
         
-//         $menus->add_submenu($submenus);
-//         $menus = RC_Hook::apply_filters('express_admin_menu_api', $menus);
+        $dbview = RC_DB::table('staff_user as su')
+        			->leftJoin('express_user as eu', RC_DB::raw('su.user_id'), '=', RC_DB::raw('eu.user_id'));
         
-// 		if ($menus->has_submenus()) {
-// 		    return $menus;
-// 		}
-		return false;
-    }
+        $dbview->where(RC_DB::raw('su.user_id'), $staff_id);
+        
+        $express_user_info = $dbview->selectRaw('eu.*, su.name, su.mobile, su.avatar')->first();
+        
+        if (empty($express_user_info)) {
+        	return new ecjia_error('not_exists_expressinfo', '配送员信息不存在');
+        }
+        $app_url =  RC_App::apps_url('statics/images', __FILE__);
+        
+        $express_user_info = array(
+        	'express_user'	        => empty($express_user_info['name']) ? 	'' 	: $express_user_info['name'],
+        	'express_mobile'		=> empty($express_user_info['mobile']) ? '' : $express_user_info['mobile'],
+        	'avatar'	        	=> !empty($express_user_info['avatar']) ? RC_Upload::upload_url($express_user_info['avatar']) : $app_url.'/touxiang.png',
+        	'express_user_location'	=> array(
+        		'longitude'			=> empty($express_user_info['longitude']) ? '' : $express_user_info['longitude'],
+        		'latitude'			=> empty($express_user_info['latitude']) ? '' : $express_user_info['latitude'],
+        	),
+        );
+		return $express_user_info;
+	 }	
 }
 
 // end

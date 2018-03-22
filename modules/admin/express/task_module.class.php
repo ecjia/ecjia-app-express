@@ -47,73 +47,102 @@
 defined('IN_ECJIA') or exit('No permission resources.');
 
 /**
- * 配送抢单列表
- * @author will.chen
+ * 掌柜配送任务列表
+ * @author zrl
  */
-class grab_list_module extends api_admin implements api_interface {
+class task_module extends api_admin implements api_interface {
     public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {	
     	
-    	if ($_SESSION['admin_id'] <= 0 && $_SESSION['staff_id'] <= 0) {
+    	if ($_SESSION['staff_id'] <= 0) {
             return new ecjia_error(100, 'Invalid session');
         }
 		
-		$location         = $this->requestData('location', array());
-		$size             = $this->requestData('pagination.count', 15);
-		$page             = $this->requestData('pagination.page', 1);
-		//$where            = array('eo.store_id' => $_SESSION['store_id'], 'staff_id' => 0, 'eo.status' => 0);
-		$where = array();
-		$where['staff_id'] = 0;
-		$where['eo.status'] = 0;
-		if (!empty($_SESSION['store_id']) && $_SESSION['store_id'] > 0) {
-			$where['eo.store_id'] = $_SESSION['store_id'];
+		$express_type = $this->requestData('express_type');
+		//$type = $this->requestData('type');
+		$keywords = $this->requestData('keywords');
+		$size     = $this->requestData('pagination.count', 15);
+		$page     = $this->requestData('pagination.page', 1);
+		
+		if (empty($express_type)) {
+			return new ecjia_error('invalid_parameter', RC_Lang::get('orders::order.invalid_parameter'));
 		}
 		
-		$express_order_db = RC_Model::model('express/express_order_viewmodel');
+		$dbview = RC_DB::table('express_order as eo')
+							->leftJoin('order_info as oi', RC_DB::raw('eo.order_id'), '=', RC_DB::raw('oi.order_id'))
+							->leftJoin('store_franchisee as sf', RC_DB::raw('sf.store_id'), '=', RC_DB::raw('eo.store_id'));
 		
-		$count            = $express_order_db->join(null)->where($where)->count();
+		$dbview->where(RC_DB::raw('eo.store_id'), $_SESSION['store_id']);
+		
+		if (!empty($express_type)) {
+			if ($express_type == 'wait_pickup') {
+				$status = 1;
+			} elseif ($express_type == 'sending') {
+				$status = 2;
+			} elseif ($express_type == 'finished') {
+				$status = 5;
+			}
+			$dbview->where(RC_DB::raw('eo.status'), $status);
+		}
+		
+		if (!empty($keywords)) {
+			$dbview ->whereRaw('((eo.express_sn  like  "%'.mysql_like_quote($keywords).'%") or (eo.express_user like "%'.mysql_like_quote($keywords).'%") or (eo.express_mobile like "%'.mysql_like_quote($keywords).'%"))');
+		}
+		
+		//if (!empty($type) && in_array($type, array('assign', 'grab'))) {
+		//    $where['eo.from'] = $type;
+		//}
+		
+		$count = RC_DB::table('express_order')->where('store_id', $_SESSION['store_id'])->count();
+		
 		//实例化分页
 		$page_row = new ecjia_page($count, $size, 6, '', $page);
 		
-		$field                = 'eo.*, oi.add_time as order_time, oi.pay_time, oi.order_amount, oi.pay_name, sf.merchants_name, sf.district as sf_district, sf.street as sf_street, sf.address as merchant_address, sf.longitude as merchant_longitude, sf.latitude as merchant_latitude';
-		$express_order_result = $express_order_db->field($field)->join(array('delivery_order', 'order_info', 'store_franchisee'))->where($where)->order(array('express_id' => 'desc'))->select();
+		$field = 'eo.*, oi.expect_shipping_time, oi.add_time as order_time, oi.pay_time, oi.order_amount, oi.pay_name, sf.merchants_name, sf.district as sf_district, sf.street as sf_street, sf.address as merchant_address, sf.longitude as merchant_longitude, sf.latitude as merchant_latitude';
+		$express_order_result = $dbview->selectRaw($field)->orderBy('add_time', 'desc')->get();
 		
 		$express_order_list = array();
 		if (!empty($express_order_result)) {
 			foreach ($express_order_result as $val) {
+				switch ($val['status']) {
+					case '1' :
+						$status = 'wait_pickup';
+						$label_express_status = '待取货';
+						break;
+					case '2' :
+						$status = 'sending';
+						$label_express_status = '配送中';
+						break;
+					case '5' :
+						$status = 'finished';
+						$label_express_status = '已完成';
+						break;
+				}
 				$sf_district_name = ecjia_region::getRegionName($val['sf_district']);
 				$sf_street_name = ecjia_region::getRegionName($val['sf_street']);
 				$district_name = ecjia_region::getRegionName($val['district']);
 				$street_name = ecjia_region::getRegionName($val['street']);
 				
+				$shipping_fee = 
 				$express_order_list[] = array(
 					'express_id'	         => $val['express_id'],
 					'express_sn'	         => $val['express_sn'],
-					'express_type'	         => $val['from'],
-					'label_express_type'	 => $val['from'] == 'assign' ? '系统派单' : '抢单',
 					'order_sn'		         => $val['order_sn'],
-					'payment_name'	         => $val['pay_name'],
+					'format_receive_time'	 => $val['receive_time'] > 0 ? RC_Time::local_date(ecjia::config('time_format'), $val['receive_time']) : '',
+					'staff_id'				 => $val['staff_id'],
+					'express_user'			 => $val['express_user'],
+					'express_mobile'		 => $val['express_mobile'],
+					'express_status'		 => $status,
+					'label_express_status'	 => $label_express_status,
 					'express_from_address'	 => '【'.$val['merchants_name'].'】'. $sf_district_name. $sf_street_name. $val['merchant_address'],
-					'express_from_location'	 => array(
-						'longitude' => $val['merchant_longitude'],
-						'latitude'	=> $val['merchant_latitude'],
-					),
-					'express_to_address'	=> $district_name. $street_name. $val['address'],
-					'express_to_location'	=> array(
-						'longitude' => $val['longitude'],
-						'latitude'	=> $val['latitude'],
-					),
-					'distance'		=> $val['distance'],
-					'consignee'		=> $val['consignee'],
-					'mobile'		=> $val['mobile'],
-					'order_time'	=> $val['order_time'] > 0 ? RC_Time::local_date(ecjia::config('time_format'), $val['order_time']) : '',
-					'pay_time'		=> empty($val['pay_time']) ? '' : RC_Time::local_date(ecjia::config('time_format'), $val['pay_time']),
-					'best_time'		=> $val['best_time'],
-					'shipping_fee'	=> $val['shipping_fee'],
-					'order_amount'	=> $val['order_amount'],
+					'express_to_address'	 => $district_name. $street_name. $val['address'],
+					'shipping_fee'			 => $val['commision'],	
+					'format_shipping_fee'	 => price_format($val['commision']),
+					'best_time'				 => empty($val['expect_shipping_time']) ? '' : $val['expect_shipping_time'],
+					'express_status' 		 => $status,
+					'label_express_status'	 => $label_express_status,
 				);
 			}
 		}
-		
 		$pager = array(
 			'total' => $page_row->total_records,
 			'count' => $page_row->total_records,

@@ -51,7 +51,7 @@ class express_merchant_hook {
 	public static function express_merchant_menu_api($menus) {	    
 	    $menu = array(
 	    	11 => ecjia_merchant::make_admin_menu('01_express_list','配送员管理', RC_Uri::url('express/mh_express/init'), 3)->add_purview('express_manage')->add_icon('fa-truck'), 
-	    	12 => ecjia_merchant::make_admin_menu('02_match_list','资金对账', RC_Uri::url('express/mh_match/init'), 4)->add_purview('express_match_manage')->add_icon('fa-money'), 
+	    	12 => ecjia_merchant::make_admin_menu('02_match_list','配送员资金对账', RC_Uri::url('express/mh_match/init'), 4)->add_purview('express_match_manage')->add_icon('fa-money'), 
 	    );
 	    $menus->add_submenu($menu);
 	    return $menus;
