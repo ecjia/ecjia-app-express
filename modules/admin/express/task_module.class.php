@@ -72,6 +72,7 @@ class task_module extends api_admin implements api_interface {
 							->leftJoin('store_franchisee as sf', RC_DB::raw('sf.store_id'), '=', RC_DB::raw('eo.store_id'));
 		
 		$dbview->where(RC_DB::raw('eo.store_id'), $_SESSION['store_id']);
+		$dbview->where(RC_DB::raw('eo.shipping_code'), 'ship_o2o_express');
 		
 		if (!empty($express_type)) {
 			if ($express_type == 'wait_pickup') {
@@ -135,7 +136,7 @@ class task_module extends api_admin implements api_interface {
 					'label_express_status'	 => $label_express_status,
 					'express_from_address'	 => '【'.$val['merchants_name'].'】'. $sf_district_name. $sf_street_name. $val['merchant_address'],
 					'express_to_address'	 => $district_name. $street_name. $val['address'],
-					'shipping_fee'			 => $val['commision'],	
+					'shipping_fee'			 => !empty($val['commision']) ? $val['commision'] : '0.00',	
 					'format_shipping_fee'	 => price_format($val['commision']),
 					'best_time'				 => empty($val['expect_shipping_time']) ? '' : $val['expect_shipping_time'],
 					'express_status' 		 => $status,
