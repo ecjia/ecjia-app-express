@@ -72,9 +72,12 @@ class task_module extends api_admin implements api_interface {
 							->leftJoin('store_franchisee as sf', RC_DB::raw('sf.store_id'), '=', RC_DB::raw('eo.store_id'));
 		
 		$dbview->where(RC_DB::raw('eo.store_id'), $_SESSION['store_id']);
+		$dbview->where(RC_DB::raw('eo.shipping_code'), 'ship_o2o_express');
 		
 		if (!empty($express_type)) {
-			if ($express_type == 'wait_pickup') {
+			if ($express_type == 'wait_assign') {
+				$status = 0;
+			}elseif ($express_type == 'wait_pickup') {
 				$status = 1;
 			} elseif ($express_type == 'sending') {
 				$status = 2;
@@ -87,11 +90,7 @@ class task_module extends api_admin implements api_interface {
 		if (!empty($keywords)) {
 			$dbview ->whereRaw('((eo.express_sn  like  "%'.mysql_like_quote($keywords).'%") or (eo.express_user like "%'.mysql_like_quote($keywords).'%") or (eo.express_mobile like "%'.mysql_like_quote($keywords).'%"))');
 		}
-		
-		//if (!empty($type) && in_array($type, array('assign', 'grab'))) {
-		//    $where['eo.from'] = $type;
-		//}
-		
+				
 		$count = RC_DB::table('express_order')->where('store_id', $_SESSION['store_id'])->count();
 		
 		//实例化分页
@@ -104,6 +103,10 @@ class task_module extends api_admin implements api_interface {
 		if (!empty($express_order_result)) {
 			foreach ($express_order_result as $val) {
 				switch ($val['status']) {
+					case '0' :
+						$status = 'wait_assign';
+						$label_express_status = '待指派';
+						break;
 					case '1' :
 						$status = 'wait_pickup';
 						$label_express_status = '待取货';
@@ -135,7 +138,7 @@ class task_module extends api_admin implements api_interface {
 					'label_express_status'	 => $label_express_status,
 					'express_from_address'	 => '【'.$val['merchants_name'].'】'. $sf_district_name. $sf_street_name. $val['merchant_address'],
 					'express_to_address'	 => $district_name. $street_name. $val['address'],
-					'shipping_fee'			 => $val['commision'],	
+					'shipping_fee'			 => !empty($val['commision']) ? $val['commision'] : '0.00',	
 					'format_shipping_fee'	 => price_format($val['commision']),
 					'best_time'				 => empty($val['expect_shipping_time']) ? '' : $val['expect_shipping_time'],
 					'express_status' 		 => $status,

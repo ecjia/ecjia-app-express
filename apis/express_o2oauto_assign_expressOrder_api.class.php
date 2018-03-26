@@ -47,11 +47,11 @@
 use Ecjia\System\Notifications\ExpressAssign;
 defined('IN_ECJIA') or exit('No permission resources.');
 /**
- * 商家发货后自动派单
+ * 发货后;配送方式是商家配送时，自动派单给商家配送员
  * @author zrl
  *
  */
-class express_auto_assign_expressOrder_api extends Component_Event_Api {
+class express_o2oauto_assign_expressOrder_api extends Component_Event_Api {
     /**
      * @param  array 
      * @return array
@@ -236,7 +236,7 @@ class express_auto_assign_expressOrder_api extends Component_Event_Api {
 	 */
 	public function get_express_user_list($pra){
 		$db = RC_DB::table('staff_user as su')->leftJoin('express_user as eu', RC_DB::raw('su.user_id'), '=', RC_DB::raw('eu.user_id'));
-		$db->where(RC_DB::raw('su.store_id'), 0);
+		$db->where(RC_DB::raw('su.store_id'), '>', 0);
 		
 		if (!empty($pra['online_status'])) {
 			$db->where(RC_DB::raw('su.online_status'), 1);

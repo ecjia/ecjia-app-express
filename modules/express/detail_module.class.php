@@ -90,6 +90,10 @@ class detail_module extends api_admin implements api_interface {
 		$app_url =  RC_App::apps_url('statics/images', __FILE__);
 		
 		switch ($express_order_info['status']) {
+			case '0' :
+				$status = 'wait_assign';
+				$label_express_status = '待指派';
+				break;
 			case '1' :
 				$status = 'wait_pickup';
 				$label_express_status = '待取货';
