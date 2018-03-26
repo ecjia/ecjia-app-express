@@ -71,7 +71,7 @@ class mh_history extends ecjia_merchant {
 		
 		
 		ecjia_merchant_screen::get_current_screen()->add_nav_here(new admin_nav_here('配送管理', RC_Uri::url('shipping/mh_shipping/shipping_template')));
-		ecjia_merchant_screen::get_current_screen()->add_nav_here(new admin_nav_here('历史配送', RC_Uri::url('express/mh_match/init')));
+		ecjia_merchant_screen::get_current_screen()->add_nav_here(new admin_nav_here('历史配送', RC_Uri::url('express/mh_history/init')));
 		ecjia_merchant_screen::get_current_screen()->set_parentage('express', 'express/mh_history.php');
 		
 	}
