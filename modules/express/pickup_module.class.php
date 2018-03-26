@@ -153,7 +153,7 @@ class pickup_module extends api_admin implements api_interface {
     	if ($order_info['shipping_id'] > 0) {
 //     		$shipping_method = RC_Loader::load_app_class('shipping_method', 'shipping');
     		$shipping_info = ecjia_shipping::pluginData($order_info['shipping_id']);
-    		if ($shipping_info['shipping_code'] == 'ship_o2o_express') {
+    		if ($shipping_info['shipping_code'] == 'ship_o2o_express' || $shipping_info['shipping_code'] == 'ship_ecjia_express') {
     			$data = array(
     				'express_code' => $shipping_info['shipping_code'],
     				'track_number' => $order_info['invoice_no'],
