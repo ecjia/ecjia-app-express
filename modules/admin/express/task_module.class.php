@@ -75,7 +75,9 @@ class task_module extends api_admin implements api_interface {
 		$dbview->where(RC_DB::raw('eo.shipping_code'), 'ship_o2o_express');
 		
 		if (!empty($express_type)) {
-			if ($express_type == 'wait_pickup') {
+			if ($express_type == 'wait_assign') {
+				$status = 0;
+			}elseif ($express_type == 'wait_pickup') {
 				$status = 1;
 			} elseif ($express_type == 'sending') {
 				$status = 2;
@@ -88,11 +90,7 @@ class task_module extends api_admin implements api_interface {
 		if (!empty($keywords)) {
 			$dbview ->whereRaw('((eo.express_sn  like  "%'.mysql_like_quote($keywords).'%") or (eo.express_user like "%'.mysql_like_quote($keywords).'%") or (eo.express_mobile like "%'.mysql_like_quote($keywords).'%"))');
 		}
-		
-		//if (!empty($type) && in_array($type, array('assign', 'grab'))) {
-		//    $where['eo.from'] = $type;
-		//}
-		
+				
 		$count = RC_DB::table('express_order')->where('store_id', $_SESSION['store_id'])->count();
 		
 		//实例化分页
@@ -105,6 +103,10 @@ class task_module extends api_admin implements api_interface {
 		if (!empty($express_order_result)) {
 			foreach ($express_order_result as $val) {
 				switch ($val['status']) {
+					case '0' :
+						$status = 'wait_assign';
+						$label_express_status = '待指派';
+						break;
 					case '1' :
 						$status = 'wait_pickup';
 						$label_express_status = '待取货';
