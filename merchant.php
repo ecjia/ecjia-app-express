@@ -77,9 +77,10 @@ class merchant extends ecjia_merchant {
 		
 		RC_Script::localize_script('express', 'js_lang', RC_Lang::get('express::express.js_lang'));
 		
-		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here('配送任务', RC_Uri::url('express/merchant/init')));
+		
 		
 		ecjia_merchant_screen::get_current_screen()->add_nav_here(new admin_nav_here('配送管理', RC_Uri::url('shipping/mh_shipping/shipping_template')));
+		ecjia_merchant_screen::get_current_screen()->add_nav_here(new admin_nav_here('配送任务', RC_Uri::url('express/merchant/init')));
 		ecjia_merchant_screen::get_current_screen()->set_parentage('express', 'express/merhcant.php');
 	}
 	
@@ -410,8 +411,8 @@ class merchant extends ecjia_merchant {
 		$this->admin_priv('mh_express_task_manage');
 	
 		ecjia_screen::get_current_screen()->remove_last_nav_here();
-		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here('任务中心'));
-		$this->assign('ur_here', '任务中心');
+		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here('配送任务'));
+		$this->assign('ur_here', '配送任务');
 	
 		$type = empty($_GET['type']) ? 'wait_pickup' : trim($_GET['type']);
 		$keywords = empty($_GET['keywords']) ? '' : trim($_GET['keywords']);

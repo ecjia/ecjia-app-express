@@ -7,6 +7,7 @@
 			<div class="accordion-heading">
 				<a class="accordion-toggle move-mod-head"><strong>配送员列表</strong></a>
 			</div>
+			
 			<div class="accordion-body">
 				<div class="accordion-inner right-scroll">
 					<div class="control-group control-group-small">
@@ -19,41 +20,44 @@
 							 </form>
 						</div>
 					</div>
+					
 					<div class="control-group control-group-small press-list" style="margin-bottom:0px;">
 						<div class="margin-label online-list" style="margin-top:5px;margin-bottom: 5px;">在线 （{$express_count.online}）<a class="acc-in move-mod-head online-triangle" data-toggle="collapse" data-target="#online"><b class="triangle on-tran"></b></a></div>
-						<div class="online open">
-						<div class="express-user-list assign-operate accordion-body in collapse" id="online">
-							<!-- {foreach from=$express_user_list.list item=list} -->
-								{if $list.online_status eq '1'}
-									<div class="express-user-info ex-user-div{$list.user_id}" staff_user_id="{$list.user_id}">
-										<div class="exuser_div" longitude="{$list.longitude}" latitude="{$list.latitude}" name="{$list.name}" mobile="{$list.mobile}">
-											<div class="imginfo-div">
-	        		                			<div class="express-img">{if $list.avatar}<img src="{$list.avatar}">{else}<img src="{$app_url}/touxiang.png">{/if}</div>
-	        		                			<div class="expressinfo">{$list.name}<br>{$list.mobile}</div>
-											</div>
-											<div class="express-order-div">
-												<div class="waitfor-pickup">
-													待取货<span class="ecjia-red">{if $list.wait_pickup_count}{$list.wait_pickup_count}{else}0{/if}单</span>
+							<div class="online open">
+							<div class="express-user-list assign-operate accordion-body in collapse" id="online">
+								<!-- {foreach from=$express_user_list.list item=list} -->
+									{if $list.online_status eq '1'}
+										<div class="express-user-info ex-user-div{$list.user_id}" staff_user_id="{$list.user_id}">
+											<div class="exuser_div" longitude="{$list.longitude}" latitude="{$list.latitude}" name="{$list.name}" mobile="{$list.mobile}">
+												<div class="imginfo-div">
+		        		                			<div class="express-img">{if $list.avatar}<img src="{$list.avatar}">{else}<img src="{$app_url}/touxiang.png">{/if}</div>
+		        		                			<div class="expressinfo">{$list.name}<br>{$list.mobile}</div>
 												</div>
-												<div class="wait-sending">
-													待配送<span class="ecjia-red">{if $list.sending_count}{$list.sending_count}{else}0{/if}单</span>
+												<div class="express-order-div">
+													<div class="waitfor-pickup">
+														待取货<span class="ecjia-red">{if $list.wait_pickup_count}{$list.wait_pickup_count}{else}0{/if}单</span>
+													</div>
+													<div class="wait-sending">
+														待配送<span class="ecjia-red">{if $list.sending_count}{$list.sending_count}{else}0{/if}单</span>
+													</div>
 												</div>
 											</div>
+											<div class="assign-div">
+				                       			<a class="assign btn btn-warning" type="button"  notice="是否确定让  【{$list.name}】  去配送？" assign-url='{url path="express/admin/assign_express_order" args="staff_id={$list.user_id}&type={$type}"}'>
+				                       				指派给他
+				                       			</a>  
+											</div>
+											<input type="hidden" class="ex-u-id" value=""/>
 										</div>
-										<div class="assign-div">
-			                       			<a class="assign btn btn-warning" type="button"  notice="是否确定让  【{$list.name}】  去配送？" assign-url='{url path="express/admin/assign_express_order" args="staff_id={$list.user_id}&type={$type}"}'>
-			                       				指派给他
-			                       			</a>  
-										</div>
-										<input type="hidden" class="ex-u-id" value=""/>
-									</div>
-								{/if}
-									<!-- {foreachelse} -->
-								<div class="text-position">暂无任何记录!</div>
-							<!-- {/foreach} -->
+									{/if}
+										<!-- {foreachelse} -->
+									<div class="text-position">暂无任何记录!</div>
+								<!-- {/foreach} -->
+							</div>
 						</div>
 					</div>
-					</div>
+					
+					
 					<div class="control-group control-group-small press-list" style="margin-bottom:0px;">
 						<div class="margin-label online-list" style="margin-top:5px;margin-bottom: 5px;">离线 （{$express_count.offline}）<a class="acc-in  move-mod-head collapsed leave-trangle" data-toggle="collapse" data-target="#leave"><b class="triangle1 leaveline"></b></a></div>
 						<div class="leaveline-express">
@@ -111,5 +115,4 @@
 		  </div>
 	</div>
 </div>
-	
 <!--指派结束 -->

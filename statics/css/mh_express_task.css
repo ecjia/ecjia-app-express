@@ -242,30 +242,38 @@
 }
 
 /*配送订单详情*/
-.wait-grab-order-detail .modal {
-   width: 930px;
-   margin-left: -350px;
-   margin-top: 10px;
-}
 .order-wait-grab-detail .modal-body {
     max-height: 800px;
 }
 
 .express_content{
-	height:515px;
+	height:600px;
 	overflow:auto;
 }
 .express_order{
 	height:35px;
+	font-size: 16px;
 	border-bottom: 1px solid #dcdcdc;
 }
 .express_order span{
-	font-size: 16px;
-	margin-right: 35px;
+	margin-right:35px;
 }
+.express_title{
+	font-size: 18px;
+	font-weight:bold;
+}
+.express_content ul {
+	padding:15px;
+}
+.express_content li {
+	font-size: 14px;
+	list-style: none;
+	padding:5px;
+}
+
 .pickup_info{
-	width:435px;
-	height:168px;
+	width:415px;
+	height:190px;
 	background-color: #f9fafa;
 	border: 1px solid #f9fafa;
     border-radius: 5px;
@@ -273,8 +281,8 @@
 	float:left;
 }
 .delivery_info{
-	width:435px;
-	height:168px;
+	width:415px;
+	height:190px;
 	background-color: #f9fafa;
 	border: 1px solid #f9fafa;
     border-radius: 5px;
@@ -283,21 +291,27 @@
 }
 
 .shipping_info{
-	width:435px;
-	height:138px;
+	width:415px;
+	height:160px;
 	background-color: #f9fafa;
 	border: 1px solid #f9fafa;
     border-radius: 5px;
     margin-top: 20px;
 	float:left;
 }
-.express_content li {
-	list-style: none;
-	margin-top: 5px;
+
+.shipping_info_over{
+	width:415px;
+	height:190px;
+	background-color: #f9fafa;
+	border: 1px solid #f9fafa;
+    border-radius: 5px;
+    margin-top: 20px;
+	float:left;
 }
 
 .order_goods{
-	width:881px;
+	width:851px;
 	background-color: #f9fafa;
 	border: 1px solid #f9fafa;
     margin-top: 20px;
@@ -314,13 +328,13 @@
 }
 
 .info-right{
-	 margin-left: 70px;
+	margin-left: 70px;
 }
 .goods_number{
 	margin-left:60px;
 }
 .order_desc{
-	width:881px;
+	width:851px;
 	background-color: #f9fafa;
 	border: 1px solid #f9fafa;
 	float:left;
@@ -329,10 +343,7 @@
 }
 
 /*查看当前位置*/
-.express-location-modal{
-	height:580px;
-	width:950px;
-}
+
 .currnt-location-detail .modal {
    width: 950px;
    margin-left: -350px;
@@ -356,22 +367,15 @@
 	height:580px;
 	width:950px;
 }
-.assign-order-detail .modal {
-   width: 995px;
-   margin-left: -395px;
-   margin-top: 10px;
-}
 .assign-detail .modal-body {
     max-height: 800px;
 	padding:10px 10px;
 }
 .express_reassign{
-	height:650px;
-	overflow:auto;
+	height:600px;
 }
 .map-reassign{
 	float: left;
-    height: 523px;
     width: 73%;
 }
 .express_reassign .right-bar{
@@ -392,10 +396,22 @@
 	text-align:center;
 }
 .express_reassign .right-scroll{
-	height: 468px;
+	height: 560px;
     overflow: auto;
 }
-
+.express_reassign .accordion-group{
+    border: 1px solid #e5e5e5;
+    border-radius: 4px;
+}
+.express_reassign .accordion-toggle{
+	background-color: #f5f5f5;
+	background-repeat:no-repeat;
+	color:#222;
+	text-decoration:none;
+	display:block;
+	padding:8px 15px;
+	transition:background-color 0.2s ease-in-out 0s;
+}
 /*重新指派弹框页指派操作*/
 .re-assign-model{
 	display:none;
@@ -438,4 +454,21 @@
 }
 .express-search-btn{
 	 margin-left: -25px;
+}
+
+
+
+/* 
+ * 配送员管理-查看当前位置
+ */
+.modal {
+	margin-top:100px;
+}
+.modal-content{
+	width:900px;
+	margin-left: -150px;
+}
+
+#allmap {
+	height:600px;
 }

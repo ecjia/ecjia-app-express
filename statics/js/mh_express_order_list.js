@@ -132,6 +132,11 @@
 			  });
 			  $(".exuser_div").on('click', function (e) {
 	            e.preventDefault();
+
+	            var home_url = $("input[name='home_url']").val();
+	            var ex_user_img =  home_url + "/content/apps/express/statics/images/ex_user.png";
+	            var lable_text_img =  home_url + "/content/apps/express/statics/images/lable_text.png";
+	            
 	            var $this = $(this);
 	            var ex_lng = $this.attr('longitude');
 	            var ex_lat = $this.attr('latitude');
@@ -157,7 +162,7 @@
 	                size   = new qq.maps.Size(50,50),
 	                origin = new qq.maps.Point(0, 0),
 	                icon   = new qq.maps.MarkerImage(
-	                    "content/apps/express/statics/images/ex_user.png",
+	                	ex_user_img,
 	                    size,
 	                    origin,
 	                    anchor
@@ -174,7 +179,7 @@
 	            Label.prototype.construct = function() {
 	                 this.dom = document.createElement('div');
 	                 this.dom.style.cssText =
-	                      'background:url("content/apps/express/statics/images/lable_text.png") no-repeat;width:130px;height:60px;margin-top:-98px;margin-left:-38px;position:absolute;' +
+	                	  'background:url("'+ lable_text_img +'") no-repeat;width:130px;height:60px;margin-top:-98px;margin-left:-38px;position:absolute;' +
 	                      'text-align:left;color:white;padding-left:25px;padding-top:8px;';
 	                 this.dom.innerHTML = ex_name +'<br>'+ex_mobile;
 	                 //将dom添加到覆盖物层，overlayLayer的顺序为容器 1，此容器中包含Polyline、Polygon、GroundOverlay等
@@ -224,7 +229,6 @@
             	e.preventDefault();
                 var $this = $(this);
                 var express_id = $this.attr('express-id');
-                //express_id替换；供指派使用
                 $(".selected-express-id").val(express_id);
                 var url = $this.attr('express-reassign-url');
                 $.post(url, {'express_id': express_id}, function (data) {
@@ -235,6 +239,12 @@
        },
         
         map: function () {
+        	
+        	var home_url = $("input[name='home_url']").val();
+        	var ex_user_img =  home_url + "/content/apps/express/statics/images/ex_user.png";
+        	var lable_text_img =  home_url + "/content/apps/express/statics/images/lable_text.png";
+        	var busmarker =  home_url + "/content/apps/express/statics/images/busmarker.png";
+        	
 	        var map, 
 	        directionsService = new qq.maps.DrivingService({
 	            complete : function(response){
@@ -244,13 +254,13 @@
 	                var anchor = new qq.maps.Point(6, 6),
 	                    size = new qq.maps.Size(24, 36),
 	                    start_icon = new qq.maps.MarkerImage(
-	                        'content/apps/express/statics/images/busmarker.png', 
+	                    	busmarker, 
 	                        size, 
 	                        new qq.maps.Point(0, 0),
 	                        anchor
 	                    ),
 	                    end_icon = new qq.maps.MarkerImage(
-	                        'content/apps/express/statics/images/busmarker.png', 
+	                    	busmarker, 
 	                        size, 
 	                        new qq.maps.Point(24, 0),
 	                        anchor
@@ -336,14 +346,12 @@
 	        var ex_lat_cen 			= $('.nearest_exuser_lat').val();
 	        var cen_latLng = new qq.maps.LatLng(ex_lat_cen, ex_lng_cen);
 	        
-//	    function map_init() {
         map = new qq.maps.Map(document.getElementById("allmap"), {
             // 地图的中心地理坐标。
         	center: cen_latLng,
             zoom: 18
         });
         calcRoute();
-//	    }
 	    function calcRoute() {
 	        var start_name = document.getElementById("start").value.split(",");
 	        var end_name = document.getElementById("end").value.split(",");
@@ -393,7 +401,7 @@
             size   = new qq.maps.Size(50,50),
             origin = new qq.maps.Point(0, 0),
             icon   = new qq.maps.MarkerImage(
-                "content/apps/express/statics/images/ex_user.png",
+            	ex_user_img,
                 size,
                 origin,
                 ex_user_anchor
@@ -410,7 +418,7 @@
         Label.prototype.construct = function() {
              this.dom = document.createElement('div');
              this.dom.style.cssText =
-                  'background:url("content/apps/express/statics/images/lable_text.png") no-repeat;width:130px;height:60px;margin-top:-98px;margin-left:-38px;position:absolute;z-index:1;' +
+            	  'background:url("'+ lable_text_img +'") no-repeat;width:130px;height:60px;margin-top:-98px;margin-left:-38px;position:absolute;z-index:1;' +
                   'text-align:left;color:white;padding-left:25px;padding-top:8px;';
              this.dom.innerHTML = ex_name +'<br>'+ex_mobile;
              //将dom添加到覆盖物层，overlayLayer的顺序为容器 1，此容器中包含Polyline、Polygon、GroundOverlay等
@@ -443,6 +451,9 @@
         //配送员位置end
 	 },
   }
+    
+    
+    //加载二
     app.serach_user_list = {
 		 init : function() {
 		    $('.online-click').click(function(e) {
@@ -540,13 +551,19 @@
 	            //选中配送员边框变色end
 			  });
 			  $(".reassign_exuser_div").on('click', function (e) {
+				  
 	            e.preventDefault();
 	            var $this = $(this);
 	            var ex_lng = $this.attr('longitude');
 	            var ex_lat = $this.attr('latitude');
 	            var ex_name = $this.attr('name');
 	            var ex_mobile = $this.attr('mobile');
-	             
+	            
+	            
+	            var home_url = $("input[name='home_url']").val();
+	            var ex_user_img =  home_url + "/content/apps/express/statics/images/ex_user.png";
+	            var lable_text_img =  home_url + "/content/apps/express/statics/images/lable_text.png";
+	            
 	         	//腾讯地图加载
 	         	var map, markersArray = [];
 	         	var latLng = new qq.maps.LatLng(ex_lat, ex_lng);
@@ -566,7 +583,7 @@
 	                size   = new qq.maps.Size(50,50),
 	                origin = new qq.maps.Point(0, 0),
 	                icon   = new qq.maps.MarkerImage(
-	                    "content/apps/express/statics/images/ex_user.png",
+	                	ex_user_img,
 	                    size,
 	                    origin,
 	                    anchor
@@ -583,7 +600,7 @@
 	            Label.prototype.construct = function() {
 	                 this.dom = document.createElement('div');
 	                 this.dom.style.cssText =
-	                      'background:url("content/apps/express/statics/images/lable_text.png") no-repeat;width:130px;height:60px;margin-top:-98px;margin-left:-38px;position:absolute;' +
+	                	  'background:url("'+ lable_text_img +'") no-repeat;width:130px;height:60px;margin-top:-98px;margin-left:-38px;position:absolute;' +
 	                      'text-align:left;color:white;padding-left:25px;padding-top:8px;';
 	                 this.dom.innerHTML = ex_name +'<br>'+ex_mobile;
 	                 //将dom添加到覆盖物层，overlayLayer的顺序为容器 1，此容器中包含Polyline、Polygon、GroundOverlay等

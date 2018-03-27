@@ -80,7 +80,7 @@ class mh_history extends ecjia_merchant {
 	 * 历史配送订单列表加载
 	 */
 	public function init() {
-		$this->admin_priv('express_history_manage');
+		$this->admin_priv('mh_express_history_manage');
 		
 		ecjia_screen::get_current_screen()->remove_last_nav_here();
 		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here('历史配送'));
@@ -101,7 +101,7 @@ class mh_history extends ecjia_merchant {
 	 * 查看详情
 	 */
 	public function detail() {
-		$this->admin_priv('express_history_manage');
+		$this->admin_priv('mh_express_history_manage');
 	
 		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here('配送详情'));
 		$this->assign('ur_here', '配送详情');

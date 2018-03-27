@@ -79,7 +79,7 @@ class mh_express extends ecjia_merchant {
 	 * 配送员列表页加载
 	 */
 	public function init() {
-		$this->admin_priv('express_manage');
+		$this->admin_priv('mh_express_manage');
 
 		ecjia_screen::get_current_screen()->remove_last_nav_here();
 		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here('配送员管理'));
