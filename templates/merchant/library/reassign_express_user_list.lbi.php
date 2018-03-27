@@ -43,7 +43,7 @@
 												</div>
 											</div>
 											<div class="assign-div">
-				                       			<a class="assign btn btn-warning" type="button"  notice="是否确定让  【{$list.name}】  去配送？" assign-url='{url path="express/admin/assign_express_order" args="staff_id={$list.user_id}&type={$type}"}'>
+				                       			<a class="assign btn btn-warning" type="button"  notice="是否确定让  【{$list.name}】  去配送？" assign-url='{url path="express/merchant/assign_express_order" args="staff_id={$list.user_id}&type={$type}"}'>
 				                       				指派给他
 				                       			</a>  
 											</div>
@@ -80,7 +80,7 @@
 											</div>
 										</div>
 										<div class="assign-div">
-											 <button class="assign btn btn-warning"  type="button" style="background:#F6A618;text-shadow:none;" data-toggle="modal" href="#assignmodel" notice="是否确定让  【{$list.name}】  去配送？" assign-url='{url path="express/admin/assign_express_order" args="staff_id={$list.user_id}&type={$type}"}'>
+											 <button class="assign btn btn-warning"  type="button" style="background:#F6A618;text-shadow:none;" data-toggle="modal" href="#assignmodel" notice="是否确定让  【{$list.name}】  去配送？" assign-url='{url path="express/merchant/assign_express_order" args="staff_id={$list.user_id}&type={$type}"}'>
 											 	指派给他
 											 </button>  
 										</div>

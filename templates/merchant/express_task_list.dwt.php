@@ -25,9 +25,7 @@
 	</div>
 </div>
 
-<div class="wait-grab-order-detail">
-	<div class="modal hide fade" id="myModal1" style="height:590px;"></div>
-</div>
+<div class="modal fade" id="myModal1" ></div>
 
 <div class="row row-fluid-new">
 	<div class="col-lg-12 express-task">
