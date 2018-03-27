@@ -56,6 +56,12 @@ class detail_module extends api_admin implements api_interface {
     	if ($_SESSION['staff_id'] <= 0) {
             return new ecjia_error(100, 'Invalid session');
         }
+        //权限判断，查看配送员详情的权限
+        $result = $this->admin_priv('mh_express_manage');
+        if (is_ecjia_error($result)) {
+        	return $result;
+        }
+
     	$staff_id = $this->requestData('staff_id');
     	$size     = $this->requestData('pagination.count', 15);
 		$page     = $this->requestData('pagination.page', 1);

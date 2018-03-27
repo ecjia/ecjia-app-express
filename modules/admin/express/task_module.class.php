@@ -56,9 +56,22 @@ class task_module extends api_admin implements api_interface {
     	if ($_SESSION['staff_id'] <= 0) {
             return new ecjia_error(100, 'Invalid session');
         }
-		
-		$express_type = $this->requestData('express_type');
-		//$type = $this->requestData('type');
+        
+        $express_type = $this->requestData('express_type');
+		if ($express_type == 'finished') {
+			//权限判断，查看历史配送的权限
+			$result1 = $this->admin_priv('mh_express_history_manage');
+			if (is_ecjia_error($result1)) {
+				return $result1;
+			}
+		} else {
+			//权限判断，查看配送任务的权限
+			$result2 = $this->admin_priv('mh_express_task_manage');
+			if (is_ecjia_error($result2)) {
+				return $result2;
+			}
+		}
+        
 		$keywords = $this->requestData('keywords');
 		$size     = $this->requestData('pagination.count', 15);
 		$page     = $this->requestData('pagination.page', 1);
