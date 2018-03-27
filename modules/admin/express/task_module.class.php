@@ -52,13 +52,26 @@ defined('IN_ECJIA') or exit('No permission resources.');
  */
 class task_module extends api_admin implements api_interface {
     public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {	
-    	
+    	$this->authadminSession();
     	if ($_SESSION['staff_id'] <= 0) {
             return new ecjia_error(100, 'Invalid session');
         }
-		
-		$express_type = $this->requestData('express_type');
-		//$type = $this->requestData('type');
+        
+        $express_type = $this->requestData('express_type');
+		if ($express_type == 'finished') {
+			//权限判断，查看历史配送的权限
+			$result1 = $this->admin_priv('mh_express_history_manage');
+			if (is_ecjia_error($result1)) {
+				return $result1;
+			}
+		} else {
+			//权限判断，查看配送任务的权限
+			$result2 = $this->admin_priv('mh_express_task_manage');
+			if (is_ecjia_error($result2)) {
+				return $result2;
+			}
+		}
+        
 		$keywords = $this->requestData('keywords');
 		$size     = $this->requestData('pagination.count', 15);
 		$page     = $this->requestData('pagination.page', 1);
@@ -138,8 +151,8 @@ class task_module extends api_admin implements api_interface {
 					'label_express_status'	 => $label_express_status,
 					'express_from_address'	 => '【'.$val['merchants_name'].'】'. $sf_district_name. $sf_street_name. $val['merchant_address'],
 					'express_to_address'	 => $district_name. $street_name. $val['address'],
-					'shipping_fee'			 => !empty($val['commision']) ? $val['commision'] : '0.00',	
-					'format_shipping_fee'	 => price_format($val['commision']),
+					'shipping_fee'			 => !empty($val['shipping_fee']) ? $val['shipping_fee'] : '0.00',	
+					'format_shipping_fee'	 => price_format($val['shipping_fee']),
 					'best_time'				 => empty($val['expect_shipping_time']) ? '' : $val['expect_shipping_time'],
 					'express_status' 		 => $status,
 					'label_express_status'	 => $label_express_status,

@@ -47,44 +47,69 @@
 defined('IN_ECJIA') or exit('No permission resources.');
 
 /**
- * 查看配送订单配送员位置
+ * 掌柜查看配送员列表
  * @author zrl
  */
-class location_module extends api_admin implements api_interface {
+class list_module extends api_admin implements api_interface {
     public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {	
     	$this->authadminSession();
     	if ($_SESSION['staff_id'] <= 0) {
             return new ecjia_error(100, 'Invalid session');
         }
+		//权限判断，查看配送员列表的权限
+        $result = $this->admin_priv('mh_express_manage');
+        if (is_ecjia_error($result)) {
+        	return $result;
+        }
+        
+		$size     = $this->requestData('pagination.count', 15);
+		$page     = $this->requestData('pagination.page', 1);
 		
-        $staff_id = $this->requestData('staff_id');
-        
-        if (empty($staff_id)) {
-        	return new ecjia_error('invalid_parameter', RC_Lang::get('orders::order.invalid_parameter'));
-        }
-        
-        $dbview = RC_DB::table('staff_user as su')
-        			->leftJoin('express_user as eu', RC_DB::raw('su.user_id'), '=', RC_DB::raw('eu.user_id'));
-        
-        $dbview->where(RC_DB::raw('su.user_id'), $staff_id);
-        
-        $express_user_info = $dbview->selectRaw('eu.*, su.name, su.mobile, su.avatar')->first();
-        
-        if (empty($express_user_info)) {
-        	return new ecjia_error('not_exists_expressinfo', '配送员信息不存在');
-        }
-        $app_url =  RC_App::apps_url('statics/images', __FILE__);
-        
-        $express_user_info = array(
-        	'express_user'	        => empty($express_user_info['name']) ? 	'' 	: $express_user_info['name'],
-        	'express_mobile'		=> empty($express_user_info['mobile']) ? '' : $express_user_info['mobile'],
-        	'avatar'	        	=> !empty($express_user_info['avatar']) ? RC_Upload::upload_url($express_user_info['avatar']) : $app_url.'/touxiang.png',
-        	'express_user_location'	=> array(
-        		'longitude'			=> empty($express_user_info['longitude']) ? '' : $express_user_info['longitude'],
-        		'latitude'			=> empty($express_user_info['latitude']) ? '' : $express_user_info['latitude'],
-        	),
-        );
-		return $express_user_info;
+		$db = RC_DB::table('staff_user');
+		
+		$db->where('store_id', $_SESSION['store_id']);
+		$db->where('group_id', '=', '-1');
+		$db->where('parent_id', '>', 0);
+		
+		$count = $db->select('user_id')->count();
+		
+		//实例化分页
+		$page_row = new ecjia_page($count, $size, 6, '', $page);
+		
+		$list = $db->take($size)->skip($page_row->start_id - 1)->select('*')->orderBy('add_time', 'desc')->get();
+		
+		$express_user_list = array();
+		if (!empty($list)) {
+			foreach ($list as $row) {
+				if ($row['online_status'] == '1') {
+					$online_status = 'online';
+					$label_online_status = '在线';
+				} elseif ($row['online_status'] == '4') {
+					$online_status = 'offline';
+					$label_online_status = '离线';
+				}
+				$express_order_in_progress = 0;
+				$express_order_count = RC_DB::table('express_order')->where('staff_id', $row['user_id'])->whereIn('status', array(1, 2))->count();
+				if ($express_order_count > 0) {
+					$express_order_in_progress = 1;
+				}
+				$express_user_list[] = array(
+						'staff_id' 					=> $row['user_id'],
+						'staff_name' 				=> $row['name'],
+						'avatar' 					=> empty($row['avatar']) ? '' : RC_Upload::upload_url($row['avatar']),
+						'mobile'					=> $row['mobile'],
+						'online_status'				=> $online_status,
+						'label_online_status'		=> $label_online_status,
+						'express_order_in_progress'	=> $express_order_in_progress
+				);
+			}
+		}
+		$pager = array(
+			'total' => $page_row->total_records,
+			'count' => $page_row->total_records,
+			'more'	=> $page_row->total_pages <= $page ? 0 : 1,
+		);
+		return array('data' => $express_user_list, 'pager' => $pager);
 	 }	
 }
 
