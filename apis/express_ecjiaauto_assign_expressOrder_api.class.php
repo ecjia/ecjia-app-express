@@ -237,6 +237,7 @@ class express_ecjiaauto_assign_expressOrder_api extends Component_Event_Api {
 	public function get_express_user_list($pra){
 		$db = RC_DB::table('staff_user as su')->leftJoin('express_user as eu', RC_DB::raw('su.user_id'), '=', RC_DB::raw('eu.user_id'));
 		$db->where(RC_DB::raw('su.store_id'), 0);
+		$db->where(RC_DB::raw('eu.work_type'), 1);
 		
 		if (!empty($pra['online_status'])) {
 			$db->where(RC_DB::raw('su.online_status'), 1);
