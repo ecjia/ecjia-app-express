@@ -123,7 +123,7 @@ class add_module extends api_admin implements api_interface {
     					'store_id'  			=> $_SESSION['store_id'],
     					'work_type' 			=> 1,
     					'shippingfee_percent' 	=> 100,
-    					'apply_source' 			=> 'mobile',
+    					'apply_source' 			=> 'merchant',
     			);
     			$user_id = RC_DB::table('express_user')->insertGetId($data_express);
     		}
