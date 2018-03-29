@@ -48,105 +48,69 @@ defined('IN_ECJIA') or exit('No permission resources.');
 
 
 /**
- * 掌柜添加配送员
+ * 掌柜指派订单
  * @author zrl
  */
-class add_module extends api_admin implements api_interface {
+class assignOrder_module extends api_admin implements api_interface {
     public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {	
     	$this->authadminSession();
     	if ($_SESSION['staff_id'] <= 0) {
             return new ecjia_error(100, 'Invalid session');
         }
-		//检查权限，添加员工的权限
-        $result = $this->admin_priv('staff_update');
+		//检查权限，指派订单的权限
+        $result = $this->admin_priv('mh_express_task_manage');
         if (is_ecjia_error($result)) {
         	return $result;
         }
         
-        $name 		= $this->requestData('name', '');
-        $mobile 	= $this->requestData('mobile', '');
-        $user_ident = $this->requestData('user_ident', '');
-        $email 		= $this->requestData('email', '');
-        $remark 	= $this->requestData('remark', '');
+        $express_id = $this->requestData('express_id', 0);
+        $staff_id 	= $this->requestData('staff_id', 0);
         
-		if (empty($name) || empty($mobile) || empty($user_ident) || empty($remark)) {
+		if (empty($express_id) || empty($staff_id)) {
     		return new ecjia_error('invalid_parameter', RC_Lang::get ('system::system.invalid_parameter' ));
     	}
     	
-    	//用户名重复判断
-    	$user_name_count = RC_DB::table('staff_user')->where('name', $name)->where('store_id', $_SESSION['store_id'])->count();
-    	if ($user_name_count > 0) {
-    		return new ecjia_error('staff_name_exist', '该员工名称已存在');
+    	//配送单信息是否存在
+    	$express_orderinfo = RC_DB::table('express_order')->where('express_id', $express_id)->first();
+    	if (empty($express_orderinfo)) {
+    		return new ecjia_error('not_exists_express_order', '配送单信息不存在');
     	}
-    	//邮件重复判断
-    	$email_count = RC_DB::table('staff_user')->where('email', $email)->where('store_id', $_SESSION['store_id'])->count();
-    	if ($email_count > 0) {
-    		return new ecjia_error('email_exist', '该邮箱已存在');
-    	}
-    	//工号重复判断
-    	$user_ident_count = RC_DB::table('staff_user')->where('user_ident', $user_ident)->where('store_id', $_SESSION['store_id'])->count();
-    	if ($user_ident_count > 0) {
-    		return new ecjia_error('user_ident_exist', '该员工工号已存在');
+    	if ($express_orderinfo['store_id'] != $_SESSION['store_id']) {
+    		return new ecjia_error('no_authority', '对不起，您没权限指派此订单！');
     	}
     	
-    	$manager_id = RC_DB::table('staff_user')->where('store_id', $_SESSION['store_id'])->where('parent_id', 0)->pluck('user_id');
-
-    	$password = rand(100000,999999);
-    	$salt = rand(1, 9999);
-    	$password_last = md5(md5($password) . $salt);
+    	//配送员信息
+    	$express_user_dbview = RC_DB::table('staff_user')->leftJoin('express_user', 'express_user.user_id', '=', 'staff_user.user_id');
+    						
+    	$express_user_info = $express_user_dbview->where('staff_user.user_id', $staff_id)->select('staff_user.*', 'express_user.shippingfee_percent')->first();
     	
-    	$group_id = '-1';
-    	
-        $data       = array(
-            'store_id'     => $_SESSION['store_id'],
-            'name'         => $name,
-            'nick_name'    => '',
-            'user_ident'   => $user_ident,
-            'mobile'       => $mobile,
-            'email'        => $email,
-            'password'     => $password_last,
-        	'salt'		   => $salt,
-            'group_id'     => $group_id,
-            'action_list'  => '',
-            'todolist'     => $remark,
-            'add_time'     => RC_Time::gmtime(),
-            'parent_id'    => $manager_id,
-            'introduction' => '',
-        );
-        
-        $staff_id = RC_DB::table('staff_user')->insertGetId($data);
-    	if ($staff_id) {
-    		//插入配送员关联表
-    		if($group_id == '-1') {
-    			$data_express = array(
-    					'user_id'				=> $staff_id,
-    					'store_id'  			=> $_SESSION['store_id'],
-    					'work_type' 			=> 1,
-    					'shippingfee_percent' 	=> 100,
-    					'apply_source' 			=> 'merchant',
-    			);
-    			$user_id = RC_DB::table('express_user')->insertGetId($data_express);
-    		}
-    		//记录管理员操作log
-    		Ecjia\App\Express\Helper::assign_adminlog_content();
-    		ecjia_merchant::admin_log('配送员'.$name.'【来源掌柜】', 'add', 'express_user');
-    		
-    		//短信发送通知
-    		$store_name = $_SESSION['store_name'];
-    		$options = array(
-    				'mobile' => $mobile,
-    				'event'	 => 'sms_store_express_added',
-    				'value'  =>array(
-    						'store_name' => $store_name,
-    						'account'	 => $mobile,
-    						'password'	 => $password_last,
-    				),
-    		);
-    		$response = RC_Api::api('sms', 'send_event_sms', $options);
-    		return array();
-    	} else {
-    		return new ecjia_error('add_staff_fail', '添加员工失败！');
+    	if (empty($express_user_info)) {
+    		return new ecjia_error('not_exists_express_userinfo', '配送员信息不存在');
     	}
+    	
+    	if ($express_user_info['store_id'] != $_SESSION['store_id']) {
+    		return new ecjia_error('express_user_not_belong_store', '指定配送员不属于当前店铺！');
+    	}
+    	
+    	$commision = $express_user_info['shippingfee_percent']/100 * $express_orderinfo['shipping_fee'];
+    	$commision = sprintf("%.2f", $commision);
+    	$data = array(
+    			'from' 			=> 'assign',
+    			'status'		=> 1,
+    			'staff_id'		=> $staff_id,
+    			'express_user'	=> $express_user_info['name'],
+    			'express_mobile'=> $express_user_info['mobile'],
+    			'commision'		=> $commision,
+    			'commision_status'	=> 0,
+    			'receive_time'	=> RC_Time::gmtime()
+    	);
+    	
+    	$update = RC_DB::table('express_order')->where('express_id', $express_id)->update($data);
+    	//记录管理员操作log
+    	Ecjia\App\Express\Helper::assign_adminlog_content();
+    	ecjia_merchant::admin_log('配送单号：'.$express_orderinfo['express_sn'].'【来源掌柜】', 'assign', 'express_order');
+    	
+    	return array();
 	 }	
 }
 
