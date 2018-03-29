@@ -129,7 +129,7 @@ class add_module extends api_admin implements api_interface {
     		}
     		//记录管理员操作log
     		Ecjia\App\Express\Helper::assign_adminlog_content();
-    		ecjia_merchant::admin_log('配送员'.$name.'【来源掌柜】', 'add', 'express_user');
+    		RC_Api::api('merchant', 'admin_log', array('text'=> '配送员:'.$name.'【来源掌柜】', 'action'=>'add', 'object'=>'express_user'));
     		
     		//短信发送通知
     		$store_name = $_SESSION['store_name'];
@@ -137,6 +137,7 @@ class add_module extends api_admin implements api_interface {
     				'mobile' => $mobile,
     				'event'	 => 'sms_store_express_added',
     				'value'  =>array(
+    						'user_name'	 => $name,
     						'store_name' => $store_name,
     						'account'	 => $mobile,
     						'password'	 => $password_last,

@@ -108,8 +108,7 @@ class assignOrder_module extends api_admin implements api_interface {
     	$update = RC_DB::table('express_order')->where('express_id', $express_id)->update($data);
     	//记录管理员操作log
     	Ecjia\App\Express\Helper::assign_adminlog_content();
-    	ecjia_merchant::admin_log('配送单号：'.$express_orderinfo['express_sn'].'【来源掌柜】', 'assign', 'express_order');
-    	
+    	RC_Api::api('merchant', 'admin_log', array('text'=> '配送单号：'.$express_orderinfo['express_sn'].'【来源掌柜】', 'action'=>'assign', 'object'=>'express_order'));
     	return array();
 	 }	
 }

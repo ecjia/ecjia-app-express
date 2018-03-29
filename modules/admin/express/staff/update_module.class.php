@@ -112,7 +112,7 @@ class add_module extends api_admin implements api_interface {
     	}
     	//记录管理员操作记录log
     	Ecjia\App\Express\Helper::assign_adminlog_content();
-    	ecjia_merchant::admin_log('配送员'.$name.'【来源掌柜】', 'edit', 'express_user_profile');
+    	RC_Api::api('merchant', 'admin_log', array('text'=> '配送员:'.$name.'【来源掌柜】', 'action'=>'edit', 'object'=>'express_user_profile'));
     	
     	return array();
 	 }	
