@@ -25,7 +25,7 @@
 						<div class="express-user-list accordion-body in in_visable collapse" id="online">
 							<!-- {foreach from=$express_user_list.list item=list} -->
 								{if $list.online_status eq '1'}
-									<div class="express-user-info ex-user-div{$list.user_id}" staff_user_id="{$list.user_id}">
+									<div class="express-user-info ex-user-div{$list.user_id}" staff_user_id="{$list.user_id}" online_status ="{$list.online_status}">
 										<div class="{if $express_order_count.wait_grab} exuser_div {/if} " longitude="{$list.longitude}" latitude="{$list.latitude}" name="{$list.name}" mobile="{$list.mobile}" >
 											<div class="imginfo-div">
 	        		                			<div class="express-img">{if $list.avatar}<img src="{$list.avatar}">{else}<img src="{$app_url}/touxiang.png">{/if}</div>
@@ -43,7 +43,7 @@
 										<div class="assign-div">
 											 <a class="{if $express_order_count.wait_grab} assign {/if}"  data-msg="是否确定让  【{$list.name}】  去配送？" data-href='{url path="express/admin/assign_express_order" args="staff_id={$list.user_id}&type={$type}"}'>
 				                       			{if $express_order_count.wait_grab}
-				                       				<button class="btn" type="button" style="background:#F6A618;text-shadow:none;"><span style="color:#fff;">指派给他</span></button>  
+				                       				<button class="btn btn-warning" type="button"><span style="color:#fff;">指派给他</span></button>  
 				                       			{else}
 				                       				<button class="btn" type="button" disabled="disabled"><span>指派给他</span></button>  
 				                       			{/if}
@@ -65,7 +65,7 @@
 						<div class="express-user-list-leave accordion-body collapse" id="leave">
 							<!-- {foreach from=$express_user_list.list item=list} -->
 								{if $list.online_status eq '4'}
-									<div class="express-user-info">
+									<div class="express-user-info" online_status ="{$list.online_status}">
 										<div longitude="{$list.longitude}" latitude="{$list.latitude}" name="{$list.name}" mobile="{$list.mobile}">
 											<div class="imginfo-div">
 	        		                			<div class="express-img">{if $list.avatar}<img src="{$list.avatar}">{else}<img src="{$app_url}/touxiang.png">{/if}</div>
@@ -82,11 +82,7 @@
 										</div>
 										<div class="assign-div">
 											 <a class="{if $express_order_count.wait_grab} assign {/if}"  data-msg="你确定让  【{$list.name}】  去配送？" data-href='{url path="express/admin/assign_express_order" args="staff_id={$list.user_id}&type={$type}"}'  >
-				                       			{if $express_order_count.wait_grab}
-				                       				<button class="btn" type="button" style="background:#F6A618;text-shadow:none;"><span style="color:#fff;">指派给他</span></button>  
-				                       			{else}
-													<button class="btn" type="button" disabled="disabled"><span>指派给他</span></button>  
-               								 	{/if}
+												<button class="btn" type="button" disabled="disabled"><span>指派给他</span></button>  
                								 </a> 
 										</div>
 									</div>

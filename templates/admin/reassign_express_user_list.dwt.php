@@ -40,7 +40,7 @@
 												</div>
 											</div>
 											<div class="assign-div">
-												<a class="re-assign btn" type="button" style="background:#F6A618;text-shadow:none;" notice="是否确定让  【{$list.name}】  去配送？" assign-url='{url path="express/admin/assign_express_order" args="staff_id={$list.user_id}&type={$type}"}'><span style="color:#fff;">指派给他</span></a>  
+												<a class="re-assign btn btn-warning" type="button"  notice="是否确定让  【{$list.name}】  去配送？" assign-url='{url path="express/admin/assign_express_order" args="staff_id={$list.user_id}&type={$type}"}'><span style="color:#fff;">指派给他</span></a>  
 											</div>
 											<input type="hidden" class="ex-u-id" value=""/>
 										</div>
@@ -73,7 +73,7 @@
 											</div>
 										</div>
 										<div class="assign-div">
-               								 <a class="re-assign btn" type="button" style="background:#F6A618;text-shadow:none;" notice="是否确定让  【{$list.name}】  去配送？" assign-url='{url path="express/admin/assign_express_order" args="staff_id={$list.user_id}&type={$type}"}'><span style="color:#fff;">指派给他</span></a>  
+               								 <a class="re-assign btn" type="button" disabled="disabled" notice="是否确定让  【{$list.name}】  去配送？" assign-url='{url path="express/admin/assign_express_order" args="staff_id={$list.user_id}&type={$type}"}'>指派给他</a>  
 										</div>
 									</div>
 								<!-- {/if} -->

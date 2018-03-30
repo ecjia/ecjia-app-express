@@ -74,7 +74,7 @@
 										</div>
 										<div class="control-group control-group-s>mall">
 											<div class="margin-label btn-a">
-											  	 <a class="btn btn-gebo express-order-modal" style="background:#058DC7;" data-toggle="modal" href="#myModal1" express-id="{$wait_grab.express_id}" express-order-url='{url path="express/admin/express_order_detail" args="express_id={$wait_grab.express_id}{if $type}&type={$type}{/if}"}'  title="查看详情">查看详情</a>
+											  	 <a class="btn btn-gebo express-order-modal" data-toggle="modal" href="#myModal1" express-id="{$wait_grab.express_id}" express-order-url='{url path="express/admin/express_order_detail" args="express_id={$wait_grab.express_id}{if $type}&type={$type}{/if}"}'  title="查看详情">查看详情</a>
 								    	  	</div>
 										</div>
 										<input type="hidden" class="nearest_exuser_name" value="{$express_info.name}"/>
