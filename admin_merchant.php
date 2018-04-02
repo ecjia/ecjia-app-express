@@ -138,6 +138,8 @@ class admin_merchant extends ecjia_admin {
 		$db_data = RC_DB::table('express_order as eo')
 		->leftJoin('users as user', RC_DB::raw('eo.user_id'), '=', RC_DB::raw('user.user_id'));
 		
+		$db_data->where(RC_DB::raw('eo.shipping_code'), 'ship_ecjia_express');
+		
 		$db_data->where(RC_DB::raw('eo.store_id'), $store_id)->where(RC_DB::raw('eo.status'),"!=", 6)->where(RC_DB::raw('eo.status'),"!=", 5)->where(RC_DB::raw('eo.status'),"!=", 4)->where(RC_DB::raw('eo.status'),"!=", 3);
 		
 		$express_count = $db_data->select(RC_DB::raw('count(*) as count'),
@@ -245,6 +247,8 @@ class admin_merchant extends ecjia_admin {
 			$db_data ->where(RC_DB::raw('sf.cat_id'), $cat_id);
 		}
 		
+		$db_data->where(RC_DB::raw('eo.shipping_code'), 'ship_ecjia_express');
+		
 		$keyword = trim($_GET['keyword']);
 		if ($keyword) {
 			$db_data ->whereRaw('(sf.merchants_name  like  "%'.mysql_like_quote($keyword).'%")');
@@ -267,9 +271,9 @@ class admin_merchant extends ecjia_admin {
 				$row['shop_trade_time'] = unserialize($shop_trade_time);
 				$row['district'] = ecjia_region::getRegionName($row['district']);
 				$row['street']   = ecjia_region::getRegionName($row['street']);
-				$row['wait_grab'] = RC_DB::TABLE('express_order')->where('status', 0)->where('store_id', $row['store_id'])->count();
-				$row['wait_pickup']	= RC_DB::TABLE('express_order')->where('status', 1)->where('store_id', $row['store_id'])->count();
-				$row['delivery'] = RC_DB::TABLE('express_order')->where('status', 2)->where('store_id', $row['store_id'])->count();
+				$row['wait_grab'] = RC_DB::TABLE('express_order')->where('status', 0)->where('shipping_code', 'ship_ecjia_express')->where('store_id', $row['store_id'])->count();
+				$row['wait_pickup']	= RC_DB::TABLE('express_order')->where('status', 1)->where('shipping_code', 'ship_ecjia_express')->where('store_id', $row['store_id'])->count();
+				$row['delivery'] = RC_DB::TABLE('express_order')->where('status', 2)->where('shipping_code', 'ship_ecjia_express')->where('store_id', $row['store_id'])->count();
 				$list[] = $row;
 			}
 		}
@@ -284,6 +288,7 @@ class admin_merchant extends ecjia_admin {
 	private function get_cat_list($keyword = '') {
 		$db_data = RC_DB::table('express_order as eo')
 		->leftJoin('store_franchisee as sf', RC_DB::raw('eo.store_id'), '=', RC_DB::raw('sf.store_id'));
+		$db_data->where(RC_DB::raw('eo.shipping_code'), 'ship_ecjia_express');
 		$db_data->Where(function ($query) {
 			$query->orwhere(RC_DB::raw('eo.status'), 0)->orwhere(RC_DB::raw('eo.status'), 1)->orwhere(RC_DB::raw('eo.status'),2);
 		});

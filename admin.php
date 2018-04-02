@@ -549,6 +549,9 @@ class admin extends ecjia_admin {
 					//->leftJoin('users as u', RC_DB::raw('eo.user_id'), '=', RC_DB::raw('u.user_id'))
 					->leftJoin('store_franchisee as sf', RC_DB::raw('eo.store_id'), '=', RC_DB::raw('sf.store_id'));
 		
+		//平台订单只获取配送方式是众包配送的订单
+		$dbview->where(RC_DB::raw('eo.shipping_code'), 'ship_ecjia_express');
+		
 		$field = 'eo.consignee, eo.mobile as consignee_mobile, eo.express_id, eo.store_id, eo.express_sn, eo.country, eo.province, eo.city, eo.district, eo.street, eo.address, eo.distance, eo.add_time, 
 				  eo.longitude, eo.latitude, eo.express_user, eo.express_mobile, eo.staff_id, eo.from, eo.receive_time, sf.province as sf_province, sf.city as sf_city, sf.longitude as sf_longitude, sf.latitude as sf_latitude, 
 				  sf.district as sf_district, sf.street as sf_street, sf.address as sf_address';
@@ -556,12 +559,14 @@ class admin extends ecjia_admin {
 		$filter['keywords']	= empty($_GET['keywords']) ? '' : trim($_GET['keywords']);
 		$filter['type'] 	= empty($type) ? 'wait_grab' : $type;
 		
+		//数量统计单独查询
 		$db = RC_DB::table('express_order');
 		if ($type != 'wait_grab') {
 			if (!empty($filter['keywords'])) {
 				$db ->whereRaw('(express_user  like  "%'.mysql_like_quote($filter['keywords']).'%") or (express_mobile like "%'.mysql_like_quote($filter['keywords']).'%")');
 			}
 		}
+		$db->where('shipping_code', 'ship_ecjia_express');
 		
 		$express_order_count = $db
 		->selectRaw('count(*) as count, SUM(IF(status = 0, 1, 0)) as wait_grab, SUM(IF(status = 1, 1, 0)) as wait_pickup, SUM(IF(status = 2, 1, 0)) as sending')

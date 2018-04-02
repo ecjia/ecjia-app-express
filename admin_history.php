@@ -150,6 +150,7 @@ class admin_history extends ecjia_admin {
 		->leftJoin('store_franchisee as sf', RC_DB::raw('eo.store_id'), '=', RC_DB::raw('sf.store_id'));
 		
 		$db_data->where(RC_DB::raw('eo.status'), 5);
+		$db_data->where(RC_DB::raw('eo.shipping_code'), 'ship_ecjia_express');
 		
 		if($_GET['start_date'] && $_GET['end_date']) {
 			$start_date = RC_Time::local_strtotime($_GET['start_date']);
