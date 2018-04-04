@@ -52,7 +52,7 @@
 					                       			{if $express_order_count.wait_grab}
 					                       				<button class="btn btn-warning" type="button">指派给他</button>  
 					                       			{else}
-					                       				<button class="btn btn-warning" type="button" disabled="disabled">指派给他</button>  
+					                       				<button class="btn btn-default" type="button" disabled="disabled">指派给他</button>  
 					                       			{/if}
 	               								 </a> 
 												 <input type="hidden" class="selected-express-id" value="{$first_express_order.express_id}"/>

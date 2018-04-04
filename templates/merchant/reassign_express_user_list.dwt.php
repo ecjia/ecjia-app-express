@@ -80,9 +80,7 @@
 											</div>
 										</div>
 										<div class="assign-div">
-               								 <a class="re-assign btn btn-warning" type="button"  notice="是否确定让  【{$list.name}】  去配送？" assign-url='{url path="express/merchant/assign_express_order" args="staff_id={$list.user_id}&type={$type}"}'>
-               								 	指派给他
-               								 </a>  
+											<button class="btn btn-default" type="button" disabled="disabled">指派给他</button>  
 										</div>
 									</div>
 								<!-- {/if} -->

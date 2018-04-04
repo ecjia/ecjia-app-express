@@ -582,7 +582,7 @@
    		 click_reassign_exuser: function () {
 	   		  $(".express-user-info").on('click', function(e) {
 				  e.preventDefault();
-				  
+				  alert(1);
 				  var $this = $(this);
 				  var online_status = $this.attr('online_status');
 				  if (online_status == 1) {

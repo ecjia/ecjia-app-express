@@ -77,8 +77,6 @@ class merchant extends ecjia_merchant {
 		
 		RC_Script::localize_script('express', 'js_lang', RC_Lang::get('express::express.js_lang'));
 		
-		
-		
 		ecjia_merchant_screen::get_current_screen()->add_nav_here(new admin_nav_here('配送管理', RC_Uri::url('shipping/mh_shipping/shipping_template')));
 		ecjia_merchant_screen::get_current_screen()->add_nav_here(new admin_nav_here('配送任务', RC_Uri::url('express/merchant/init')));
 		ecjia_merchant_screen::get_current_screen()->set_parentage('express', 'express/merhcant.php');
@@ -242,14 +240,13 @@ class merchant extends ecjia_merchant {
 	public function assign_express_order() {
 		$this->admin_priv('mh_express_task_manage');
 
-		$express_id = $_POST['express_id'];
-
+		$express_id = intval($_POST['express_id']);
 		if (empty($express_id)) {
 			return $this->showmessage('暂无可指派的订单！', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 		}
 
-		$staff_id = $_GET['staff_id'];
-		$type = $_GET['type'];
+		$staff_id = intval($_GET['staff_id']);
+		$type 	  = $_GET['type'];
 		
 		$field = 'eo.*, oi.add_time as order_time, oi.pay_time,  oi.expect_shipping_time, oi.order_amount, oi.pay_name, sf.merchants_name, sf.district as sf_district, sf.street as sf_street, sf.address as merchant_address, sf.longitude as sf_longitude, sf.latitude as sf_latitude';
 			$dbview = RC_DB::table('express_order as eo')
@@ -257,7 +254,6 @@ class merchant extends ecjia_merchant {
 			->leftJoin('order_info as oi', RC_DB::raw('eo.order_id'), '=', RC_DB::raw('oi.order_id'));
 			
 		$express_order_info	= $dbview->where(RC_DB::raw('eo.express_id'), $express_id)->selectRaw($field)->first();
-			
 		$staff_user_info = RC_DB::table('staff_user as su')->leftJoin('express_user as eu', RC_DB::raw('su.user_id'), '=', RC_DB::raw('eu.user_id'))
 							->where(RC_DB::raw('su.user_id'), $staff_id)
 							->selectRaw('su.name, su.mobile, su.store_id, eu.shippingfee_percent')->first();
@@ -282,11 +278,11 @@ class merchant extends ecjia_merchant {
 			/* 消息插入 */
 			$orm_staff_user_db = RC_Model::model('orders/orm_staff_user_model');
 			$user = $orm_staff_user_db->find($staff_id);
-			
+			$express_mobile = RC_DB::TABLE('express_order')->where('staff_id', $staff_id)->pluck('express_mobile');
 			/* 派单发短信 */
-			if (!empty($express_order_info['express_mobile'])) {
+			if (!empty($express_mobile)) {
 				$options = array(
-						'mobile' => $express_order_info['express_mobile'],
+						'mobile' => $express_mobile,
 						'event'	 => 'sms_express_system_assign',
 						'value'  =>array(
 								'express_sn'=> $express_order_info['express_sn'],
