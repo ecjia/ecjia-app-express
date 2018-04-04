@@ -271,9 +271,9 @@ class admin extends ecjia_admin {
 			$user = $orm_staff_user_db->find($staff_id);
 			
 			/* 派单发短信 */
-			if (!empty($express_order_info['express_mobile'])) {
+			if (!empty($staff_user_info['mobile'])) {
 				$options = array(
-						'mobile' => $express_order_info['express_mobile'],
+						'mobile' => $staff_user_info['mobile'],
 						'event'	 => 'sms_express_system_assign',
 						'value'  =>array(
 								'express_sn'=> $express_order_info['express_sn'],
