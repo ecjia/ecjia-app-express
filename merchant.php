@@ -439,7 +439,7 @@ class merchant extends ecjia_merchant {
 		$this->admin_priv('mh_express_task_manage');
 	
 		$express_id = intval($_GET['express_id']);
-		$store_id = intval($_GET['store_id']);
+		$store_id   = intval($_GET['store_id']);
 		$type = trim($_GET['type']);
 	
 		$express_info = RC_DB::table('express_order as eo')
@@ -469,9 +469,8 @@ class merchant extends ecjia_merchant {
 		$this->admin_priv('mh_express_task_manage');
 	
 		$express_id = intval($_GET['express_id']);
-		$store_id = intval($_GET['store_id']);
-		$type = trim($_GET['type']);
-		
+		$store_id   = intval($_GET['store_id']);
+		$type       = trim($_GET['type']);
 		
 		$express_info = RC_DB::table('express_order as eo')
 		->leftJoin('express_user as eu', RC_DB::raw('eo.staff_id'), '=', RC_DB::raw('eu.user_id'))
@@ -562,8 +561,9 @@ class merchant extends ecjia_merchant {
 	 */
 	private function get_wait_grab_list($type){
 		$dbview = RC_DB::table('express_order as eo')
-					//->leftJoin('users as u', RC_DB::raw('eo.user_id'), '=', RC_DB::raw('u.user_id'))
 					->leftJoin('store_franchisee as sf', RC_DB::raw('eo.store_id'), '=', RC_DB::raw('sf.store_id'));
+		
+		$dbview->where(RC_DB::raw('eo.shipping_code'), 'ship_o2o_express');
 		
 		$field = 'eo.consignee, eo.mobile as consignee_mobile, eo.express_id, eo.store_id, eo.express_sn, eo.country, eo.province, eo.city, eo.district, eo.street, eo.address, eo.distance, eo.add_time, 
 				  eo.longitude, eo.latitude, eo.express_user, eo.express_mobile, eo.staff_id, eo.from, eo.receive_time, sf.province as sf_province, sf.city as sf_city, sf.longitude as sf_longitude, sf.latitude as sf_latitude, 
@@ -573,6 +573,8 @@ class merchant extends ecjia_merchant {
 		$filter['type'] 	= empty($type) ? 'wait_grab' : $type;
 		
 		$db = RC_DB::table('express_order');
+		$db->where(RC_DB::raw('shipping_code'), 'ship_o2o_express');
+		
 		if ($type != 'wait_grab') {
 			if (!empty($filter['keywords'])) {
 				$db ->whereRaw('(express_user  like  "%'.mysql_like_quote($filter['keywords']).'%") or (express_mobile like "%'.mysql_like_quote($filter['keywords']).'%")');
@@ -582,7 +584,6 @@ class merchant extends ecjia_merchant {
 		$express_order_count = $db
 		->selectRaw('count(*) as count, SUM(IF(status = 0, 1, 0)) as wait_grab, SUM(IF(status = 1, 1, 0)) as wait_pickup, SUM(IF(status = 2, 1, 0)) as sending')
 		->first();
-		
 	
 		if ($type == 'wait_grab') {
 			$dbview->where(RC_DB::raw('eo.status'), 0);
@@ -630,17 +631,21 @@ class merchant extends ecjia_merchant {
 	 * 配送员列表
 	 */
 	private function get_express_user_list($type, $keywords) {
-		$keywords = $_GET['keywords'];
 		$express_user_view =  RC_DB::table('staff_user as su')
 		->leftJoin('express_user as eu', RC_DB::raw('su.user_id'), '=', RC_DB::raw('eu.user_id'));
-		$express_user_view->where(RC_DB::raw('su.store_id'), 0);
-		
+		$express_user_view->where(RC_DB::raw('su.store_id'), $_SESSION['store_id']);
+		$express_user_view->where(RC_DB::raw('su.group_id'), -1);
+		$keywords = $_GET['keywords'];
 		if (!empty($keywords)) {
 			$express_user_view ->whereRaw('(su.name  like  "%'.mysql_like_quote($keywords).'%")');
 		}
 		
+		
 		$db = RC_DB::table('staff_user as su')
-								->leftJoin('express_user as eu', RC_DB::raw('su.user_id'), '=', RC_DB::raw('eu.user_id'));
+		->leftJoin('express_user as eu', RC_DB::raw('su.user_id'), '=', RC_DB::raw('eu.user_id'));
+		$db->where(RC_DB::raw('su.store_id'), $_SESSION['store_id']);
+		$db->where(RC_DB::raw('su.group_id'), -1);
+		
 		if (!empty($keywords)) {
 			$db ->whereRaw('(su.name  like  "%'.mysql_like_quote($keywords).'%")');
 		}
@@ -656,9 +661,9 @@ class merchant extends ecjia_merchant {
 		}
 		
 		$express_user_count = $db
-								->where(RC_DB::raw('su.store_id'), 0)
-								->select(RC_DB::raw('count(*) as count'),RC_DB::raw('SUM(IF(su.online_status = 1, 1, 0)) as online'),RC_DB::raw('SUM(IF(su.online_status = 4, 1, 0)) as offline'))
-								->first();
+		->where(RC_DB::raw('su.store_id'), $_SESSION['store_id'])
+		->select(RC_DB::raw('count(*) as count'),RC_DB::raw('SUM(IF(su.online_status = 1, 1, 0)) as online'),RC_DB::raw('SUM(IF(su.online_status = 4, 1, 0)) as offline'))
+		->first();
 		
 		$list = $express_user_view->selectRaw('eu.*, su.mobile, su.name, su.avatar, su.online_status')->orderBy('online_status', 'asc')->get();
 		$data = array();

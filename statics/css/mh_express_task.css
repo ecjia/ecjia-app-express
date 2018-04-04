@@ -472,3 +472,11 @@
 #allmap {
 	height:600px;
 }
+
+.order-border-first{
+  border:1px solid #009acd;
+}
+
+.order-border-other{
+  border:1px solid #dcdcdc;
+}

@@ -175,7 +175,7 @@ class mh_history extends ecjia_merchant {
 		$list = array();
 		if (!empty($data)) {
 			foreach ($data as $row) {
-				$row['signed_time']  = RC_Time::local_date('Y-m-d H:i:s', $row['signed_time']);
+				$row['signed_time']   = RC_Time::local_date('Y-m-d H:i:s', $row['signed_time']);
 				$row['district']      = ecjia_region::getRegionName($row['district']);
 				$row['street']        = ecjia_region::getRegionName($row['street']);
 				$list[] = $row;

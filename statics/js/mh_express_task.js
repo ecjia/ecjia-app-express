@@ -342,24 +342,26 @@
 		 click_exuser: function () {
 			  $(".express-user-info").on('click', function(e) {
 				  e.preventDefault();
-				  
 				  var $this = $(this);
-				  var staff_user_id = $this.attr('staff_user_id');
-                  var express_userid  = $('.ex-u-id').val();
-                 
-                  //选中配送员边框变色start
-                  var current_click_user = 'ex-user-div'+ staff_user_id;
-                  
-                  if (express_userid == '') {
-                	  $this.css("border","1px solid #009ACD");
-               	  	  $('.ex-u-id').val(staff_user_id);
-                  } else {
-               	  	 var last_click_user = 'ex-user-div'+ express_userid;
-               	  	 $('.' + last_click_user).css("border","1px solid #dcdcdc");
-               	   $this.css("border","1px solid #009ACD");
-               	  	 $('.ex-u-id').val(staff_user_id);
-                 }
-                //选中配送员边框变色end
+				  var online_status = $this.attr('online_status');
+				  if (online_status == 1) {
+					  var staff_user_id = $this.attr('staff_user_id');
+	                  var express_userid  = $('.ex-u-id').val();
+	                 
+	                  //选中配送员边框变色start
+	                  var current_click_user = 'ex-user-div'+ staff_user_id;
+	                  
+	                  if (express_userid == '') {
+	                	  $this.css("border","1px solid #009ACD");
+	               	  	  $('.ex-u-id').val(staff_user_id);
+	                  } else {
+	               	  	 var last_click_user = 'ex-user-div'+ express_userid;
+	               	  	 $('.' + last_click_user).css("border","1px solid #dcdcdc");
+	               	     $this.css("border","1px solid #009ACD");
+	               	  	 $('.ex-u-id').val(staff_user_id);
+	                 }
+	                //选中配送员边框变色end
+				  }
 			  });
 			  
 			  $(".exuser_div").on('click', function (e) {
@@ -580,24 +582,27 @@
    		 click_reassign_exuser: function () {
 	   		  $(".express-user-info").on('click', function(e) {
 				  e.preventDefault();
-			
+				  
 				  var $this = $(this);
-				  var staff_user_id = $this.attr('staff_user_id');
-	              var express_userid  = $('.ex-u-id').val();
-	             
-	              //选中配送员边框变色start
-	              var current_click_user = 'ex-user-div'+ staff_user_id;
-	              
-	              if (express_userid == '') {
-	            	  $this.css("border","1px solid #009ACD");
-	           	  	  $('.ex-u-id').val(staff_user_id);
-	              } else {
-	           	  	 var last_click_user = 'ex-user-div'+ express_userid;
-	           	  	 $('.' + last_click_user).css("border","1px solid #dcdcdc");
-	           	   $this.css("border","1px solid #009ACD");
-	           	  	 $('.ex-u-id').val(staff_user_id);
-	             }
-	            //选中配送员边框变色end
+				  var online_status = $this.attr('online_status');
+				  if (online_status == 1) {
+					  var staff_user_id = $this.attr('staff_user_id');
+		              var express_userid  = $('.ex-u-id').val();
+		             
+		              //选中配送员边框变色start
+		              var current_click_user = 'ex-user-div'+ staff_user_id;
+		              
+		              if (express_userid == '') {
+		            	  $this.css("border","1px solid #009ACD");
+		           	  	  $('.ex-u-id').val(staff_user_id);
+		              } else {
+		           	  	 var last_click_user = 'ex-user-div'+ express_userid;
+		           	  	 $('.' + last_click_user).css("border","1px solid #dcdcdc");
+		           	   $this.css("border","1px solid #009ACD");
+		           	  	 $('.ex-u-id').val(staff_user_id);
+		             }
+		            //选中配送员边框变色end
+				  }
 			  });
 	   		  
    			  $(".reassign_exuser_div").on('click', function (e) {

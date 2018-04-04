@@ -58,7 +58,7 @@
 					      	</td>
 					      	<td>{$history.express_user}<br>[{$history.express_mobile}]</td>
 					      	<td>{$history.consignee}[{$history.mobile}]<br>
-					      		{$history.district}{$history.street}{$history.address}
+					      		地址：{$history.district}{$history.street}{$history.address}
 					      	</td>
 					      	<td>派单</td>
 					      	<td>{$history.signed_time}</td>

@@ -29,7 +29,7 @@
 							<div class="express-user-list-on accordion-body in collapse" id="reassign-online">
 								<!-- {foreach from=$express_user_list.list item=list} -->
 									{if $list.online_status eq '1'}
-										<div class="express-user-info ex-user-div{$list.user_id}" staff_user_id="{$list.user_id}">
+										<div class="express-user-info ex-user-div{$list.user_id}" staff_user_id="{$list.user_id}" online_status ="{$list.online_status}">
 											<div class="reassign_exuser_div" longitude="{$list.longitude}" latitude="{$list.latitude}" name="{$list.name}" mobile="{$list.mobile}">
 												<div class="imginfo-div">
 		        		                			<div class="express-img">{if $list.avatar}<img src="{$list.avatar}">{else}<img src="{$app_url}/touxiang.png">{/if}</div>
@@ -64,7 +64,7 @@
 						<div class="express-user-list-off accordion-body collapse" id="reassign-leave">
 							<!-- {foreach from=$express_user_list.list item=list} -->
 								<!-- {if $list.online_status eq '4'} -->
-									<div class="express-user-info" longitude="{$list.longitude}" latitude="{$list.latitude}" name="{$list.name}" mobile="{$list.mobile}">
+									<div class="express-user-info" longitude="{$list.longitude}" latitude="{$list.latitude}" name="{$list.name}" mobile="{$list.mobile}" online_status ="{$list.online_status}">
 										<div>
 											<div class="imginfo-div">
 	        		                			<div class="express-img">{if $list.avatar}<img src="{$list.avatar}">{else}<img src="{$app_url}/touxiang.png">{/if}</div>

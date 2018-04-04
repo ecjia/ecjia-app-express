@@ -10,7 +10,7 @@
 	<div class="foldable-list move-mod-group">
 		<div class="accordion-group">
 			<div class="accordion-heading">
-				<a class="accordion-toggle move-mod-head"><strong>配送员列表1</strong></a>
+				<a class="accordion-toggle move-mod-head"><strong>配送员列表</strong></a>
 			</div>
 			<div class="accordion-body">
 				<div class="accordion-inner right-scroll">
@@ -35,7 +35,7 @@
 						<div class="express-user-list-on accordion-body in collapse" id="waitgrab_online">
 							<!-- {foreach from=$express_user_list.list item=list} -->
 								{if $list.online_status eq '1'}
-									<div class="express-user-info ex-user-div{$list.user_id}" staff_user_id="{$list.user_id}">
+									<div class="express-user-info ex-user-div{$list.user_id}" staff_user_id="{$list.user_id}" online_status ="{$list.online_status}">
 										<div class="reassign_exuser_div" longitude="{$list.longitude}" latitude="{$list.latitude}" name="{$list.name}" mobile="{$list.mobile}">
 											<div class="imginfo-div">
 	        		                			<div class="express-img">{if $list.avatar}<img src="{$list.avatar}">{else}<img src="{$app_url}/touxiang.png">{/if}</div>
@@ -77,7 +77,7 @@
 						<div class="express-user-list-off accordion-body collapse" id="waitgrab_leave">
 							<!-- {foreach from=$express_user_list.list item=list} -->
 								{if $list.online_status eq '4'}
-									<div class="express-user-info">
+									<div class="express-user-info" online_status ="{$list.online_status}">
 										<div longitude="{$list.longitude}" latitude="{$list.latitude}" name="{$list.name}" mobile="{$list.mobile}">
 											<div class="imginfo-div">
 	        		                			<div class="express-img">{if $list.avatar}<img src="{$list.avatar}">{else}<img src="{$app_url}/touxiang.png">{/if}</div>
