@@ -480,3 +480,12 @@
 .order-border-other{
   border:1px solid #dcdcdc;
 }
+
+
+
+.modal{
+	z-index: 999;
+}
+.modal-backdrop {
+	z-index: 998;
+}

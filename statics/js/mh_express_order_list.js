@@ -33,6 +33,7 @@
               app.mh_express_order_list.express_order_detail();
               app.mh_express_order_list.order_current_location();
               app.mh_express_order_list.order_reassign_detail();
+              app.mh_express_order_list.ajaxassign();
               app.mh_express_order_list.assign();
               app.mh_express_order_list.click_exuser();
             },
@@ -53,7 +54,29 @@
                     }, 'json');
                 });
 		    },
-            
+		    
+	        ajaxassign: function () {
+	            $('[data-toggle="ajax_assign"]').on('click', function (e) {
+	                e.preventDefault();
+	                var $this = $(this),
+	                    url = $this.attr('data-href') || $this.attr('href'),
+	                    msg = $this.attr('data-msg') || '您确定进行该操作吗？';
+	                var exp_id = $('.selected-express-id').val();
+	                if (!url) {
+	                    smoke.alert('参数错误！');
+	                    return false;
+	                }
+	                smoke.confirm(msg, function (e) {
+	                    if (e) {
+	                        $.post(url, {'express_id':exp_id}, function (data) {
+	                        	$('#myModal2').modal('hide');
+	                        	ecjia.merchant.showmessage(data);
+	                        }, 'json');
+	                    }
+	                }, { ok: "确定", cancel: "取消"});
+	            });
+	        },
+	        
 		    assign : function(url){
 				$(".assign").on('click', function() {	
 					$('.re-assign-model').css('display', 'block');
