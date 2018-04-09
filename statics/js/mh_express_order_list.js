@@ -70,6 +70,8 @@
 	                    if (e) {
 	                        $.post(url, {'express_id':exp_id}, function (data) {
 	                        	$('#myModal2').modal('hide');
+	                    		$(".modal-backdrop").remove();
+								$("body").removeClass('modal-open');
 	                        	ecjia.merchant.showmessage(data);
 	                        }, 'json');
 	                    }
