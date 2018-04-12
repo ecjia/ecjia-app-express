@@ -19,6 +19,21 @@
                      }
                 });
                 
+                $(".user-map-change").click(function(){
+               	 var $this = $(this);
+               	 if ($this.hasClass('fa fa-expand')) {
+                       $this.removeClass('fa fa-expand').addClass('fa fa-compress');
+                       $(".left-bar1").hide();
+                    	$(".right-bar").hide();
+                    	$('.middle-bar').attr('style','width:98%');
+                    } else {
+                        $this.removeClass('fa fa-compress').addClass('fa fa-expand');
+                        $(".left-bar1").show();
+                    	$(".right-bar").show();
+                    	$('.middle-bar').attr('style','width:50%');
+                    }
+               });
+                
                 
                 $('.online-triangle').on('click', function(e) {
                 	var div = ($(".express-user-list").hasClass("in"));
