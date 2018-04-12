@@ -166,24 +166,22 @@
 	clear:both;
 }
 .express-order-div .waitfor-pickup{
-	padding-left: 5px;
-    width: 45%;
+	margin-left: 5px;
     float: left;
 }
 .express-order-div .waitfor-pickup span{
 	color:#c62626;
 	display:inline-block;
-	margin-left:8px;
+	margin-left:3px;
 }
 .express-order-div .wait-sending{
-	width: 44%;
-    padding-right: 4%;
-    float: right;
+    margin-left: 15px;
+    float: left;
 }
 .express-order-div .wait-sending span{
 	color:#c62626;
 	display:inline-block;
-	margin-left:8px;
+	margin-left:3px;
 }
 
 .express-user-info .assign-div{

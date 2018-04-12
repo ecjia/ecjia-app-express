@@ -94,22 +94,3 @@
 		</div>
 	</div>
 </div>
-
-
-<!-- 指派开始 -->
-<div class="re-assign-model">
-	<div class="modal " style="width:530px;">
-		 <div class="modal-body">
-			<div class="control-group formSep control-group-small">
-				<div class="controls">
-					<div class="notice-message"></div>
-				</div>
-			</div>
-			<div class="control-group t_c">
-				<button class="btn cancel-btn">取消</button>&nbsp;&nbsp;
-				<button class="btn ok-btn">确定</button>
-			</div>
-		  </div>
-	</div>
-</div>
-<!--指派结束 -->
