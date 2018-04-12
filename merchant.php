@@ -417,7 +417,6 @@ class merchant extends ecjia_merchant {
 		/*待取货列表*/
 		$wait_pickup_list = $this->get_wait_grab_list($type);
 		$this->assign('search_action', RC_Uri::url('express/merchant/wait_pickup'));
-		
 		$this->assign('express_order_count', $wait_pickup_list['express_order_count']);
 		$this->assign('filter', $wait_pickup_list['filter']);
 		
