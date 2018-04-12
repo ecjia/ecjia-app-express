@@ -42,7 +42,7 @@
 													<div class="waitfor-pickup">
 														待取货<span class="ecjia-red">{if $list.wait_pickup_count}{$list.wait_pickup_count}{else}0{/if}单</span>
 													</div>
-													<div class="wait-sending">
+													<div class="wait-sending-list">
 														待配送<span class="ecjia-red">{if $list.sending_count}{$list.sending_count}{else}0{/if}单</span>
 													</div>
 												</div>
