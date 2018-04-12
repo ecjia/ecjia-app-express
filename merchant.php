@@ -386,7 +386,7 @@ class merchant extends ecjia_merchant {
 		$content['eocity']        		= ecjia_region::getRegionName($content['eocity']);
 		$content['eodistrict']    		= ecjia_region::getRegionName($content['eodistrict']);
 		$content['eostreet']      		= ecjia_region::getRegionName($content['eostreet']);
-		$content['add_time']  	  		= RC_Time::local_date('Y-m-d H:i', $content['add_time']);
+		$content['add_time']  	  		= RC_Time::local_date('Y-m-d H:i:s', $content['add_time']);
 		$content['signed_time']   		= RC_Time::local_date('Y-m-d H:i', $content['signed_time']);
 		$content['all_address'] 		= $content['district'].$content['street'];
 		$content['express_all_address'] = $content['eodistrict'].$content['eostreet'];
