@@ -221,10 +221,7 @@
 	color:#c62626;
 	margin-right:6px;
 }
-.fresh{
-	float:left;
-	width:40%;
-}
+
 .countdown{
 	height:32px;
 	float:left;
@@ -232,7 +229,7 @@
 }
 .express-task .mark{
 	color:#c62626;
-	background-color:#ffffff;
+	background-color:#f5f5f5;
 }
 .map-exp-order{
 	display:block;

@@ -19,7 +19,6 @@
 <div class="page-header task-heading">
 	<h2 class="pull-left">
 		<!-- {if $ur_here}{$ur_here}{/if} -->
-		<a class="btn plus_or_reply sidebar-ckeck " key="0" href="javascript:;"  id="sticky_a">全屏查看</a>
 	</h2>
 	<div class="clearfix">
 	</div>
@@ -37,21 +36,17 @@
 					<li class="{if $type eq 'wait_pickup'}active{/if}"><a  href='{url path="express/merchant/wait_pickup" args="type=wait_pickup"}'>待取货 <span class="badge badge-info">{if $express_order_count.wait_pickup}{$express_order_count.wait_pickup}{else}0{/if}</span> </a></li>
 					<li class="{if $type eq 'sending'}active{/if}"><a  href='{url path="express/merchant/wait_pickup" args="type=sending"}'>配送中 <span class="badge badge-info">{if $express_order_count.sending}{$express_order_count.sending}{else}0{/if}</span> </a></li>
 				</ul>
-				<form class="f_r form-inline" style="width:49%;">
-					<!-- {if $express_order_count.wait_grab} -->
-						<div class="map-change-remark map-exp-order">注：配送单号&nbsp;&nbsp;<span class="mark order">[{$first_express_order.express_sn}]</span>&nbsp;&nbsp;位置</div>
-						<div class="map-change-remark map-exp-user">注：配送员&nbsp;&nbsp;<span class="mark user">[{$express_info.name}]</span>&nbsp;&nbsp;位置</div>
-					<!--{/if} -->
-					<div class="fresh">
-						<span class="auto-refresh">
-							<span class="numcolor">120</span>秒后自动刷新
-						</span>
-						<a class="btn btn-primary data-pjax m_l5"  href='{url path="express/merchant/init" args="type=wait_grab"}'>
-							手动刷新
-						</a>
-					</div>
-				</form>
-				<div class="clearfix"></div>
+				
+					
+				
+				<div class="pull-right">
+					<span class="auto-refresh">
+						<span class="numcolor">120</span>秒后自动刷新
+					</span><a class="btn btn-primary data-pjax m_l5"  href='{url path="express/merchant/init" args="type=wait_grab"}'>手动刷新</a>
+				</div>
+				
+		
+				
 			</div>
 			
 			<div class="panel-body panel-body-smal row-fluid ditpage-rightbar-new editpage-rightbar">
@@ -63,7 +58,7 @@
 									<a class="accordion-toggle acc-in move-mod-head"><strong>待抢单列表</strong></a>
 								</div>
 								
-								<div class="accordion-body in collapse" style="height:547px;overflow:auto;">
+								<div class="accordion-body in collapse" style="height:544px;overflow:auto;">
 									<!-- {foreach from=$wait_grab_list.list key=key item=wait_grab} -->
 										<div class="accordion-inner order-div div{$wait_grab.express_id} {if $key eq 0}order-border-first{else}order-border-other{/if}"  express_id="{$wait_grab.express_id}" express_sn="{$wait_grab.express_sn}" express_start="{$wait_grab.sf_latitude},{$wait_grab.sf_longitude}" express_end="{$wait_grab.latitude},{$wait_grab.longitude}" sf_lng="{$wait_grab.sf_longitude}" sf_lat="{$wait_grab.sf_latitude}" data-url='{url path="express/merchant/get_nearest_exuser"}'>
 											<div class="control-group control-group-small border-bottom-line">
@@ -100,15 +95,25 @@
 				</div>
 				
 				<div class="middle-bar">
-					<div class="control-group">
-	        			<div class="">
-	        				{if $express_order_count.wait_grab}
-	        					<div class="span6" id="allmap" style="height:580px;width:100%;"></div>
-	        				{else}
-	        					<div class="span6"  style="height:580px;width:100%;text-align:center;margin-top: 285px;">暂无任何记录!</div>
-	        				{/if}
-	        			</div>
-	        		</div>
+					<div class="foldable-list move-mod-group">
+						<div class="accordion-group">
+							<div class="accordion-heading">
+								<!-- {if $express_order_count.wait_grab} -->
+								<a class="accordion-toggle acc-in move-mod-head">
+									<div class="map-exp-order">配送单号&nbsp;&nbsp;<span class="mark order">[{$first_express_order.express_sn}]</span>&nbsp;&nbsp;位置 <i class="fa fa-expand pull-right"></i></div>
+									<div class="map-exp-user">配送员&nbsp;&nbsp;<span class="mark user">[{$express_info.name}]</span>&nbsp;&nbsp;位置 <i class="fa fa-expand pull-right"></i></div>
+								</a>
+								<!--{/if} -->
+							</div>
+							<div class="accordion-body in collapse" >
+								{if $express_order_count.wait_grab}
+		        					<div class="span6" id="allmap" style="height:542px;width:100%;"></div>
+		        				{else}
+		        					<div class="span6"  style="height:580px;width:100%;text-align:center;padding-top: 328px;">暂无任何记录!</div>
+		        				{/if}
+							</div>
+						</div>
+					</div>
 				</div>
 				
 				<div class="original-user-list">
