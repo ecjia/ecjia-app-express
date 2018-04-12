@@ -37,16 +37,11 @@
 					<li class="{if $type eq 'sending'}active{/if}"><a  href='{url path="express/merchant/wait_pickup" args="type=sending"}'>配送中 <span class="badge badge-info">{if $express_order_count.sending}{$express_order_count.sending}{else}0{/if}</span> </a></li>
 				</ul>
 				
-					
-				
 				<div class="pull-right">
 					<span class="auto-refresh">
 						<span class="numcolor">120</span>秒后自动刷新
 					</span><a class="btn btn-primary data-pjax m_l5"  href='{url path="express/merchant/init" args="type=wait_grab"}'>手动刷新</a>
 				</div>
-				
-		
-				
 			</div>
 			
 			<div class="panel-body panel-body-smal row-fluid ditpage-rightbar-new editpage-rightbar">
