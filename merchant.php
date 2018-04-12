@@ -412,12 +412,10 @@ class merchant extends ecjia_merchant {
 	
 		$type = empty($_GET['type']) ? 'wait_pickup' : trim($_GET['type']);
 		$keywords = empty($_GET['keywords']) ? '' : trim($_GET['keywords']);
-	
 		$this->assign('type', $type);
 	
 		/*待取货列表*/
 		$wait_pickup_list = $this->get_wait_grab_list($type);
-	
 		$this->assign('search_action', RC_Uri::url('express/merchant/wait_pickup'));
 		
 		$this->assign('express_order_count', $wait_pickup_list['express_order_count']);
@@ -559,6 +557,7 @@ class merchant extends ecjia_merchant {
 		$dbview = RC_DB::table('express_order as eo')
 					->leftJoin('store_franchisee as sf', RC_DB::raw('eo.store_id'), '=', RC_DB::raw('sf.store_id'));
 		
+		$dbview->where(RC_DB::raw('eo.store_id'), $_SESSION['store_id']);
 		$dbview->where(RC_DB::raw('eo.shipping_code'), 'ship_o2o_express');
 		
 		$field = 'eo.consignee, eo.mobile as consignee_mobile, eo.express_id, eo.store_id, eo.express_sn, eo.country, eo.province, eo.city, eo.district, eo.street, eo.address, eo.distance, eo.add_time, 
@@ -569,6 +568,7 @@ class merchant extends ecjia_merchant {
 		$filter['type'] 	= empty($type) ? 'wait_grab' : $type;
 		
 		$db = RC_DB::table('express_order');
+		$db->where(RC_DB::raw('store_id'), $_SESSION['store_id']);
 		$db->where(RC_DB::raw('shipping_code'), 'ship_o2o_express');
 		
 		if ($type != 'wait_grab') {
