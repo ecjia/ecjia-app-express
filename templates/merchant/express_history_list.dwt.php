@@ -56,8 +56,8 @@
 								  	 <a data-toggle="modal" data-backdrop="static" href="#myModal1" express-id="{$history.express_id}" express-url="{$express_detail}"  title="查看详情">查看详情</a>
 					    	  	</div>
 					      	</td>
-					      	<td>{$history.express_user}<br>[{$history.express_mobile}]</td>
-					      	<td>{$history.consignee}[{$history.mobile}]<br>
+					      	<td>{$history.express_user}</td>
+					      	<td>{$history.consignee}<br>
 					      		地址：{$history.district}{$history.street}{$history.address}
 					      	</td>
 					      	<td>派单</td>

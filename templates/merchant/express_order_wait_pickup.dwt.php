@@ -72,8 +72,8 @@
 								  	 {if $wait_pickup.online_status eq '1'}&nbsp;|&nbsp;<a class="express-location" data-toggle="modal" data-backdrop="static" href="#myModal3" express-id="{$wait_pickup.express_id}" express-location-url='{url path="express/merchant/express_location" args="express_id={$wait_pickup.express_id}&store_id={$wait_pickup.store_id}{if $type}&type={$type}{/if}"}'  title="当前位置">当前位置</a>{/if}
 					    	  	</div>
 					      	</td>
-					      	<td>{$wait_pickup.express_user}[{$wait_pickup.express_mobile}]</td>
-					      	<td>{$wait_pickup.consignee}[{$wait_pickup.consignee_mobile}]<br>地址：{$wait_pickup.to_address}</td>
+					      	<td>{$wait_pickup.express_user}</td>
+					      	<td>{$wait_pickup.consignee}<br>地址：{$wait_pickup.to_address}</td>
 					      	<td>{if $wait_pickup.from eq 'assign'}派单{else}抢单{/if}</td>
 					      	<td>{$wait_pickup.format_receive_time}</td>
 					      	<td class="ecjiafc-red">{if $type eq 'wait_pickup'}待取货{elseif $type eq 'sending'}配送中{/if}</td>
