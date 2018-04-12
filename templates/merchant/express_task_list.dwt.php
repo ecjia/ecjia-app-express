@@ -89,7 +89,7 @@
 					</div>
 				</div>
 				
-				<div class="middle-bar" style="width:50%;">
+				<div class="middle-bar" style="width:50%;margin-left:1%;margin-right:1%;">
 					<div class="foldable-list move-mod-group">
 						<div class="accordion-group">
 							<div class="accordion-heading">
