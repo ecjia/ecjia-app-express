@@ -417,6 +417,7 @@ class merchant extends ecjia_merchant {
 		/*待取货列表*/
 		$wait_pickup_list = $this->get_wait_grab_list($type);
 		$this->assign('search_action', RC_Uri::url('express/merchant/wait_pickup'));
+		
 		$this->assign('express_order_count', $wait_pickup_list['express_order_count']);
 		$this->assign('filter', $wait_pickup_list['filter']);
 		
@@ -589,7 +590,10 @@ class merchant extends ecjia_merchant {
 		}
 		
 		if (!empty($filter['keywords'])) {
-			$dbview ->whereRaw('(eo.express_user  like  "%'.mysql_like_quote($filter['keywords']).'%") or (eo.express_mobile like "%'.mysql_like_quote($filter['keywords']).'%")');
+			$keywords = $filter['keywords'];
+			$dbview->where(function($query) use ($keywords) {
+				$query->where(RC_DB::raw('eo.express_user'), 'like', '%'.mysql_like_quote($keywords).'%')->orWhere(RC_DB::raw('eo.express_mobile'), 'like', '%'.mysql_like_quote($keywords).'%');
+			});
 		}
 		
 		$count = $dbview->count();
