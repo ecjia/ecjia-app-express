@@ -130,11 +130,9 @@ class mh_history extends ecjia_merchant {
 		$content['eostreet']      = ecjia_region::getRegionName($content['eostreet']);
 		$content['add_time']  = RC_Time::local_date('Y-m-d H:i:s', $content['add_time']);
 		$content['signed_time']  = RC_Time::local_date('Y-m-d H:i:s', $content['signed_time']);
-		$content['expect_shipping_time']  = RC_Time::local_date('Y-m-d H:i:s', $content['expect_shipping_time']);
 		$content['all_address'] = $content['district'].$content['street'];
 		$content['express_all_address'] = $content['eodistrict'].$content['eostreet'];
 		$content['commision'] = price_format($content['commision']);
-		
 		$this->assign('content', $content);
 		$this->assign('goods_list', $goods_list);
 		
