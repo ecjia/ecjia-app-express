@@ -89,22 +89,22 @@
 					</div>
 				</div>
 				
-				<div class="middle-bar">
+				<div class="middle-bar" style="width:50%;">
 					<div class="foldable-list move-mod-group">
 						<div class="accordion-group">
 							<div class="accordion-heading">
 								<!-- {if $express_order_count.wait_grab} -->
 								<a class="accordion-toggle acc-in move-mod-head">
-									<div class="map-exp-order">配送单号&nbsp;&nbsp;<span class="mark order">[{$first_express_order.express_sn}]</span>&nbsp;&nbsp;位置 <i class="fa fa-expand pull-right"></i></div>
-									<div class="map-exp-user">配送员&nbsp;&nbsp;<span class="mark user">[{$express_info.name}]</span>&nbsp;&nbsp;位置 <i class="fa fa-expand pull-right"></i></div>
+									<div class="map-exp-order">配送单号&nbsp;&nbsp;<span class="mark order">[{$first_express_order.express_sn}]</span>&nbsp;&nbsp;位置 <i class="order-map-change cursor_pointer fa fa-expand pull-right "></i></div>
+									<div class="map-exp-user">配送员&nbsp;&nbsp;<span class="mark user">[{$express_info.name}]</span>&nbsp;&nbsp;位置 <i class="user-map-change cursor_pointer fa fa-expand pull-right"></i></div>
 								</a>
 								<!--{/if} -->
 							</div>
 							<div class="accordion-body in collapse" >
 								{if $express_order_count.wait_grab}
-		        					<div class="span6" id="allmap" style="height:542px;width:100%;"></div>
+		        					<div id="allmap" style="height:542px;"></div>
 		        				{else}
-		        					<div class="span6"  style="height:580px;width:100%;text-align:center;padding-top: 328px;">暂无任何记录!</div>
+		        					<div style="height:580px;text-align:center;padding-top: 328px;">暂无任何记录!</div>
 		        				{/if}
 							</div>
 						</div>
