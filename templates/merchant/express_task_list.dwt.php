@@ -95,8 +95,8 @@
 							<div class="accordion-heading">
 								<!-- {if $express_order_count.wait_grab} -->
 								<a class="accordion-toggle acc-in move-mod-head">
-									<div class="map-exp-order">配送单号&nbsp;&nbsp;<span class="mark order">[{$first_express_order.express_sn}]</span>&nbsp;&nbsp;位置 <i class="order-map-change cursor_pointer fa fa-expand pull-right "></i></div>
-									<div class="map-exp-user">配送员&nbsp;&nbsp;<span class="mark user">[{$express_info.name}]</span>&nbsp;&nbsp;位置 <i class="user-map-change cursor_pointer fa fa-expand pull-right"></i></div>
+									<div class="map-exp-order"><strong>配送单号<span class="mark order">【{$first_express_order.express_sn}】</span>位置</strong><i class="order-map-change cursor_pointer fa fa-expand pull-right "></i></div>
+									<div class="map-exp-user"><strong>配送员<span class="mark user">【{$express_info.name}】</span>位置 </strong><i class="user-map-change cursor_pointer fa fa-expand pull-right"></i></div>
 								</a>
 								<!--{/if} -->
 							</div>
