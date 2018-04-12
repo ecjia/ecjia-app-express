@@ -33,7 +33,7 @@
 											<div class="reassign_exuser_div" longitude="{$list.longitude}" latitude="{$list.latitude}" name="{$list.name}" mobile="{$list.mobile}">
 												<div class="imginfo-div">
 		        		                			<div class="express-img">{if $list.avatar}<img src="{$list.avatar}">{else}<img src="{$app_url}/touxiang.png">{/if}</div>
-		        		                			<div class="expressinfo">{$list.name}<br>{$list.mobile}</div>
+		        		                			<div class="expressinfo">{$list.name}</div>
 												</div>
 												<div class="express-order-div">
 													<div class="waitfor-pickup">
@@ -68,7 +68,7 @@
 										<div>
 											<div class="imginfo-div">
 	        		                			<div class="express-img">{if $list.avatar}<img src="{$list.avatar}">{else}<img src="{$app_url}/touxiang.png">{/if}</div>
-	        		                			<div class="expressinfo">{$list.name}<br>{$list.mobile}</div>
+	        		                			<div class="expressinfo">{$list.name}</div>
 											</div>
 											<div class="express-order-div">
 												<div class="waitfor-pickup">
