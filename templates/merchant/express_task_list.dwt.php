@@ -104,7 +104,7 @@
 								{if $express_order_count.wait_grab}
 		        					<div id="allmap" style="height:542px;"></div>
 		        				{else}
-		        					<div style="height:580px;text-align:center;padding-top: 328px;">暂无任何记录!</div>
+		        					<div style="height:580px;text-align:center;margin-top: 116px;">暂无任何记录!</div>
 		        				{/if}
 							</div>
 						</div>
