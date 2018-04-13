@@ -106,7 +106,7 @@
 							</div>
 							{/if}
 						{else}
-							<div class="norecord">暂无配送员!</div>
+							<div class="norecord">未查找到配送员!</div>
 						{/if}
 					</div>
 				</div>
