@@ -103,12 +103,8 @@ class task_module extends api_admin implements api_interface {
 		if (!empty($keywords)) {
 			$dbview ->whereRaw('((eo.express_sn  like  "%'.mysql_like_quote($keywords).'%") or (eo.express_user like "%'.mysql_like_quote($keywords).'%") or (eo.express_mobile like "%'.mysql_like_quote($keywords).'%"))');
 		}
-		$db = RC_DB::table('express_order');
-		if (!empty($express_type)) {
-			$db->where('status', $status);
-		}
-		$count = $db->where('store_id', $_SESSION['store_id'])->count();
 		
+		$count = $dbview->count(RC_DB::raw('eo.express_id'));
 		//实例化分页
 		$page_row = new ecjia_page($count, $size, 6, '', $page);
 		
