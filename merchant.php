@@ -95,7 +95,7 @@ class merchant extends ecjia_merchant {
 		$type = empty($_GET['type']) ? 'wait_grab' : trim($_GET['type']);
 		$this->assign('type', $type);
 		
-		/*待抢单列表*/
+		/*待派单列表*/
 		$wait_grab_list = $this->get_wait_grab_list($type);
 		
 		/*第一个订单获取*/
@@ -497,7 +497,7 @@ class merchant extends ecjia_merchant {
 	}
 	
 	/**
-	 * 待抢单列表页搜索配送员
+	 * 待派单列表页搜索配送员
 	 */
 	public function waitgrablist_search_user() {
 		$this->admin_priv('mh_express_task_manage');
@@ -551,7 +551,7 @@ class merchant extends ecjia_merchant {
 	
 	
 	/**
-	 * 待抢单列表
+	 * 待派单列表
 	 */
 	private function get_wait_grab_list($type){
 		$dbview = RC_DB::table('express_order as eo')

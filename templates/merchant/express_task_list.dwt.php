@@ -32,7 +32,7 @@
 			<input type="hidden" name="home_url" value="{RC_Uri::home_url()}"/>
 			<div class="panel-body panel-body-small">
 				<ul class="nav nav-pills pull-left">
-					<li class="{if $type eq 'wait_grab'}active{/if}"><a  href='{url path="express/merchant/init" args="type=wait_grab"}'>待抢单 <span class="badge badge-info">{if $express_order_count.wait_grab}{$express_order_count.wait_grab}{else}0{/if}</span> </a></li>
+					<li class="{if $type eq 'wait_grab'}active{/if}"><a  href='{url path="express/merchant/init" args="type=wait_grab"}'>待派单 <span class="badge badge-info">{if $express_order_count.wait_grab}{$express_order_count.wait_grab}{else}0{/if}</span> </a></li>
 					<li class="{if $type eq 'wait_pickup'}active{/if}"><a  href='{url path="express/merchant/wait_pickup" args="type=wait_pickup"}'>待取货 <span class="badge badge-info">{if $express_order_count.wait_pickup}{$express_order_count.wait_pickup}{else}0{/if}</span> </a></li>
 					<li class="{if $type eq 'sending'}active{/if}"><a  href='{url path="express/merchant/wait_pickup" args="type=sending"}'>配送中 <span class="badge badge-info">{if $express_order_count.sending}{$express_order_count.sending}{else}0{/if}</span> </a></li>
 				</ul>
@@ -50,7 +50,7 @@
 						<div class="foldable-list move-mod-group">
 							<div class="accordion-group">
 								<div class="accordion-heading">
-									<a class="accordion-toggle acc-in move-mod-head"><strong>待抢单列表</strong></a>
+									<a class="accordion-toggle acc-in move-mod-head"><strong>待派单列表</strong></a>
 								</div>
 								
 								<div class="accordion-body in collapse" style="height:544px;overflow:auto;">

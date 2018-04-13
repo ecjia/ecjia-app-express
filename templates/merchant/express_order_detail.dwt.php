@@ -11,7 +11,7 @@
 			<div class="express_content">
 				<div class="express_order">
 					<span>配送单号：<font class="ecjiafc-red">{$content.express_sn}</font></span>
-					<span>配送状态：<font class="ecjiafc-red"> {if $type eq 'wait_grab'}待抢单{elseif $type eq 'wait_pickup'}待取货{elseif $type eq 'sending'}配送中{/if}   </font></span>
+					<span>配送状态：<font class="ecjiafc-red"> {if $type eq 'wait_grab'}待派单{elseif $type eq 'wait_pickup'}待取货{elseif $type eq 'sending'}配送中{/if}   </font></span>
 					<span>取货距离：<font class="ecjiafc-red">{$content.distance}</font>米</span>
 					<span>运费：<font class="ecjiafc-red">¥{if $type eq 'wait_grab'}{$content.shipping_fee}{else}{$content.commision}{/if}</font>元</span>
 				</div>

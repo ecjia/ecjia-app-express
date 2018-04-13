@@ -121,7 +121,7 @@
 							<td>派单</td>
 							<td>{$list.commision}</td>
 							<td>
-							{if $list.status eq 0}<font class="ecjiafc-red">待抢单</font>{elseif $list.status eq 1}<font class="ecjiafc-red">待取货</font>{elseif $list.status eq 2}<font class="ecjiafc-red">配送中</font>{elseif $list.status eq 3}退货中{elseif $list.status eq 4}已拒收{elseif $list.status eq 5}已完成{else}已退回{/if}</td>
+							{if $list.status eq 0}<font class="ecjiafc-red">待派单</font>{elseif $list.status eq 1}<font class="ecjiafc-red">待取货</font>{elseif $list.status eq 2}<font class="ecjiafc-red">配送中</font>{elseif $list.status eq 3}退货中{elseif $list.status eq 4}已拒收{elseif $list.status eq 5}已完成{else}已退回{/if}</td>
 						</tr>
 						<!-- {foreachelse} -->
 						<tr>
