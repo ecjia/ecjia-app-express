@@ -112,6 +112,9 @@ class task_module extends api_admin implements api_interface {
 		$express_order_result = $dbview->selectRaw($field)->orderBy('add_time', 'desc')->get();
 		
 		$express_order_list = array();
+		$express_from_location = array();
+		$express_to_location = array();
+		$distance = 0;
 		if (!empty($express_order_result)) {
 			foreach ($express_order_result as $val) {
 				switch ($val['status']) {
@@ -139,7 +142,6 @@ class task_module extends api_admin implements api_interface {
 				$street_name 		= ecjia_region::getRegionName($val['street']);
 				
 				//起终点距离计算
-				$distance = 0;
 				if (!empty($val['sf_longitude']) && !empty($val['sf_latitude']) && !empty($val['longitude']) && !empty($val['latitude'])) {
 					//腾讯地图api距离计算
 					$keys = ecjia::config('map_qq_key');
@@ -150,8 +152,6 @@ class task_module extends api_admin implements api_interface {
 				}
 				
 				//起终点坐标
-				$express_from_location = array();
-				$express_to_location = array();
 				if (!empty($val['sf_longitude']) && !empty($val['sf_latitude'])) {
 					$express_from_location = array('longitude' => $val['sf_longitude'], 'latitude' => $val['sf_latitude']);
 				}
