@@ -108,7 +108,7 @@ class task_module extends api_admin implements api_interface {
 		//实例化分页
 		$page_row = new ecjia_page($count, $size, 6, '', $page);
 		
-		$field = 'eo.*, oi.expect_shipping_time, oi.add_time as order_time, oi.pay_time, oi.order_amount, oi.pay_name, sf.merchants_name, sf.district as sf_district, sf.street as sf_street, sf.address as merchant_address, sf.longitude as merchant_longitude, sf.latitude as merchant_latitude';
+		$field = 'eo.*, oi.expect_shipping_time, oi.add_time as order_time, oi.pay_time, oi.order_amount, oi.pay_name, sf.merchants_name, sf.longitude as sf_longitude, sf.latitude as sf_latitude, sf.district as sf_district, sf.street as sf_street, sf.address as merchant_address, sf.longitude as merchant_longitude, sf.latitude as merchant_latitude';
 		$express_order_result = $dbview->selectRaw($field)->orderBy('add_time', 'desc')->get();
 		
 		$express_order_list = array();
@@ -132,12 +132,33 @@ class task_module extends api_admin implements api_interface {
 						$label_express_status = '已完成';
 						break;
 				}
-				$sf_district_name = ecjia_region::getRegionName($val['sf_district']);
-				$sf_street_name = ecjia_region::getRegionName($val['sf_street']);
-				$district_name = ecjia_region::getRegionName($val['district']);
-				$street_name = ecjia_region::getRegionName($val['street']);
 				
-				$shipping_fee = 
+				$sf_district_name 	= ecjia_region::getRegionName($val['sf_district']);
+				$sf_street_name 	= ecjia_region::getRegionName($val['sf_street']);
+				$district_name 		= ecjia_region::getRegionName($val['district']);
+				$street_name 		= ecjia_region::getRegionName($val['street']);
+				
+				//起终点距离计算
+				$distance = 0;
+				if (!empty($val['sf_longitude']) && !empty($val['sf_latitude']) && !empty($val['longitude']) && !empty($val['latitude'])) {
+					//腾讯地图api距离计算
+					$keys = ecjia::config('map_qq_key');
+					$url = "http://apis.map.qq.com/ws/distance/v1/?mode=driving&from=".$val['sf_latitude'].",".$val['sf_longitude']."&to=".$val['latitude'].",".$val['longitude']."&key=".$keys;
+					$distance_json = file_get_contents($url);
+					$distance_info = json_decode($distance_json, true);
+					$distance = isset($distance_info['result']['elements'][0]['distance']) ? $distance_info['result']['elements'][0]['distance'] : 0;
+				}
+				
+				//起终点坐标
+				$express_from_location = array();
+				$express_to_location = array();
+				if (!empty($val['sf_longitude']) && !empty($val['sf_latitude'])) {
+					$express_from_location = array('longitude' => $val['sf_longitude'], 'latitude' => $val['sf_latitude']);
+				}
+				if (!empty($val['longitude']) && !empty($val['latitude'])) {
+					$express_to_location = array('longitude' => $val['longitude'], 'latitude' => $val['latitude']);
+				}
+				
 				$express_order_list[] = array(
 					'express_id'	         => $val['express_id'],
 					'express_sn'	         => $val['express_sn'],
@@ -150,6 +171,9 @@ class task_module extends api_admin implements api_interface {
 					'label_express_status'	 => $label_express_status,
 					'express_from_address'	 => '【'.$val['merchants_name'].'】'. $sf_district_name. $sf_street_name. $val['merchant_address'],
 					'express_to_address'	 => $district_name. $street_name. $val['address'],
+					'express_from_location'	 => $express_from_location,
+					'express_to_location'	 => $express_to_location,
+					'distance'				 => $distance,
 					'shipping_fee'			 => !empty($val['shipping_fee']) ? $val['shipping_fee'] : '0.00',	
 					'format_shipping_fee'	 => price_format($val['shipping_fee']),
 					'best_time'				 => empty($val['expect_shipping_time']) ? '' : $val['expect_shipping_time'],
