@@ -176,9 +176,10 @@ class task_module extends api_admin implements api_interface {
 					'distance'				 => $distance,
 					'shipping_fee'			 => !empty($val['shipping_fee']) ? $val['shipping_fee'] : '0.00',	
 					'format_shipping_fee'	 => price_format($val['shipping_fee']),
-					'best_time'				 => empty($val['expect_shipping_time']) ? '' : $val['expect_shipping_time'],
+					'format_best_time'		 => empty($val['expect_shipping_time']) ? '' : $val['expect_shipping_time'],
 					'express_status' 		 => $status,
 					'label_express_status'	 => $label_express_status,
+					'format_add_time'	 	 => $val['order_time'] > 0 ? RC_Time::local_date(ecjia::config('time_format'), $val['order_time']) : '',
 				);
 			}
 		}
