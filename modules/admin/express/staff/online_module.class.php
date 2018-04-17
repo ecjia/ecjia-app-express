@@ -64,6 +64,7 @@ class online_module extends api_admin implements api_interface {
         $express_id = $this->requestData('express_id', 0);
 		$size     	= $this->requestData('pagination.count', 15);
 		$page     	= $this->requestData('pagination.page', 1);
+		$keywords = $this->requestData('keywords');
 		
 		if (empty($express_id)) {
 			return new ecjia_error('invalid_parameter', RC_Lang::get('orders::order.invalid_parameter'));
@@ -74,6 +75,10 @@ class online_module extends api_admin implements api_interface {
 		$db->where('staff_user.store_id', $_SESSION['store_id']);
 		$db->where('staff_user.group_id', '=', '-1');
 		$db->where('staff_user.parent_id', '>', 0);
+		
+		if (!empty($keywords)) {
+			$db ->whereRaw('(staff_user.mobile  like  "%'.mysql_like_quote($keywords).'%" or staff_user.name like "%'.mysql_like_quote($keywords).'%")');
+		}
 		
 		$count = $db->select('staff_user.user_id')->count();
 		

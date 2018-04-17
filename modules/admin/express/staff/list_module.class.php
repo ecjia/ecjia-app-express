@@ -64,6 +64,7 @@ class list_module extends api_admin implements api_interface {
         
 		$size     = $this->requestData('pagination.count', 15);
 		$page     = $this->requestData('pagination.page', 1);
+		$keywords = $this->requestData('keywords');
 		
 		$db = RC_DB::table('staff_user');
 		
@@ -71,6 +72,9 @@ class list_module extends api_admin implements api_interface {
 		$db->where('group_id', '=', '-1');
 		$db->where('parent_id', '>', 0);
 		
+		if (!empty($keywords)) {
+			$db ->whereRaw('(mobile  like  "%'.mysql_like_quote($keywords).'%" or name like "%'.mysql_like_quote($keywords).'%")');
+		}
 		$count = $db->select('user_id')->count();
 		
 		//实例化分页
