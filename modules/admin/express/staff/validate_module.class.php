@@ -77,7 +77,7 @@ class validate_module extends api_admin implements api_interface {
         }
         
         //判断校验码是否过期
-        if ($_SESSION['captcha']['sms']['add_staff']['lifetime'] > RC_Time::gmtime()) {
+        if ($_SESSION['captcha']['sms']['add_staff']['lifetime'] < RC_Time::gmtime()) {
         	return new ecjia_error('code_timeout', '验证码已过期，请重新获取！');
         }
        	 
