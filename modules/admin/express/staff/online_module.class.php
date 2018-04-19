@@ -75,6 +75,7 @@ class online_module extends api_admin implements api_interface {
 		$db->where('staff_user.store_id', $_SESSION['store_id']);
 		$db->where('staff_user.group_id', '=', '-1');
 		$db->where('staff_user.parent_id', '>', 0);
+		$db->where('staff_user.online_status', '=', 1);
 		
 		if (!empty($keywords)) {
 			$db ->whereRaw('(staff_user.mobile  like  "%'.mysql_like_quote($keywords).'%" or staff_user.name like "%'.mysql_like_quote($keywords).'%")');
