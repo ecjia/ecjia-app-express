@@ -73,7 +73,7 @@ class validate_module extends api_admin implements api_interface {
         //当前店铺子员工数
         $sub_staff_count = RC_DB::table('staff_user')->where('store_id', $_SESSION['store_id'])->where('parent_id', '>', 0)->count();
         if ($sub_staff_count >= 10) {
-        	return new ecjia_error('sub_staff_number_error', '目前子员工数额已达到10个，不可再添加');
+        	return new ecjia_error('sub_staff_number_error', '目前店铺员工数已达到10个最大限额');
         }
         
         //判断校验码是否过期
