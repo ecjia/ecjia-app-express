@@ -42,7 +42,7 @@
 			<div class="panel-body panel-body-small">
 				<form class="form-inline" method="post" action="{$search_action}{if $filter.type}&type={$filter.type}{/if}" name="searchForm">
 					<div class="f_r form-group">
-						<input type="text" name="keywords" class="form-control" value="{$smarty.get.keywords}" placeholder="请输入名称或手机号"/>
+						<input type="text" name="keywords" class="form-control" value="{$smarty.get.keywords}" placeholder="请输入配送员名或配送单号"/>
 						<button class="btn btn-primary search_express_order" type="submit">搜索</button>
 					</div>
 				</form>

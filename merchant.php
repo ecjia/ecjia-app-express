@@ -100,10 +100,12 @@ class merchant extends ecjia_merchant {
 		
 		/*第一个订单获取*/
 		$first_express_order = $wait_grab_list['list']['0'];
+		$first_express_order_id = $first_express_order['express_id'];
 		$start = $first_express_order['sf_latitude'].','.$first_express_order['sf_longitude'];
 		$end = $first_express_order['latitude'].','.$first_express_order['longitude'];
 		$this->assign('start', $start);
 		$this->assign('end', $end);
+		$this->assign('first_express_id', $first_express_order_id);
 		
 		/*配送员列表*/
 		$keywords = empty($_GET['keywords']) ? '' : trim($_GET['keywords']);
@@ -573,7 +575,7 @@ class merchant extends ecjia_merchant {
 		
 		if ($type != 'wait_grab') {
 			if (!empty($filter['keywords'])) {
-				$db ->whereRaw('(express_user  like  "%'.mysql_like_quote($filter['keywords']).'%") or (express_mobile like "%'.mysql_like_quote($filter['keywords']).'%")');
+				$db ->whereRaw('(express_user  like  "%'.mysql_like_quote($filter['keywords']).'%") or (express_sn like "%'.mysql_like_quote($filter['keywords']).'%")');
 			}
 		}
 		
@@ -592,7 +594,7 @@ class merchant extends ecjia_merchant {
 		if (!empty($filter['keywords'])) {
 			$keywords = $filter['keywords'];
 			$dbview->where(function($query) use ($keywords) {
-				$query->where(RC_DB::raw('eo.express_user'), 'like', '%'.mysql_like_quote($keywords).'%')->orWhere(RC_DB::raw('eo.express_mobile'), 'like', '%'.mysql_like_quote($keywords).'%');
+				$query->where(RC_DB::raw('eo.express_user'), 'like', '%'.mysql_like_quote($keywords).'%')->orWhere(RC_DB::raw('eo.express_sn'), 'like', '%'.mysql_like_quote($keywords).'%');
 			});
 		}
 		

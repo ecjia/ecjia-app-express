@@ -78,7 +78,7 @@
 											<input type="hidden" class="nearest_exuser_lng" value="{$express_info.longitude}"/>
 											<input type="hidden" class="nearest_exuser_lat" value="{$express_info.latitude}"/>
 											<input type="hidden" class="hasstaff" value="{$has_staff}"/>
-											<input type="hidden" class="order_express_id" value=""/>
+											<input type="hidden" class="order_express_id" value="{$first_express_id}"/>
 										</div>
 									<!-- {foreachelse} -->
 										<div class="norecord">暂无任何记录!</div>
