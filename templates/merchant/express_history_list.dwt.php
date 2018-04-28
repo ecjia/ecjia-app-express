@@ -29,7 +29,7 @@
                     <input class="form-control date w110" name="start_date" type="text" placeholder="开始时间" value="{$smarty.get.start_date}" />
     				<span class="">至</span>
     				<input class="form-control date w110" name="end_date" type="text" placeholder="结束时间" value="{$smarty.get.end_date}" />
-    				<input type="text" name="keyword" class="form-control" value="{$smarty.get.keyword}" placeholder="请输入名称或手机号"/>
+    				<input type="text" name="keyword" class="form-control" style="width: 200px;" value="{$smarty.get.keyword}" placeholder="请输入配送员名或配送单号"/>
     				
 					<a class="btn btn-primary m_l5 search_history">搜索</a>
 				</form>

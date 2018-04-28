@@ -157,7 +157,7 @@ class mh_history extends ecjia_merchant {
 		
 		$filter['keyword']	 = trim($_GET['keyword']);
 		if ($filter['keyword']) {
-			$db_data ->whereRaw('(express_user  like  "%'.mysql_like_quote($filter['keyword']).'%"  or express_mobile like "%'.mysql_like_quote($filter['keyword']).'%")');
+			$db_data ->whereRaw('(express_user  like  "%'.mysql_like_quote($filter['keyword']).'%"  or express_sn like "%'.mysql_like_quote($filter['keyword']).'%")');
 		}
 		
 		$count = $db_data->count();
