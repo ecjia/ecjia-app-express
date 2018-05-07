@@ -107,6 +107,11 @@ class update_module extends api_admin implements api_interface {
     		$data['user_ident'] = $user_ident;
     	}
     	
+    	//员工备注
+    	if (!empty($remark)) {
+    		$data['todolist'] = $remark;
+    	}
+    	
     	if (!empty($data)) {
     		RC_DB::table('staff_user')->where('store_id', $_SESSION['store_id'])->where('user_id', $staff_id)->update($data);
     	}
