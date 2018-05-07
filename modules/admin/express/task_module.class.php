@@ -52,13 +52,26 @@ defined('IN_ECJIA') or exit('No permission resources.');
  */
 class task_module extends api_admin implements api_interface {
     public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {	
-    	
+    	$this->authadminSession();
     	if ($_SESSION['staff_id'] <= 0) {
             return new ecjia_error(100, 'Invalid session');
         }
-		
-		$express_type = $this->requestData('express_type');
-		//$type = $this->requestData('type');
+        
+        $express_type = $this->requestData('express_type');
+		if ($express_type == 'finished') {
+			//权限判断，查看历史配送的权限
+			$result1 = $this->admin_priv('mh_express_history_manage');
+			if (is_ecjia_error($result1)) {
+				return $result1;
+			}
+		} else {
+			//权限判断，查看配送任务的权限
+			$result2 = $this->admin_priv('mh_express_task_manage');
+			if (is_ecjia_error($result2)) {
+				return $result2;
+			}
+		}
+        
 		$keywords = $this->requestData('keywords');
 		$size     = $this->requestData('pagination.count', 15);
 		$page     = $this->requestData('pagination.page', 1);
@@ -72,9 +85,12 @@ class task_module extends api_admin implements api_interface {
 							->leftJoin('store_franchisee as sf', RC_DB::raw('sf.store_id'), '=', RC_DB::raw('eo.store_id'));
 		
 		$dbview->where(RC_DB::raw('eo.store_id'), $_SESSION['store_id']);
+		$dbview->where(RC_DB::raw('eo.shipping_code'), 'ship_o2o_express');
 		
 		if (!empty($express_type)) {
-			if ($express_type == 'wait_pickup') {
+			if ($express_type == 'wait_assign') {
+				$status = 0;
+			}elseif ($express_type == 'wait_pickup') {
 				$status = 1;
 			} elseif ($express_type == 'sending') {
 				$status = 2;
@@ -88,22 +104,29 @@ class task_module extends api_admin implements api_interface {
 			$dbview ->whereRaw('((eo.express_sn  like  "%'.mysql_like_quote($keywords).'%") or (eo.express_user like "%'.mysql_like_quote($keywords).'%") or (eo.express_mobile like "%'.mysql_like_quote($keywords).'%"))');
 		}
 		
-		//if (!empty($type) && in_array($type, array('assign', 'grab'))) {
-		//    $where['eo.from'] = $type;
-		//}
-		
-		$count = RC_DB::table('express_order')->where('store_id', $_SESSION['store_id'])->count();
-		
+		$count = $dbview->count(RC_DB::raw('eo.express_id'));
 		//实例化分页
 		$page_row = new ecjia_page($count, $size, 6, '', $page);
 		
-		$field = 'eo.*, oi.expect_shipping_time, oi.add_time as order_time, oi.pay_time, oi.order_amount, oi.pay_name, sf.merchants_name, sf.district as sf_district, sf.street as sf_street, sf.address as merchant_address, sf.longitude as merchant_longitude, sf.latitude as merchant_latitude';
+		$field = 'eo.*, oi.expect_shipping_time, oi.add_time as order_time, oi.pay_time, oi.order_amount, oi.pay_name, sf.merchants_name, sf.longitude as sf_longitude, sf.latitude as sf_latitude, sf.district as sf_district, sf.street as sf_street, sf.address as merchant_address, sf.longitude as merchant_longitude, sf.latitude as merchant_latitude';
 		$express_order_result = $dbview->selectRaw($field)->orderBy('add_time', 'desc')->get();
+		if ($express_type == 'wait_assign') {
+			$express_order_result = $dbview->selectRaw($field)->orderBy('add_time', 'desc')->get();
+		} else {
+			$express_order_result = $dbview->selectRaw($field)->orderBy('receive_time', 'desc')->get();
+		}
 		
 		$express_order_list = array();
+		$express_from_location = array();
+		$express_to_location = array();
+		$distance = 0;
 		if (!empty($express_order_result)) {
 			foreach ($express_order_result as $val) {
 				switch ($val['status']) {
+					case '0' :
+						$status = 'wait_assign';
+						$label_express_status = '待指派';
+						break;
 					case '1' :
 						$status = 'wait_pickup';
 						$label_express_status = '待取货';
@@ -117,12 +140,30 @@ class task_module extends api_admin implements api_interface {
 						$label_express_status = '已完成';
 						break;
 				}
-				$sf_district_name = ecjia_region::getRegionName($val['sf_district']);
-				$sf_street_name = ecjia_region::getRegionName($val['sf_street']);
-				$district_name = ecjia_region::getRegionName($val['district']);
-				$street_name = ecjia_region::getRegionName($val['street']);
 				
-				$shipping_fee = 
+				$sf_district_name 	= ecjia_region::getRegionName($val['sf_district']);
+				$sf_street_name 	= ecjia_region::getRegionName($val['sf_street']);
+				$district_name 		= ecjia_region::getRegionName($val['district']);
+				$street_name 		= ecjia_region::getRegionName($val['street']);
+				
+				//起终点距离计算
+				if (!empty($val['sf_longitude']) && !empty($val['sf_latitude']) && !empty($val['longitude']) && !empty($val['latitude'])) {
+					//腾讯地图api距离计算
+					$keys = ecjia::config('map_qq_key');
+					$url = "http://apis.map.qq.com/ws/distance/v1/?mode=driving&from=".$val['sf_latitude'].",".$val['sf_longitude']."&to=".$val['latitude'].",".$val['longitude']."&key=".$keys;
+					$distance_json = file_get_contents($url);
+					$distance_info = json_decode($distance_json, true);
+					$distance = isset($distance_info['result']['elements'][0]['distance']) ? $distance_info['result']['elements'][0]['distance'] : 0;
+				}
+				
+				//起终点坐标
+				if (!empty($val['sf_longitude']) && !empty($val['sf_latitude'])) {
+					$express_from_location = array('longitude' => $val['sf_longitude'], 'latitude' => $val['sf_latitude']);
+				}
+				if (!empty($val['longitude']) && !empty($val['latitude'])) {
+					$express_to_location = array('longitude' => $val['longitude'], 'latitude' => $val['latitude']);
+				}
+				
 				$express_order_list[] = array(
 					'express_id'	         => $val['express_id'],
 					'express_sn'	         => $val['express_sn'],
@@ -135,11 +176,15 @@ class task_module extends api_admin implements api_interface {
 					'label_express_status'	 => $label_express_status,
 					'express_from_address'	 => '【'.$val['merchants_name'].'】'. $sf_district_name. $sf_street_name. $val['merchant_address'],
 					'express_to_address'	 => $district_name. $street_name. $val['address'],
-					'shipping_fee'			 => $val['commision'],	
-					'format_shipping_fee'	 => price_format($val['commision']),
-					'best_time'				 => empty($val['expect_shipping_time']) ? '' : $val['expect_shipping_time'],
+					'express_from_location'	 => $express_from_location,
+					'express_to_location'	 => $express_to_location,
+					'distance'				 => $distance,
+					'shipping_fee'			 => !empty($val['shipping_fee']) ? $val['shipping_fee'] : '0.00',	
+					'format_shipping_fee'	 => price_format($val['shipping_fee']),
+					'format_best_time'		 => empty($val['expect_shipping_time']) ? '' : $val['expect_shipping_time'],
 					'express_status' 		 => $status,
 					'label_express_status'	 => $label_express_status,
+					'format_add_time'	 	 => $val['order_time'] > 0 ? RC_Time::local_date(ecjia::config('time_format'), $val['order_time']) : '',
 				);
 			}
 		}

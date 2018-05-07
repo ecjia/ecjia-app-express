@@ -54,7 +54,7 @@ defined('IN_ECJIA') or exit('No permission resources.');
  */
 class finished_module extends api_admin implements api_interface {
     public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {	
-    	
+    	$this->authadminSession();
     	if ($_SESSION['staff_id'] <= 0) {
             return new ecjia_error(100, 'Invalid session');
         }
@@ -194,7 +194,7 @@ class finished_module extends api_admin implements api_interface {
 				/*当订单配送方式为o2o速递时,记录o2o速递物流信息*/
 				if ($express_order_info['shipping_id'] > 0) {
 					$shipping_info = ecjia_shipping::pluginData($express_order_info['shipping_id']);
-					if ($shipping_info['shipping_code'] == 'ship_o2o_express') {
+					if ($shipping_info['shipping_code'] == 'ship_o2o_express' || $shipping_info['shipping_code'] == 'ship_ecjia_express') {
 						$data = array(
 								'express_code' => $shipping_info['shipping_code'],
 								'track_number' => $express_order_info['invoice_no'],

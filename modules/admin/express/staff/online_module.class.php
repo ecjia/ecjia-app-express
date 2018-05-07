@@ -47,44 +47,79 @@
 defined('IN_ECJIA') or exit('No permission resources.');
 
 /**
- * 查看配送订单配送员位置
+ * 掌柜指派订单获取在线配送员列表
  * @author zrl
  */
-class location_module extends api_admin implements api_interface {
+class online_module extends api_admin implements api_interface {
     public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {	
     	$this->authadminSession();
     	if ($_SESSION['staff_id'] <= 0) {
             return new ecjia_error(100, 'Invalid session');
         }
+		//权限判断，查看配送员列表的权限
+        $result = $this->admin_priv('mh_express_manage');
+        if (is_ecjia_error($result)) {
+        	return $result;
+        }
+        $express_id = $this->requestData('express_id', 0);
+		$size     	= $this->requestData('pagination.count', 15);
+		$page     	= $this->requestData('pagination.page', 1);
+		$keywords = $this->requestData('keywords');
 		
-        $staff_id = $this->requestData('staff_id');
-        
-        if (empty($staff_id)) {
-        	return new ecjia_error('invalid_parameter', RC_Lang::get('orders::order.invalid_parameter'));
-        }
-        
-        $dbview = RC_DB::table('staff_user as su')
-        			->leftJoin('express_user as eu', RC_DB::raw('su.user_id'), '=', RC_DB::raw('eu.user_id'));
-        
-        $dbview->where(RC_DB::raw('su.user_id'), $staff_id);
-        
-        $express_user_info = $dbview->selectRaw('eu.*, su.name, su.mobile, su.avatar')->first();
-        
-        if (empty($express_user_info)) {
-        	return new ecjia_error('not_exists_expressinfo', '配送员信息不存在');
-        }
-        $app_url =  RC_App::apps_url('statics/images', __FILE__);
-        
-        $express_user_info = array(
-        	'express_user'	        => empty($express_user_info['name']) ? 	'' 	: $express_user_info['name'],
-        	'express_mobile'		=> empty($express_user_info['mobile']) ? '' : $express_user_info['mobile'],
-        	'avatar'	        	=> !empty($express_user_info['avatar']) ? RC_Upload::upload_url($express_user_info['avatar']) : $app_url.'/touxiang.png',
-        	'express_user_location'	=> array(
-        		'longitude'			=> empty($express_user_info['longitude']) ? '' : $express_user_info['longitude'],
-        		'latitude'			=> empty($express_user_info['latitude']) ? '' : $express_user_info['latitude'],
-        	),
-        );
-		return $express_user_info;
+		if (empty($express_id)) {
+			return new ecjia_error('invalid_parameter', RC_Lang::get('orders::order.invalid_parameter'));
+		}
+		
+		$db = RC_DB::table('staff_user')->leftJoin('express_user', 'staff_user.user_id', '=', 'express_user.user_id');
+		
+		$db->where('staff_user.store_id', $_SESSION['store_id']);
+		$db->where('staff_user.group_id', '=', '-1');
+		$db->where('staff_user.parent_id', '>', 0);
+		$db->where('staff_user.online_status', '=', 1);
+		
+		if (!empty($keywords)) {
+			$db ->whereRaw('(staff_user.mobile  like  "%'.mysql_like_quote($keywords).'%" or staff_user.name like "%'.mysql_like_quote($keywords).'%")');
+		}
+		
+		$count = $db->select('staff_user.user_id')->count();
+		
+		//实例化分页
+		$page_row = new ecjia_page($count, $size, 6, '', $page);
+		
+		$list = $db->take($size)->skip($page_row->start_id - 1)->select('staff_user.*', 'express_user.longitude', 'express_user.latitude')->orderBy('staff_user.add_time', 'desc')->get();
+		
+		$express_user_list = array();
+		$distance = 0;
+		$location		= RC_DB::table('express_order')->where('express_id', $express_id)->select('longitude', 'latitude')->first();
+		if (!empty($list)) {
+			foreach ($list as $row) {
+				$wait_count 	= RC_DB::table('express_order')->where('staff_id', $row['user_id'])->where('status', 1)->count();
+				$sending_count	= RC_DB::table('express_order')->where('staff_id', $row['user_id'])->where('status', 2)->count(); 
+				if (!empty($location['longitude']) && !empty($location['latitude']) && !empty($row['latitude']) && !empty($row['longitude'])) {
+					//腾讯地图api距离计算
+					$keys = ecjia::config('map_qq_key');
+					$url = "http://apis.map.qq.com/ws/distance/v1/?mode=driving&from=".$row['latitude'].",".$row['longitude']."&to=".$location['latitude'].",".$location['longitude']."&key=".$keys;
+					$distance_json = file_get_contents($url);
+					$distance_info = json_decode($distance_json, true);
+					$row['distance'] = isset($distance_info['result']['elements'][0]['distance']) ? $distance_info['result']['elements'][0]['distance'] : 0;
+				}
+				$express_user_list[] = array(
+						'staff_id' 					=> $row['user_id'],
+						'staff_name' 				=> $row['name'],
+						'avatar' 					=> empty($row['avatar']) ? '' : RC_Upload::upload_url($row['avatar']),
+						'mobile'					=> $row['mobile'],
+						'wait_count'				=> $wait_count,
+						'sending_count'				=> $sending_count,
+						'distance'					=> !empty($row['distance']) ? $row['distance'] : $distance
+				);
+			}
+		}
+		$pager = array(
+			'total' => $page_row->total_records,
+			'count' => $page_row->total_records,
+			'more'	=> $page_row->total_pages <= $page ? 0 : 1,
+		);
+		return array('data' => $express_user_list, 'pager' => $pager);
 	 }	
 }
 

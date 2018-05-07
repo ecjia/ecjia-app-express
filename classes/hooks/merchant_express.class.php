@@ -46,27 +46,28 @@
 //
 defined('IN_ECJIA') or exit('No permission resources.');
 
-/**
- * 后台权限API
- * @author 
- */
-class express_admin_purview_api extends Component_Event_Api {
-    public function call(&$options) {
-        $purviews = array(
-        	array('action_name' => '配送任务中心', 'action_code' => 'express_task_manage', 'relevance' => ''),
-        		
-        	array('action_name' => '配送员管理', 'action_code' => 'express_manage', 'relevance' => ''),
-        	array('action_name' => '配送员编辑', 'action_code' => 'express_update', 'relevance' => ''),
-        	array('action_name' => '配送员删除', 'action_code' => 'express_delete', 'relevance' => ''),
-        		
-        	array('action_name' => '商家管理', 'action_code' => 'express_merchant_manage', 'relevance' => ''),
-        		
-        	array('action_name' => '资金对账', 'action_code' => 'express_match_manage', 'relevance' => ''),
-        		
-        	array('action_name' => '历史配送', 'action_code' => 'express_history_manage', 'relevance' => ''),
-        );
-        return $purviews;
-    }
+class express_merchant_hook {
+	
+	public static function express_merchant_menu_api($menus) {	    
+	    $menu = array(
+	    	11 => ecjia_merchant::make_admin_menu('01_express_list','配送员管理', RC_Uri::url('express/mh_express/init'), 3)->add_purview('express_manage')->add_icon('fa-truck'), 
+	    	12 => ecjia_merchant::make_admin_menu('02_match_list','配送员资金对账', RC_Uri::url('express/mh_match/init'), 4)->add_purview('express_match_manage')->add_icon('fa-money'), 
+	    );
+	    $menus->add_submenu($menu);
+	    return $menus;
+	}
+	
+	public static function express_shipping_merchant_menu_api($menus) {
+		$menu = array(
+			11 => ecjia_merchant::make_admin_menu('01_task_list','配送任务', RC_Uri::url('express/merchant/init', array('type' => 'wait_grab')), 2)->add_purview('express_manage')->add_icon('fa-tasks'), 
+			12 => ecjia_merchant::make_admin_menu('02_history_list','历史配送', RC_Uri::url('express/mh_history/init'), 3)->add_purview('express_match_manage')->add_icon('fa-history'), 
+		);
+		$menus->add_submenu($menu);
+		return $menus;
+	}
 }
+
+RC_Hook::add_filter( 'staff_merchant_menu_api', array('express_merchant_hook', 'express_merchant_menu_api') );
+RC_Hook::add_filter( 'shipping_merchant_menu_api', array('express_merchant_hook', 'express_shipping_merchant_menu_api') );
 
 // end

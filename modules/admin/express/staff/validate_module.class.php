@@ -47,25 +47,52 @@
 defined('IN_ECJIA') or exit('No permission resources.');
 
 /**
- * 后台权限API
+ * 掌柜添加配送员第一步：验证
  * @author zrl
  */
-class express_merchant_purview_api extends Component_Event_Api {
-    
-    public function call(&$options) {
-        $purviews = array(
-        	array('action_name' => '任务中心', 'action_code' => 'mh_express_task_manage', 'relevance'   => ''),
-        	array('action_name' => '历史配送', 'action_code' => 'mh_express_history_manage', 'relevance'   => ''),
-        		
-        	array('action_name' => '配送员管理', 'action_code' => 'mh_express_manage', 'relevance' => ''),
-        	array('action_name' => '配送员编辑', 'action_code' => 'mh_express_update', 'relevance' => ''),
-        	array('action_name' => '配送员删除', 'action_code' => 'mh_express_delete', 'relevance' => ''),
-        		
-        	array('action_name' => '资金对账', 'action_code' => 'mh_express_match_manage', 'relevance' => ''),
-        	
-        );
-        return $purviews;
-    }
+class validate_module extends api_admin implements api_interface {
+    public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {	
+    	$this->authadminSession();	
+    	
+    	if ($_SESSION['staff_id'] <= 0) {
+    		return new ecjia_error(100, 'Invalid session');
+    	}
+    	
+		$mobile  = $this->requestData('mobile', '');
+		$smscode = $this->requestData('smscode', '');
+		
+		if (empty($mobile) || empty($smscode)) {
+        	return new ecjia_error( 'invalid_parameter', RC_Lang::get ('system::system.invalid_parameter' ));
+        }
+        //手机号是否存在
+        $mobile_count = RC_DB::table('staff_user')->where('mobile', $mobile)->count();
+        if ($mobile_count > 0) {
+        	return new ecjia_error('mobile_exist', '该手机号已存在，请更换手机号再进行添加员工');
+        }
+        
+        //当前店铺子员工数
+        $sub_staff_count = RC_DB::table('staff_user')->where('store_id', $_SESSION['store_id'])->where('parent_id', '>', 0)->count();
+        if ($sub_staff_count >= 10) {
+        	return new ecjia_error('sub_staff_number_error', '目前店铺员工数已达到10个最大限额');
+        }
+        
+        //判断校验码是否过期
+        if ($_SESSION['captcha']['sms']['add_staff']['lifetime'] < RC_Time::gmtime()) {
+        	return new ecjia_error('code_timeout', '验证码已过期，请重新获取！');
+        }
+       	 
+        //验证码是否正确
+        if ($_SESSION['captcha']['sms']['add_staff']['code'] != $smscode) {
+        	return new ecjia_error('code_error', '验证码错误，请重新填写！');
+        }
+        
+        //获取和验证的手机号码是否一致
+        if ($_SESSION['captcha']['sms']['add_staff']['value'] != $mobile) {
+        	return new ecjia_error('mobile error', '接收和验证的手机号不同');
+        }
+        
+        return array();
+	}
 }
 
 // end

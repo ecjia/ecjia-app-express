@@ -142,7 +142,7 @@ class list_module extends api_admin implements api_interface {
 					'pay_time'		=> empty($val['pay_time']) ? '' : RC_Time::local_date(ecjia::config('time_format'), $val['pay_time']),
 					'signed_time'	=> $val['signed_time'] > 0 ? RC_Time::local_date(ecjia::config('time_format'), $val['signed_time']) : '',
 					'best_time'		=> $val['expect_shipping_time'],
-					'shipping_fee'	=> $val['commision'],
+					'shipping_fee'	=> $val['shipping_fee'],
 					'order_amount'	=> $val['order_amount'],
 				);
 			}

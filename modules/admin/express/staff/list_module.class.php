@@ -47,25 +47,74 @@
 defined('IN_ECJIA') or exit('No permission resources.');
 
 /**
- * 后台权限API
+ * 掌柜查看配送员列表
  * @author zrl
  */
-class express_merchant_purview_api extends Component_Event_Api {
-    
-    public function call(&$options) {
-        $purviews = array(
-        	array('action_name' => '任务中心', 'action_code' => 'mh_express_task_manage', 'relevance'   => ''),
-        	array('action_name' => '历史配送', 'action_code' => 'mh_express_history_manage', 'relevance'   => ''),
-        		
-        	array('action_name' => '配送员管理', 'action_code' => 'mh_express_manage', 'relevance' => ''),
-        	array('action_name' => '配送员编辑', 'action_code' => 'mh_express_update', 'relevance' => ''),
-        	array('action_name' => '配送员删除', 'action_code' => 'mh_express_delete', 'relevance' => ''),
-        		
-        	array('action_name' => '资金对账', 'action_code' => 'mh_express_match_manage', 'relevance' => ''),
-        	
-        );
-        return $purviews;
-    }
+class list_module extends api_admin implements api_interface {
+    public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {	
+    	$this->authadminSession();
+    	if ($_SESSION['staff_id'] <= 0) {
+            return new ecjia_error(100, 'Invalid session');
+        }
+		//权限判断，查看配送员列表的权限
+        $result = $this->admin_priv('mh_express_manage');
+        if (is_ecjia_error($result)) {
+        	return $result;
+        }
+        
+		$size     = $this->requestData('pagination.count', 15);
+		$page     = $this->requestData('pagination.page', 1);
+		$keywords = $this->requestData('keywords');
+		
+		$db = RC_DB::table('staff_user');
+		
+		$db->where('store_id', $_SESSION['store_id']);
+		$db->where('group_id', '=', '-1');
+		$db->where('parent_id', '>', 0);
+		
+		if (!empty($keywords)) {
+			$db ->whereRaw('(mobile  like  "%'.mysql_like_quote($keywords).'%" or name like "%'.mysql_like_quote($keywords).'%")');
+		}
+		$count = $db->select('user_id')->count();
+		
+		//实例化分页
+		$page_row = new ecjia_page($count, $size, 6, '', $page);
+		
+		$list = $db->take($size)->skip($page_row->start_id - 1)->select('*')->orderBy('add_time', 'desc')->get();
+		
+		$express_user_list = array();
+		if (!empty($list)) {
+			foreach ($list as $row) {
+				if ($row['online_status'] == '1') {
+					$online_status = 'online';
+					$label_online_status = '在线';
+				} elseif ($row['online_status'] == '4') {
+					$online_status = 'offline';
+					$label_online_status = '离线';
+				}
+				$express_order_in_progress = 0;
+				$express_order_count = RC_DB::table('express_order')->where('staff_id', $row['user_id'])->whereIn('status', array(1, 2))->count();
+				if ($express_order_count > 0) {
+					$express_order_in_progress = 1;
+				}
+				$express_user_list[] = array(
+						'staff_id' 					=> $row['user_id'],
+						'staff_name' 				=> $row['name'],
+						'avatar' 					=> empty($row['avatar']) ? '' : RC_Upload::upload_url($row['avatar']),
+						'mobile'					=> $row['mobile'],
+						'online_status'				=> $online_status,
+						'label_online_status'		=> $label_online_status,
+						'express_order_in_progress'	=> $express_order_in_progress
+				);
+			}
+		}
+		$pager = array(
+			'total' => $page_row->total_records,
+			'count' => $page_row->total_records,
+			'more'	=> $page_row->total_pages <= $page ? 0 : 1,
+		);
+		return array('data' => $express_user_list, 'pager' => $pager);
+	 }	
 }
 
 // end
