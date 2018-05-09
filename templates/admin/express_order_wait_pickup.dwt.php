@@ -36,7 +36,7 @@
 		<li class="{if $type eq 'sending'}active{/if}"><a class="data-pjax" href='{url path="express/admin/wait_pickup" args="type=sending{if $filter.keywords}&keywords={$filter.keywords}{/if}"}'>配送中 <span class="badge badge-info">{if $express_order_count.sending}{$express_order_count.sending}{else}0{/if}</span> </a></li>
 		<form method="post" action="{$search_action}{if $type}&type={$type}{/if}" name="searchForm">
 			<div class="choose_list f_r">
-				<input type="text" name="keywords" value="{$smarty.get.keywords}" placeholder="请输入配送员名称或手机号"/> 
+				<input type="text" name="keywords" value="{$smarty.get.keywords}" placeholder="请输入配送员名称或配送单号"/> 
 				<button class="btn search_express_order" type="submit">搜索</button>
 			</div>
 		</form>
@@ -67,8 +67,8 @@
 					  	 {if $wait_pickup.online_status eq '1'}&nbsp;|&nbsp;<a class="express-location" data-toggle="modal" data-backdrop="static" href="#myModal3" express-id="{$wait_pickup.express_id}" express-location-url='{url path="express/admin/express_location" args="express_id={$wait_pickup.express_id}&store_id={$wait_pickup.store_id}{if $type}&type={$type}{/if}"}'  title="当前位置">当前位置</a>{/if}
 		    	  	</div>
 		      	</td>
-		      	<td>{$wait_pickup.express_user}<br>{if $wait_pickup.express_mobile}[{$wait_pickup.express_mobile}]{/if}</td>
-		      	<td>{$wait_pickup.consignee}<br>{if $wait_pickup.consignee_mobile}[{$wait_pickup.consignee_mobile}]{/if}</td>
+		      	<td>{$wait_pickup.express_user}</td>
+		      	<td>{$wait_pickup.consignee}</td>
 		      	<td>取：{$wait_pickup.from_address}<br>
 					送：{$wait_pickup.to_address}
 		      	</td>

@@ -250,8 +250,12 @@ class admin extends ecjia_admin {
 			
 		$staff_user_info = RC_DB::table('staff_user as su')->leftJoin('express_user as eu', RC_DB::raw('su.user_id'), '=', RC_DB::raw('eu.user_id'))
 							->where(RC_DB::raw('su.user_id'), $staff_id)
-							->selectRaw('su.name, su.mobile, su.store_id, eu.shippingfee_percent')->first();
-
+							->selectRaw('su.name, su.mobile, su.online_status, eu.shippingfee_percent')->first();
+		
+		if ($staff_user_info['online_status'] == '4') {
+			return $this->showmessage('当前配送员不在线，请选择在线配送员进行指派！', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+		}
+		
 		$commision = $staff_user_info['shippingfee_percent']/100 * $express_order_info['shipping_fee'];
 		$commision = sprintf("%.2f", $commision);
 		$data = array(
@@ -566,7 +570,7 @@ class admin extends ecjia_admin {
 		$db = RC_DB::table('express_order');
 		if ($type != 'wait_grab') {
 			if (!empty($filter['keywords'])) {
-				$db ->whereRaw('(express_user  like  "%'.mysql_like_quote($filter['keywords']).'%") or (express_mobile like "%'.mysql_like_quote($filter['keywords']).'%")');
+				$db ->whereRaw('(express_user  like  "%'.mysql_like_quote($filter['keywords']).'%" or express_sn like "%'.mysql_like_quote($filter['keywords']).'%")');
 			}
 		}
 		$db->where('shipping_code', 'ship_ecjia_express');
@@ -585,7 +589,7 @@ class admin extends ecjia_admin {
 		}
 		
 		if (!empty($filter['keywords'])) {
-			$dbview ->whereRaw('(eo.express_user  like  "%'.mysql_like_quote($filter['keywords']).'%") or (eo.express_mobile like "%'.mysql_like_quote($filter['keywords']).'%")');
+			$dbview ->whereRaw('(eo.express_user  like  "%'.mysql_like_quote($filter['keywords']).'%" or eo.express_sn like "%'.mysql_like_quote($filter['keywords']).'%")');
 		}
 		
 		$count = $dbview->count();

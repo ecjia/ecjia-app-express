@@ -163,7 +163,7 @@ class admin_history extends ecjia_admin {
 		$filter['keyword']	 = trim($_GET['keyword']);
 		
 		if ($filter['keyword']) {
-			$db_data ->whereRaw('(eo.express_user  like  "%'.mysql_like_quote($filter['keyword']).'%"  or eo.express_mobile like "%'.mysql_like_quote($filter['keyword']).'%")');
+			$db_data ->whereRaw('(eo.express_user  like  "%'.mysql_like_quote($filter['keyword']).'%"  or eo.express_sn like "%'.mysql_like_quote($filter['keyword']).'%")');
 		}
 		
 		if ($filter['work_type']) {

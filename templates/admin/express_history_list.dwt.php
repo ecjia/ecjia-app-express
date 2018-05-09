@@ -34,7 +34,7 @@
 					<option value="grab" {if $smarty.get.work_type eq 'grab'}selected{/if}>抢单</option>
 				</select>
 				
-				<input type="text" name="keyword" value="{$smarty.get.keyword}" placeholder="请输入配送员名称或手机号"/> 
+				<input type="text" name="keyword" value="{$smarty.get.keyword}" placeholder="请输入配送员名称或配送单号"/> 
 				<button class="btn search_history" type="button">搜索</button>
 			</form>
 		</div>
@@ -63,8 +63,8 @@
 					  	 <a data-toggle="modal" data-backdrop="static" href="#myModal1" express-id="{$history.express_id}" express-url="{$express_detail}"  title="查看详情">查看详情</a>
 		    	  	</div>
 		      	</td>
-		      	<td>{$history.express_user}<br>[{$history.express_mobile}]</td>
-		      	<td>{$history.consignee}<br>[{$history.mobile}]</td>
+		      	<td>{$history.express_user}</td>
+		      	<td>{$history.consignee}</td>
 		      	<td>取：{$history.district}{$history.street}{$history.address}<br>
 					送：{$history.eodistrict}{$history.eostreet}{$history.eoaddress}
 		      	</td>
