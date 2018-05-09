@@ -1,3 +1,6 @@
+.auto-refresh{
+	margin-right:10px;
+}
 .main_content .row-fluid + .row-fluid-new{
 	margin-top:5px;
 }
@@ -14,9 +17,14 @@
 }
 
 .express-task .editpage-rightbar .left-bar1 .left-bar{
-	width:21%;
+	width:24%;
 }
-
+.order-border-first{
+  border:1px solid #009acd;
+}
+.order-border-other{
+  border:1px solid #dcdcdc;
+}
 .express-task .editpage-rightbar .left-bar .accordion-toggle{
 	background-image:url();
 }
@@ -26,8 +34,9 @@
 }
 
 .express-task .editpage-rightbar .middle-bar{
-	width:54%;
+	width:50%;
 	margin-left:1%;
+	margin-right:1%;
 	border: 1px solid #dcdcdc;
 	border-radius:4px;
 	height:580px;
@@ -35,25 +44,28 @@
 }
 
 .express-task .editpage-rightbar .right-bar{
-	width:23%;
+	width:23.6%;
 	margin-right:0;
+	height:580px;
+	border:1px solid #dcdcdc;
+	border-radius:4px;
 }
 .express-task .editpage-rightbar .right-bar .foldable-list .accordion-group{
 	border:none;
 	border-radius:0px;
 }
 .express-task .editpage-rightbar .left-bar1 .left-bar .accordion-inner{
-	margin:8px 11px;
-	/*border: 1px solid #dcdcdc;*/
+	margin:10px 5px;
 	padding:0 0;
+	width:96%;
 }
 .margin-label{
-	margin-left: 4px;
-    margin-top: 13px;
+	margin-left: 5px;
+    margin-top: 10px;
     margin-bottom: 13px;
 }
 .btn-a{
-	 margin-bottom: 0px;
+	margin-bottom: 10px;
 }
 .border-bottom-line{
 	border-bottom: 1px dashed #dcdcdc;
@@ -83,7 +95,7 @@
 }
 
 .express-task .editpage-rightbar .right-bar .accordion-inner{
-	margin:6px 4px;
+	margin:0px 4px;
 	padding:0 0;
 	border-top:none;
 }
@@ -367,7 +379,7 @@
 .map-reassign{
 	float: left;
     height: 523px;
-    width: 73%;
+    width: 72%;
 }
 .express_reassign .right-bar{
 	/*border: 1px solid #dcdcdc;*/
@@ -375,7 +387,7 @@
     float: right;
     height: 523px;
     margin-right: 0;
-    width: 26%;
+    width: 27%;
 }
 .express_reassign .right-bar .accordion-toggle{
 	background-image:url();
@@ -409,4 +421,22 @@
 	font-size: 16px;
 	font-weight: normal;
 	text-align:center;
+}
+
+.middle-bar .foldable-list .accordion-heading .accordion-toggle{
+	background-image:url();
+}
+
+.map-change-icon {
+    background: url(../images/shrink.png) no-repeat;
+    /*position: absolute;*/
+    background-origin: content-box;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+    margin-top: -2px;
+	float:right;
+	font-family: FontAwesome;
 }

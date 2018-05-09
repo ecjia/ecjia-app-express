@@ -2,6 +2,39 @@
 ;(function (app, $) {
     app.admin_express_task = {
             init: function () {
+            	
+                //缩展地图
+                $(".order-map-change").click(function(){
+                	 var $this = $(this);
+                	 if ($this.hasClass('fa fa-expand')) {
+                        $this.removeClass('fa fa-expand').addClass('fa fa-compress');
+                        $(".left-bar1").hide();
+                     	$(".right-bar").hide();
+                     	$('.middle-bar').attr('style','width:100%;margin-left:0%;margin-right:0%;');
+                     } else {
+                        $this.removeClass('fa fa-compress').addClass('fa fa-expand');
+                        $(".left-bar1").show();
+                     	$(".right-bar").show();
+                     	$('.middle-bar').attr('style','width:50%;margin-left:1%;margin-right:1%;');
+                     }
+                });
+                
+                $(".user-map-change").click(function(){
+                  	 var $this = $(this);
+                  	 if ($this.hasClass('fa fa-expand')) {
+                           $this.removeClass('fa fa-expand').addClass('fa fa-compress');
+                           $(".left-bar1").hide();
+                       	$(".right-bar").hide();
+                       	$('.middle-bar').attr('style','width:100%;margin-left:0%;margin-right:0%;');
+                       } else {
+                           $this.removeClass('fa fa-compress').addClass('fa fa-expand');
+                           $(".left-bar1").show();
+                       	$(".right-bar").show();
+                       	$('.middle-bar').attr('style','width:50%;margin-left:1%;margin-right:1%;');
+                       }
+                  });
+            	
+                //在线配送员缩展
                 $('.online-triangle').on('click', function(e) {
                 	var div = ($(".express-user-list").hasClass("in"));
                 	if (div) {
@@ -14,6 +47,7 @@
                 		$(".on-tran").removeClass("triangle1");
                 	}
     			});
+              //离线配送员缩展
                 $('.leave-trangle').on('click', function(e) {
                 	var div = ($(".express-user-list-leave").hasClass("in"));
                 	

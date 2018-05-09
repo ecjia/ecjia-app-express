@@ -94,10 +94,13 @@ class admin extends ecjia_admin {
 		
 		/*第一个订单获取*/
 		$first_express_order = $wait_grab_list['list']['0'];
+		$first_express_order_id = $first_express_order['express_id'];
 		$start = $first_express_order['sf_latitude'].','.$first_express_order['sf_longitude'];
 		$end = $first_express_order['latitude'].','.$first_express_order['longitude'];
 		$this->assign('start', $start);
 		$this->assign('end', $end);
+		
+		$this->assign('first_express_id', $first_express_order_id);
 		
 		/*配送员列表*/
 		$express_user_list = $this->get_express_user_list($type, $keywords);
