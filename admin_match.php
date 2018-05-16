@@ -142,7 +142,7 @@ class admin_match extends ecjia_admin {
 		$page = new ecjia_page($count, 10, 5);
 		
 		$data = $db_data
-		->selectRaw('express_id,express_sn,commision,shipping_fee,commision_status,receive_time,staff_id,shipping_fee-commision as store_money')
+		->selectRaw('express_id,express_sn,from,commision,shipping_fee,commision_status,receive_time,staff_id,shipping_fee-commision as store_money')
 		->orderby('express_id', 'desc')
 		->take(10)
 		->skip($page->start_id-1)
@@ -151,7 +151,6 @@ class admin_match extends ecjia_admin {
 		$list = array();
 		if (!empty($data)) {
 			foreach ($data as $row) {
-				$row['from_type'] = RC_DB::TABLE('express_order')->where('staff_id', $row['staff_id'])->pluck('from');
 				$row['receive_time']  = RC_Time::local_date('Y-m-d', $row['receive_time']);
 				$list[] = $row;
 			}
