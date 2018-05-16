@@ -19,7 +19,7 @@
 				<div class="pickup_info">
 					<ul>
 						<li><font class="express_title">取货信息</font></li>
-						<li>商家名称：<span>送钱店铺{$content.merchants_name}</span></li>
+						<li>商家名称：<span>{$content.merchants_name}</span></li>
 						<li>商家电话：<span>{$content.contact_mobile}</span></li>
 						<li>下单时间：<span>{$content.add_time}</span></li>
 						<li>取货地址：<span>{$content.all_address}&nbsp;&nbsp;{$content.address}</span></li>
