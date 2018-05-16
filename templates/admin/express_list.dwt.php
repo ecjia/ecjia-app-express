@@ -88,7 +88,7 @@
 					  	<a class="data-pjax" href='{url path="express/admin_express/detail" args="user_id={$express.user_id}"}' title="查看详情">查看详情</a>&nbsp;|&nbsp;
 					  	{if $express.online_status eq '1'}<a data-toggle="modal" data-backdrop="static" href="#myModal1" exmobile="{$express.mobile}" exname="{$express.name}" exlng="{$express.longitude}" exlat="{$express.latitude}" title="当前位置">当前位置</a>&nbsp;|&nbsp;{/if}
 					  	<a target="_blank"   href='{url path="express/admin_express/account_list" args="user_id={$express.user_id}"}' title="查看账目明细">查看账目明细</a>&nbsp;|&nbsp;
-			          	<a class="ajaxremove ecjiafc-red" data-toggle="ajaxremove" data-msg="你确定要删除该买单规则吗？" href='{url path="express/admin_express/remove" args="user_id={$express.user_id}"}' title="删除">删除</a>
+			          	<a class="ajaxremove ecjiafc-red" data-toggle="ajaxremove" data-msg="你确定要删除配送员【{$express.name}】吗？" href='{url path="express/admin_express/remove" args="user_id={$express.user_id}"}' title="删除">删除</a>
 		    	  	</div>
 		      	</td>
 		      	<td>{$express.mobile}</td>

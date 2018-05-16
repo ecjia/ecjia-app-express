@@ -68,7 +68,7 @@
 											<div class="margin-label">距离：{if $wait_grab.distance}{$wait_grab.distance}&nbsp;m{/if}</div>
 										</div>
 										<div class="control-group control-group-small">
-											<div class="margin-label">下单时间：{$wait_grab.format_add_time}</div>
+											<div class="margin-label">下单时间：{$wait_grab.format_order_add_time}</div>
 										</div>
 										<div class="control-group control-group-s>mall">
 											<div class="margin-label btn-a">
@@ -91,6 +91,7 @@
 				</div>
 			</div>
 			<div class="middle-bar">
+			{if $express_order_count.wait_grab}
         		<div class="foldable-list move-mod-group">
 					<div class="accordion-group">
 						<div class="accordion-heading">
@@ -101,15 +102,16 @@
 							</a>
 							<!--{/if} -->
 						</div>
+						{if $express_order_count.wait_grab}
 						<div class="accordion-body in collapse" >
-							{if $express_order_count.wait_grab}
 	        					<div class="span6" id="allmap" style="height:545px;width:100%;"></div>
-	        				{else}
-	        					<div class="span6"  style="height:580px;width:100%;text-align:center;margin-top: 285px;">暂无任何记录!</div>
-	        				{/if}
-						</div>
+	        			</div>
+	        			{/if}
 					</div>
 				</div>
+			{else}
+				<div style="height:545px;line-height:545px;text-align:center;width:100%;">暂无任何记录!</div>
+			{/if}
 			</div>
 			<div class="original-user-list">
 				<!-- #BeginLibraryItem "/library/waitgrablist_search_user_list.lbi" --><!-- #EndLibraryItem -->

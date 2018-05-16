@@ -151,7 +151,7 @@ class admin_match extends ecjia_admin {
 		$list = array();
 		if (!empty($data)) {
 			foreach ($data as $row) {
-				$row['from'] = RC_DB::TABLE('express_order')->where('staff_id', $row['staff_id'])->pluck('from');
+				$row['from_type'] = RC_DB::TABLE('express_order')->where('staff_id', $row['staff_id'])->pluck('from');
 				$row['receive_time']  = RC_Time::local_date('Y-m-d', $row['receive_time']);
 				$list[] = $row;
 			}

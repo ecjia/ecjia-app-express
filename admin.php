@@ -386,7 +386,7 @@ class admin extends ecjia_admin {
 		$content['eocity']        		= ecjia_region::getRegionName($content['eocity']);
 		$content['eodistrict']    		= ecjia_region::getRegionName($content['eodistrict']);
 		$content['eostreet']      		= ecjia_region::getRegionName($content['eostreet']);
-		$content['add_time']  	  		= RC_Time::local_date('Y-m-d H:i', $content['add_time']);
+		$content['add_time']  	  		= RC_Time::local_date(ecjia::config('time_format'), $content['add_time']);
 		$content['signed_time']   		= RC_Time::local_date('Y-m-d H:i', $content['signed_time']);
 		$content['all_address'] 		= $content['district'].$content['street'];
 		$content['express_all_address'] = $content['eodistrict'].$content['eostreet'];
@@ -559,7 +559,7 @@ class admin extends ecjia_admin {
 		//平台订单只获取配送方式是众包配送的订单
 		$dbview->where(RC_DB::raw('eo.shipping_code'), 'ship_ecjia_express');
 		
-		$field = 'eo.consignee, eo.mobile as consignee_mobile, eo.express_id, eo.store_id, eo.express_sn, eo.country, eo.province, eo.city, eo.district, eo.street, eo.address, eo.distance, eo.add_time, 
+		$field = 'eo.consignee, eo.mobile as consignee_mobile, eo.express_id, eo.store_id, eo.express_sn, eo.country, eo.province, eo.city, eo.district, eo.street, eo.address, eo.distance, eo.order_id, 
 				  eo.longitude, eo.latitude, eo.express_user, eo.express_mobile, eo.staff_id, eo.from, eo.receive_time, sf.province as sf_province, sf.city as sf_city, sf.longitude as sf_longitude, sf.latitude as sf_latitude, 
 				  sf.district as sf_district, sf.street as sf_street, sf.address as sf_address';
 		
@@ -609,7 +609,8 @@ class admin extends ecjia_admin {
 						$row['online_status'] = RC_DB::table('staff_user')->where('user_id', $row['staff_id'])->pluck('online_status');
 					}
 				}
-				$row['format_add_time'] = RC_Time::local_date(ecjia::config('time_format'), $row['add_time']);
+				$row['order_add_time'] = RC_DB::table('order_info')->where('order_id', $row['order_id'])->pluck('add_time');
+				$row['format_order_add_time'] = RC_Time::local_date(ecjia::config('time_format'), $row['order_add_time']);
 				$row['format_receive_time'] = RC_Time::local_date(ecjia::config('time_format'), $row['receive_time']);
 				$row['from_address'] 	= ecjia_region::getRegionName($row['sf_district']).ecjia_region::getRegionName($row['sf_street']).$row['sf_address'];
 				$row['to_address']		= ecjia_region::getRegionName($row['district']).ecjia_region::getRegionName($row['street']).$row['address'];

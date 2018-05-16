@@ -72,7 +72,7 @@
 				<tr>
 					<td>{$list.receive_time}</td>
 					<td>{$list.express_sn}</td>
-					<td>{if $list.from eq 'grab'}抢单{else}派单{/if}</td>
+					<td>{if $list.from_type eq 'grab'}抢单{else}派单{/if}</td>
 					<td>¥{$list.shipping_fee}</td>
 					<td>¥{$list.store_money}</td>
 					<td>¥{$list.commision}</td>
