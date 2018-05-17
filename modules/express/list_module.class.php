@@ -115,6 +115,9 @@ class list_module extends api_admin implements api_interface {
 				$district_name = ecjia_region::getRegionName($val['district']);
 				$street_name = ecjia_region::getRegionName($val['street']);
 				
+				/*店铺电话*/
+				$shop_kf_mobile = RC_DB::table('merchants_config')->where('store_id', $val['store_id'])->where('code', 'shop_kf_mobile')->pluck('value');
+				
 				$express_order_list[] = array(
 					'express_id'	         => $val['express_id'],
 					'express_sn'	         => $val['express_sn'],
@@ -122,7 +125,9 @@ class list_module extends api_admin implements api_interface {
 					'label_express_type'	 => $val['from'] == 'assign' ? '系统派单' : '抢单',
 					'order_sn'		         => $val['order_sn'],
 					'payment_name'	         => $val['pay_name'],
-					'express_from_address'	 => '【'.$val['merchants_name'].'】'. $sf_district_name. $sf_street_name. $val['merchant_address'],
+					'store_name'			 => $val['merchants_name'],
+					'shop_kf_mobile'		 => empty($shop_kf_mobile) ? $shop_kf_mobile : '',
+					'express_from_address'	 => $sf_district_name. $sf_street_name. $val['merchant_address'],
 					'express_from_location'	 => array(
 						'longitude' => $val['merchant_longitude'],
 						'latitude'	=> $val['merchant_latitude'],
