@@ -146,6 +146,7 @@ class detail_module extends api_admin implements api_interface {
     		'label_express_status' => $label_express_status,
     		'goods_items'	=> array(),
     		'pickup_qrcode_sn'	=> 'ecjiaopen://app?open_type=express_pickup&delivery_sn='. $express_order_info['delivery_sn'],
+    		'delivery_sn'		=> $express_order_info['delivery_sn']
     	);
     	
     	$goods_items = RC_DB::table('delivery_goods as dg')
