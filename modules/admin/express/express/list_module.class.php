@@ -59,7 +59,7 @@ class list_module extends api_admin implements api_interface {
 		
 		$express_type = $this->requestData('express_type');
 		$type = $this->requestData('type');
-		$order_sn = $this->requestData('order_sn');
+		$order_sn = $this->requestData('order_sn');//配送单号
 		$size     = $this->requestData('pagination.count', 15);
 		$page     = $this->requestData('pagination.page', 1);
 		
@@ -77,7 +77,7 @@ class list_module extends api_admin implements api_interface {
 				break;
 			default : 
 				if (!empty($order_sn)) {
-					$where['eo.order_sn'] = array('like' => '%'.$order_sn.'%');
+					$where['eo.express_sn'] = array('like' => '%'.$order_sn.'%');
 				} else {
 					return new ecjia_error('invalid_parameter', RC_Lang::get('orders::order.invalid_parameter'));
 				}
