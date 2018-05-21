@@ -52,17 +52,23 @@ defined('IN_ECJIA') or exit('No permission resources.');
  */
 class basicinfo_module extends api_admin implements api_interface {
     public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {	
-    	
-    	if ($_SESSION['admin_id'] <= 0 && $_SESSION['staff_id'] <= 0) {
+    	$this->authadminSession();
+    	if ($_SESSION['staff_id'] <= 0) {
             return new ecjia_error(100, 'Invalid session');
         }
-		
-        $express_order_db       = RC_Model::model('express/express_order_model');
-        $where                  = array('store_id' => $_SESSION['store_id'], 'staff_id' => 0, 'status' => 0);
-        $sum_express_grab       = $express_order_db->where($where)->count();
-        $sum_express_wait_pick  = $express_order_db->where(array('store_id' => $_SESSION['store_id'], 'staff_id' => $_SESSION['staff_id'], 'status' => 1))->count();
-        $sum_express_shipping   = $express_order_db->where(array('store_id' => $_SESSION['store_id'], 'staff_id' => $_SESSION['staff_id'], 'status' => 2))->count();
-		
+        
+        if (!empty($_SESSION['store_id'])) {
+        	/*商家配送员*/
+        	$sum_express_grab       = RC_DB::table('express_order')->where('store_id', $_SESSION['store_id'])->where('staff_id', 0)->where('status', 0)->count();
+        	$sum_express_wait_pick  = RC_DB::table('express_order')->where('store_id', $_SESSION['store_id'])->where('staff_id',$_SESSION['staff_id'])->where('status', 1)->count();
+        	$sum_express_shipping   = RC_DB::table('express_order')->where('store_id', $_SESSION['store_id'])->where('staff_id', $_SESSION['staff_id'])->where('status', 2)->count();
+        } else {
+        	/*平台配送员*/
+        	$sum_express_grab       = RC_DB::table('express_order')->where('staff_id', 0)->where('status', 0)->count();
+        	$sum_express_wait_pick  = RC_DB::table('express_order')->where('staff_id',$_SESSION['staff_id'])->where('status', 1)->count();
+        	$sum_express_shipping   = RC_DB::table('express_order')->where('staff_id', $_SESSION['staff_id'])->where('status', 2)->count();
+        }
+      
 		return array(
 			'sum_express_grab'		=> $sum_express_grab,
 			'sum_express_wait_pick'	=> $sum_express_wait_pick,
