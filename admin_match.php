@@ -142,7 +142,7 @@ class admin_match extends ecjia_admin {
 		$page = new ecjia_page($count, 10, 5);
 		
 		$data = $db_data
-		->selectRaw('express_id,express_sn,from,commision,shipping_fee,commision_status,receive_time,staff_id,shipping_fee-commision as store_money')
+		->selectRaw('express_id,express_sn,`from`,commision,shipping_fee,commision_status,receive_time,staff_id,shipping_fee-commision as store_money')
 		->orderby('express_id', 'desc')
 		->take(10)
 		->skip($page->start_id-1)
