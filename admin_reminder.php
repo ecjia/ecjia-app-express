@@ -44,34 +44,53 @@
 //
 //  ---------------------------------------------------------------------------------
 //
+use Ecjia\System\Notifications\ExpressAssign;
+
 defined('IN_ECJIA') or exit('No permission resources.');
 
 /**
- * 后台配送菜单API
- * @author 
+ * 派单提醒
+ *
  */
-class express_admin_menu_api extends Component_Event_Api {
+class admin_reminder extends ecjia_admin
+{
 
-    public function call(&$options) {
-        $menus = ecjia_admin::make_admin_menu('05_content', '配送调度', '', 5);
-        
-        $submenus = array(
-            ecjia_admin::make_admin_menu('01_task_list', '任务中心', RC_Uri::url('express/admin/init', array('type' => 'wait_grab')), 1)->add_purview('express_task_manage'),
-        	ecjia_admin::make_admin_menu('02_express_list', '配送员管理', RC_Uri::url('express/admin_express/init'), 2)->add_purview('express_manage'),
-        	ecjia_admin::make_admin_menu('03_merchant_list', '商家管理', RC_Uri::url('express/admin_merchant/init'), 3)->add_purview('express_merchant_manage'),
-        	ecjia_admin::make_admin_menu('04_match_list', '资金对账', RC_Uri::url('express/admin_match/init'), 4)->add_purview('express_match_manage'),
-        	ecjia_admin::make_admin_menu('05_history_list', '历史配送', RC_Uri::url('express/admin_history/init'), 5)->add_purview('express_history_manage'),
-            ecjia_admin::make_admin_menu('06_history_list', '派单提醒', RC_Uri::url('express/admin_reminder/init'), 6)->add_purview('express_reminder_manage'),
-        );
-        
-        $menus->add_submenu($submenus);
-        $menus = RC_Hook::apply_filters('express_admin_menu_api', $menus);
-        
-		if ($menus->has_submenus()) {
-		    return $menus;
-		}
-		return false;
+    public function __construct()
+    {
+        parent::__construct();
+
+        /* 加载全局 js/css */
+        RC_Script::enqueue_script('jquery-validate');
+        RC_Script::enqueue_script('jquery-form');
+        RC_Script::enqueue_script('smoke');
+        RC_Style::enqueue_style('chosen');
+        RC_Style::enqueue_style('uniform-aristo');
+        RC_Script::enqueue_script('jquery-uniform');
+        RC_Script::enqueue_script('jquery-chosen');
+
+        RC_Script::enqueue_script('admin_express_task', RC_App::apps_url('statics/js/admin_express_task.js', __FILE__));
+        RC_Script::enqueue_script('admin_express_order_list', RC_App::apps_url('statics/js/admin_express_order_list.js', __FILE__));
+        RC_Style::enqueue_style('admin_express_task', RC_App::apps_url('statics/css/admin_express_task.css', __FILE__));
+
+        RC_Script::enqueue_script('qq_map', 'https://map.qq.com/api/js?v=2.exp');
+
+        RC_Script::localize_script('express', 'js_lang', RC_Lang::get('express::express.js_lang'));
+
+        ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here('派单提醒'));
     }
+
+    /**
+     * 列表
+     */
+    public function init()
+    {
+        $this->admin_priv('express_reminder_manage');
+
+        $this->assign('ur_here', '派单提醒');
+
+        $this->display('express_reminder_list.dwt');
+    }
+
 }
 
-// end
+//end
