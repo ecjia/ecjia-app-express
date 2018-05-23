@@ -100,11 +100,6 @@ class admin_merchant extends ecjia_admin {
 		$keyword = trim($_GET['keyword']);
 		$cat_arr = $this->get_cat_list($keyword);
 		
-	    RC_Logger::getLogger('error')->info('testaaa');
-	    RC_Logger::getLogger('error')->info($cat_arr);
-	    RC_Logger::getLogger('error')->info($cat_arr['list']);
-	    RC_Logger::getLogger('error')->info('testbbb');
-		
 		$this->assign('cat_list', $cat_arr['list']);
 		$this->assign('allnumber', $cat_arr['allnumber']);
 		
@@ -304,6 +299,12 @@ class admin_merchant extends ecjia_admin {
 		foreach ($store_list as $k => $v) {
 			$cat_list[$k]['cat_id'] = RC_DB::TABLE('store_franchisee')->where('store_id', $v['store_id'])->pluck('cat_id');
 		}
+		
+		RC_Logger::getLogger('error')->info('testaaa');
+		RC_Logger::getLogger('error')->info($store_list);
+		RC_Logger::getLogger('error')->info($cat_list);
+		RC_Logger::getLogger('error')->info('testbbb');
+		
 		foreach ($cat_list as $k => $v) {
 			foreach ($cat_list as $key => $value) {
 				$cat_list[$key]['cat_name'] = RC_DB::TABLE('store_category')->where('cat_id', $value['cat_id'])->pluck('cat_name');
@@ -315,6 +316,11 @@ class admin_merchant extends ecjia_admin {
 				}
 			}
 		}
+		
+		RC_Logger::getLogger('error')->info('testccc');
+		RC_Logger::getLogger('error')->info($cat_list);
+		RC_Logger::getLogger('error')->info('testddd');
+		
 		$cat_list = array_unique($cat_list);
 	
 		if ($keyword) {
