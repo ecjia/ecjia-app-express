@@ -3,7 +3,7 @@
 
 <!-- {block name="footer"} -->
 <script type="text/javascript">
-    ecjia.admin.express_list.init();
+	ecjia.admin.admin_express_order_list.init();
 </script>
 <!-- {/block} -->
 
@@ -15,6 +15,14 @@
 		<a class="btn plus_or_reply data-pjax" href="{$action_link.href}"  id="sticky_a"><i class="fontello-icon-plus"></i>{$action_link.text}</a>
 		<!-- {/if} -->
 	</h3>
+</div>
+
+<div class="wait-grab-order-detail">
+	<div class="modal order-detail hide fade" id="myModal1" style="height:590px;"></div>
+</div>
+
+<div class="assign-order-detail">
+	<div class="modal express-reassign-modal hide fade" id="myModal2" style="height:590px;"></div>
 </div>
 
 <!-- 批量操作和搜索 -->
@@ -31,8 +39,8 @@
 		</div>
 		
 		<div class="choose_list f_r">
-			<input type="text" name="keyword" value="{$smarty.get.keyword}" placeholder="请输入订单号或收货人"/>
-			<button class="btn search_express" type="button">搜索</button>
+			<input type="text" name="keywords" value="{$smarty.get.keywords}" placeholder="请输入配送单号或收货人关键字"/>
+			<button class="btn search_express" type="submit">搜索</button>
 		</div>
 	</form>
 </div>
@@ -43,7 +51,7 @@
 			<thead>
 				<tr>
 				    <th class="table_checkbox"><input type="checkbox" name="select_rows" data-toggle="selectall" data-children=".checkbox"/></th>
-				    <th class="w150">订单编号</th>
+				    <th class="w150">配送单号</th>
 				    <th class="w150">收货人</th>
 				    <th class="w150">收货地址</th>
 				    <th class="w100">审核状态</th>
@@ -58,11 +66,15 @@
 		      	<td class="hide-edit-area">
                     {$express.express_sn}
                     <div class="edit-list">
-<!--                        <a class="data-pjax" href='{url path="" args=""}' title="详情">查看详情</a>&nbsp;|&nbsp;-->
+            			<a  class="express-order-modal" data-toggle="modal" data-backdrop="static" href="#myModal1" express-id="{$express.express_id}" express-order-url='{url path="express/admin_reminder/order_detail" args="express_id={$express.express_id}&store_id={$express.store_id}"}'  title="查看详情">查看详情</a>&nbsp;|&nbsp;
+						<a class="express-reassign-click" data-toggle="modal" data-backdrop="static" href="#myModal2" express-id="{$express.express_id}" express-reassign-url='{url path="express/admin_reminder/express_detail" args="express_id={$express.express_id}&store_id={$express.store_id}"}' title="重新指派">指派订单</a>&nbsp;|&nbsp;
                         <a class="ajaxremove ecjiafc-red" data-toggle="ajaxremove" data-msg='{t name="{$express.express_id}"}您确定要删除派单[ %1 ]吗？{/t}' href='{url path="express/admin_reminder/remove" args="express_id={$express.express_id}"}' title="{t}移除{/t}">{t}{lang key='orders::order.remove'}{/t}</a>
                     </div>
                 </td>
-                <td>{$express.consignee}</td>
+                <td>
+                	{$express.consignee}<br/>
+                	{$express.mobile}
+                </td>
                 <td>{$express.address}</td>
                 <td>{$express.status}</td>
                 <td>{$express.confirm_time}</td>
