@@ -68,8 +68,11 @@ class admin_reminder extends ecjia_admin
         RC_Script::enqueue_script('jquery-uniform');
         RC_Script::enqueue_script('jquery-chosen');
 
-        RC_Script::enqueue_script('admin_express', RC_App::apps_url('statics/js/admin_express.js', __FILE__));
-        RC_Script::localize_script('express', 'js_lang', RC_Lang::get('express::express.js_lang'));
+		RC_Script::enqueue_script('admin_express_task', RC_App::apps_url('statics/js/admin_express_task.js', __FILE__));
+		RC_Script::enqueue_script('admin_express_order_list', RC_App::apps_url('statics/js/admin_express_order_list.js', __FILE__));
+		RC_Style::enqueue_style('admin_express_task', RC_App::apps_url('statics/css/admin_express_task.css', __FILE__));
+		RC_Script::enqueue_script('qq_map', 'https://map.qq.com/api/js?v=2.exp');
+		RC_Script::localize_script('express', 'js_lang', RC_Lang::get('express::express.js_lang'));
 
         ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here('派单提醒'));
     }
@@ -86,10 +89,10 @@ class admin_reminder extends ecjia_admin
             ->leftJoin('express_order as o', RC_DB::raw('o.express_id'), '=', RC_DB::raw('e.express_id'))
             ->leftJoin('users as a', RC_DB::raw('o.user_id'), '=', RC_DB::raw('a.user_id'));
 
-        $keywords = empty($keyword) ? '' : trim($_GET['keyword']);
+        $keywords = empty($_GET['keywords']) ? '' : trim($_GET['keywords']);
 
         if (!empty($keywords)) {
-            $db_order_reminder->whereRaw('(o.order_sn like "%' . mysql_like_quote($keywords) . '%" or o.consignee like "%' . mysql_like_quote($keywords) . '%")');
+            $db_order_reminder->whereRaw('(o.express_sn like "%' . mysql_like_quote($keywords) . '%" or o.consignee like "%' . mysql_like_quote($keywords) . '%")');
         }
 
         $count = $db_order_reminder->count();
@@ -111,7 +114,123 @@ class admin_reminder extends ecjia_admin
 
         $this->display('express_reminder_list.dwt');
     }
+    
+	/**
+	 * 查看订单详情
+	 */
+	public function order_detail() {
+		$this->admin_priv('express_task_manage');
+	
+		$express_id = intval($_GET['express_id']);
+		$type = trim($_GET['type']);
+		
+		$express_info = RC_DB::table('express_order')->where('express_id', $express_id)->select('store_id', 'order_id', 'order_sn', 'delivery_id', 'delivery_sn', 'user_id', 'mobile', 'consignee', 'express_sn', 'distance', 'shipping_fee', 'commision','express_user','express_mobile','from','signed_time','province as eoprovince','city as eocity','district as eodistrict','street as eostreet','address as eoaddress')->first();
+		$store_info = RC_DB::table('store_franchisee')->where('store_id', $express_info['store_id'])->select('merchants_name','contact_mobile','province','city','district','street','address')->first();
+		//$users_info = RC_DB::table('users')->where('user_id', $express_info['user_id'])->select('user_name','mobile_phone')->first();
+		$order_info = RC_DB::table('order_info')->where('order_id', $express_info['order_id'])->select('add_time','expect_shipping_time','postscript')->first();
+		
+		//$goods_list = RC_DB::table('order_goods')->where('order_id', $express_info['order_id'])->select('goods_id', 'goods_name' ,'goods_price','goods_number')->get();
+		/*配送单对应的发货单商品*/
+		$goods_list = RC_DB::table('delivery_goods')->where('delivery_id', $express_info['delivery_id'])->selectRaw('goods_id, goods_name, send_number')->get();
+		
+		foreach ($goods_list as $key => $val) {
+			$goods_list[$key]['image']  	  			= RC_DB::table('goods')->where('goods_id', $val['goods_id'])->pluck('goods_thumb');
+			$goods_list[$key]['goods_price']  			= RC_DB::table('order_goods')->where('goods_id', $val['goods_id'])->where('order_id', $express_info['order_id'])->pluck('goods_price');
+			$goods_list[$key]['formated_goods_price']	= price_format($goods_list[$key]['goods_price']);
+		}
+		$disk = RC_Filesystem::disk();
+		foreach ($goods_list as $key => $val) {
+			if (!$disk->exists(RC_Upload::upload_path($val['image'])) || empty($val['image'])) {
+				$goods_list[$key]['image'] = RC_Uri::admin_url('statics/images/nopic.png');
+			} else {
+				$goods_list[$key]['image'] = RC_Upload::upload_url($val['image']);
+			}
+		}
+		
+		$content = array_merge($express_info,$store_info,$order_info);
+		
+		$content['district']      		= ecjia_region::getRegionName($content['district']);
+		$content['street']        		= ecjia_region::getRegionName($content['street']);
+		$content['eoprovince']    		= ecjia_region::getRegionName($content['eoprovince']);
+		$content['eocity']        		= ecjia_region::getRegionName($content['eocity']);
+		$content['eodistrict']    		= ecjia_region::getRegionName($content['eodistrict']);
+		$content['eostreet']      		= ecjia_region::getRegionName($content['eostreet']);
+		$content['add_time']  	  		= RC_Time::local_date(ecjia::config('time_format'), $content['add_time']);
+		$content['signed_time']   		= RC_Time::local_date('Y-m-d H:i', $content['signed_time']);
+		$content['all_address'] 		= $content['district'].$content['street'];
+		$content['express_all_address'] = $content['eodistrict'].$content['eostreet'];
+	
+		$this->assign('type', $type);
+		$this->assign('content', $content);
+		$this->assign('goods_list', $goods_list);
+		
+		$data = $this->fetch('express_order_detail.dwt');
+		return $this->showmessage('', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('data' => $data));
+	}
 
+	/**
+	 * 订单重新指派
+	 */
+	public function express_detail() {
+		$this->admin_priv('express_task_manage');
+	
+		$express_id = intval($_GET['express_id']);
+		$store_id = intval($_GET['store_id']);
+		$type = trim($_GET['type']);
+	
+		$express_info = RC_DB::table('express_order as eo')
+		->leftJoin('express_user as eu', RC_DB::raw('eo.staff_id'), '=', RC_DB::raw('eu.user_id'))
+		->where(RC_DB::raw('eo.express_id'), $express_id)
+		->selectRaw('eo.express_user, eo.express_mobile, eo.longitude as u_longitude, eo.latitude as u_latitude, eu.longitude as eu_longitude, eu.latitude as eu_latitude')
+		->first();
+	
+		$store_info =  RC_DB::table('store_franchisee')->where('store_id', $store_id)->selectRaw('longitude as sf_longitude, latitude as sf_latitude')->first();
+	
+		$content = array_merge($express_info, $store_info);
+	
+		$content['start'] =  $content['sf_latitude'].','.$content['sf_longitude'];
+		$content['end']   =  $content['u_latitude'].','.$content['u_longitude'];
+	
+		/*配送员列表*/
+		$express_user_list = $this->get_express_user_list($type);
+		$this->assign('express_user_list', $express_user_list);
+		$this->assign('express_count', $express_user_list['express_count']);
+		$app_url =  RC_App::apps_url('statics/images', __FILE__);
+		$this->assign('app_url', $app_url);
+		$this->assign('type', $type);
+		$this->assign('content', $content);
+		$this->assign('express_id', $express_id);
+	
+		$this->assign('search_action', RC_Uri::url('express/admin_reminder/reassign_search_user', array('type' => $type)));
+	
+		$data = $this->fetch('express_order_reassign.dwt');
+	
+		return $this->showmessage('', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('data' => $data));
+	}
+	
+	/**
+	 * 重新指派页搜索配送员
+	 */
+	public function reassign_search_user() {
+		$type = $_GET['type'];
+		$keywords = $_GET['keywords'];
+	
+		/*配送员列表*/
+		$express_user_list = $this->get_express_user_list($type, $keywords);
+	
+		$this->assign('express_user_list', $express_user_list);
+	
+		$this->assign('express_count', $express_user_list['express_count']);
+		$app_url =  RC_App::apps_url('statics/images', __FILE__);
+		$this->assign('app_url', $app_url);
+		$this->assign('type', $type);
+		$this->assign('search_action', RC_Uri::url('express/admin_reminder/reassign_search_user', array('type' => $type)));
+	
+		$data = $this->fetch('reassign_express_user_list.dwt');
+	
+		return $this->showmessage('', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('data' => $data));
+	}
+	
     public function remove()
     {
         /* 检查权限 */
@@ -123,6 +242,57 @@ class admin_reminder extends ecjia_admin
         /* 记录日志 */
         RC_DB::table('express_order_reminder')->whereIn('express_id', $express_id)->delete();
         return $this->showmessage('删除成功', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('pjaxurl' => RC_Uri::url('express/admin_reminder/init')));
+    }
+    
+    /**
+     * 配送员列表
+     */
+    private function get_express_user_list($type, $keywords) {
+    	$keywords = $_GET['keywords'];
+    	$express_user_view =  RC_DB::table('staff_user as su')
+    	->leftJoin('express_user as eu', RC_DB::raw('su.user_id'), '=', RC_DB::raw('eu.user_id'));
+    	$express_user_view->where(RC_DB::raw('su.store_id'), 0);
+    
+    	if (!empty($keywords)) {
+    		$express_user_view ->whereRaw('(su.name  like  "%'.mysql_like_quote($keywords).'%")');
+    	}
+    
+    	$db = RC_DB::table('staff_user as su')
+    	->leftJoin('express_user as eu', RC_DB::raw('su.user_id'), '=', RC_DB::raw('eu.user_id'));
+    	if (!empty($keywords)) {
+    		$db ->whereRaw('(su.name  like  "%'.mysql_like_quote($keywords).'%")');
+    	}
+    
+    	if (!empty($type)) {
+    		if ($type == 'online') {
+    			$express_user_view->where(RC_DB::raw('su.online_status'), 1);
+    			$db->where(RC_DB::raw('su.online_status'), 1);
+    		} elseif ($type == 'offline') {
+    			$express_user_view->where(RC_DB::raw('su.online_status'), 4);
+    			$db->where(RC_DB::raw('su.online_status'), 1);
+    		}
+    	}
+    
+    	$express_user_count = $db
+    	->where(RC_DB::raw('su.store_id'), 0)
+    	->select(RC_DB::raw('count(*) as count'),RC_DB::raw('SUM(IF(su.online_status = 1, 1, 0)) as online'),RC_DB::raw('SUM(IF(su.online_status = 4, 1, 0)) as offline'))
+    	->first();
+    
+    	$list = $express_user_view->selectRaw('eu.*, su.mobile, su.name, su.avatar, su.online_status')->orderBy('online_status', 'asc')->get();
+    	$data = array();
+    	if (!empty($list)) {
+    		foreach ($list as $row) {
+    			$count = RC_DB::table('express_order')->where('staff_id', $row['user_id'])->select(RC_DB::raw('count(*) as count'),RC_DB::raw('SUM(IF(status = 1, 1, 0)) as wait_pickup'),RC_DB::raw('SUM(IF(status = 2, 1, 0)) as sending'))->first();
+    			$row['avatar'] = empty($row['avatar']) ? '' : RC_Upload::upload_url($row['avatar']);
+    			$row['wait_pickup_count'] = $count['wait_pickup'];
+    			$row['sending_count'] = $count['sending'];
+    			$data[] = $row;
+    		}
+    	}
+    
+    	$result = array('list' => $data, 'express_count' => $express_user_count);
+    
+    	return $result;
     }
 
 }
