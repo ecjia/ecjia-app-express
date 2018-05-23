@@ -47,6 +47,16 @@
 					</div>
 				{/if}
 				
+				<div class="order_info">
+					<ul>
+			         	<li><h3>订单信息</h3></li>
+			            <li>
+			            	<div class="order">订单编号：<a  href='{url path="orders/merchant/info" args="order_id={$content.order_id}"}' target="_blank">{$content.order_sn}</a></div>
+			            	<div class="order">发货单号：<a  href='{url path="orders/mh_delivery/delivery_info" args="delivery_id={$content.delivery_id}"}' target="_blank">{$content.delivery_sn}</a></div>
+			            </li>
+			        </ul>
+				</div>
+				
 				<div class="order_goods">
 					<ul>
 			         	<li><font class="express_title">订单商品</font></li>
@@ -55,8 +65,8 @@
 				            	<div class="goods-info">
 					            	<div class="info-left" ><img src="{$list.image}" width="50" height="50" /></div>
 					            	<div class="info-right">
-						            	<span>{$list.goods_name}</span><span class="goods_number">数量：X{$list.goods_number}</span>
-						            	<p>¥{$list.goods_price}元 </p>
+						            	<span>{$list.goods_name}</span><span class="goods_number">数量：X{$list.send_number}</span>
+						            	<p>{$list.formated_goods_price} </p>
 					            	</div>
 				            	</div>
 				            </li>

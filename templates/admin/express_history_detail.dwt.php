@@ -53,7 +53,7 @@
 			
 			<div class="order_goods">
 				<ul>
-		         	<li><h3>订单商品</h3></li>
+		         	<li><h3>发货单商品</h3></li>
 		         	<!-- {foreach from=$goods_list item=list} -->
 			            <li class="goodslist">
 			            	<div class="goods-info">

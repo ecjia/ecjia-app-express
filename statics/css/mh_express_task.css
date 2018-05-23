@@ -343,6 +343,22 @@
 	border-bottom-left-radius: 5px;
 }
 
+.order_info{
+	width:851px;
+	background-color: #f9fafa;
+	border: 1px solid #f9fafa;
+	float:left;
+	margin-top: 20px;
+	border-bottom-right-radius: 5px;
+	border-bottom-left-radius: 5px;
+}
+
+.order_info .order{
+	width:50%;
+	float:right;
+	height:42px;
+}
+
 /*查看当前位置*/
 
 .currnt-location-detail .modal {

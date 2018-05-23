@@ -107,13 +107,17 @@ class mh_history extends ecjia_merchant {
 		$this->assign('ur_here', '配送详情');
 	
 		$express_id = intval($_POST['express_id']);
-		$express_info = RC_DB::table('express_order')->where('express_id', $express_id)->select('store_id','order_id','mobile','consignee','user_id','express_sn', 'distance','commision','express_user','express_mobile','from','signed_time','district as eodistrict','street as eostreet','address as eoaddress')->first();
+		$express_info = RC_DB::table('express_order')->where('express_id', $express_id)->select('store_id','order_id', 'order_sn', 'delivery_id', 'delivery_sn','mobile','consignee','user_id','express_sn', 'distance','commision','express_user','express_mobile','from','signed_time','district as eodistrict','street as eostreet','address as eoaddress')->first();
 		$store_info = RC_DB::table('store_franchisee')->where('store_id', $express_info['store_id'])->select('merchants_name','contact_mobile','district','street','address')->first();
 		$order_info = RC_DB::table('order_info')->where('order_id', $express_info['order_id'])->select('add_time','expect_shipping_time','postscript')->first();
-		$goods_list = RC_DB::TABLE('order_goods')->where('order_id', $express_info['order_id'])->select('goods_id', 'goods_name' ,'goods_price','goods_number')->get();
+		//$goods_list = RC_DB::TABLE('order_goods')->where('order_id', $express_info['order_id'])->select('goods_id', 'goods_name' ,'goods_price','goods_number')->get();
+		/*配送单对应的发货单商品*/
+		$goods_list = RC_DB::table('delivery_goods')->where('delivery_id', $express_info['delivery_id'])->selectRaw('goods_id, goods_name, send_number')->get();
+		
 		foreach ($goods_list as $key => $val) {
-			$goods_list[$key]['image']  = RC_DB::TABLE('goods')->where('goods_id', $val['goods_id'])->pluck('goods_thumb');
-			$goods_list[$key]['goods_price']  = price_format($val['goods_price']);
+			$goods_list[$key]['image']  				= RC_DB::table('goods')->where('goods_id', $val['goods_id'])->pluck('goods_thumb');
+			$goods_list[$key]['goods_price']  			= RC_DB::table('order_goods')->where('order_id', $express_info['order_id'])->where('goods_id', $val['goods_id'])->pluck('goods_price');
+			$goods_list[$key]['formated_goods_price'] 	= price_format($goods_list[$key]['goods_price']);
 		}
 		$disk = RC_Filesystem::disk();
 		foreach ($goods_list as $key => $val) {
