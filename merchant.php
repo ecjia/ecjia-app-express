@@ -397,6 +397,12 @@ class merchant extends ecjia_merchant {
 		$this->assign('content', $content);
 		$this->assign('goods_list', $goods_list);
 
+        $show_taked_ship = false;
+        if ($type == 'wait_pickup') {
+            $show_taked_ship = true;
+        }
+        $this->assign('show_taked_ship', $show_taked_ship);
+
 		$data = $this->fetch('express_order_detail.dwt');
 		return $this->showmessage('', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('data' => $data));
 	}
@@ -424,12 +430,6 @@ class merchant extends ecjia_merchant {
 		$this->assign('filter', $wait_pickup_list['filter']);
 		
 		$this->assign('wait_pickup_list', $wait_pickup_list);
-
-        $show_taked_ship = false;
-        if ($type == 'wait_pickup') {
-            $show_taked_ship = true;
-        }
-        $this->assign('show_taked_ship', $show_taked_ship);
 
 		$this->display('express_order_wait_pickup.dwt');
 	}
