@@ -56,7 +56,7 @@ class express_order {
 	 */
 	public static function express_order_info($options){
 		$express_order_info = array();
-		if (empty($options['express_id']) || empty($options['express_sn'])) {
+		if (empty($options['express_id']) && empty($options['express_sn'])) {
 			return $express_order_info;
 		}
 		 
