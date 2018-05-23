@@ -129,6 +129,7 @@
                 var url = $this.attr('express-order-url');
                 $.post(url, {'express_id': express_id}, function (data) {
                 	$('.order-detail').html(data.data);
+                    app.mh_express_order_list.toggleState();
                 }, 'json');
 			})
         },
@@ -477,6 +478,24 @@
         });
         //配送员位置end
 	 },
+
+        toggleState: function () {
+        	$('[data-toggle="toggleState"]').off('click').on('click', function (e) {
+        		e.preventDefault();
+        		var $this = $(this),
+        			url = $this.attr('data-url'),
+        			sn = $this.attr('data-sn');
+        		var info = {
+        			sn: sn
+        		};
+        		$.post(url, info, function (data) {
+                    $('#myModal1').modal('hide');
+                    $(".modal-backdrop").remove();
+                    $("body").removeClass('modal-open');
+        			ecjia.merchant.showmessage(data);
+        		})
+        	});
+        }
   }
     
     
