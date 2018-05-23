@@ -72,7 +72,9 @@
 				</div>
 
                 {if $show_taked_ship}
+                <div class="ecjiaf_fl clear_both">
                     <a class="btn btn-info m_t20 m_b10" data-toggle="toggleState" data-url="{RC_Uri::url('express/merchant/taked_ship')}" data-sn="{$content.express_sn}">已取货</a>
+                </div>
                 {/if}
 			</div>
 		</div>

@@ -488,12 +488,19 @@
         		var info = {
         			sn: sn
         		};
-        		$.post(url, info, function (data) {
-                    $('#myModal1').modal('hide');
-                    $(".modal-backdrop").remove();
-                    $("body").removeClass('modal-open');
-        			ecjia.merchant.showmessage(data);
-        		})
+                smoke.confirm('您确定要将该配送单设为已取货吗？', function (e) {
+                    if (e) {
+                        $.post(url, info, function (data) {
+                            $('#myModal1').modal('hide');
+                            $(".modal-backdrop").remove();
+                            $("body").removeClass('modal-open');
+                            ecjia.merchant.showmessage(data);
+                        })
+                    }
+                }, {
+                    ok: '确定',
+                    cancel: '取消'
+                });
         	});
         }
   }
