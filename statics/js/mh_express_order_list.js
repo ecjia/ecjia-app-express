@@ -488,7 +488,7 @@
         		var info = {
         			sn: sn
         		};
-                smoke.confirm('您确定要将该配送单设为已取货吗？', function (e) {
+                smoke.confirm('您确定订单商品已被配送员取走？如未完成就操作，您将会被用户投诉', function (e) {
                     if (e) {
                         $.post(url, info, function (data) {
                             $('#myModal1').modal('hide');
