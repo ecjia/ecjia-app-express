@@ -99,6 +99,12 @@ class admin_merchant extends ecjia_admin {
 		
 		$keyword = trim($_GET['keyword']);
 		$cat_arr = $this->get_cat_list($keyword);
+		
+	    RC_Logger::getLogger('error')->info('testaaa');
+	    RC_Logger::getLogger('error')->info($cat_arr);
+	    RC_Logger::getLogger('error')->info($cat_arr['list']);
+	    RC_Logger::getLogger('error')->info('testbbb');
+		
 		$this->assign('cat_list', $cat_arr['list']);
 		$this->assign('allnumber', $cat_arr['allnumber']);
 		
