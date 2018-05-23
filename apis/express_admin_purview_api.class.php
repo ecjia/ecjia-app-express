@@ -64,6 +64,9 @@ class express_admin_purview_api extends Component_Event_Api {
         	array('action_name' => '资金对账', 'action_code' => 'express_match_manage', 'relevance' => ''),
         		
         	array('action_name' => '历史配送', 'action_code' => 'express_history_manage', 'relevance' => ''),
+
+            array('action_name' => '派单提醒', 'action_code' => 'express_reminder_manage', 'relevance' => ''),
+            array('action_name' => '派单删除', 'action_code' => 'express_reminder_delete', 'relevance' => ''),
         );
         return $purviews;
     }
