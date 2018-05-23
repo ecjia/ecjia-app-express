@@ -70,6 +70,10 @@
 			            <li>{if $content.postscript}{$content.postscript}{else}此用户没有填写备注内容{/if}</li>
 			        </ul>
 				</div>
+
+                {if $show_taked_ship}
+                    <a class="btn btn-info m_t20 m_b10" data-toggle="toggleState" data-url="{RC_Uri::url('express/merchant/taked_ship')}" data-sn="{$content.express_sn}">已取货</a>
+                {/if}
 			</div>
 		</div>
     </div>
