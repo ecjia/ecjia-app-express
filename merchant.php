@@ -392,17 +392,17 @@ class merchant extends ecjia_merchant {
 		$content['signed_time']   		= RC_Time::local_date('Y-m-d H:i', $content['signed_time']);
 		$content['all_address'] 		= $content['district'].$content['street'];
 		$content['express_all_address'] = $content['eodistrict'].$content['eostreet'];
-	
+
 		$this->assign('type', $type);
 		$this->assign('content', $content);
 		$this->assign('goods_list', $goods_list);
 
         $show_taked_ship = false;
-		if ($type == 'wait_grab') {
+        if ($type == 'wait_pickup') {
             $show_taked_ship = true;
         }
         $this->assign('show_taked_ship', $show_taked_ship);
-		
+
 		$data = $this->fetch('express_order_detail.dwt');
 		return $this->showmessage('', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('data' => $data));
 	}
@@ -430,7 +430,7 @@ class merchant extends ecjia_merchant {
 		$this->assign('filter', $wait_pickup_list['filter']);
 		
 		$this->assign('wait_pickup_list', $wait_pickup_list);
-		
+
 		$this->display('express_order_wait_pickup.dwt');
 	}
 	
@@ -563,12 +563,12 @@ class merchant extends ecjia_merchant {
 
         $delivery_sn = trim($_POST['sn']);
         if (empty($delivery_sn)) {
-            return $this->showmessage('发货单号不能为空', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+            return $this->showmessage('配送单号不能为空', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
         }
 
         $express_order = array();
         $express_order_db = RC_Model::model('express/express_order_viewmodel');
-        $where = array('eo.store_id' => $_SESSION['store_id'], 'eo.delivery_sn' => $delivery_sn, 'eo.status' => 1, 'eo.shipping_code' => 'ship_o2o_express');
+        $where = array('eo.store_id' => $_SESSION['store_id'], 'eo.express_sn' => $delivery_sn, 'eo.status' => 1, 'eo.shipping_code' => 'ship_o2o_express');
         $field = 'eo.*, oi.add_time as order_time, oi.pay_time, oi.order_amount, oi.pay_name, sf.merchants_name, sf.district as sf_district, sf.street as sf_street, sf.address as merchant_address, sf.longitude as merchant_longitude, sf.latitude as merchant_latitude';
         $express_order_info = $express_order_db->field($field)->join(array('delivery_order', 'order_info', 'store_franchisee'))->where($where)->find();
 
@@ -582,7 +582,7 @@ class merchant extends ecjia_merchant {
             return $this->showmessage('此配送单并未有配送员接单！', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
         }
 
-        $where = array('store_id' => $_SESSION['store_id'], 'staff_id' => $express_order_info['staff_id'], 'delivery_sn' => $delivery_sn);
+        $where = array('store_id' => $_SESSION['store_id'], 'staff_id' => $express_order_info['staff_id'], 'express_sn' => $delivery_sn);
         RC_Model::model('express/express_order_model')->where($where)->update(array('status' => 2, 'express_time' => RC_Time::gmtime()));
 
         /*当订单配送方式为o2o速递时,记录o2o速递物流信息*/
@@ -599,7 +599,7 @@ class merchant extends ecjia_merchant {
                 RC_DB::table('express_track_record')->insert($data);
             }
         }
-        return $this->showmessage('操作成功', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS);
+        return $this->showmessage('操作成功', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('pjaxurl' => RC_Uri::url('express/merchant/wait_pickup', array('type' => 'wait_pickup'))));
     }
 
 	/**

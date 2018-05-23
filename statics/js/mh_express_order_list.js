@@ -488,12 +488,19 @@
         		var info = {
         			sn: sn
         		};
-        		$.post(url, info, function (data) {
-                    $('#myModal1').modal('hide');
-                    $(".modal-backdrop").remove();
-                    $("body").removeClass('modal-open');
-        			ecjia.merchant.showmessage(data);
-        		})
+                smoke.confirm('您确定订单商品已被配送员取走？如未完成就操作，您将会被用户投诉', function (e) {
+                    if (e) {
+                        $.post(url, info, function (data) {
+                            $('#myModal1').modal('hide');
+                            $(".modal-backdrop").remove();
+                            $("body").removeClass('modal-open');
+                            ecjia.merchant.showmessage(data);
+                        })
+                    }
+                }, {
+                    ok: '确定',
+                    cancel: '取消'
+                });
         	});
         }
   }
