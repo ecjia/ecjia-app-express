@@ -3,7 +3,7 @@
 
 <!-- {block name="footer"} -->
 <script type="text/javascript">
-
+    ecjia.admin.express_list.init();
 </script>
 <!-- {/block} -->
 
@@ -26,7 +26,7 @@
 				<span class="caret"></span>
 			</a>
 			<ul class="dropdown-menu">
-				<li><a class="button_remove" data-toggle="ecjiabatch" data-idClass=".checkbox:checked" data-url="{url path=''}" data-msg="您确实要删除选中的订单吗？" data-noSelectMsg="请先选中要删除的订单！" href="javascript:;"><i class="fontello-icon-trash"></i>移除</a></li>
+				<li><a class="button_remove" data-toggle="ecjiabatch" data-idClass=".checkbox:checked" data-url="{$form_action}" data-msg="您确实要删除选中的订单吗？" data-noSelectMsg="请先选中要删除的订单！" href="javascript:;"><i class="fontello-icon-trash"></i>移除</a></li>
 			</ul>
 		</div>
 		
@@ -50,19 +50,25 @@
 				    <th class="w100">催单时间</th>
 			  	</tr>
 			</thead>
-			<!-- {foreach from=$data.list item=express} -->
+			<!-- {foreach from=$result_list.list item=express} -->
 		    <tr>
 				<td>
-					<span><input type="checkbox" name="checkboxes[]" class="checkbox" value=""/></span>
+					<span><input type="checkbox" name="checkboxes[]" class="checkbox" value="{$express.express_id}"/></span>
 				</td>
-		      	<td class="hide-edit-area"><div class="edit-list"></div></td>
-		      	<td></td>
-		      	<td></td>
-		      	<td></td>
-		      	<td></td>
+		      	<td class="hide-edit-area">
+                    {$express.express_sn}
+                    <div class="edit-list">
+<!--                        <a class="data-pjax" href='{url path="" args=""}' title="详情">查看详情</a>&nbsp;|&nbsp;-->
+                        <a class="ajaxremove ecjiafc-red" data-toggle="ajaxremove" data-msg='{t name="{$express.express_id}"}您确定要删除派单[ %1 ]吗？{/t}' href='{url path="express/admin_reminder/remove" args="express_id={$express.express_id}"}' title="{t}移除{/t}">{t}{lang key='orders::order.remove'}{/t}</a>
+                    </div>
+                </td>
+                <td>{$express.consignee}</td>
+                <td>{$express.address}</td>
+                <td>{$express.status}</td>
+                <td>{$express.confirm_time}</td>
 		    </tr>
 		    <!-- {foreachelse} -->
-	        <tr><td class="no-records" colspan="8">{lang key='system::system.no_records'}</td></tr>
+	        <tr><td class="no-records" colspan="6">{lang key='system::system.no_records'}</td></tr>
 			<!-- {/foreach} -->
             </tbody>
          </table>

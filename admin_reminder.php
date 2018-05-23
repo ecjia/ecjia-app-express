@@ -68,12 +68,7 @@ class admin_reminder extends ecjia_admin
         RC_Script::enqueue_script('jquery-uniform');
         RC_Script::enqueue_script('jquery-chosen');
 
-        RC_Script::enqueue_script('admin_express_task', RC_App::apps_url('statics/js/admin_express_task.js', __FILE__));
-        RC_Script::enqueue_script('admin_express_order_list', RC_App::apps_url('statics/js/admin_express_order_list.js', __FILE__));
-        RC_Style::enqueue_style('admin_express_task', RC_App::apps_url('statics/css/admin_express_task.css', __FILE__));
-
-        RC_Script::enqueue_script('qq_map', 'https://map.qq.com/api/js?v=2.exp');
-
+        RC_Script::enqueue_script('admin_express', RC_App::apps_url('statics/js/admin_express.js', __FILE__));
         RC_Script::localize_script('express', 'js_lang', RC_Lang::get('express::express.js_lang'));
 
         ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here('派单提醒'));
@@ -86,9 +81,48 @@ class admin_reminder extends ecjia_admin
     {
         $this->admin_priv('express_reminder_manage');
 
-        $this->assign('ur_here', '派单提醒');
+        /* 查询 */
+        $db_order_reminder = RC_DB::table('express_order_reminder as e')
+            ->leftJoin('express_order as o', RC_DB::raw('o.express_id'), '=', RC_DB::raw('e.express_id'))
+            ->leftJoin('users as a', RC_DB::raw('o.user_id'), '=', RC_DB::raw('a.user_id'));
+
+        $keywords = empty($keyword) ? '' : trim($_GET['keyword']);
+
+        if (!empty($keywords)) {
+            $db_order_reminder->whereRaw('(o.order_sn like "%' . mysql_like_quote($keywords) . '%" or o.consignee like "%' . mysql_like_quote($keywords) . '%")');
+        }
+
+        $count = $db_order_reminder->count();
+        $page = new ecjia_page($count, 10, 6);
+
+        $result = $db_order_reminder->take(10)->skip($page->start_id - 1)->get();
+        $result_list = array('list' => $result, 'page' => $page->show(2), 'desc' => $page->page_desc(), 'keywords' => $keywords);
+
+        if (!empty($result_list['list'])) {
+            foreach ($result_list['list'] as $key => $val) {
+                $result_list['list'][$key]['status'] = $val['status'] == 1 ? RC_Lang::get('orders::order.processed') : RC_Lang::get('orders::order.untreated');
+                $result_list['list'][$key]['confirm_time'] = RC_Time::local_date(ecjia::config('time_format'), $val['confirm_time']);
+            }
+        }
+        $this->assign('result_list', $result_list);
+        $this->assign('ur_here', '派单提醒列表');
+        $this->assign('form_action', RC_Uri::url('express/admin_reminder/remove&type=batch'));
+        $this->assign('search_action', RC_Uri::url('express/admin_reminder/init'));
 
         $this->display('express_reminder_list.dwt');
+    }
+
+    public function remove()
+    {
+        /* 检查权限 */
+        $this->admin_priv('express_reminder_delete', ecjia::MSGTYPE_JSON);
+
+        $express_id = !empty($_GET['express_id']) ? $_GET['express_id'] : $_POST['express_id'];
+        $express_id = explode(',', $express_id);
+
+        /* 记录日志 */
+        RC_DB::table('express_order_reminder')->whereIn('express_id', $express_id)->delete();
+        return $this->showmessage('删除成功', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('pjaxurl' => RC_Uri::url('express/admin_reminder/init')));
     }
 
 }
