@@ -1,5 +1,5 @@
 /* 
- * ÅäËÍÔ±¹ÜÀí-²é¿´ÏêÇé
+ * ï¿½ï¿½ï¿½ï¿½Ô±ï¿½ï¿½ï¿½ï¿½-ï¿½é¿´ï¿½ï¿½ï¿½ï¿½
  */
 .w480 {
 	width: 480px;
@@ -12,7 +12,7 @@
 
 
 /* 
- * ÅäËÍÔ±¹ÜÀí-²é¿´µ±Ç°Î»ÖÃ
+ * ï¿½ï¿½ï¿½ï¿½Ô±ï¿½ï¿½ï¿½ï¿½-ï¿½é¿´ï¿½ï¿½Ç°Î»ï¿½ï¿½
  */
 .modal {
    width: 930px;
@@ -29,7 +29,7 @@
 
 
 /* 
- * ÀúÊ·ÅäËÍ-²é¿´ÏêÇé
+ * ï¿½ï¿½Ê·ï¿½ï¿½ï¿½ï¿½-ï¿½é¿´ï¿½ï¿½ï¿½ï¿½
  */
 .express_content{
 	height:575px;
@@ -117,11 +117,23 @@
 	border-bottom-left-radius: 5px;
 }
 
-
-
+.order_info{
+	width:881px;
+	background-color: #f9fafa;
+	border: 1px solid #f9fafa;
+	float:left;
+	margin-top: 20px;
+	border-bottom-right-radius: 5px;
+	border-bottom-left-radius: 5px;
+}
+.order_info .order{
+	width:50%;
+	float:right;
+	height:35px;
+}
 
 /* 
- * ÅäËÍÔ±¹ÜÀí-²é¿´ÕËÄ¿Ã÷Ï¸
+ * ï¿½ï¿½ï¿½ï¿½Ô±ï¿½ï¿½ï¿½ï¿½-ï¿½é¿´ï¿½ï¿½Ä¿ï¿½ï¿½Ï¸
  */
 .all{
 	background-color: #f9fafa;
@@ -137,7 +149,7 @@
 
 
 /* 
- * ×Ê½ğ¶ÔÕË-¶ÔÕËÏêÇé
+ * ï¿½Ê½ï¿½ï¿½ï¿½ï¿½-ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
  */
 ul.list-mod-briefing {
 	margin: 0;
@@ -184,7 +196,7 @@ ul.list-mod-briefing li:nth-of-type(4n) .ft {
 
 
 /* 
- * ÉÌ¼Ò¹ÜÀí
+ * ï¿½Ì¼Ò¹ï¿½ï¿½ï¿½
  */
 .merchant_list {
 	margin: 0;
@@ -258,7 +270,7 @@ ul.list-mod-briefing li:nth-of-type(4n) .ft {
 
 
 /* 
- * ÉÌ¼ÒÏêÇé
+ * ï¿½Ì¼ï¿½ï¿½ï¿½ï¿½ï¿½
  */
 .store_detail{
 	height:105px;
