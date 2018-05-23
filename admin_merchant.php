@@ -100,6 +100,11 @@ class admin_merchant extends ecjia_admin {
 		$keyword = trim($_GET['keyword']);
 		$cat_arr = $this->get_cat_list($keyword);
 		
+		RC_Logger::getLogger('error')->info('test111');
+		RC_Logger::getLogger('error')->info($cat_arr);
+		RC_Logger::getLogger('error')->info($cat_arr['list']);
+		RC_Logger::getLogger('error')->info('test222');
+		
 		$this->assign('cat_list', $cat_arr['list']);
 		$this->assign('allnumber', $cat_arr['allnumber']);
 		
@@ -323,6 +328,10 @@ class admin_merchant extends ecjia_admin {
 		
 		$cat_list = array_unique($cat_list);
 	
+		RC_Logger::getLogger('error')->info('testeee');
+		RC_Logger::getLogger('error')->info($cat_list);
+		RC_Logger::getLogger('error')->info('testfff');
+		
 		if ($keyword) {
 			foreach ($cat_list as $k => $v) {
 				$cat_list[$k]['number'] = 0;
@@ -352,13 +361,19 @@ class admin_merchant extends ecjia_admin {
 				$number = $cat_list_keyword[$cat_id]['number'];
 				$cat_list[$k]['number'] = $number;
 			}
-			
+			RC_Logger::getLogger('error')->info('testggg');
+			RC_Logger::getLogger('error')->info($cat_list);
+			RC_Logger::getLogger('error')->info('testhhh');
 		}
 
 		$allnumber = 0;
 		foreach($cat_list as $key=>$value){
 			$allnumber+= $value['number'];
 		}
+		RC_Logger::getLogger('error')->info('testiii');
+		RC_Logger::getLogger('error')->info($cat_list);
+		RC_Logger::getLogger('error')->info('testjjj');
+		
 		return array('list' => $cat_list, 'allnumber' => $allnumber);
 	}
 }
