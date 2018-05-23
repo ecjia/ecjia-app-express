@@ -137,6 +137,7 @@ class detail_module extends api_admin implements api_interface {
     		'best_time'		=> $express_order_info['expect_shipping_time'],
     		'signed_time'	=> $express_order_info['signed_time'] > 0 ? RC_Time::local_date(ecjia::config('time_format'), $express_order_info['signed_time']) : '',
     		'shipping_fee'	=> $express_order_info['commision'],
+    		'shipping_code'	=> empty($express_order_info['shipping_code']) ? '' : $express_order_info['shipping_code'],
     		'order_amount'	=> $express_order_info['order_amount'],
     		'staff_id'		=> $express_order_info['staff_id'],
     		'express_user'	=> $express_order_info['express_user'],
