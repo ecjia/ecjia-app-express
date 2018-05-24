@@ -68,12 +68,13 @@
                         <a class="express-order-modal" data-toggle="modal" data-backdrop="static" href="#myModal1"
                            express-id="{$express.express_id}"
                            express-order-url='{url path="express/admin_reminder/order_detail" args="express_id={$express.express_id}&store_id={$express.store_id}"}'
-                           title="查看详情">查看详情</a>&nbsp;|&nbsp;
-                           
-                        <a class="express-reassign-click" data-toggle="modal" data-backdrop="static" href="#myModal2"
+                           title="查看详情">查看详情</a>
+                        {if $express.unformat_status eq '0'}
+                        	&nbsp;|&nbsp;<a class="express-reassign-click" data-toggle="modal" data-backdrop="static" href="#myModal2"
                            express-id="{$express.express_id}"
                            express-reassign-url='{url path="express/admin_reminder/express_detail" args="express_id={$express.express_id}&store_id={$express.store_id}"}'
                            title="重新指派">指派订单</a>
+                        {/if}  
                     </div>
                 </td>
                 <td>

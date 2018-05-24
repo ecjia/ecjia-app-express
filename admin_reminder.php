@@ -99,6 +99,7 @@ class admin_reminder extends ecjia_admin
 
         if (!empty($result_list['list'])) {
             foreach ($result_list['list'] as $key => $val) {
+            	$result_list['list'][$key]['unformat_status'] = $val['status'];
                 $result_list['list'][$key]['status'] = $val['status'] == 1 ? RC_Lang::get('orders::order.processed') : RC_Lang::get('orders::order.untreated');
                 $result_list['list'][$key]['create_time'] = RC_Time::local_date(ecjia::config('time_format'), $val['create_time']);
                 
@@ -294,6 +295,14 @@ class admin_reminder extends ecjia_admin
         );
 
         $update = RC_DB::table('express_order')->where('express_id', $express_id)->update($data);
+        
+        /*当前配送单有没派单提醒，有的话修改派单提醒状态为已处理；派单提醒只有众包配送有*/
+        $remind_list = RC_DB::table('express_order_reminder')->where('express_id', $express_id)->where('status', 0)->get();
+        if (!empty($remind_list)) {
+        	foreach ($remind_list as $row) {
+        		RC_DB::table('express_order_reminder')->where('id', $row['id'])->update(array('status' => 1));
+        	}
+        }
 
         /*指派后*/
         if ($staff_id > 0) {

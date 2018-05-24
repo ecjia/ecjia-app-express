@@ -271,6 +271,14 @@ class admin extends ecjia_admin {
 	
 		$update = RC_DB::table('express_order')->where('express_id', $express_id)->update($data);
 		
+		/*当前配送单有没派单提醒，有的话修改派单提醒状态为已处理；派单提醒只有众包配送有*/
+		$remind_list = RC_DB::table('express_order_reminder')->where('express_id', $express_id)->where('status', 0)->get();
+		if (!empty($remind_list)) {
+			foreach ($remind_list as $row) {
+				RC_DB::table('express_order_reminder')->where('id', $row['id'])->update(array('status' => 1));
+			}
+		}
+		
 		/*指派后*/
 		if ($staff_id > 0) {
 			/* 消息插入 */
