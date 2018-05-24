@@ -75,13 +75,12 @@ class finished_module extends api_admin implements api_interface {
 				'shipping_status'	=> SS_RECEIVED
 		);
 		
-		$update = RC_DB::table('order_info')->where('order_id', $express_order_info['order_id'])->update($data);
+		/*检查订单和配送单状态*/
+		if ($express_order_info['status'] == '5' || $express_order_info['order_status'] == OS_CONFIRMED || $express_order_info['shipping_status'] == SS_RECEIVED) {
+			return new ecjia_error('express_order_finished', '此配送单已配送完成了！');
+		}
 		
-		RC_Logger::getLogger('error')->info('testxxx');
-		RC_Logger::getLogger('error')->info($update);
-		RC_Logger::getLogger('error')->info($express_order_info);
-		RC_Logger::getLogger('error')->info($data);
-		RC_Logger::getLogger('error')->info('testyyy');
+		$update = RC_DB::table('order_info')->where('order_id', $express_order_info['order_id'])->update($data);
 		
 // 		if ($update) {
 			$db_order_status_log = RC_DB::table('order_status_log');
