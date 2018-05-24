@@ -70,18 +70,20 @@ class finished_module extends api_admin implements api_interface {
 			->leftJoin('store_franchisee as sf', RC_DB::raw('sf.store_id'), '=', RC_DB::raw('eo.store_id'))
 			->leftJoin('order_info as oi', RC_DB::raw('eo.order_id'), '=', RC_DB::raw('oi.order_id'));
 		$express_order_info	= $dbview->where(RC_DB::raw('eo.express_id'), $express_id)->selectRaw($field)->first();
-		$data = array();
-		$data['order_status'] = OS_CONFIRMED;
-		$data['shipping_status'] = SS_RECEIVED;
+		$data = array(
+				'order_status' 		=> OS_CONFIRMED,
+				'shipping_status'	=> SS_RECEIVED
+		);
 		
 		$update = RC_DB::table('order_info')->where('order_id', $express_order_info['order_id'])->update($data);
 		
 		RC_Logger::getLogger('error')->info('testxxx');
 		RC_Logger::getLogger('error')->info($update);
 		RC_Logger::getLogger('error')->info($express_order_info);
+		RC_Logger::getLogger('error')->info($data);
 		RC_Logger::getLogger('error')->info('testyyy');
 		
-		if ($update) {
+// 		if ($update) {
 			$db_order_status_log = RC_DB::table('order_status_log');
 							   
 			$order_status_data = array(
@@ -220,7 +222,7 @@ class finished_module extends api_admin implements api_interface {
 					RC_DB::table('express_user')->insert(array('user_id' => $express_order_info['staff_id'], 'store_id' => $_SESSION['store_id'], 'delivery_count' => 1, 'delivery_distance' => $express_order_info['distance'], 'longitude' => $express_order_info['longitude'], 'latitude' => $express_order_info['latitude']));
 				}
 			}
-		}
+// 		}
 		
 		return array();
 	 }	
