@@ -80,9 +80,9 @@
                     {$express.consignee}<br/>
                     {$express.mobile}
                 </td>
-                <td>{$express.address}</td>
+                <td>{$express.express_all_address}{$express.address}</td>
                 <td>{$express.status}</td>
-                <td>{$express.confirm_time}</td>
+                <td>{$express.create_time}</td>
             </tr>
             <!-- {foreachelse} -->
             <tr>

@@ -100,7 +100,15 @@ class admin_reminder extends ecjia_admin
         if (!empty($result_list['list'])) {
             foreach ($result_list['list'] as $key => $val) {
                 $result_list['list'][$key]['status'] = $val['status'] == 1 ? RC_Lang::get('orders::order.processed') : RC_Lang::get('orders::order.untreated');
-                $result_list['list'][$key]['confirm_time'] = RC_Time::local_date(ecjia::config('time_format'), $val['confirm_time']);
+                $result_list['list'][$key]['create_time'] = RC_Time::local_date(ecjia::config('time_format'), $val['create_time']);
+                
+                $result_list['list'][$key]['express_all_address'] = '';
+                if (!empty($val['district'])) {
+                	$result_list['list'][$key]['express_all_address'] .= ecjia_region::getRegionName($val['district']);
+                }
+                if (!empty($val['street'])) {
+                	$result_list['list'][$key]['express_all_address'] .= ecjia_region::getRegionName($val['street']).'&nbsp;&nbsp;&nbsp;&nbsp;';
+                }
             }
         }
         $this->assign('result_list', $result_list);
@@ -211,6 +219,7 @@ class admin_reminder extends ecjia_admin
 
         $this->assign('search_action', RC_Uri::url('express/admin_reminder/reassign_search_user', array('type' => $type)));
         $this->assign('assign_url', RC_Uri::url('express/admin_reminder/assign_express_order'));
+        $this->assign('title', '指派订单');
 
         $data = $this->fetch('express_order_reassign.dwt');
 
