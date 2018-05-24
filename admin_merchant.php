@@ -305,10 +305,10 @@ class admin_merchant extends ecjia_admin {
 			$cat_list[$k]['cat_id'] = RC_DB::TABLE('store_franchisee')->where('store_id', $v['store_id'])->pluck('cat_id');
 		}
 		
-		RC_Logger::getLogger('error')->info('testaaa');
-		RC_Logger::getLogger('error')->info($store_list);
-		RC_Logger::getLogger('error')->info($cat_list);
-		RC_Logger::getLogger('error')->info('testbbb');
+// 		RC_Logger::getLogger('error')->info('testaaa');
+// 		RC_Logger::getLogger('error')->info($store_list);
+// 		RC_Logger::getLogger('error')->info($cat_list);
+// 		RC_Logger::getLogger('error')->info('testbbb');
 		
 		foreach ($cat_list as $k => $v) {
 			foreach ($cat_list as $key => $value) {
@@ -322,15 +322,15 @@ class admin_merchant extends ecjia_admin {
 			}
 		}
 		
-		RC_Logger::getLogger('error')->info('testccc');
-		RC_Logger::getLogger('error')->info($cat_list);
-		RC_Logger::getLogger('error')->info('testddd');
+// 		RC_Logger::getLogger('error')->info('testccc');
+// 		RC_Logger::getLogger('error')->info($cat_list);
+// 		RC_Logger::getLogger('error')->info('testddd');
 		
 		$cat_list = array_unique($cat_list);
 	
-		RC_Logger::getLogger('error')->info('testeee');
-		RC_Logger::getLogger('error')->info($cat_list);
-		RC_Logger::getLogger('error')->info('testfff');
+// 		RC_Logger::getLogger('error')->info('testeee');
+// 		RC_Logger::getLogger('error')->info($cat_list);
+// 		RC_Logger::getLogger('error')->info('testfff');
 		
 		if ($keyword) {
 			foreach ($cat_list as $k => $v) {
@@ -361,18 +361,18 @@ class admin_merchant extends ecjia_admin {
 				$number = $cat_list_keyword[$cat_id]['number'];
 				$cat_list[$k]['number'] = $number;
 			}
-			RC_Logger::getLogger('error')->info('testggg');
-			RC_Logger::getLogger('error')->info($cat_list);
-			RC_Logger::getLogger('error')->info('testhhh');
+// 			RC_Logger::getLogger('error')->info('testggg');
+// 			RC_Logger::getLogger('error')->info($cat_list);
+// 			RC_Logger::getLogger('error')->info('testhhh');
 		}
 
 		$allnumber = 0;
 		foreach($cat_list as $key=>$value){
 			$allnumber+= $value['number'];
 		}
-		RC_Logger::getLogger('error')->info('testiii');
-		RC_Logger::getLogger('error')->info($cat_list);
-		RC_Logger::getLogger('error')->info('testjjj');
+// 		RC_Logger::getLogger('error')->info('testiii');
+// 		RC_Logger::getLogger('error')->info($cat_list);
+// 		RC_Logger::getLogger('error')->info('testjjj');
 		
 		return array('list' => $cat_list, 'allnumber' => $allnumber);
 	}
