@@ -327,6 +327,10 @@ class admin_merchant extends ecjia_admin {
 		RC_Logger::getLogger('error')->info('test888');
 		
 		$cat_list = array_unique($cat_list);
+		
+		RC_Logger::getLogger('error')->info('testsss');
+		RC_Logger::getLogger('error')->info($cat_list);
+		RC_Logger::getLogger('error')->info('testfff');
 
 		if ($keyword) {
 			foreach ($cat_list as $k => $v) {
