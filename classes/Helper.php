@@ -57,10 +57,11 @@ class Helper
     public static function assign_adminlog_content()
     {
     	ecjia_admin_log::instance()->add_action('assign', '指派');
+    	ecjia_admin_log::instance()->add_action('pickup', '取货');
     	
         ecjia_admin_log::instance()->add_object('express_user', '配送员');
         ecjia_admin_log::instance()->add_object('express_user_profile', '配送员资料');
-        ecjia_admin_log::instance()->add_object('express_order', '订单');
+        ecjia_admin_log::instance()->add_object('express_order', '配送单');
     }
 }
 

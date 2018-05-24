@@ -83,6 +83,10 @@ class pickup_module extends api_admin implements api_interface {
     	$where = array('store_id' => $_SESSION['store_id'], 'staff_id' => $express_order_info['staff_id'], 'delivery_sn' => $delivery_sn);
     	RC_Model::model('express/express_order_model')->where($where)->update(array('status' => 2, 'express_time' => RC_Time::gmtime()));
     	
+    	//记录管理员操作log
+    	Ecjia\App\Express\Helper::assign_adminlog_content();
+    	RC_Api::api('merchant', 'admin_log', array('text'=> $_SESSION['staff_name'].'操作配送单'.$express_order_info['express_sn'].'为已取货'.'【来源掌柜】', 'action'=>'pickup', 'object'=>'express_order'));
+    	 
     	
     	//消息通知
     	$express_from_address = ecjia_region::getRegionName($express_order_info['sf_district']).ecjia_region::getRegionName($express_order_info['sf_street']).$express_order_info['merchant_address'];
