@@ -309,7 +309,7 @@ class admin_merchant extends ecjia_admin {
 		}
 		
 		RC_Logger::getLogger('error')->info('test555');
-		RC_Logger::getLogger('error')->info($store_list);
+		RC_Logger::getLogger('error')->info($cat_list);
 		RC_Logger::getLogger('error')->info('test666');
 		
 		foreach ($cat_list as $key => $value) {
@@ -323,10 +323,10 @@ class admin_merchant extends ecjia_admin {
 		}
 		
 		RC_Logger::getLogger('error')->info('test777');
-		RC_Logger::getLogger('error')->info($store_list);
+		RC_Logger::getLogger('error')->info($cat_list);
 		RC_Logger::getLogger('error')->info('test888');
 		
-		$cat_list = array_unique($cat_list);
+		//$cat_list = array_unique($cat_list);
 		
 		RC_Logger::getLogger('error')->info('testsss');
 		RC_Logger::getLogger('error')->info($cat_list);
