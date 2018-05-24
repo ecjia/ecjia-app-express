@@ -4,7 +4,7 @@
     		init: function () {
     			
                 //缩展地图
-                $(".order-map-change").click(function(){
+                $(".order-map-change").off('click').on('click', function(){
                 	 var $this = $(this);
                 	 if ($this.hasClass('fa fa-expand')) {
                         $this.removeClass('fa fa-expand').addClass('fa fa-compress');
@@ -19,7 +19,7 @@
                      }
                 });
                 
-                $(".user-map-change").click(function(){
+                $(".user-map-change").off('click').on('click', function(){
                	 var $this = $(this);
                	 if ($this.hasClass('fa fa-expand')) {
                         $this.removeClass('fa fa-expand').addClass('fa fa-compress');
@@ -35,7 +35,7 @@
                });
                 
                 
-                $('.online-triangle').on('click', function(e) {
+                $('.online-triangle').off('click').on('click', function(e) {
                 	var div = ($(".express-user-list").hasClass("in"));
                 	if (div) {
             			$(".on-tran").addClass("triangle1");
@@ -48,7 +48,7 @@
                 	}
     			});
                 
-                $('.leave-trangle').on('click', function(e) {
+                $('.leave-trangle').off('click').on('click', function(e) {
                 	var div = ($(".express-user-list-leave").hasClass("in"));
                 	if (div) {
                 		$(".leaveline").addClass("triangle1");
@@ -72,7 +72,7 @@
     
             search_express_user: function () {
                 /* 配送员列表搜索 */
-                $("form[name='express_searchForm'] .express-search-btn").on('click', function (e) {
+                $("form[name='express_searchForm'] .express-search-btn").off('click').on('click', function (e) {
                     e.preventDefault();
                     var url = $("form[name='express_searchForm']").attr('action');
                     var keyword = $("input[name='keywords']").val();
@@ -87,7 +87,7 @@
 		    },
 		    
 		    hide_sidebar: function () {
-                $(".sidebar-ckeck").on('click', function (e) {
+                $(".sidebar-ckeck").off('click').on('click', function (e) {
                     e.preventDefault();
                     var $this = $(this);
                     var key = $(this).attr('key');
@@ -317,7 +317,7 @@
 		 },
 		 
 		 click_order: function () {
-			  $(".order-div").on('click', function (e) {
+			  $(".order-div").off('click').on('click', function (e) {
                   e.preventDefault();
                   var $this = $(this);
                   var ex_lng = $this.attr('sf_lng');
@@ -373,7 +373,7 @@
 		 },
 		 
 		 click_exuser: function () {
-			  $(".express-user-info").on('click', function(e) {
+			  $(".express-user-info").off('click').on('click', function(e) {
 				  e.preventDefault();
 				  var $this = $(this);
 				  var online_status = $this.attr('online_status');
@@ -397,7 +397,7 @@
 				  }
 			  });
 			  
-			  $(".exuser_div").on('click', function (e) {
+			  $(".exuser_div").off('click').on('click', function (e) {
                  e.preventDefault();
                  
                  var $this = $(this);
@@ -484,7 +484,7 @@
 		 },
 		 
 		assign : function(url){
-			$('.assign').on('click', function() {
+			$('.assign').off('click').on('click', function() {
 				var $this = $(this);
 				var message = $this.attr('data-msg');
 				var url = $this.attr('data-href');
@@ -504,7 +504,7 @@
 		},
 		
 		express_order_detail :function(){
-            $(".express-order-modal").on('click', function (e) {
+            $(".express-order-modal").off('click').on('click', function (e) {
             	e.preventDefault();
                 var $this = $(this);
                 var express_id = $this.attr('express-id');
@@ -544,7 +544,7 @@
     //加载三
     app.serachuser_list = {
    		 init : function() {
-   		    $('.online-click').click(function(e) {
+   		    $('.online-click').off('click').on('click', function(e) {
                	var div = ($(".express-user-list-on").hasClass("in"));
                	if (div) {
            			$(".on-tri").addClass("triangle1");
@@ -556,7 +556,7 @@
                		$(".on-tri").removeClass("triangle1");
                	}
    			});
-	        $('.offline-click').click(function(e) {
+	        $('.offline-click').off('click').on('click', function(e) {
 	           	var div = ($(".express-user-list-off").hasClass("in"));
 	           	
 	           	if (div) {
@@ -576,7 +576,7 @@
        		
    		 search_user: function () {
    		      /* 配送员列表搜索 */
-               $(".new-user-list form[name='express_searchForm'] .express-search-btn").on('click', function (e) {
+               $(".new-user-list form[name='express_searchForm'] .express-search-btn").off('click').on('click', function (e) {
                    e.preventDefault();
                    var url = $(".new-user-list form[name='express_searchForm']").attr('action');
                    var keyword = $(".new-user-list input[name='keywords']").val();
@@ -593,7 +593,7 @@
             },
             
          re_assign : function(url){
-   			$('.re-assign').on('click', function() {
+   			$('.re-assign').off('click').on('click', function() {
    				var $this = $(this);
    				var message = $this.attr('data-msg');
    				var url = $this.attr('data-href');
@@ -613,7 +613,7 @@
    		 },
             
    		 click_reassign_exuser: function () {
-	   		  $(".express-user-info").on('click', function(e) {
+	   		  $(".express-user-info").off('click').on('click', function(e) {
 				  e.preventDefault();
 				  var $this = $(this);
 				  var online_status = $this.attr('online_status');
@@ -637,7 +637,7 @@
 				  }
 			  });
 	   		  
-   			  $(".reassign_exuser_div").on('click', function (e) {
+   			  $(".reassign_exuser_div").off('click').on('click', function (e) {
    				  	e.preventDefault();
    				  	
 		   	   	  	var home_url = $("input[name='home_url']").val();

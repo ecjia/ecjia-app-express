@@ -498,6 +498,7 @@ class admin extends ecjia_admin {
 		$this->assign('express_id', $express_id);
 		
 		$this->assign('search_action', RC_Uri::url('express/admin/reassign_search_user', array('type' => $type)));
+		$this->assign('assign_url', RC_Uri::url('express/admin/assign_express_order'));
 		
 		$data = $this->fetch('express_order_reassign.dwt');
 	

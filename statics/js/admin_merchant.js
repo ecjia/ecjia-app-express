@@ -2,7 +2,7 @@
 ;(function (app, $) {
     app.merchant_list = {
         init: function () {
-            $("form[name='searchForm'] .search_merchant").on('click', function (e) {
+            $("form[name='searchForm'] .search_merchant").off('click').on('click', function (e) {
                 e.preventDefault();
                 var url = $("form[name='searchForm']").attr('action');
                 var keyword = $("input[name='keyword']").val();
@@ -16,7 +16,7 @@
         },
         
         detail :function(){
-            $("a[data-toggle='modal']").on('click', function (e) {
+            $("a[data-toggle='modal']").off('click').on('click', function (e) {
             	e.preventDefault();
                 var $this = $(this);
                 var express_id = $this.attr('express-id');

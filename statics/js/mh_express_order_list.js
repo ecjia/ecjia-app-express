@@ -2,7 +2,7 @@
 ;(function (app, $) {
     app.mh_express_order_list = {
             init: function () {
-                $('.online-triangle').click(function(e) {
+                $('.online-triangle').off('click').on('click', function(e) {
                 	var div = ($(".express-user-list").hasClass("in"));
                 	if (div) {
             			$(".on-tran").addClass("triangle1");
@@ -14,7 +14,7 @@
                 		$(".on-tran").removeClass("triangle1");
                 	}
     			});
-                $('.leave-trangle').click(function(e) {
+                $('.leave-trangle').off('click').on('click', function(e) {
                 	var div = ($(".express-user-list-leave").hasClass("in"));
                 	
                 	if (div) {
@@ -40,7 +40,7 @@
             
             search_express_user: function () {
                 /* 配送员列表搜索 */
-                $("form[name='express_searchForm'] .express-search-btn").on('click', function (e) {
+                $("form[name='express_searchForm'] .express-search-btn").off('click').on('click', function (e) {
                     e.preventDefault();
                     var url = $("form[name='express_searchForm']").attr('action');
                     var keyword = $(".original-div input[name='keywords']").val();
@@ -56,7 +56,7 @@
 		    },
 		    
 	        ajaxassign: function () {
-	            $('[data-toggle="ajax_assign"]').on('click', function (e) {
+	            $('[data-toggle="ajax_assign"]').off('click').on('click', function (e) {
 	                e.preventDefault();
 	                var $this = $(this),
 	                    url = $this.attr('data-href') || $this.attr('href'),
@@ -80,7 +80,7 @@
 	        },
 	        
 		    assign : function(url){
-				$(".assign").on('click', function() {	
+				$(".assign").off('click').on('click', function() {	
 					$('.re-assign-model').css('display', 'block');
 					var $this = $(this);
 					var message = $this.attr('notice');
@@ -88,10 +88,10 @@
 					var url = $this.attr('assign-url');
 					var exp_id = $('.selected-express-id').val();
 					if (message != undefined) {
-						$('.cancel-btn').on('click', function() {
+						$('.cancel-btn').off('click').on('click', function() {
 							$('.re-assign-model').css('display', 'none');
 						});
-						$('.ok-btn').on('click', function() {
+						$('.ok-btn').off('click').on('click', function() {
 							$('#myModal2').modal('hide');
 							$('.re-assign-model').css('display', 'none');
 							$.post(url,{'express_id':exp_id}, function(data){
@@ -122,7 +122,7 @@
 			},
 		
 		express_order_detail :function(){
-            $(".express-order-modal").on('click', function (e) {
+            $(".express-order-modal").off('click').on('click', function (e) {
             	e.preventDefault();
                 var $this = $(this);
                 var express_id = $this.attr('express-id');
@@ -135,7 +135,7 @@
         },
         
 		 click_exuser: function () {
-			 $(".express-user-info").on('click', function(e) {
+			 $(".express-user-info").off('click').on('click', function(e) {
 				  e.preventDefault();
 				  var $this = $(this);
 				  var online_status = $this.attr('online_status');
@@ -158,7 +158,7 @@
 	                //选中配送员边框变色end
 				  }
 			  });
-			  $(".exuser_div").on('click', function (e) {
+			  $(".exuser_div").off('click').on('click', function (e) {
 	            e.preventDefault();
 
 	            var home_url = $("input[name='home_url']").val();
@@ -240,7 +240,7 @@
 		 },
         
         order_current_location :function(){
-        	 $(".express-location").on('click', function (e) {
+        	 $(".express-location").off('click').on('click', function (e) {
              	e.preventDefault();
                  var $this = $(this);
                  var express_id = $this.attr('express-id');
@@ -253,7 +253,7 @@
         },
         
         order_reassign_detail :function(){
-       	 $(".express-reassign-click").on('click', function (e) {
+       	 $(".express-reassign-click").off('click').on('click', function (e) {
             	e.preventDefault();
                 var $this = $(this);
                 var express_id = $this.attr('express-id');
@@ -509,7 +509,7 @@
     //加载二
     app.serach_user_list = {
 		 init : function() {
-		    $('.online-click').click(function(e) {
+		    $('.online-click').off('click').on('click', function(e) {
             	var div = ($(".express-user-list-on").hasClass("in"));
             	if (div) {
         			$(".on-tri").addClass("triangle1");
@@ -521,7 +521,7 @@
             		$(".on-tri").removeClass("triangle1");
             	}
 			});
-            $('.offline-click').click(function(e) {
+            $('.offline-click').off('click').on('click', function(e) {
             	var div = ($(".express-user-list-off").hasClass("in"));
             	
             	if (div) {
@@ -541,7 +541,7 @@
     		
 		 search_user: function () {
 		      /* 配送员列表搜索 */
-            $(".new-div form[name='express_searchForm'] .express-search-btn").on('click', function (e) {
+            $(".new-div form[name='express_searchForm'] .express-search-btn").off('click').on('click', function (e) {
                 e.preventDefault();
                 var url = $(".new-div form[name='express_searchForm']").attr('action');
                 var keyword = $(".new-div input[name='keywords']").val();
@@ -557,7 +557,7 @@
          },
          
      	 re_assign : function(url){
-     		$(".re-assign").on('click', function() {	
+     		$(".re-assign").off('click').on('click', function() {	
 				$('.after-search-re-assign-model').css('display', 'block');
 				var $this = $(this);
 				var message = $this.attr('notice');
@@ -566,10 +566,10 @@
 				var exp_id = $('.selected-express-id').val();
 				
 				if (message != undefined) {
-					$('.cancel-btn').on('click', function() {
+					$('.cancel-btn').off('click').on('click', function() {
 						$('.after-search-re-assign-model').css('display', 'none');
 					});
-					$('.ok-btn').on('click', function() {
+					$('.ok-btn').off('click').on('click', function() {
 						$('#myModal2').modal('hide');
 						$('.after-search-re-assign-model').css('display', 'none');
 						$.post(url,{'express_id':exp_id}, function(data){
@@ -583,7 +583,7 @@
 		 },
          
 		 click_reassign_exuser: function () {
-			 $(".express-user-info").on('click', function(e) {
+			 $(".express-user-info").off('click').on('click', function(e) {
 				  e.preventDefault();
 				  var $this = $(this);
 				  var online_status = $this.attr('online_status');
@@ -606,7 +606,7 @@
 	                //选中配送员边框变色end
 				  }
 			  });
-			  $(".reassign_exuser_div").on('click', function (e) {
+			  $(".reassign_exuser_div").off('click').on('click', function (e) {
 				  
 	            e.preventDefault();
 	            var $this = $(this);

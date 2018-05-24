@@ -3,14 +3,14 @@
     app.express_list = {
         init: function () {
             //筛选功能
-            $('.screen-btn').on('click', function (e) {
+            $('.screen-btn').off('click').on('click', function (e) {
                 e.preventDefault();
                 var url = $("form[name='searchForm']").attr('action') + '&work_type=' + $("#select-work option:selected").val();
                 ecjia.pjax(url);
             })
             
             /* 列表搜索传参 */
-            $("form[name='searchForm'] .search_express").on('click', function (e) {
+            $("form[name='searchForm'] .search_express").off('click').on('click', function (e) {
                 e.preventDefault();
                 var url = $("form[name='searchForm']").attr('action');
                 var keyword = $("input[name='keyword']").val();
@@ -21,7 +21,7 @@
             });
             
             //列表快速审核触发
-            $("a[data-toggle='modal']").on('click', function (e) {
+            $("a[data-toggle='modal']").off('click').on('click', function (e) {
                 var $this = $(this);
                 var lng = $this.attr('exlng');
                 var lat = $this.attr('exlat');
@@ -146,7 +146,7 @@
     		},
     		
             screen: function () {
-                $(".select-button").click(function () {
+                $(".select-button").off('click').on('click', function () {
                     var start_date = $("input[name='start_date']").val();
                     var end_date = $("input[name='end_date']").val();
                     var user_id = $("input[name='user_id']").val();
@@ -174,7 +174,7 @@
     app.match_list = {
             init: function () {
                 /* 列表搜索传参 */
-                $("form[name='searchForm'] .search_match").on('click', function (e) {
+                $("form[name='searchForm'] .search_match").off('click').on('click', function (e) {
                     e.preventDefault();
                     var url = $("form[name='searchForm']").attr('action');
                     var keyword = $("input[name='keyword']").val();
@@ -191,7 +191,7 @@
             },
             
             screen: function () {
-                $(".select-button").click(function () {
+                $(".select-button").off('click').on('click', function () {
                     var start_date = $("input[name='start_date']").val();
                     var end_date = $("input[name='end_date']").val();
                     var user_id = $("input[name='user_id']").val();
