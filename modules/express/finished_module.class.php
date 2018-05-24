@@ -78,7 +78,7 @@ class finished_module extends api_admin implements api_interface {
 		
 		RC_Logger::getLogger('error')->info('testxxx');
 		RC_Logger::getLogger('error')->info($update);
-		RC_Logger::getLogger('error')->info($express_order_info['order_id']);
+		RC_Logger::getLogger('error')->info($express_order_info);
 		RC_Logger::getLogger('error')->info('testyyy');
 		
 		if ($update) {
