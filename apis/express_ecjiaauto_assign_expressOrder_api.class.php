@@ -157,7 +157,7 @@ class express_ecjiaauto_assign_expressOrder_api extends Component_Event_Api {
 				$remind_list = RC_DB::table('express_order_reminder')->where('express_id', $express_id)->where('status', 0)->get();
 				if (!empty($remind_list)) {
 					foreach ($remind_list as $row) {
-						RC_DB::table('express_order_reminder')->where('id', $row['id'])->update(array('status' => 1));
+						RC_DB::table('express_order_reminder')->where('id', $row['id'])->update(array('status' => 1, 'confirm_time' => RC_Time::gmtime()));
 					}
 				}
 				
