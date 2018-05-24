@@ -76,9 +76,10 @@ class finished_module extends api_admin implements api_interface {
 		
 		$update = RC_DB::table('order_info')->where('order_id', $express_order_info['order_id'])->update($data);
 		
-		RC_Logger::getLogger('error')->info('testaaa');
+		RC_Logger::getLogger('error')->info('testxxx');
 		RC_Logger::getLogger('error')->info($update);
-		RC_Logger::getLogger('error')->info('testbbb');
+		RC_Logger::getLogger('error')->info($express_order_info['order_id']);
+		RC_Logger::getLogger('error')->info('testyyy');
 		
 		if ($update) {
 			$db_order_status_log = RC_DB::table('order_status_log');

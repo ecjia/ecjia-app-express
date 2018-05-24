@@ -94,7 +94,7 @@ class admin_reminder extends ecjia_admin
         $count = $db_order_reminder->count();
         $page = new ecjia_page($count, 10, 6);
 
-        $result = $db_order_reminder->take(10)->skip($page->start_id - 1)->get();
+        $result = $db_order_reminder->take(10)->skip($page->start_id - 1)->orderBy('create_time', 'desc')->get();
         $result_list = array('list' => $result, 'page' => $page->show(2), 'desc' => $page->page_desc(), 'keywords' => $keywords);
 
         if (!empty($result_list['list'])) {
@@ -130,7 +130,7 @@ class admin_reminder extends ecjia_admin
         $express_id = intval($_GET['express_id']);
         $type = trim($_GET['type']);
 
-        $express_info = RC_DB::table('express_order')->where('express_id', $express_id)->select('store_id', 'order_id', 'order_sn', 'delivery_id', 'delivery_sn', 'user_id', 'mobile', 'consignee', 'express_sn', 'distance', 'shipping_fee', 'commision', 'express_user', 'express_mobile', 'from', 'signed_time', 'province as eoprovince', 'city as eocity', 'district as eodistrict', 'street as eostreet', 'address as eoaddress')->first();
+        $express_info = RC_DB::table('express_order')->where('express_id', $express_id)->select('store_id', 'status', 'order_id', 'order_sn', 'delivery_id', 'delivery_sn', 'user_id', 'mobile', 'consignee', 'express_sn', 'distance', 'shipping_fee', 'commision', 'express_user', 'express_mobile', 'from', 'signed_time', 'province as eoprovince', 'city as eocity', 'district as eodistrict', 'street as eostreet', 'address as eoaddress')->first();
         $store_info = RC_DB::table('store_franchisee')->where('store_id', $express_info['store_id'])->select('merchants_name', 'contact_mobile', 'province', 'city', 'district', 'street', 'address')->first();
         $order_info = RC_DB::table('order_info')->where('order_id', $express_info['order_id'])->select('add_time', 'expect_shipping_time', 'postscript')->first();
 
@@ -300,7 +300,7 @@ class admin_reminder extends ecjia_admin
         $remind_list = RC_DB::table('express_order_reminder')->where('express_id', $express_id)->where('status', 0)->get();
         if (!empty($remind_list)) {
         	foreach ($remind_list as $row) {
-        		RC_DB::table('express_order_reminder')->where('id', $row['id'])->update(array('status' => 1));
+        		RC_DB::table('express_order_reminder')->where('id', $row['id'])->update(array('status' => 1, 'confirm_time' => RC_Time::gmtime()));
         	}
         }
 
