@@ -299,18 +299,10 @@ class admin_merchant extends ecjia_admin {
 		});
 		$store_list = $db_data->selectRaw('distinct eo.store_id,sf.cat_id')->orderby(RC_DB::raw('sf.store_id'), 'desc')->get();
 		
-		RC_Logger::getLogger('error')->info('test333');
-		RC_Logger::getLogger('error')->info($store_list);
-		RC_Logger::getLogger('error')->info('test444');
-		
 		$cat_list =array();
 		foreach ($store_list as $k => $v) {
 			$cat_list[$k]['cat_id'] = RC_DB::TABLE('store_franchisee')->where('store_id', $v['store_id'])->pluck('cat_id');
 		}
-		
-		RC_Logger::getLogger('error')->info('test555');
-		RC_Logger::getLogger('error')->info($cat_list);
-		RC_Logger::getLogger('error')->info('test666');
 		
 		foreach ($cat_list as $key => $value) {
 			$cat_list[$key]['cat_name'] = RC_DB::TABLE('store_category')->where('cat_id', $value['cat_id'])->pluck('cat_name');
@@ -322,15 +314,8 @@ class admin_merchant extends ecjia_admin {
 			}
 		}
 		
-		RC_Logger::getLogger('error')->info('test777');
-		RC_Logger::getLogger('error')->info($cat_list);
-		RC_Logger::getLogger('error')->info('test888');
-		
-		$cat_list = array_unique($cat_list);
-		
-		RC_Logger::getLogger('error')->info('testsss');
-		RC_Logger::getLogger('error')->info($cat_list);
-		RC_Logger::getLogger('error')->info('testfff');
+		//$cat_list = array_unique($cat_list);
+		$cat_list = $this->more_array_unique($cat_list);
 
 		if ($keyword) {
 			foreach ($cat_list as $k => $v) {
@@ -355,7 +340,8 @@ class admin_merchant extends ecjia_admin {
 					}
 				}
 			}
-			$cat_list_keyword = array_unique($cat_list_keyword);
+			//$cat_list_keyword = array_unique($cat_list_keyword);
+			$cat_list_keyword = $this->more_array_unique($cat_list_keyword);
 			foreach ($cat_list as $k => $v) {
 				$cat_id = $v['cat_id'];
 				$number = $cat_list_keyword[$cat_id]['number'];
@@ -367,11 +353,35 @@ class admin_merchant extends ecjia_admin {
 		foreach($cat_list as $key=>$value){
 			$allnumber+= $value['number'];
 		}
-		RC_Logger::getLogger('error')->info('testlll');
-		RC_Logger::getLogger('error')->info($cat_list);
-		RC_Logger::getLogger('error')->info('testmmm');
-		
 		return array('list' => $cat_list, 'allnumber' => $allnumber);
+	}
+	
+	/**
+	 * 二维数组去重
+	 * @param array $arr
+	 * @return array
+	 */
+	private function more_array_unique($arr=array()){
+		if (!empty($arr)) {
+			foreach($arr[0] as $k => $v){
+				$arr_inner_key[]= $k;  //先把二维数组中的内层数组的键值记录在在一维数组中
+			}
+			
+			foreach ($arr as $k => $v){
+				$v =join(",",$v);  //降维 用implode()也行
+				$temp[$k] =$v;   //保留原来的键值 $temp[]即为不保留原来键值
+			}
+			
+			$temp =array_unique($temp);  //去重：去掉重复的字符串
+			
+			foreach ($temp as $k => $v){
+				$a = explode(",",$v);  //拆分后的重组 如：Array( [0] => james [1] => 30 )
+				$arr_after[$k]= array_combine($arr_inner_key,$a); //将原来的键与值重新合并
+			}
+			//ksort($arr_after);//排序如需要：ksort对数组进行排序(保留原键值key) ,sort为不保留key值
+			sort($arr_after);
+			return$arr_after;
+		}
 	}
 }
 
