@@ -329,7 +329,7 @@ class admin_merchant extends ecjia_admin {
 			foreach ($store_list as $k => $v) {
 				$cat_list_keyword[$v['cat_id']]['cat_id'] = RC_DB::TABLE('store_franchisee')->where('store_id', $v['store_id'])->pluck('cat_id');
 			}
-			foreach ($cat_list_keyword as $k => $v) {
+// 			foreach ($cat_list_keyword as $k => $v) {
 				foreach ($cat_list_keyword as $key => $value) {
 					$cat_list_keyword[$value['cat_id']]['cat_name'] = RC_DB::TABLE('store_category')->where('cat_id', $value['cat_id'])->pluck('cat_name');
 					$count_cat = array_count_values(array_column($store_list,"cat_id"));
@@ -339,7 +339,7 @@ class admin_merchant extends ecjia_admin {
 						}
 					}
 				}
-			}
+// 			}
 			//$cat_list_keyword = array_unique($cat_list_keyword);
 			$cat_list_keyword = $this->more_array_unique($cat_list_keyword);
 			foreach ($cat_list as $k => $v) {
