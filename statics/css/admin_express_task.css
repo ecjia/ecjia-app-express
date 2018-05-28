@@ -36,7 +36,7 @@
 .express-task .editpage-rightbar .middle-bar{
 	width:49%;
 	margin-left:1%;
-	margin-right:0.5%;
+	margin-right:1%;
 	border: 1px solid #dcdcdc;
 	border-radius:4px;
 	height:580px;
@@ -44,7 +44,7 @@
 }
 
 .express-task .editpage-rightbar .right-bar{
-	width:24.5%;
+	width:24.579%;
 	margin-right:0;
 	height:580px;
 	border:1px solid #dcdcdc;

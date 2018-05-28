@@ -15,7 +15,7 @@
                         $this.removeClass('fa fa-compress').addClass('fa fa-expand');
                         $(".left-bar1").show();
                      	$(".right-bar").show();
-                     	$('.middle-bar').attr('style','width:50%;margin-left:0.5%;margin-right:0.5%;');
+                     	$('.middle-bar').attr('style','width:49%;margin-left:1%;margin-right:0.5%;');
                      }
                 });
                 
@@ -30,7 +30,7 @@
                            $this.removeClass('fa fa-compress').addClass('fa fa-expand');
                            $(".left-bar1").show();
                        	$(".right-bar").show();
-                       	$('.middle-bar').attr('style','width:50%;margin-left:0.5%;margin-right:0.5%;');
+                       	$('.middle-bar').attr('style','width:49%;margin-left:1%;margin-right:0.5%;');
                        }
                   });
             	
