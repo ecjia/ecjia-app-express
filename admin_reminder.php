@@ -85,12 +85,32 @@ class admin_reminder extends ecjia_admin
         $db_order_reminder = RC_DB::table('express_order_reminder as e')
             ->leftJoin('express_order as o', RC_DB::raw('o.express_id'), '=', RC_DB::raw('e.express_id'))
             ->leftJoin('users as a', RC_DB::raw('o.user_id'), '=', RC_DB::raw('a.user_id'));
-
+        
+		/*数量统计单独查询*/
+        $db = RC_DB::table('express_order_reminder as e') ->leftJoin('express_order as o', RC_DB::raw('o.express_id'), '=', RC_DB::raw('e.express_id'));
+        
         $keywords = empty($_GET['keywords']) ? '' : trim($_GET['keywords']);
+        $type	  = empty($_GET['type']) ? '' : trim($_GET['type']);
+        
         if (!empty($keywords)) {
             $db_order_reminder->whereRaw('(o.express_sn like "%' . mysql_like_quote($keywords) . '%" or o.consignee like "%' . mysql_like_quote($keywords) . '%")');
+            $db->whereRaw('(o.express_sn like "%' . mysql_like_quote($keywords) . '%" or o.consignee like "%' . mysql_like_quote($keywords) . '%")');
         }
-
+        
+        if (!empty($type)) {
+        	if ($type == 'wait_process') {
+        		$db_order_reminder->where(RC_DB::raw('e.status'), 0);
+        		$db->where(RC_DB::raw('e.status'), 0);
+        	} elseif ($type == 'processed') {
+        		$db_order_reminder->where(RC_DB::raw('e.status'), 1);
+        		$db->where(RC_DB::raw('e.status'), 1);
+        	}
+        }
+        
+        $express_remind_count = $db->select(RC_DB::raw('count("e.*") as whole'),
+        							RC_DB::raw('SUM(IF(e.status = 0, 1, 0)) as wait_process'),
+        							RC_DB::raw('SUM(IF(e.status = 1, 1, 0)) as processed'))->first();
+        
         $count = $db_order_reminder->count();
         $page = new ecjia_page($count, 10, 6);
 
@@ -113,6 +133,9 @@ class admin_reminder extends ecjia_admin
             }
         }
         $this->assign('result_list', $result_list);
+        $this->assign('express_remind_count', $express_remind_count);
+        $this->assign('type', $type);
+        $this->assign('keywords', $keywords);
         $this->assign('ur_here', '派单提醒列表');
         $this->assign('form_action', RC_Uri::url('express/admin_reminder/remove&type=batch'));
         $this->assign('search_action', RC_Uri::url('express/admin_reminder/init'));

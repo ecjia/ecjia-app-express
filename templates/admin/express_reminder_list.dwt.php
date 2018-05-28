@@ -27,21 +27,18 @@
 </div>
 
 <!-- 批量操作和搜索 -->
-<div class="row-fluid batch">
-    <form method="post" action="{$search_action}{if $type}&type={$type}{/if}" name="searchForm">
-<!--         <div class="btn-group f_l m_r5"> -->
-<!--             <a class="btn dropdown-toggle" data-toggle="dropdown" href="#"> -->
-<!--                 <i class="fontello-icon-cog"></i>批量操作<span class="caret"></span> -->
-<!--             </a> -->
-<!--             <ul class="dropdown-menu"> -->
-<!--                 <li><a class="button_remove" data-toggle="ecjiabatch" data-idClass=".checkbox:checked" data-url="{$form_action}" data-msg="您确实要删除选中的订单吗？" data-noSelectMsg="请先选中要删除的订单！" href="javascript:;"><i class="fontello-icon-trash"></i>移除</a></li> -->
-<!--             </ul> -->
-<!--         </div> -->
-        <div class="choose_list f_r">
-            <input type="text" name="keywords" value="{$smarty.get.keywords}" placeholder="请输入配送单号或收货人关键字"/>
-            <button class="btn search_express" type="submit">搜索</button>
-        </div>
-    </form>
+<div class="row-fluid batch" >
+	<ul class="nav nav-pills" style="margin-bottom:5px;">
+		<li class="{if $type eq ''}active{/if}"><a class="data-pjax" href='{url path="express/admin_reminder/init" args="{if $keywords}&keywords={$keywords}{/if}"}'>全部<span class="badge badge-info">{if $express_remind_count.whole}{$express_remind_count.whole}{else}0{/if}</span> </a></li>
+		<li class="{if $type eq 'wait_process'}active{/if}"><a class="data-pjax" href='{url path="express/admin_reminder/init" args="type=wait_process{if $keywords}&keywords={$keywords}{/if}"}'>待处理<span class="badge badge-info">{if $express_remind_count.wait_process}{$express_remind_count.wait_process}{else}0{/if}</span> </a></li>
+		<li class="{if $type eq 'processed'}active{/if}"><a class="data-pjax" href='{url path="express/admin_reminder/init" args="type=processed{if $keywords}&keywords={$keywords}{/if}"}'>已处理 <span class="badge badge-info">{if $express_remind_count.processed}{$express_remind_count.processed}{else}0{/if}</span> </a></li>
+		<form method="post" action="{$search_action}{if $type}&type={$type}{/if}" name="searchForm">
+	        <div class="choose_list f_r">
+	            <input type="text" name="keywords" value="{$smarty.get.keywords}" placeholder="请输入配送单号或收货人关键字"/>
+	            <button class="btn search_express" type="submit">搜索</button>
+	        </div>
+	    </form>
+	</ul>
 </div>
 
 <div class="row-fluid">
