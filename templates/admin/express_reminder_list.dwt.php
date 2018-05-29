@@ -89,7 +89,7 @@
             <!-- {/foreach} -->
             </tbody>
         </table>
-        <!-- {$data.page} -->
+        <!-- {$result_list.page} -->
     </div>
 </div>
 <!-- {/block} -->

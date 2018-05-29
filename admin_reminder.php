@@ -100,23 +100,25 @@ class admin_reminder extends ecjia_admin
         if (!empty($type)) {
         	if ($type == 'wait_process') {
         		$db_order_reminder->where(RC_DB::raw('e.status'), 0);
-        		$db->where(RC_DB::raw('e.status'), 0);
         	} elseif ($type == 'processed') {
         		$db_order_reminder->where(RC_DB::raw('e.status'), 1);
-        		$db->where(RC_DB::raw('e.status'), 1);
         	}
         }
         
-        $express_remind_count = $db->select(RC_DB::raw('count("e.*") as whole'),
+        $express_remind_count = $db->select(RC_DB::raw('count("e.id") as whole'),
         							RC_DB::raw('SUM(IF(e.status = 0, 1, 0)) as wait_process'),
         							RC_DB::raw('SUM(IF(e.status = 1, 1, 0)) as processed'))->first();
         
         $count = $db_order_reminder->count();
-        $page = new ecjia_page($count, 10, 6);
-
-        $result = $db_order_reminder->take(10)->skip($page->start_id - 1)->orderBy('create_time', 'desc')->get();
-        $result_list = array('list' => $result, 'page' => $page->show(2), 'desc' => $page->page_desc(), 'keywords' => $keywords);
-
+        $page = new ecjia_page($count, 10, 5);
+        
+        $result = $db_order_reminder
+        ->orderBy(RC_DB::raw('e.create_time'), 'desc')
+        ->take(10)
+        ->skip($page->start_id-1)
+        ->get();
+        $result_list = array('list' => $result,  'page' => $page->show(5), 'desc' => $page->page_desc(), 'keywords' => $keywords);
+        
         if (!empty($result_list['list'])) {
             foreach ($result_list['list'] as $key => $val) {
             	$result_list['list'][$key]['unformat_status'] = $val['status'];
@@ -132,6 +134,8 @@ class admin_reminder extends ecjia_admin
                 }
             }
         }
+        
+        
         $this->assign('result_list', $result_list);
         $this->assign('express_remind_count', $express_remind_count);
         $this->assign('type', $type);
