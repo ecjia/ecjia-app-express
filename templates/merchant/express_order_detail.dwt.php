@@ -49,7 +49,7 @@
 				
 				<div class="order_info">
 					<ul>
-			         	<li><h3>订单信息</h3></li>
+			         	<li><font class="express_title">订单信息</font></li>
 			            <li>
 			            	<div class="order">订单编号：<a  href='{url path="orders/merchant/info" args="order_id={$content.order_id}"}' target="_blank">{$content.order_sn}</a></div>
 			            	<div class="order">发货单号：<a  href='{url path="orders/mh_delivery/delivery_info" args="delivery_id={$content.delivery_id}"}' target="_blank">{$content.delivery_sn}</a></div>
