@@ -51,7 +51,7 @@ class express_admin_hooks {
 	{
 		$setting = ecjia_admin_setting::singleton();
 		
-		$menus[] = ecjia_admin::make_admin_menu('ecjia_express_set', '众包配送设置', RC_Uri::url('express/admin_ecjia_express/init'), 7)->add_purview('ship_ecjia_express_set');
+		$menus[] = ecjia_admin::make_admin_menu('ecjia_express_set', '众包配送设置', RC_Uri::url('express/admin_ecjia_express/init'), 72)->add_purview('ship_ecjia_express_set');
 		return $menus;
 	}
 }
