@@ -280,7 +280,7 @@ class merchant extends ecjia_merchant {
 			/* 消息插入 */
 			$orm_staff_user_db = RC_Model::model('orders/orm_staff_user_model');
 			$user = $orm_staff_user_db->find($staff_id);
-			$express_mobile = RC_DB::TABLE('express_order')->where('staff_id', $staff_id)->pluck('express_mobile');
+			$express_mobile = RC_DB::table('express_order')->where('staff_id', $staff_id)->pluck('express_mobile');
 			/* 派单发短信 */
 			if (!empty($express_mobile)) {
 				$options = array(
@@ -372,7 +372,7 @@ class merchant extends ecjia_merchant {
 		$goods_list = RC_DB::table('delivery_goods')->where('delivery_id', $express_info['delivery_id'])->selectRaw('goods_id, goods_name, send_number')->get();
 		
 		foreach ($goods_list as $key => $val) {
-			$goods_list[$key]['image']  				= RC_DB::TABLE('goods')->where('goods_id', $val['goods_id'])->pluck('goods_thumb');
+			$goods_list[$key]['image']  				= RC_DB::table('goods')->where('goods_id', $val['goods_id'])->pluck('goods_thumb');
 			$goods_list[$key]['goods_price']			= RC_DB::table('order_goods')->where('order_id', $express_info['order_id'])->where('goods_id', $val['goods_id'])->pluck('goods_price');
 			$goods_list[$key]['formated_goods_price']	= price_format($goods_list[$key]['goods_price']);
 		}
