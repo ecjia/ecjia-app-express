@@ -129,7 +129,7 @@ class admin_express extends ecjia_admin {
 		$address   = trim($_POST['address']);
 		$password  = empty($_POST['password']) ? ''	: trim($_POST['password']);
 		
-		if (!preg_match('/^1(3|4|5|7|8)\d{9}$/', $mobile)) {
+		if (!preg_match('/^1(3|4|5|6|7|8)\d{9}$/s', $mobile)) {
 			return $this->showmessage('手机号码格式错误', ecjia::MSGSTAT_ERROR | ecjia::MSGTYPE_JSON);
 		} 
 	   	$is_exist_mobile = RC_DB::table('staff_user')->where('mobile', $mobile)->get();
@@ -240,7 +240,7 @@ class admin_express extends ecjia_admin {
 		$address   = trim($_POST['address']);
 		$newpassword = trim($_POST['newpassword']);
 		
-		if (!preg_match('/^1(3|4|5|7|8)\d{9}$/', $mobile)) {
+		if (!preg_match('/^1(3|4|5|6|7|8)\d{9}$/s', $mobile)) {
 			return $this->showmessage('手机号码格式错误', ecjia::MSGSTAT_ERROR | ecjia::MSGTYPE_JSON);
 		} 
 	   	$is_exist_mobile = RC_DB::table('staff_user')->where('user_id', '<>', $user_id)->where('mobile', $mobile)->get();
