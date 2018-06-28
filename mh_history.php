@@ -149,7 +149,7 @@ class mh_history extends ecjia_merchant {
 		$db_data = RC_DB::table('express_order');
 		
 		$db_data->where(RC_DB::raw('store_id'), $_SESSION['store_id']);
-		$db_data->where(RC_DB::raw('status'), 5);
+		$db_data->whereIn(RC_DB::raw('status'), array(5, 7));
 		$db_data->where(RC_DB::raw('shipping_code'), 'ship_o2o_express');
 		
 		if($_GET['start_date'] && $_GET['end_date']) {

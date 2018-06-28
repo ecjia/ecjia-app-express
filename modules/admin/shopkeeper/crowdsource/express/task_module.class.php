@@ -95,9 +95,14 @@ class task_module extends api_admin implements api_interface {
 			} elseif ($express_type == 'sending') {
 				$status = 2;
 			} elseif ($express_type == 'finished') {
-				$status = 5;
+				$status = array(5,7);
 			}
-			$dbview->where(RC_DB::raw('eo.status'), $status);
+			if ($express_type == 'finished') {
+				$dbview->whereIn(RC_DB::raw('eo.status'), $status);
+			} else {
+				$dbview->where(RC_DB::raw('eo.status'), $status);
+			}
+			
 		}
 		
 		if (!empty($keywords)) {
@@ -105,6 +110,7 @@ class task_module extends api_admin implements api_interface {
 		}
 		
 		$count = $dbview->count(RC_DB::raw('eo.express_id'));
+
 		//实例化分页
 		$page_row = new ecjia_page($count, $size, 6, '', $page);
 		
@@ -122,23 +128,19 @@ class task_module extends api_admin implements api_interface {
 		$distance = 0;
 		if (!empty($express_order_result)) {
 			foreach ($express_order_result as $val) {
-				switch ($val['status']) {
-					case '0' :
-						$status = 'wait_assign';
-						$label_express_status = '待指派';
-						break;
-					case '1' :
-						$status = 'wait_pickup';
-						$label_express_status = '待取货';
-						break;
-					case '2' :
-						$status = 'sending';
-						$label_express_status = '配送中';
-						break;
-					case '5' :
-						$status = 'finished';
-						$label_express_status = '已完成';
-						break;
+				
+				if ($val['status'] == '0') {
+					$status = 'wait_assign';
+					$label_express_status = '待指派';
+				} elseif ($val['status'] == '1') {
+					$status = 'wait_pickup';
+					$label_express_status = '待取货';
+				} elseif ($val['status'] == '2') {
+					$status = 'sending';
+					$label_express_status = '配送中';
+				} elseif ($val['status'] == '5' || $val['status'] == '7') {
+					$status = 'finished';
+					$label_express_status = '已完成';
 				}
 				
 				$sf_district_name 	= ecjia_region::getRegionName($val['sf_district']);
