@@ -70,7 +70,7 @@ class express_cancel_express_api extends Component_Event_Api {
 					if (!empty($row['express_mobile'])) {
 						$options = array(
 								'mobile' => $row['express_mobile'],
-								'event'	 => 'sms_express_system_assign',
+								'event'	 => 'sms_express_cancel',
 								'value'  =>array(
 										'express_sn'	=> $row['express_sn'],
 								),
@@ -82,21 +82,6 @@ class express_cancel_express_api extends Component_Event_Api {
 		}
 		
 		return array();
-	}
-	
-	
-	/**
-	 * 获取配送员待取货和配送中的配送单数量
-	 */
-	public function get_express_count($user_id){
-		$db = RC_DB::table('express_order');
-		
-		$express_order_count = $db
-		->where('staff_id', $user_id)
-		->selectRaw('SUM(IF(status = 1, 1, 0)) as wait_pickup, SUM(IF(status = 2, 1, 0)) as sending')
-		->first();
-		
-		return $express_order_count;
 	}
 }
 
