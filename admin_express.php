@@ -129,9 +129,13 @@ class admin_express extends ecjia_admin {
 		$address   = trim($_POST['address']);
 		$password  = empty($_POST['password']) ? ''	: trim($_POST['password']);
 		
-		if (!preg_match('/^1(3|4|5|6|7|8)\d{9}$/s', $mobile)) {
-			return $this->showmessage('手机号码格式错误', ecjia::MSGSTAT_ERROR | ecjia::MSGTYPE_JSON);
-		} 
+// 		if (!preg_match('/^1(3|4|5|6|7|8)\d{9}$/s', $mobile)) {
+// 			return $this->showmessage('手机号码格式错误', ecjia::MSGSTAT_ERROR | ecjia::MSGTYPE_JSON);
+// 		} 
+		$check_mobile = Ecjia\App\Sms\Helper::check_mobile($mobile);
+		if (is_ecjia_error($check_mobile)) {
+		    return $this->showmessage($check_mobile->get_error_message(), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+		}
 	   	$is_exist_mobile = RC_DB::table('staff_user')->where('mobile', $mobile)->get();
         if ($is_exist_mobile) {
             return $this->showmessage('手机号已存在，请修改', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
@@ -240,9 +244,13 @@ class admin_express extends ecjia_admin {
 		$address   = trim($_POST['address']);
 		$newpassword = trim($_POST['newpassword']);
 		
-		if (!preg_match('/^1(3|4|5|6|7|8)\d{9}$/s', $mobile)) {
-			return $this->showmessage('手机号码格式错误', ecjia::MSGSTAT_ERROR | ecjia::MSGTYPE_JSON);
-		} 
+// 		if (!preg_match('/^1(3|4|5|6|7|8)\d{9}$/s', $mobile)) {
+// 			return $this->showmessage('手机号码格式错误', ecjia::MSGSTAT_ERROR | ecjia::MSGTYPE_JSON);
+// 		} 
+		$check_mobile = Ecjia\App\Sms\Helper::check_mobile($mobile);
+		if (is_ecjia_error($check_mobile)) {
+		    return $this->showmessage($check_mobile->get_error_message(), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+		}
 	   	$is_exist_mobile = RC_DB::table('staff_user')->where('user_id', '<>', $user_id)->where('mobile', $mobile)->get();
         if ($is_exist_mobile) {
             return $this->showmessage('手机号已存在，请修改', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
