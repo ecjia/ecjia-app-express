@@ -150,7 +150,7 @@ class task_module extends api_admin implements api_interface {
 				if (!empty($val['sf_longitude']) && !empty($val['sf_latitude']) && !empty($val['longitude']) && !empty($val['latitude'])) {
 					//腾讯地图api距离计算
 					$keys = ecjia::config('map_qq_key');
-					$url = "http://apis.map.qq.com/ws/distance/v1/?mode=driving&from=".$val['sf_latitude'].",".$val['sf_longitude']."&to=".$val['latitude'].",".$val['longitude']."&key=".$keys;
+					$url = "https://apis.map.qq.com/ws/distance/v1/?mode=driving&from=".$val['sf_latitude'].",".$val['sf_longitude']."&to=".$val['latitude'].",".$val['longitude']."&key=".$keys;
 					$distance_json = file_get_contents($url);
 					$distance_info = json_decode($distance_json, true);
 					$distance = isset($distance_info['result']['elements'][0]['distance']) ? $distance_info['result']['elements'][0]['distance'] : 0;

@@ -119,7 +119,7 @@ class merchant extends ecjia_merchant {
 					if (!empty($first_express_order['sf_latitude']) && !empty($first_express_order['sf_longitude'])) {
 						//腾讯地图api距离计算
 						$keys = ecjia::config('map_qq_key');
-						$url = "http://apis.map.qq.com/ws/distance/v1/?mode=driving&from=".$first_express_order['sf_latitude'].",".$first_express_order['sf_longitude']."&to=".$v['latitude'].",".$v['longitude']."&key=".$keys;
+						$url = "https://apis.map.qq.com/ws/distance/v1/?mode=driving&from=".$first_express_order['sf_latitude'].",".$first_express_order['sf_longitude']."&to=".$v['latitude'].",".$v['longitude']."&key=".$keys;
 						$distance_json = file_get_contents($url);
 						$distance_info = json_decode($distance_json, true);
 						$v['distance'] = isset($distance_info['result']['elements'][0]['distance']) ? $distance_info['result']['elements'][0]['distance'] : 0;
@@ -193,7 +193,7 @@ class merchant extends ecjia_merchant {
 					if (!empty($sf_lat) && !empty($sf_lng)) {
 						//腾讯地图api距离计算
 						$keys = ecjia::config('map_qq_key');
-						$url = "http://apis.map.qq.com/ws/distance/v1/?mode=driving&from=".$sf_lat.",".$sf_lng."&to=".$v['latitude'].",".$v['longitude']."&key=".$keys;
+						$url = "https://apis.map.qq.com/ws/distance/v1/?mode=driving&from=".$sf_lat.",".$sf_lng."&to=".$v['latitude'].",".$v['longitude']."&key=".$keys;
 						$distance_json = file_get_contents($url);
 						$distance_info = json_decode($distance_json, true);
 						$v['distance'] = isset($distance_info['result']['elements'][0]['distance']) ? $distance_info['result']['elements'][0]['distance'] : 0;
