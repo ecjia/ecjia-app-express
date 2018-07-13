@@ -609,7 +609,7 @@ class merchant extends ecjia_merchant {
 	/**
 	 * 待派单列表
 	 */
-	private function get_wait_grab_list($type){
+	private function get_wait_grab_list($type =''){
 		$dbview = RC_DB::table('express_order as eo')
 					->leftJoin('store_franchisee as sf', RC_DB::raw('eo.store_id'), '=', RC_DB::raw('sf.store_id'));
 		
@@ -685,7 +685,7 @@ class merchant extends ecjia_merchant {
 	/**
 	 * 配送员列表
 	 */
-	private function get_express_user_list($type, $keywords) {
+	private function get_express_user_list($type ='', $keywords ='') {
 		$express_user_view =  RC_DB::table('staff_user as su')
 		->leftJoin('express_user as eu', RC_DB::raw('su.user_id'), '=', RC_DB::raw('eu.user_id'));
 		$express_user_view->where(RC_DB::raw('su.store_id'), $_SESSION['store_id']);

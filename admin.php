@@ -566,7 +566,7 @@ class admin extends ecjia_admin {
 	/**
 	 * 待抢单列表
 	 */
-	private function get_wait_grab_list($type = ''){
+	private function get_wait_grab_list($type =''){
 		$dbview = RC_DB::table('express_order as eo')
 					//->leftJoin('users as u', RC_DB::raw('eo.user_id'), '=', RC_DB::raw('u.user_id'))
 					->leftJoin('store_franchisee as sf', RC_DB::raw('eo.store_id'), '=', RC_DB::raw('sf.store_id'));
