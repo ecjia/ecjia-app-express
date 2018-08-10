@@ -148,7 +148,7 @@
 								  	 data-url='{url path="express/merchant/get_nearest_exuser"}'
 								  	 >
 								  	 查看线路</a>&nbsp;|&nbsp;
-								  	 <a class="ajaxremove" data-toggle="ajaxremove" data-msg="您确定要提醒平台指派配送员吗？" href='{url path="express/merchant/remind_assign"}'>提醒指派</a>
+								  	 <a class="ajaxremove" data-toggle="ajaxremove" data-msg="您确定要提醒平台派单吗？" href='{url path="express/merchant/remind_assign"}'>提醒派单</a>
 					    	  	</div>
 					      	</td>
 					      	<td>{$val.consignee}<br>地址：{$val.to_address}</td>
