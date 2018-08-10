@@ -32,15 +32,15 @@
 		<div class="panel">
 			<div class="panel-body panel-body-small">
 				<ul class="nav nav-pills pull-left">
-					<li class="{if $type eq 'wait_grab'}active{/if}"><a class="data-pjax" href='{url path="express/merchant/init" args="type=wait_grab"}'>待派单 <span class="badge badge-info">{if $express_order_count.wait_grab}{$express_order_count.wait_grab}{else}0{/if}</span> </a></li>
-					<li class="{if $type eq 'wait_pickup'}active{/if}"><a class="data-pjax" href='{url path="express/merchant/wait_pickup" args="type=wait_pickup{if $filter.keywords}&keywords={$filter.keywords}{/if}"}'>待取货 <span class="badge badge-info">{if $express_order_count.wait_pickup}{$express_order_count.wait_pickup}{else}0{/if}</span> </a></li>
-					<li class="{if $type eq 'sending'}active{/if}"><a class="data-pjax" href='{url path="express/merchant/wait_pickup" args="type=sending{if $filter.keywords}&keywords={$filter.keywords}{/if}"}'>配送中 <span class="badge badge-info">{if $express_order_count.sending}{$express_order_count.sending}{else}0{/if}</span> </a></li>
+					<li class="{if $type eq 'wait_grab'}active{/if}"><a class="data-pjax" href='{url path="express/merchant/init" args="type=wait_grab"}{if $platform}&platform=1{/if}'>待派单 <span class="badge badge-info">{if $express_order_count.wait_grab}{$express_order_count.wait_grab}{else}0{/if}</span> </a></li>
+					<li class="{if $type eq 'wait_pickup'}active{/if}"><a class="data-pjax" href='{url path="express/merchant/wait_pickup" args="type=wait_pickup{if $platform}&platform=1{/if}{if $filter.keywords}&keywords={$filter.keywords}{/if}"}'>待取货 <span class="badge badge-info">{if $express_order_count.wait_pickup}{$express_order_count.wait_pickup}{else}0{/if}</span> </a></li>
+					<li class="{if $type eq 'sending'}active{/if}"><a class="data-pjax" href='{url path="express/merchant/wait_pickup" args="type=sending{if $platform}&platform=1{/if}{if $filter.keywords}&keywords={$filter.keywords}{/if}"}'>配送中 <span class="badge badge-info">{if $express_order_count.sending}{$express_order_count.sending}{else}0{/if}</span> </a></li>
 				</ul>
 				<div class="clearfix"></div>
 			</div>
 			
 			<div class="panel-body panel-body-small">
-				<form class="form-inline" method="post" action="{$search_action}{if $filter.type}&type={$filter.type}{/if}" name="searchForm">
+				<form class="form-inline" method="post" action="{$search_action}{if $filter.type}&type={$filter.type}{/if}{if $platform}&platform=1{/if}" name="searchForm">
 					<div class="f_r form-group">
 						<input type="text" name="keywords" class="form-control" style="width:200px;" value="{$smarty.get.keywords}" placeholder="请输入配送员名或配送单号"/>
 						<button class="btn btn-primary search_express_order" type="submit">搜索</button>

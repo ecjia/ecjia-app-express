@@ -24,7 +24,7 @@
 	</div>
 </div>
 
-<div class="modal fade" id="myModal1" ></div>
+<div class="modal fade" id="myModal1"></div>
 
 <div class="row row-fluid-new">
 	<div class="col-lg-12 express-task">
@@ -32,18 +32,19 @@
 			<input type="hidden" name="home_url" value="{RC_Uri::home_url()}"/>
 			<div class="panel-body panel-body-small">
 				<ul class="nav nav-pills pull-left">
-					<li class="{if $type eq 'wait_grab'}active{/if}"><a  href='{url path="express/merchant/init" args="type=wait_grab"}'>待派单 <span class="badge badge-info">{if $express_order_count.wait_grab}{$express_order_count.wait_grab}{else}0{/if}</span> </a></li>
-					<li class="{if $type eq 'wait_pickup'}active{/if}"><a  href='{url path="express/merchant/wait_pickup" args="type=wait_pickup"}'>待取货 <span class="badge badge-info">{if $express_order_count.wait_pickup}{$express_order_count.wait_pickup}{else}0{/if}</span> </a></li>
-					<li class="{if $type eq 'sending'}active{/if}"><a  href='{url path="express/merchant/wait_pickup" args="type=sending"}'>配送中 <span class="badge badge-info">{if $express_order_count.sending}{$express_order_count.sending}{else}0{/if}</span> </a></li>
+					<li class="{if $type eq 'wait_grab'}active{/if}"><a  href='{url path="express/merchant/init" args="type=wait_grab"}{if $platform}&platform=1{/if}'>待派单 <span class="badge badge-info">{if $express_order_count.wait_grab}{$express_order_count.wait_grab}{else}0{/if}</span> </a></li>
+					<li class="{if $type eq 'wait_pickup'}active{/if}"><a  href='{url path="express/merchant/wait_pickup" args="type=wait_pickup"}{if $platform}&platform=1{/if}'>待取货 <span class="badge badge-info">{if $express_order_count.wait_pickup}{$express_order_count.wait_pickup}{else}0{/if}</span> </a></li>
+					<li class="{if $type eq 'sending'}active{/if}"><a  href='{url path="express/merchant/wait_pickup" args="type=sending"}{if $platform}&platform=1{/if}'>配送中 <span class="badge badge-info">{if $express_order_count.sending}{$express_order_count.sending}{else}0{/if}</span> </a></li>
 				</ul>
 				
 				<div class="pull-right">
 					<span class="auto-refresh">
 						<span class="numcolor">120</span>秒后自动刷新
-					</span><a class="btn btn-primary data-pjax m_l5"  href='{url path="express/merchant/init" args="type=wait_grab"}'>手动刷新</a>
+					</span><a class="btn btn-primary data-pjax m_l5"  href='{url path="express/merchant/init" args="type=wait_grab"}{if $platform}&platform=1{/if}'>手动刷新</a>
 				</div>
 			</div>
 			
+			{if $platform neq 1}
 			<div class="panel-body panel-body-smal row-fluid ditpage-rightbar-new editpage-rightbar">
 				<div class="left-bar1">
 					<div class="left-bar move-mod">
@@ -117,7 +118,41 @@
 				
 				<div class="new-user-list">
 				</div>
-			</div>	
+			</div>
+			{else}
+			<div class="panel-body panel-body-small">
+				<table class="table table-striped table-hover table-hide-edit ecjiaf-tlf">
+					<thead>
+						<tr>
+						  	<th class="w200">配送单号</th>
+						    <th >收货人信息</th>
+						    <th class="w200">下单时间</th>
+						    <th class="w100">配送状态</th>
+						</tr>
+					</thead>
+					<tbody>
+						<!-- {foreach from=$wait_grab_list.list item=val} -->
+			 			<tr>
+					      	<td class="hide-edit-area">
+								{$val.express_sn}
+					     	  	<div class="edit-list">
+<!-- 								  	 <a class="express-order-modal" data-toggle="modal" data-backdrop="static" href="#myModal1" express-id="{$val.express_id}" express-order-url='{url path="express/merchant/express_order_detail" args="express_id={$val.express_id}{if $type}&type={$type}{/if}"}'  title="查看详情">查看详情</a> -->
+<!-- 								  	 {if $type eq 'wait_pickup'}&nbsp;|&nbsp;<a class="express-reassign-click" data-toggle="modal" data-backdrop="static" href="#myModal2" express-id="{$val.express_id}" express-reassign-url='{url path="express/merchant/express_reasign_detail" args="express_id={$val.express_id}&store_id={$val.store_id}{if $type}&type={$type}{/if}"}'  title="重新指派">重新指派</a>{/if} -->
+<!-- 								  	 {if $val.online_status eq '1'}&nbsp;|&nbsp;<a class="express-location" data-toggle="modal" data-backdrop="static" href="#myModal3" express-id="{$val.express_id}" express-location-url='{url path="express/merchant/express_location" args="express_id={$val.express_id}&store_id={$val.store_id}{if $type}&type={$type}{/if}"}'  title="当前位置">当前位置</a>{/if} -->
+					    	  	</div>
+					      	</td>
+					      	<td>{$val.consignee}<br>地址：{$val.to_address}</td>
+					      	<td>{$val.format_add_time}</td>
+					      	<td class="ecjiafc-red">{if $type eq 'wait_grab'}待派单{elseif $type eq 'wait_pickup'}待取货{elseif $type eq 'sending'}配送中{/if}</td>
+					    </tr>
+					    <!-- {foreachelse} -->
+	        			<tr><td class="no-records" colspan="6">{lang key='system::system.no_records'}</td></tr>
+						<!-- {/foreach} -->
+					</tbody>
+				</table>
+				<!-- {$wait_grab_list.page} -->
+			</div>
+			{/if}
 		</div>
 	</div>
 </div>
