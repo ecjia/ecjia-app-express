@@ -617,7 +617,7 @@ class merchant extends ecjia_merchant {
     //提醒指派
     public function remind_assign() {
 
-    	return $this->showmessage('操作成功', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS);
+    	return $this->showmessage('已提醒平台派单', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS);
     }
 	/**
 	 * 待派单列表
