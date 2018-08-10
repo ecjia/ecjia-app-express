@@ -124,10 +124,10 @@
 				<table class="table table-striped table-hover table-hide-edit ecjiaf-tlf">
 					<thead>
 						<tr>
-						  	<th class="w200">配送单号</th>
-						    <th >收货人信息</th>
-						    <th class="w200">下单时间</th>
-						    <th class="w100">配送状态</th>
+						  	<th>配送单号</th>
+						    <th class="w300">收货人信息</th>
+						    <th class="w300">下单时间</th>
+						    <th class="w150">配送状态</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -136,9 +136,19 @@
 					      	<td class="hide-edit-area">
 								{$val.express_sn}
 					     	  	<div class="edit-list">
-<!-- 								  	 <a class="express-order-modal" data-toggle="modal" data-backdrop="static" href="#myModal1" express-id="{$val.express_id}" express-order-url='{url path="express/merchant/express_order_detail" args="express_id={$val.express_id}{if $type}&type={$type}{/if}"}'  title="查看详情">查看详情</a> -->
-<!-- 								  	 {if $type eq 'wait_pickup'}&nbsp;|&nbsp;<a class="express-reassign-click" data-toggle="modal" data-backdrop="static" href="#myModal2" express-id="{$val.express_id}" express-reassign-url='{url path="express/merchant/express_reasign_detail" args="express_id={$val.express_id}&store_id={$val.store_id}{if $type}&type={$type}{/if}"}'  title="重新指派">重新指派</a>{/if} -->
-<!-- 								  	 {if $val.online_status eq '1'}&nbsp;|&nbsp;<a class="express-location" data-toggle="modal" data-backdrop="static" href="#myModal3" express-id="{$val.express_id}" express-location-url='{url path="express/merchant/express_location" args="express_id={$val.express_id}&store_id={$val.store_id}{if $type}&type={$type}{/if}"}'  title="当前位置">当前位置</a>{/if} -->
+								  	 <a class="express-order-modal" data-toggle="modal" data-backdrop="static" href="#myModal1" express-id="{$val.express_id}" express-order-url='{url path="express/merchant/express_order_detail" args="express_id={$val.express_id}{if $type}&type={$type}{/if}"}'  title="查看详情">查看详情</a>&nbsp;|&nbsp;
+								  	 <a class="order-div" data-toggle="modal" 
+								  	 data-backdrop="static" href="#view_circuit" 
+								  	 express_id="{$val.express_id}" 
+								  	 express_sn="{$val.express_sn}" 
+								  	 express_start="{$val.sf_latitude},{$val.sf_longitude}" 
+								  	 express_end="{$val.latitude},{$val.longitude}" 
+								  	 sf_lng="{$val.sf_longitude}" 
+								  	 sf_lat="{$val.sf_latitude}" 
+								  	 data-url='{url path="express/merchant/get_nearest_exuser"}'
+								  	 >
+								  	 查看线路</a>&nbsp;|&nbsp;
+								  	 <a class="ajaxremove" data-toggle="ajaxremove" data-msg="您确定要提醒平台指派配送员吗？" href='{url path="express/merchant/remind_assign"}'>提醒指派</a>
 					    	  	</div>
 					      	</td>
 					      	<td>{$val.consignee}<br>地址：{$val.to_address}</td>
@@ -152,8 +162,33 @@
 				</table>
 				<!-- {$wait_grab_list.page} -->
 			</div>
+			<div class="hide">
+			<!-- #BeginLibraryItem "/library/waitgrablist_search_user_list.lbi" --><!-- #EndLibraryItem -->
+			</div>
 			{/if}
 		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="view_circuit">
+	<div class="modal-dialog">
+	    <div class="modal-content">
+	        <div class="modal-header">
+	            <button data-dismiss="modal" class="close" type="button">×</button>
+	            <h4 class="modal-title">查看线路</h4>
+	        </div>
+	        <div class="modal-body">
+				<div class="middle-bar" style="width:98%;margin-left:1%;margin-right:1%;">
+					<div class="foldable-list move-mod-group">
+						<div class="accordion-group">
+							<div class="accordion-body in collapse" >
+			        			<div id="allmap" style="height:542px;"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+	    </div>
 	</div>
 </div>
 <!-- {/block} -->

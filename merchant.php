@@ -614,6 +614,11 @@ class merchant extends ecjia_merchant {
         return $this->showmessage('操作成功', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('pjaxurl' => RC_Uri::url('express/merchant/wait_pickup', array('type' => 'wait_pickup'))));
     }
 
+    //提醒指派
+    public function remind_assign() {
+
+    	return $this->showmessage('操作成功', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS);
+    }
 	/**
 	 * 待派单列表
 	 */
