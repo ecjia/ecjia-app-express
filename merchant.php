@@ -616,7 +616,24 @@ class merchant extends ecjia_merchant {
 
     //提醒指派
     public function remind_assign() {
-
+    	$express_id = trim($_GET['id']);
+    	$express_sn = RC_DB::table('express_order')->where('express_id', $express_id)->where('store_id', $_SESSION['store_id'])->pluck('express_sn');
+    	if (empty($express_sn)) {
+    		return $this->showmessage('该配送单不存在', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+    	}
+    	
+    	$count = RC_DB::table('express_order_reminder')->where('express_id', $express_id)->count();
+    	if ($count != 0) {
+    		return $this->showmessage('该配送单已提醒过平台派单，请勿重复提醒！', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+    	}
+    	$data = array(
+    		'express_id' 	=> $express_id,
+    		'message'  		=> '商家【'.$_SESSION['store_name'].'】'.'正在进行派单提醒,配送单号:'.$express_sn.'，请赶快派单吧！',
+    		'status'   		=> 0,
+    		'create_time' 	=> RC_Time::gmtime(),
+    	);
+    	RC_DB::table('express_order_reminder')->insert($data);
+    	
     	return $this->showmessage('已提醒平台派单', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS);
     }
 	/**
