@@ -69,12 +69,12 @@
 					     	  	<div class="edit-list">
 								  	 <a class="express-order-modal" data-toggle="modal" data-backdrop="static" href="#myModal1" express-id="{$wait_pickup.express_id}" express-order-url='{url path="express/merchant/express_order_detail" args="express_id={$wait_pickup.express_id}{if $type}&type={$type}{/if}"}'  title="查看详情">查看详情</a>
 								  	 {if $platform eq 1 && $wait_pickup.online_status eq '1'}
-								  	 	&nbsp;|&nbsp;<a class="express-location" data-toggle="modal" data-backdrop="static" href="#myModal3" express-id="{$wait_pickup.express_id}" express-location-url='{url path="express/merchant/express_location" args="express_id={$wait_pickup.express_id}&store_id={$wait_pickup.store_id}{if $type}&type={$type}{/if}"}'  title="查看路线">查看路线</a>{/if}
+								  	 	&nbsp;|&nbsp;<a class="express-location" data-toggle="modal" data-backdrop="static" href="#myModal3" express-id="{$wait_pickup.express_id}" express-location-url='{url path="express/merchant/express_location" args="express_id={$wait_pickup.express_id}&store_id={$wait_pickup.store_id}{if $type}&type={$type}{/if}"}'  title="查看路线">查看路线</a>
 								  	 {else}
 								  		{if $type eq 'wait_pickup'}&nbsp;|&nbsp;<a class="express-reassign-click" data-toggle="modal" data-backdrop="static" href="#myModal2" express-id="{$wait_pickup.express_id}" express-reassign-url='{url path="express/merchant/express_reasign_detail" args="express_id={$wait_pickup.express_id}&store_id={$wait_pickup.store_id}{if $type}&type={$type}{/if}"}'  title="重新指派">重新指派</a>{/if}
 								  	 	{if $wait_pickup.online_status eq '1'}&nbsp;|&nbsp;<a class="express-location" data-toggle="modal" data-backdrop="static" href="#myModal3" express-id="{$wait_pickup.express_id}" express-location-url='{url path="express/merchant/express_location" args="express_id={$wait_pickup.express_id}&store_id={$wait_pickup.store_id}{if $type}&type={$type}{/if}"}'  title="当前位置">当前位置</a>{/if}
 								  	 {/if}
-								  	</div>
+								</div>
 					      	</td>
 					      	<td>{$wait_pickup.express_user}</td>
 					      	<td>{$wait_pickup.consignee}<br>地址：{$wait_pickup.to_address}</td>
