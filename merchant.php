@@ -647,7 +647,9 @@ class merchant extends ecjia_merchant {
 		if (!empty($platform)) {
 			$dbview->where(RC_DB::raw('eo.shipping_code'), 'ship_o2o_express');
 		} else {
-			$dbview->where(RC_DB::raw('eo.shipping_code'), '');
+			$dbview->where(function($query) {
+				$query->where(RC_DB::raw('eo.shipping_code'), '')->orWhere(RC_DB::raw('eo.shipping_code'), null);
+			});
 		}
 		$field = 'eo.consignee, eo.mobile as consignee_mobile, eo.express_id, eo.store_id, eo.express_sn, eo.country, eo.province, eo.city, eo.district, eo.street, eo.address, eo.distance, eo.add_time, 
 				  eo.longitude, eo.latitude, eo.express_user, eo.express_mobile, eo.staff_id, eo.from, eo.receive_time, sf.province as sf_province, sf.city as sf_city, sf.longitude as sf_longitude, sf.latitude as sf_latitude, 
@@ -661,7 +663,9 @@ class merchant extends ecjia_merchant {
 		if (!empty($platform)) {
 			$db->where(RC_DB::raw('shipping_code'), 'ship_o2o_express');
 		} else {
-			$db->where(RC_DB::raw('shipping_code'), '');
+			$dbview->where(function($query) {
+				$query->where(RC_DB::raw('eo.shipping_code'), '')->orWhere(RC_DB::raw('eo.shipping_code'), null);
+			});
 		}
 		
 		$keywords = $filter['keywords'];

@@ -88,6 +88,7 @@ class mh_history extends ecjia_merchant {
 		
 		$data = $this->get_history_list();
 		$this->assign('data', $data);
+		$this->assign('type_count', $data['type_count']);
 		
 		$this->assign('express_detail', RC_Uri::url('express/mh_history/detail'));
 		
@@ -150,9 +151,10 @@ class mh_history extends ecjia_merchant {
 		
 		$db_data->where(RC_DB::raw('store_id'), $_SESSION['store_id']);
 		$db_data->whereIn(RC_DB::raw('status'), array(5, 7));
-		$db_data->where(RC_DB::raw('shipping_code'), 'ship_o2o_express');
 		
-		if($_GET['start_date'] && $_GET['end_date']) {
+		$type = !empty($_GET['type']) ? trim($_GET['type']) : 'platform';
+		
+		if ($_GET['start_date'] && $_GET['end_date']) {
 			$start_date = RC_Time::local_strtotime($_GET['start_date']);
 			$end_date	= RC_Time::local_strtotime($_GET['end_date']);
 			$db_data->where('signed_time', '>=', $start_date);
@@ -162,6 +164,18 @@ class mh_history extends ecjia_merchant {
 		$filter['keyword']	 = trim($_GET['keyword']);
 		if ($filter['keyword']) {
 			$db_data ->whereRaw('(express_user  like  "%'.mysql_like_quote($filter['keyword']).'%"  or express_sn like "%'.mysql_like_quote($filter['keyword']).'%")');
+		}
+		
+		$type_count = $db_data
+			->select(RC_DB::raw('SUM(IF(shipping_code = "ship_o2o_express", 1, 0)) as platform'), RC_DB::raw('SUM(IF((shipping_code = "" or shipping_code is null), 1, 0)) as merchant'))
+			->first();
+		
+		if ($type == 'platform') {
+			$db_data->where('shipping_code', 'ship_o2o_express');
+		} elseif ($type == 'merchant') {
+			$db_data->where(function($query) {
+				$query->where('shipping_code', '')->orWhere('shipping_code', null);
+			});
 		}
 		
 		$count = $db_data->count();
@@ -183,7 +197,7 @@ class mh_history extends ecjia_merchant {
 				$list[] = $row;
 			}
 		}
-		return array('list' => $list, 'filter' => $filter, 'page' => $page->show(5), 'desc' => $page->page_desc());
+		return array('list' => $list, 'filter' => $filter, 'page' => $page->show(5), 'desc' => $page->page_desc(), 'type_count' => $type_count);
 	}
 }
 
