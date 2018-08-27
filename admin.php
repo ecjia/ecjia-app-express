@@ -143,7 +143,7 @@ class admin extends ecjia_admin {
 		if ($key) {
 			$express_info = RC_DB::table('express_user as eu')
 								->leftJoin('staff_user as su', RC_DB::raw('su.user_id'), '=', RC_DB::raw('eu.user_id'))
-								->selectRaw('eu.*, su.mobile, su.name, su.avatar, su.online_status')
+								->select(RC_DB::raw('eu.*'), RC_DB::raw('su.mobile'), RC_DB::raw('su.name'), RC_DB::raw('su.avatar'), RC_DB::raw('su.online_status'))
 								->where(RC_DB::raw('su.user_id'), $key)
 								->first();
 			
@@ -215,7 +215,7 @@ class admin extends ecjia_admin {
 		if ($key) {
 			$express_info = RC_DB::table('express_user as eu')
 			->leftJoin('staff_user as su', RC_DB::raw('su.user_id'), '=', RC_DB::raw('eu.user_id'))
-			->selectRaw('eu.*, su.mobile, su.name')
+			->select(RC_DB::raw('eu.*'), RC_DB::raw('su.mobile'), RC_DB::raw('su.name'))
 			->where(RC_DB::raw('su.user_id'), $key)
 			->first();
 			$express_info['has_staff'] = 1;
@@ -241,12 +241,17 @@ class admin extends ecjia_admin {
 		$staff_id = $_GET['staff_id'];
 		$type = $_GET['type'];
 		
-		$field = 'eo.*, oi.add_time as order_time, oi.pay_time,  oi.expect_shipping_time, oi.order_amount, oi.pay_name, sf.merchants_name, sf.district as sf_district, sf.street as sf_street, sf.address as merchant_address, sf.longitude as sf_longitude, sf.latitude as sf_latitude';
+		$field = 'eo.*, oi.add_time as order_time, oi.pay_time, oi.expect_shipping_time, oi.order_amount, oi.pay_name, sf.merchants_name, sf.district as sf_district, sf.street as sf_street, sf.address as merchant_address, sf.longitude as sf_longitude, sf.latitude as sf_latitude';
+
 			$dbview = RC_DB::table('express_order as eo')
 			->leftJoin('store_franchisee as sf', RC_DB::raw('sf.store_id'), '=', RC_DB::raw('eo.store_id'))
 			->leftJoin('order_info as oi', RC_DB::raw('eo.order_id'), '=', RC_DB::raw('oi.order_id'));
 			
-		$express_order_info	= $dbview->where(RC_DB::raw('eo.express_id'), $express_id)->selectRaw($field)->first();
+		$express_order_info	= $dbview
+			->where(RC_DB::raw('eo.express_id'), $express_id)
+			->select(RC_DB::raw('eo.*'), RC_DB::raw('oi.add_time as order_time'), RC_DB::raw('oi.pay_time'), RC_DB::raw('oi.expect_shipping_time'), 
+				RC_DB::raw('oi.order_amount'), RC_DB::raw('oi.pay_name'), RC_DB::raw('sf.merchants_name'), RC_DB::raw('sf.district as sf_district'), RC_DB::raw('sf.street as sf_street'), RC_DB::raw('sf.address as merchant_address'), RC_DB::raw('sf.longitude as sf_longitude'), RC_DB::raw('sf.latitude as sf_latitude'))
+			->first();
 			
 		$staff_user_info = RC_DB::table('staff_user as su')->leftJoin('express_user as eu', RC_DB::raw('su.user_id'), '=', RC_DB::raw('eu.user_id'))
 							->where(RC_DB::raw('su.user_id'), $staff_id)
