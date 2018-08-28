@@ -137,7 +137,7 @@
 								{$val.express_sn}
 					     	  	<div class="edit-list">
 								  	 <a class="express-order-modal" data-toggle="modal" data-backdrop="static" href="#myModal1" express-id="{$val.express_id}" express-order-url='{url path="express/merchant/express_order_detail" args="express_id={$val.express_id}{if $type}&type={$type}{/if}"}'  title="查看详情">查看详情</a>&nbsp;|&nbsp;
-								  	 <a class="order-div" data-toggle="modal" 
+								  	 <a class="order-div no-border" data-toggle="modal" 
 								  	 data-backdrop="static" href="#view_circuit" 
 								  	 express_id="{$val.express_id}" 
 								  	 express_sn="{$val.express_sn}" 

@@ -341,6 +341,9 @@
                 	  $this.css("border","1px solid #009ACD");
                 	  $('.order_express_id').val(exp_id);
                   }
+                  if ($this.hasClass('no-border')) {
+                	  $this.css("border", "none");
+                  }
                  //选中订单边框变色end
                   
                   $("#start").val(starts);
