@@ -117,9 +117,9 @@ class task_module extends api_admin implements api_interface {
 		$field = 'eo.*, oi.expect_shipping_time, oi.add_time as order_time, oi.pay_time, oi.order_amount, oi.pay_name, sf.merchants_name, sf.longitude as sf_longitude, sf.latitude as sf_latitude, sf.district as sf_district, sf.street as sf_street, sf.address as merchant_address, sf.longitude as merchant_longitude, sf.latitude as merchant_latitude';
 		
 		if ($express_type == 'wait_assign') {
-			$express_order_result = $dbview->take($size)->skip($page_row->start_id - 1)->selectRaw($field)->orderBy('add_time', 'desc')->get();
+			$express_order_result = $dbview->take($size)->skip($page_row->start_id - 1)->select(RC_DB::raw('eo.*'), RC_DB::raw('oi.expect_shipping_time'), RC_DB::raw('oi.add_time as order_time'), RC_DB::raw('oi.pay_time'), RC_DB::raw('oi.order_amount'), RC_DB::raw('oi.pay_name'), RC_DB::raw('sf.merchants_name'), RC_DB::raw('sf.longitude as sf_longitude'), RC_DB::raw('sf.latitude as sf_latitude'), RC_DB::raw('sf.district as sf_district'), RC_DB::raw('sf.street as sf_street'), RC_DB::raw('sf.address as merchant_address'), RC_DB::raw('sf.longitude as merchant_longitude'), RC_DB::raw('sf.latitude as merchant_latitude'))->orderBy('add_time''), RC_DB::raw(''desc'))->get();
 		} else {
-			$express_order_result = $dbview->take($size)->skip($page_row->start_id - 1)->selectRaw($field)->orderBy('receive_time', 'desc')->get();
+			$express_order_result = $dbview->take($size)->skip($page_row->start_id - 1)->select(RC_DB::raw('eo.*'), RC_DB::raw('oi.expect_shipping_time'), RC_DB::raw('oi.add_time as order_time'), RC_DB::raw('oi.pay_time'), RC_DB::raw('oi.order_amount'), RC_DB::raw('oi.pay_name'), RC_DB::raw('sf.merchants_name'), RC_DB::raw('sf.longitude as sf_longitude'), RC_DB::raw('sf.latitude as sf_latitude'), RC_DB::raw('sf.district as sf_district'), RC_DB::raw('sf.street as sf_street'), RC_DB::raw('sf.address as merchant_address'), RC_DB::raw('sf.longitude as merchant_longitude'), RC_DB::raw('sf.latitude as merchant_latitude'))->orderBy('add_time''), RC_DB::raw(''desc'))->get();
 		}
 		
 		$express_order_list = array();

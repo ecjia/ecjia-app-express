@@ -255,7 +255,8 @@ class admin extends ecjia_admin {
 			
 		$staff_user_info = RC_DB::table('staff_user as su')->leftJoin('express_user as eu', RC_DB::raw('su.user_id'), '=', RC_DB::raw('eu.user_id'))
 							->where(RC_DB::raw('su.user_id'), $staff_id)
-							->selectRaw('su.name, su.mobile, su.online_status, eu.shippingfee_percent')->first();
+							->select(RC_DB::raw('su.name'), RC_DB::raw('su.mobile'), RC_DB::raw('su.online_status'), RC_DB::raw('eu.shippingfee_percent'))
+							->first();
 		
 		if ($staff_user_info['online_status'] == '4') {
 			return $this->showmessage('当前配送员不在线，请选择在线配送员进行指派！', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
@@ -381,7 +382,7 @@ class admin extends ecjia_admin {
 		
 		//$goods_list = RC_DB::table('order_goods')->where('order_id', $express_info['order_id'])->select('goods_id', 'goods_name' ,'goods_price','goods_number')->get();
 		/*配送单对应的发货单商品*/
-		$goods_list = RC_DB::table('delivery_goods')->where('delivery_id', $express_info['delivery_id'])->selectRaw('goods_id, goods_name, send_number')->get();
+		$goods_list = RC_DB::table('delivery_goods')->where('delivery_id', $express_info['delivery_id'])->select(RC_DB::raw('goods_id'), RC_DB::raw('goods_name'), RC_DB::raw('send_number'))->get();
 		
 		foreach ($goods_list as $key => $val) {
 			$goods_list[$key]['image']  	  			= RC_DB::table('goods')->where('goods_id', $val['goods_id'])->pluck('goods_thumb');
@@ -459,10 +460,10 @@ class admin extends ecjia_admin {
 		$express_info = RC_DB::table('express_order as eo')
 							->leftJoin('express_user as eu', RC_DB::raw('eo.staff_id'), '=', RC_DB::raw('eu.user_id'))
 							->where(RC_DB::raw('eo.express_id'), $express_id)	
-							->selectRaw('eo.express_user, eo.express_mobile, eo.longitude as u_longitude, eo.latitude as u_latitude, eu.longitude as eu_longitude, eu.latitude as eu_latitude')
+							->select(RC_DB::raw('eo.express_user'), RC_DB::raw('eo.express_mobile'), RC_DB::raw('eo.longitude as u_longitude'), RC_DB::raw('eo.latitude as u_latitude'), RC_DB::raw('eu.longitude as eu_longitude'), RC_DB::raw('eu.latitude as eu_latitude'))
 							->first();
 		
-		$store_info =  RC_DB::table('store_franchisee')->where('store_id', $store_id)->selectRaw('longitude as sf_longitude, latitude as sf_latitude')->first();
+		$store_info =  RC_DB::table('store_franchisee')->where('store_id', $store_id)->select(RC_DB::raw('longitude as sf_longitude'), RC_DB::raw('latitude as sf_latitude'))->first();
 		
 		$content = array_merge($express_info, $store_info);
 		
@@ -490,10 +491,11 @@ class admin extends ecjia_admin {
 		$express_info = RC_DB::table('express_order as eo')
 		->leftJoin('express_user as eu', RC_DB::raw('eo.staff_id'), '=', RC_DB::raw('eu.user_id'))
 		->where(RC_DB::raw('eo.express_id'), $express_id)
-		->selectRaw('eo.express_user, eo.express_mobile, eo.longitude as u_longitude, eo.latitude as u_latitude, eu.longitude as eu_longitude, eu.latitude as eu_latitude')
+		->select(RC_DB::raw('eo.express_user'), RC_DB::raw('eo.express_mobile'), RC_DB::raw('eo.longitude as u_longitude'), RC_DB::raw('eo.latitude as u_latitude'), RC_DB::raw('eu.longitude as eu_longitude'), RC_DB::raw('eu.latitude as eu_latitude'))
 		->first();
 	
-		$store_info =  RC_DB::table('store_franchisee')->where('store_id', $store_id)->selectRaw('longitude as sf_longitude, latitude as sf_latitude')->first();
+		$store_info =  RC_DB::table('store_franchisee')->where('store_id', $store_id)
+			->select(RC_DB::raw('longitude as sf_longitude'), RC_DB::raw('latitude as sf_latitude'))->first();
 	
 		$content = array_merge($express_info, $store_info);
 	
@@ -596,10 +598,9 @@ class admin extends ecjia_admin {
 		$db->where('shipping_code', 'ship_ecjia_express');
 		
 		$express_order_count = $db
-		->selectRaw('count(*) as count, SUM(IF(status = 0, 1, 0)) as wait_grab, SUM(IF(status = 1, 1, 0)) as wait_pickup, SUM(IF(status = 2, 1, 0)) as sending')
+		->select(RC_DB::raw('count(*) as count'), RC_DB::raw('SUM(IF(status = 0, 1, 0)) as wait_grab'), RC_DB::raw('SUM(IF(status = 1, 1, 0)) as wait_pickup'), RC_DB::raw('SUM(IF(status = 2, 1, 0)) as sending'))
 		->first();
 		
-	
 		if ($type == 'wait_grab') {
 			$dbview->where(RC_DB::raw('eo.status'), 0);
 		} elseif ($type == 'wait_pickup') {
@@ -677,7 +678,7 @@ class admin extends ecjia_admin {
 								->select(RC_DB::raw('count(*) as count'),RC_DB::raw('SUM(IF(su.online_status = 1, 1, 0)) as online'),RC_DB::raw('SUM(IF(su.online_status = 4, 1, 0)) as offline'))
 								->first();
 		
-		$list = $express_user_view->selectRaw('eu.*, su.mobile, su.name, su.avatar, su.online_status')->orderBy('online_status', 'asc')->get();
+		$list = $express_user_view->select(RC_DB::raw('eu.*'), RC_DB::raw('su.mobile'), RC_DB::raw('su.name'), RC_DB::raw('su.avatar'), RC_DB::raw('su.online_status'))->orderBy('online_status', 'asc')->get();
 		$data = array();
 		if (!empty($list)) {
 			foreach ($list as $row) {

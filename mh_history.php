@@ -113,7 +113,7 @@ class mh_history extends ecjia_merchant {
 		$order_info = RC_DB::table('order_info')->where('order_id', $express_info['order_id'])->select('add_time','expect_shipping_time','postscript')->first();
 		//$goods_list = RC_DB::table('order_goods')->where('order_id', $express_info['order_id'])->select('goods_id', 'goods_name' ,'goods_price','goods_number')->get();
 		/*配送单对应的发货单商品*/
-		$goods_list = RC_DB::table('delivery_goods')->where('delivery_id', $express_info['delivery_id'])->selectRaw('goods_id, goods_name, send_number')->get();
+		$goods_list = RC_DB::table('delivery_goods')->where('delivery_id', $express_info['delivery_id'])->select(RC_DB::raw('goods_id'), RC_DB::raw('goods_name'), RC_DB::raw('send_number'))->get();
 		
 		foreach ($goods_list as $key => $val) {
 			$goods_list[$key]['image']  				= RC_DB::table('goods')->where('goods_id', $val['goods_id'])->pluck('goods_thumb');
@@ -182,7 +182,7 @@ class mh_history extends ecjia_merchant {
 		$page = new ecjia_merchant_page($count, 10, 5);
 		
 		$data = $db_data
-		->selectRaw('express_id,order_sn,express_sn,express_user,express_mobile,signed_time,status,consignee,mobile,district,street,address')
+		->select(RC_DB::raw('express_id'), RC_DB::raw('order_sn'), RC_DB::raw('express_sn'), RC_DB::raw('express_user'), RC_DB::raw('express_mobile'), RC_DB::raw('signed_time'), RC_DB::raw('status'), RC_DB::raw('consignee'), RC_DB::raw('mobile'), RC_DB::raw('district'), RC_DB::raw('street'), RC_DB::raw('address'))
 		->orderby(RC_DB::raw('signed_time'), 'desc')
 		->take(10)
 		->skip($page->start_id-1)
