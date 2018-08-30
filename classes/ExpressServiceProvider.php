@@ -9,7 +9,7 @@ class ExpressServiceProvider extends  AppParentServiceProvider
     
     public function boot()
     {
-        $this->package('ecjia/app-express');
+        $this->package('ecjia/app-express', null, dirname(__DIR__));
     }
     
     public function register()
