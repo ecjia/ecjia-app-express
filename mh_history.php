@@ -167,15 +167,13 @@ class mh_history extends ecjia_merchant {
 		}
 		
 		$type_count = $db_data
-			->select(RC_DB::raw('SUM(IF(shipping_code = "ship_o2o_express", 1, 0)) as platform'), RC_DB::raw('SUM(IF((shipping_code = "" or shipping_code is null), 1, 0)) as merchant'))
+			->select(RC_DB::raw('SUM(IF(shipping_code = "ship_ecjia_express", 1, 0)) as platform'), RC_DB::raw('SUM(IF(shipping_code = "ship_o2o_express", 1, 0)) as merchant'))
 			->first();
 		
 		if ($type == 'platform') {
-			$db_data->where('shipping_code', 'ship_o2o_express');
+			$db_data->where('shipping_code', 'ship_ecjia_express');
 		} elseif ($type == 'merchant') {
-			$db_data->where(function($query) {
-				$query->where('shipping_code', '')->orWhere('shipping_code', null);
-			});
+			$db_data->where('shipping_code', 'ship_o2o_express');
 		}
 		
 		$count = $db_data->count();
