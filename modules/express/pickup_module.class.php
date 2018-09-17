@@ -52,7 +52,7 @@ defined('IN_ECJIA') or exit('No permission resources.');
  * 配送取货
  * @author will.chen
  */
-class pickup_module extends api_admin implements api_interface {
+class express_pickup_module extends api_admin implements api_interface {
     public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {	
     	$this->authadminSession();
     	if ($_SESSION['admin_id'] <= 0 && $_SESSION['staff_id'] <= 0) {
