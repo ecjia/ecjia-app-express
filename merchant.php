@@ -606,14 +606,14 @@ class merchant extends ecjia_merchant {
                     'express_code' => $shipping_info['shipping_code'],
                     'track_number' => $order_info['invoice_no'],
                     'time' => RC_Time::local_date(ecjia::config('time_format'), RC_Time::gmtime()),
-                    'context' => '配送员已取货，正在向您奔去，配送员：' . $_SESSION['staff_name'],
+                    'context' => '配送员已取货，正在向您奔去，配送员：' . $express_order_info['express_user'],
                 );
                 RC_DB::table('express_track_record')->insert($data);
                 //订单状态log记录
                 RC_DB::table('order_status_log')->insert(array(
                 	'order_status'	=> RC_Lang::get('express::express.express_user_pickup'),
                		'order_id'		=> $express_order_info['order_id'],
-                	'message'		=> '配送员已取货，正在向您奔去，配送员：'.$_SESSION['staff_name'],
+                	'message'		=> '配送员已取货，正在向您奔去，配送员：'.$express_order_info['express_user'],
                 	'add_time'		=> RC_Time::gmtime(),
                 ));
             }
