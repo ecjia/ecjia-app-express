@@ -77,9 +77,9 @@ class express_pickup_module extends api_admin implements api_interface {
     		return new ecjia_error('express_already_pickup','此单已被取走！');
     	}
     	
-    	$where = array('staff_id' => $_SESSION['staff_id'], 'delivery_sn' => $delivery_sn);
-    	RC_Model::model('express/express_order_model')->where($where)->update(array('status' => 2, 'express_time' => RC_Time::gmtime()));
-    	
+    	//$where = array('staff_id' => $_SESSION['staff_id'], 'delivery_sn' => $delivery_sn);
+    	//RC_Model::model('express/express_order_model')->where($where)->update(array('status' => 2, 'express_time' => RC_Time::gmtime()));
+    	RC_DB::table('express_order')->where('staff_id', $_SESSION['staff_id'])->where('delivery_sn', $delivery_sn)->update(array('status' => 2, 'express_time' => RC_Time::gmtime()));
     	
     	//消息通知
     	$express_from_address = ecjia_region::getRegionName($express_order_info['sf_district']).ecjia_region::getRegionName($express_order_info['sf_street']).$express_order_info['merchant_address'];

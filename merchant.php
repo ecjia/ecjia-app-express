@@ -594,8 +594,12 @@ class merchant extends ecjia_merchant {
             return $this->showmessage('此配送单并未有配送员接单！', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
         }
 
-        $where = array('store_id' => $_SESSION['store_id'], 'staff_id' => $express_order_info['staff_id'], 'express_sn' => $delivery_sn);
-        RC_Model::model('express/express_order_model')->where($where)->update(array('status' => 2, 'express_time' => RC_Time::gmtime()));
+        //$where = array('store_id' => $_SESSION['store_id'], 'staff_id' => $express_order_info['staff_id'], 'express_sn' => $delivery_sn);
+        //RC_Model::model('express/express_order_model')->where($where)->update(array('status' => 2, 'express_time' => RC_Time::gmtime()));
+        RC_DB::table('express_order')->where('store_id', $_SESSION['store_id'])
+        							 ->where('staff_id', $express_order_info['staff_id'])
+        							 ->where('express_sn', $delivery_sn)
+        							 ->update(array('status' => 2, 'express_time' => RC_Time::gmtime()));
 
         /*当订单配送方式为o2o速递时,记录o2o速递物流信息*/
         $order_info = RC_DB::table('order_info')->where('order_id', $express_order_info['order_id'])->first();

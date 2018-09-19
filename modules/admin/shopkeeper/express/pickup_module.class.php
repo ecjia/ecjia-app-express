@@ -81,8 +81,12 @@ class admin_shopkeeper_express_pickup_module extends api_admin implements api_in
     		return new ecjia_error('express_staffinfo_error','此配送单并未有配送员接单！');
     	}
     	
-    	$where = array('store_id' => $_SESSION['store_id'], 'staff_id' => $express_order_info['staff_id'], 'delivery_sn' => $delivery_sn);
-    	RC_Model::model('express/express_order_model')->where($where)->update(array('status' => 2, 'express_time' => RC_Time::gmtime()));
+    	//$where = array('store_id' => $_SESSION['store_id'], 'staff_id' => $express_order_info['staff_id'], 'delivery_sn' => $delivery_sn);
+    	//RC_Model::model('express/express_order_model')->where($where)->update(array('status' => 2, 'express_time' => RC_Time::gmtime()));
+        RC_DB::table('express_order')->where('store_id', $_SESSION['store_id'])
+                                     ->where('staff_id', $express_order_info['staff_id'])
+                                     ->where('delivery_sn', $delivery_sn)
+                                     ->update(array('status' => 2, 'express_time' => RC_Time::gmtime()));
     	
     	//记录管理员操作log
     	Ecjia\App\Express\Helper::assign_adminlog_content();
