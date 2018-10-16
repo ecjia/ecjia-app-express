@@ -63,16 +63,21 @@ class express_user_location_module extends api_admin implements api_interface {
 		if (!is_array($location) || empty($location['longitude']) || empty($location['latitude'])) {
 			return new ecjia_error('invalid_parameter', RC_Lang::get('orders::order.invalid_parameter'));
 		}
-		
-		$express_user_info = RC_DB::table('express_user')->where('user_id', $_SESSION['staff_id'])->first();
 		$store_id = $_SESSION['store_id'];
 		if (empty($_SESSION['store_id'])) {
 			$store_id = 0;
 		}
+		
+		$express_user_info = RC_DB::table('express_user')->where('user_id', $_SESSION['staff_id'])->where('store_id', $store_id)->first();
+		
+		RC_Logger::getLogger('error')->info('test111');
+		RC_Logger::getLogger('error')->info($express_user_info);
+		RC_Logger::getLogger('error')->info('test222');
+		
 		if (empty($express_user_info)) {
 			RC_DB::table('express_user')->insert(array('user_id' => $_SESSION['staff_id'], 'store_id' => $store_id, 'longitude' => $location['longitude'], 'latitude' => $location['latitude'], 'delivery_count' => 0, 'delivery_distance' => 0));
 		} else {
-			RC_DB::table('express_user')->where('user_id', $_SESSION['staff_id'])->update(array('longitude' => $location['longitude'], 'latitude' => $location['latitude']));
+			RC_DB::table('express_user')->where('user_id', $_SESSION['staff_id'])->where('store_id', $store_id)->update(array('longitude' => $location['longitude'], 'latitude' => $location['latitude']));
 		}
 		return array();
 	 }	
