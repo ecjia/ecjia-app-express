@@ -70,10 +70,6 @@ class express_user_location_module extends api_admin implements api_interface {
 		
 		$express_user_info = RC_DB::table('express_user')->where('user_id', $_SESSION['staff_id'])->where('store_id', $store_id)->first();
 		
-		RC_Logger::getLogger('error')->info('test111');
-		RC_Logger::getLogger('error')->info($express_user_info);
-		RC_Logger::getLogger('error')->info('test222');
-		
 		if (empty($express_user_info)) {
 			RC_DB::table('express_user')->insert(array('user_id' => $_SESSION['staff_id'], 'store_id' => $store_id, 'longitude' => $location['longitude'], 'latitude' => $location['latitude'], 'delivery_count' => 0, 'delivery_distance' => 0));
 		} else {
