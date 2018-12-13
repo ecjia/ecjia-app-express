@@ -56,7 +56,7 @@
 						</tr>
 						<tr>
 							<td><div align="right"><strong>工作类型：</strong></div></td>
-							<td>派单</td>
+							<td>{if $express_info.work_type eq 1}派单{else}抢单{/if}</td>
 							<td><div align="right"><strong>账户余额：</strong></div></td>
 							<td>{$express_info.user_money_type}</td>
 						</tr>
