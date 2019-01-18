@@ -442,7 +442,7 @@ class admin_express extends ecjia_admin {
 		$db_data = RC_DB::table('staff_user as su')
 		->leftJoin('express_user as eu', RC_DB::raw('su.user_id'), '=', RC_DB::raw('eu.user_id'));
 		
-		$db_data->where(RC_DB::raw('su.store_id'), 0);
+		$db_data->where(RC_DB::raw('su.store_id'), 0)->where(RC_DB::raw('su.group_id'), Ecjia\App\Staff\StaffGroupConstant::GROUP_EXPRESS);
 		
 		$filter['keyword']	 = trim($_GET['keyword']);
 		$filter['work_type'] = trim($_GET['work_type']);
