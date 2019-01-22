@@ -166,7 +166,7 @@ class admin_express extends ecjia_admin {
 			'user_ident'   => trim($_POST['user_ident']),
 			'mobile'       => $mobile,
 			'email'        => $email,
-			'group_id'	   => -1,	
+		    'group_id'	   => Ecjia\App\Staff\StaffGroupConstant::GROUP_EXPRESS,	
 			'add_time'     => RC_Time::gmtime(),
 		);
 		
