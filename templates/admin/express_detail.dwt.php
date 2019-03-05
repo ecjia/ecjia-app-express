@@ -28,19 +28,19 @@
 						<table class="table table-oddtd m_b0">
 							<tbody class="first-td-no-leftbd">
 								<tr>
-									<td><div align="right"><strong>配送员名称：</strong></div></td>
+									<td><div align="right"><strong>{t domain="express"}配送员名称：{/t}</strong></div></td>
 									<td>
 										{$express_info.name}
 									</td>
-									<td><div align="right"><strong>手机号码：</strong></div></td>
+									<td><div align="right"><strong>{t domain="express"}手机号码：{/t}</strong></div></td>
 									<td>{$express_info.mobile}</td>
 								</tr>
 								<tr>
-									<td><div align="right"><strong>邮箱账号：</strong></div></td>
+									<td><div align="right"><strong>{t domain="express"}邮箱账号：{/t}</strong></div></td>
 									<td>
 										{$express_info.email}
 									</td>
-									<td><div align="right"><strong>信用等级：</strong></div></td>
+									<td><div align="right"><strong>{t domain="express"}信用等级：{/t}</strong></div></td>
 									<td>
 										{section name=loop loop=$express_info.comment_rank}
 								      		<i class="fontello-icon-star" style="color:#FF9933;"></i>
@@ -51,21 +51,21 @@
 									</td>
 								</tr>
 								<tr>
-									<td><div align="right"><strong>工作类型：</strong></div></td>
+									<td><div align="right"><strong>{t domain="express"}工作类型：{/t}</strong></div></td>
 									<td>
-										{if $express_info.work_type eq 1}派单{else}抢单{/if}
+										{if $express_info.work_type eq 1}{t domain="express"}派单{/t}{else}{t domain="express"}抢单{/t}{/if}
 									</td>
-									<td><div align="right"><strong>账户余额：</strong></div></td>
+									<td><div align="right"><strong>{t domain="express"}账户余额：{/t}</strong></div></td>
 									<td>¥ {$express_info.user_money}</td>
 								</tr>
 								<tr>
-									<td><div align="right"><strong>申请时间：</strong></div></td>
+									<td><div align="right"><strong>{t domain="express"}申请时间：{/t}</strong></div></td>
 									<td>{$express_info.add_time}</td>
-									<td><div align="right"><strong>申请来源：</strong></div></td>
+									<td><div align="right"><strong>{t domain="express"}申请来源：{/t}</strong></div></td>
 									<td>{if $express_info.apply_source eq 'admin'}平台{else}APP{/if}</td>
 								</tr>
 								<tr>
-									<td><div align="right"><strong>所在地区：</strong></div></td>
+									<td><div align="right"><strong>{t domain="express"}所在地区：{/t}</strong></div></td>
 									<td colspan="3">{$express_info.province}&nbsp;{$express_info.city}&nbsp;{$express_info.district}&nbsp;{$express_info.street}&nbsp;{$express_info.address}</td>
 								</tr>
 							</tbody>

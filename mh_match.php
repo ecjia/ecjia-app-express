@@ -71,8 +71,8 @@ class mh_match extends ecjia_merchant {
 		RC_Style::enqueue_style('mh_express', RC_App::apps_url('statics/css/mh_express.css', __FILE__));
 		
 		
-		ecjia_merchant_screen::get_current_screen()->add_nav_here(new admin_nav_here('员工管理', RC_Uri::url('staff/mh_group/init')));
-		ecjia_merchant_screen::get_current_screen()->add_nav_here(new admin_nav_here('配送员资金对账', RC_Uri::url('express/mh_match/init')));
+		ecjia_merchant_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('员工管理', 'express'), RC_Uri::url('staff/mh_group/init')));
+		ecjia_merchant_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('配送员资金对账', 'express'), RC_Uri::url('express/mh_match/init')));
 		ecjia_merchant_screen::get_current_screen()->set_parentage('express', 'express/mh_match.php');
 	}
 	
@@ -83,8 +83,8 @@ class mh_match extends ecjia_merchant {
 		$this->admin_priv('mh_express_match_manage');
 		
 		ecjia_screen::get_current_screen()->remove_last_nav_here();
-		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here('配送员资金对账'));
-		$this->assign('ur_here', '配送员资金对账');
+		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('配送员资金对账', 'express')));
+		$this->assign('ur_here', __('配送员资金对账', 'express'));
 	
 		$data = $this->get_account_list();
 		$this->assign('data', $data);
@@ -100,8 +100,8 @@ class mh_match extends ecjia_merchant {
 	public function detail() {
 		$this->admin_priv('mh_express_match_manage');
 	
-		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here('对账详情'));
-		$this->assign('ur_here', '对账详情');
+		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('对账详情', 'express')));
+		$this->assign('ur_here', __('对账详情', 'express'));
 	
 		$user_id = intval($_GET['user_id']);
 		$name = RC_DB::table('staff_user')->where('user_id', $user_id)->pluck('name');

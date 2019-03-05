@@ -203,8 +203,8 @@ class express_ecjiaauto_assign_expressOrder_api extends Component_Event_Api {
 					$express_to_address = ecjia_region::getRegionName($express_order_info['district']).ecjia_region::getRegionName($express_order_info['street']).$express_order_info['address'];
 					
 					$notification_express_data = array(
-							'title'	=> '系统派单',
-							'body'	=> '有单啦！系统已分配配送单到您账户，赶快行动起来吧！',
+							'title'	=> __('系统派单', 'express'),
+							'body'	=> __('有单啦！系统已分配配送单到您账户，赶快行动起来吧！', 'express'),
 							'data'	=> array(
 									'express_id'			=> $express_order_info['express_id'],
 									'express_sn'			=> $express_order_info['express_sn'],
