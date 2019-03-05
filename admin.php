@@ -70,8 +70,10 @@ class admin extends ecjia_admin {
 		RC_Script::enqueue_script('admin_express_order_list', RC_App::apps_url('statics/js/admin_express_order_list.js', __FILE__));
 		RC_Style::enqueue_style('admin_express_task', RC_App::apps_url('statics/css/admin_express_task.css', __FILE__));
 		RC_Script::enqueue_script('qq_map', ecjia_location_mapjs());
-		RC_Script::localize_script('express', 'js_lang', RC_Lang::get('express::express.js_lang'));
-		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('配送调度', 'express'), RC_Uri::url('express/admin/init')));
+		RC_Script::localize_script('admin_express_task', 'js_lang', config('app-express::jslang.express_page'));
+        RC_Script::localize_script('admin_express_order_list', 'js_lang', config('app-express::jslang.express_page'));
+
+        ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('配送调度', 'express'), RC_Uri::url('express/admin/init')));
 	}
 	
 	/**

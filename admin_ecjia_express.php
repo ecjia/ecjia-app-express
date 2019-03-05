@@ -62,7 +62,8 @@ class admin_ecjia_express extends ecjia_admin
         RC_Script::enqueue_script('jquery-uniform');
         RC_Script::enqueue_script('jquery-chosen');
         RC_Script::enqueue_script('admin_ship_ecjia_express', RC_App::apps_url('statics/js/admin_ship_ecjia_express.js', __FILE__), array(), false, true);
-        
+        RC_Script::localize_script('admin_ship_ecjia_express', 'js_lang', config('app-express::jslang.express_page'));
+
         RC_Script::enqueue_script('bootstrap-datetimepicker', RC_Uri::admin_url('statics/lib/datepicker/bootstrap-datetimepicker.js'));
         RC_Style::enqueue_style('datetimepicker', RC_Uri::admin_url('statics/lib/datepicker/bootstrap-datetimepicker.min.css'));
     }

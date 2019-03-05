@@ -54,6 +54,21 @@ defined('IN_ECJIA') or exit('No permission resources.');
 return array(
     //express
     'express_page' =>array(
+        'delivery_name' =>  __('请输入配送员名称', 'express'),
+        'cellphone_number' =>  __('请输入手机号码', 'express'),
+        'time_range_screening' =>  __('请选择正确的时间范围进行筛选', 'express'),
+        'automatic_refresh_after_seconds' =>  __('秒后自动刷新', 'express'),
+        'ok' =>  __('确定', 'express'),
+        'cancel' =>  __('取消', 'express'),
+
+    ),
+
+    'express_mh_page' =>array(
+        'time_range_screening' =>  __('请选择正确的时间范围进行筛选', 'express'),
+        'make_sure_to_do_this' =>  __('您确定进行该操作吗？', 'express'),
+        'parameter_error' =>  __('参数错误！', 'express'),
+        'order_goods_are_taken_away' =>  __('您确定订单商品已被配送员取走？如未完成就操作，您将会被用户投诉', 'express'),
+        'automatic_refresh_after_seconds' =>  __('秒后自动刷新', 'express'),
         'ok' =>  __('确定', 'express'),
         'cancel' =>  __('取消', 'express'),
 

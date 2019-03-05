@@ -68,9 +68,10 @@ class mh_history extends ecjia_merchant {
 		
 		RC_Script::enqueue_script('mh_history', RC_App::apps_url('statics/js/mh_history.js', __FILE__));
 		RC_Style::enqueue_style('mh_express', RC_App::apps_url('statics/css/mh_express.css', __FILE__));
-		
-		
-		ecjia_merchant_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('配送管理', 'express'), RC_Uri::url('shipping/mh_shipping/shipping_template')));
+        RC_Script::localize_script('mh_history', 'js_lang', config('app-express::jslang.express_mh_page'));
+
+
+        ecjia_merchant_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('配送管理', 'express'), RC_Uri::url('shipping/mh_shipping/shipping_template')));
 		ecjia_merchant_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('历史配送', 'express'), RC_Uri::url('express/mh_history/init')));
 		ecjia_merchant_screen::get_current_screen()->set_parentage('express', 'express/mh_history.php');
 		

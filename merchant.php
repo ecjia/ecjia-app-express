@@ -75,9 +75,10 @@ class merchant extends ecjia_merchant {
 		
 		RC_Script::enqueue_script('qq_map', ecjia_location_mapjs());
 		
-		RC_Script::localize_script('express', 'js_lang', RC_Lang::get('express::express.js_lang'));
-		
-		ecjia_merchant_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('配送管理', 'express'), RC_Uri::url('shipping/mh_shipping/shipping_template')));
+        RC_Script::localize_script('mh_express_task', 'js_lang', config('app-express::jslang.express_mh_page'));
+        RC_Script::localize_script('mh_express_order_list', 'js_lang', config('app-express::jslang.express_mh_page'));
+
+        ecjia_merchant_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('配送管理', 'express'), RC_Uri::url('shipping/mh_shipping/shipping_template')));
 		ecjia_merchant_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('商家配送', 'express'), RC_Uri::url('express/merchant/init')));
 		ecjia_merchant_screen::get_current_screen()->set_parentage('express', 'express/merhcant.php');
 	}

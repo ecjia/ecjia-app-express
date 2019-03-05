@@ -72,8 +72,9 @@ class admin_express extends ecjia_admin {
 		
 		RC_Script::enqueue_script('admin_express', RC_App::apps_url('statics/js/admin_express.js', __FILE__));
 		RC_Style::enqueue_style('admin_express', RC_App::apps_url('statics/css/admin_express.css', __FILE__));
-		
-		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('配送员管理', 'express'), RC_Uri::url('express/admin_express/init')));
+        RC_Script::localize_script('admin_express', 'js_lang', config('app-express::jslang.express_page'));
+
+        ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('配送员管理', 'express'), RC_Uri::url('express/admin_express/init')));
 	}
 	
 	/**
