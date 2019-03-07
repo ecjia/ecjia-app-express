@@ -87,8 +87,8 @@
 					  	<a class="data-pjax" href='{url path="express/admin_express/edit" args="user_id={$express.user_id}"}' title='{t domain="express"}编辑{/t}'>{t domain="express"}编辑{/t}</a>&nbsp;|&nbsp;
 					  	<a class="data-pjax" href='{url path="express/admin_express/detail" args="user_id={$express.user_id}"}' title='{t domain="express"}查看详情{/t}'>{t domain="express"}查看详情{/t}</a>&nbsp;|&nbsp;
 					  	{if $express.online_status eq '1'}<a data-toggle="modal" data-backdrop="static" href="#myModal1" exmobile="{$express.mobile}" exname="{$express.name}" exlng="{$express.longitude}" exlat="{$express.latitude}" title='{t domain="express"}当前位置{/t}'>{t domain="express"}当前位置{/t}</a>&nbsp;|&nbsp;{/if}
-					  	<a target="_blank"   href='{url path="express/admin_express/account_list" args="user_id={$express.user_id}"}' title="查看账目明细">查看账目明细</a>&nbsp;|&nbsp;
-			          	<a class="ajaxremove ecjiafc-red" data-toggle="ajaxremove" data-msg="你确定要删除配送员【{$express.name}】吗？" href='{url path="express/admin_express/remove" args="user_id={$express.user_id}"}' title='{t domain="express"}删除{/t}'>{t domain="express"}删除{/t}</a>
+					  	<a target="_blank"   href='{url path="express/admin_express/account_list" args="user_id={$express.user_id}"}' title='{t domain="express"}查看账目明细{/t}'>{t domain="express"}查看账目明细{/t}</a>&nbsp;|&nbsp;
+			          	<a class="ajaxremove ecjiafc-red" data-toggle="ajaxremove" data-msg='{t domain="express" 1={$express.name}}你确定要删除配送员【%1】吗？{/t}' href='{url path="express/admin_express/remove" args="user_id={$express.user_id}"}' title='{t domain="express"}删除{/t}'>{t domain="express"}删除{/t}</a>
 		    	  	</div>
 		      	</td>
 		      	<td>{$express.mobile}</td>
@@ -106,7 +106,7 @@
 		      	<td>{$express.add_time}</td>
 		    </tr>
 		    <!-- {foreachelse} -->
-	        <tr><td class="no-records" colspan="8">{lang key='system::system.no_records'}</td></tr>
+	        <tr><td class="no-records" colspan="8">{t domain="express"}没有找到任何记录{/t}</td></tr>
 			<!-- {/foreach} -->
             </tbody>
          </table>

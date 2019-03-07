@@ -156,7 +156,7 @@
 					      	<td class="ecjiafc-red">{if $type eq 'wait_grab'}{t domain="express"}待派单{/t}{elseif $type eq 'wait_pickup'}{t domain="express"}待取货{/t}{elseif $type eq 'sending'}{t domain="express"}配送中{/t}{/if}</td>
 					    </tr>
 					    <!-- {foreachelse} -->
-	        			<tr><td class="no-records" colspan="6">{lang key='system::system.no_records'}</td></tr>
+	        			<tr><td class="no-records" colspan="6">{t domain="express"}没有找到任何记录{/t}</td></tr>
 						<!-- {/foreach} -->
 					</tbody>
 				</table>

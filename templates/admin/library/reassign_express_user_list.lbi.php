@@ -41,7 +41,7 @@
 														</div>
 													</div>
 													<div class="assign-div">
-						                       			<a class="assign btn btn-warning" type="button"  notice='{t domain="express" 1={$list.name}}是否确定让  【%1】  去配送？{/t}' assign-url="{$assign_url}&staff_id={$list.user_id}&type={$type}"><span style="color:#fff;">指派给他</span></a>
+						                       			<a class="assign btn btn-warning" type="button"  notice='{t domain="express" 1={$list.name}}是否确定让  【%1】  去配送？{/t}' assign-url="{$assign_url}&staff_id={$list.user_id}&type={$type}"><span style="color:#fff;">{t domain="express"}指派给他{/t}</span></a>
 													</div>
 													<input type="hidden" class="ex-u-id" value=""/>
 												</div>
@@ -74,7 +74,7 @@
 														</div>
 													</div>
 													<div class="assign-div">
-														 <button class="btn" type="button" disabled="disabled" data-toggle="modal" href="#assignmodel" notice='{t domain="express" 1={$list.name}}是否确定让  【%1】  去配送？{/t}' assign-url="{$assign_url}&staff_id={$list.user_id}&type={$type}"><span>指派给他</span></button>
+														 <button class="btn" type="button" disabled="disabled" data-toggle="modal" href="#assignmodel" notice='{t domain="express" 1={$list.name}}是否确定让  【%1】  去配送？{/t}' assign-url="{$assign_url}&staff_id={$list.user_id}&type={$type}"><span>{t domain="express"}指派给他{/t}</span></button>
 													</div>
 												</div>
 											{/if}

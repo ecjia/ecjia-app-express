@@ -70,7 +70,7 @@
 				</ul>
 				<!-- {$data.page} -->
 			{else}
-				<pre style=" background-color: #fbfbfb; height:80px;line-height:80px;text-align:center;">{lang key='system::system.no_records'}</pre>
+				<pre style=" background-color: #fbfbfb; height:80px;line-height:80px;text-align:center;">{t domain="express"}没有找到任何记录{/t}</pre>
 			{/if}
 		</div>
 	</div>

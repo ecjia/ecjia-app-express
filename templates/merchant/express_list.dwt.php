@@ -101,8 +101,8 @@
 								  	<a target="_blank" href='{url path="staff/merchant/edit" args="user_id={$express.user_id}"}' title='{t domain="express"}编辑{/t}'>{t domain="express"}编辑{/t}</a>&nbsp;|&nbsp;
 								  	<a class="data-pjax" href='{url path="express/mh_express/detail" args="user_id={$express.user_id}"}' title='{t domain="express"}查看详情{/t}'>{t domain="express"}查看详情{/t}</a>&nbsp;|&nbsp;
 								  	{if $express.online_status eq '1'}<a data-toggle="modal" href="#actionmodal" home_url="{RC_Uri::home_url()}" exmobile="{$express.mobile}" exname="{$express.name}" exlng="{$express.longitude}" exlat="{$express.latitude}" title='{t domain="express"}当前位置{/t}'>{t domain="express"}当前位置{/t}</a>&nbsp;|&nbsp;{/if}
-								  	<a target="_blank"   href='{url path="express/mh_express/account_list" args="user_id={$express.user_id}"}' title="查看账目明细">查看账目明细</a>&nbsp;|&nbsp;
-						          	<a class="ajaxremove ecjiafc-red" data-toggle="ajaxremove" data-msg="你确定要删除该配送员吗？" href='{url path="express/mh_express/remove" args="user_id={$express.user_id}"}' title='{t domain="express"}删除{/t}'>{t domain="express"}删除{/t}</a>
+								  	<a target="_blank"   href='{url path="express/mh_express/account_list" args="user_id={$express.user_id}"}' title='{t domain="express"}查看账目明细{/t}'>{t domain="express"}查看账目明细{/t}</a>&nbsp;|&nbsp;
+						          	<a class="ajaxremove ecjiafc-red" data-toggle="ajaxremove" data-msg='{t domain="express"}你确定要删除该配送员吗？{/t}' href='{url path="express/mh_express/remove" args="user_id={$express.user_id}"}' title='{t domain="express"}删除{/t}'>{t domain="express"}删除{/t}</a>
 					    	  	</div>
 					      	</td>
 					      	<td>{$express.mobile}</td>
@@ -122,7 +122,7 @@
 					    <!-- {foreachelse} -->
 						<tr>
 							<td class="no-records" colspan="8">
-								{lang key='system::system.no_records'}
+								{t domain="express"}没有找到任何记录{/t}
 							</td>
 						</tr>
 					<!-- {/foreach} -->

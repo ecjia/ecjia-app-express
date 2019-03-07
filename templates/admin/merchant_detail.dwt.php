@@ -83,7 +83,7 @@
 		      	<td>{if $express.status eq 0}<font class="ecjiafc-red">{t domain="express"}待抢单{/t}</font>{elseif $express.status eq 1}<font class="ecjiafc-red">{t domain="express"}待取货{/t}</font>{elseif $express.status eq 2}<font class="ecjiafc-red">{t domain="express"}配送中{/t}</font>{elseif $express.status eq 3}{t domain="express"}退货中{/t}{elseif $express.status eq 4}{t domain="express"}已拒收{/t}{elseif $express.status eq 5}{t domain="express"}已完成{/t}{else}{t domain="express"}已退回{/t}{/if}</td>
 		    </tr>
 		    <!-- {foreachelse} -->
-	        <tr><td class="no-records" colspan="6">{lang key='system::system.no_records'}</td></tr>
+	        <tr><td class="no-records" colspan="6">{t domain="express"}没有找到任何记录{/t}</td></tr>
 			<!-- {/foreach} -->
             </tbody>
          </table>

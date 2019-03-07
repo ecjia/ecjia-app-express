@@ -32,9 +32,9 @@
 		<div class="panel">
 			<div class="panel-body panel-body-small">
 				<ul class="nav nav-pills pull-left">
-					<li class="{if $type eq 'wait_grab'}active{/if}"><a class="data-pjax" href='{url path="express/merchant/init" args="type=wait_grab"}{if $platform}&platform=1{/if}'>待派单 <span class="badge badge-info">{if $express_order_count.wait_grab}{$express_order_count.wait_grab}{else}0{/if}</span> </a></li>
-					<li class="{if $type eq 'wait_pickup'}active{/if}"><a class="data-pjax" href='{url path="express/merchant/wait_pickup" args="type=wait_pickup{if $platform}&platform=1{/if}{if $filter.keywords}&keywords={$filter.keywords}{/if}"}'>待取货 <span class="badge badge-info">{if $express_order_count.wait_pickup}{$express_order_count.wait_pickup}{else}0{/if}</span> </a></li>
-					<li class="{if $type eq 'sending'}active{/if}"><a class="data-pjax" href='{url path="express/merchant/wait_pickup" args="type=sending{if $platform}&platform=1{/if}{if $filter.keywords}&keywords={$filter.keywords}{/if}"}'>配送中 <span class="badge badge-info">{if $express_order_count.sending}{$express_order_count.sending}{else}0{/if}</span> </a></li>
+					<li class="{if $type eq 'wait_grab'}active{/if}"><a class="data-pjax" href='{url path="express/merchant/init" args="type=wait_grab"}{if $platform}&platform=1{/if}'>{t domain="express"}待派单{/t} <span class="badge badge-info">{if $express_order_count.wait_grab}{$express_order_count.wait_grab}{else}0{/if}</span> </a></li>
+					<li class="{if $type eq 'wait_pickup'}active{/if}"><a class="data-pjax" href='{url path="express/merchant/wait_pickup" args="type=wait_pickup{if $platform}&platform=1{/if}{if $filter.keywords}&keywords={$filter.keywords}{/if}"}'>{t domain="express"}待取货{/t} <span class="badge badge-info">{if $express_order_count.wait_pickup}{$express_order_count.wait_pickup}{else}0{/if}</span> </a></li>
+					<li class="{if $type eq 'sending'}active{/if}"><a class="data-pjax" href='{url path="express/merchant/wait_pickup" args="type=sending{if $platform}&platform=1{/if}{if $filter.keywords}&keywords={$filter.keywords}{/if}"}'>{t domain="express"}配送中{/t} <span class="badge badge-info">{if $express_order_count.sending}{$express_order_count.sending}{else}0{/if}</span> </a></li>
 				</ul>
 				<div class="clearfix"></div>
 			</div>
@@ -83,7 +83,7 @@
 					      	<td class="ecjiafc-red">{if $type eq 'wait_pickup'}{t domain="express"}待取货{/t}{elseif $type eq 'sending'}{t domain="express"}配送中{/t}{/if}</td>
 					    </tr>
 					    <!-- {foreachelse} -->
-	        			<tr><td class="no-records" colspan="6">{lang key='system::system.no_records'}</td></tr>
+	        			<tr><td class="no-records" colspan="6">{t domain="express"}没有找到任何记录{/t}</td></tr>
 						<!-- {/foreach} -->
 					</tbody>
 				</table>

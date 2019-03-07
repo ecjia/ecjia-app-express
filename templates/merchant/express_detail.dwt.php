@@ -125,7 +125,7 @@
 						</tr>
 						<!-- {foreachelse} -->
 						<tr>
-							<td class="no-records" colspan="7">{lang key='orders::order.no_order_operation_record'}</td>
+							<td class="no-records" colspan="7">{t domain="express"}该订单暂无操作记录{/t}</td>
 						</tr>
 						<!-- {/foreach} -->
 					</tbody>

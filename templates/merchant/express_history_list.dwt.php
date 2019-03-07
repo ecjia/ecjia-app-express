@@ -25,8 +25,8 @@
 		<div class="panel">
 			<div class="panel-body panel-body-small">
 				<ul class="nav nav-pills pull-left">
-					<li class="{if !$smarty.get.type}active{/if}"><a class="data-pjax" href='{url path="express/mh_history/init" args="{if $smarty.get.start_date}&start_date={$smarty.get.start_date}{/if}{if $smarty.get.end_date}&end_date={$smarty.get.end_date}{/if}{if $smarty.get.keyword}&keyword={$smarty.get.keyword}{/if}"}'>平台配送 <span class="badge badge-info">{if $type_count.platform}{$type_count.platform}{else}0{/if}</span> </a></li>
-					<li class="{if $smarty.get.type eq 'merchant'}active{/if}"><a class="data-pjax" href='{url path="express/mh_history/init" args="type=merchant{if $smarty.get.start_date}&start_date={$smarty.get.start_date}{/if}{if $smarty.get.end_date}&end_date={$smarty.get.end_date}{/if}{if $smarty.get.keyword}&keyword={$smarty.get.keyword}{/if}"}'>商家配送 <span class="badge badge-info">{if $type_count.merchant}{$type_count.merchant}{else}0{/if}</span> </a></li>
+					<li class="{if !$smarty.get.type}active{/if}"><a class="data-pjax" href='{url path="express/mh_history/init" args="{if $smarty.get.start_date}&start_date={$smarty.get.start_date}{/if}{if $smarty.get.end_date}&end_date={$smarty.get.end_date}{/if}{if $smarty.get.keyword}&keyword={$smarty.get.keyword}{/if}"}'>{t domain="express"}平台配送{/t} <span class="badge badge-info">{if $type_count.platform}{$type_count.platform}{else}0{/if}</span> </a></li>
+					<li class="{if $smarty.get.type eq 'merchant'}active{/if}"><a class="data-pjax" href='{url path="express/mh_history/init" args="type=merchant{if $smarty.get.start_date}&start_date={$smarty.get.start_date}{/if}{if $smarty.get.end_date}&end_date={$smarty.get.end_date}{/if}{if $smarty.get.keyword}&keyword={$smarty.get.keyword}{/if}"}'>{t domain="express"}商家配送{/t} <span class="badge badge-info">{if $type_count.merchant}{$type_count.merchant}{else}0{/if}</span> </a></li>
 				</ul>
 				<div class="clearfix"></div>
 			</div>
@@ -73,7 +73,7 @@
 					      	<td>{t domain="express"}已完成{/t}</td>
 					    </tr>
 					    <!-- {foreachelse} -->
-				        <tr><td class="no-records" colspan="6">{lang key='system::system.no_records'}</td></tr>
+				        <tr><td class="no-records" colspan="6">{t domain="express"}没有找到任何记录{/t}</td></tr>
 						<!-- {/foreach} -->
 					</tbody>
 				</table>
