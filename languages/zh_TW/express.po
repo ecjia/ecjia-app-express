@@ -4,16 +4,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Ecjia App express 1.27.4\n"
 "Report-Msgid-Bugs-To: https://make.ecjia.com/polyglots/\n"
-"POT-Creation-Date: 2019-03-06 09:04:37+00:00\n"
+"POT-Creation-Date: 2019-03-13 14:07+0800\n"
+"PO-Revision-Date: 2019-03-13 14:08+0800\n"
+"Last-Translator: \n"
+"Language-Team: LANGUAGE <ecjia@ecjia.com>\n"
+"Language: zh_TW\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2019-03-07 14:05+0800\n"
-"Language-Team: LANGUAGE <ecjia@ecjia.com>\n"
-"X-Generator: Poedit 2.2\n"
-"Last-Translator: \n"
+"X-Generator: Poedit 1.8.7\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"Language: zh_TW\n"
 
 #: admin.php:76 apis/express_admin_menu_api.class.php:56 configs/package.php:55
 #: configs/package.php:56
@@ -36,6 +36,7 @@ msgstr "當前配送員不在線，請選擇在線配送員進行指派！"
 
 #: admin.php:328 admin.php:334 admin_reminder.php:372 admin_reminder.php:378
 #: apis/express_ecjiaauto_assign_expressOrder_api.class.php:206
+#: apis/express_ecjiaauto_assign_expressOrder_api.class.php:212
 #: apis/express_o2oauto_assign_expressOrder_api.class.php:199
 #: apis/express_o2oauto_assign_expressOrder_api.class.php:205 merchant.php:321
 #: merchant.php:327
@@ -417,6 +418,7 @@ msgstr "全部"
 #: content/apps/express/templates/admin/merchant_detail.dwt.php:83
 #: content/apps/express/templates/admin/express_task_list.dwt.php:34
 #: content/apps/express/templates/admin/merchant_list.dwt.php:56
+#: content/apps/express/templates/admin/express_detail.dwt.php:129
 #: content/apps/express/templates/admin/express_order_wait_pickup.dwt.php:34
 #: content/apps/express/templates/admin/merchant_express_detail.dwt.php:10
 msgid "待抢单"
@@ -424,6 +426,7 @@ msgstr "待搶單"
 
 #: content/apps/express/templates/admin/merchant_detail.dwt.php:57
 #: content/apps/express/templates/admin/express_task_list.dwt.php:100
+#: content/apps/express/templates/admin/express_detail.dwt.php:105
 #: content/apps/express/templates/admin/express_order_wait_pickup.dwt.php:51
 #: content/apps/express/templates/admin/express_history_list.dwt.php:49
 #: content/apps/express/templates/admin/express_reminder_list.dwt.php:50
@@ -493,22 +496,44 @@ msgid "查看详情"
 msgstr "查看詳情"
 
 #: content/apps/express/templates/admin/merchant_detail.dwt.php:83
+#: content/apps/express/templates/admin/express_detail.dwt.php:129
 #: content/apps/express/templates/admin/merchant_express_detail.dwt.php:10
 #: content/apps/express/templates/merchant/express_detail.dwt.php:124
 msgid "退货中"
 msgstr "退貨中"
 
 #: content/apps/express/templates/admin/merchant_detail.dwt.php:83
+#: content/apps/express/templates/admin/express_detail.dwt.php:129
 #: content/apps/express/templates/admin/merchant_express_detail.dwt.php:10
 #: content/apps/express/templates/merchant/express_detail.dwt.php:124
 msgid "已拒收"
 msgstr "已拒收"
 
 #: content/apps/express/templates/admin/merchant_detail.dwt.php:83
+#: content/apps/express/templates/admin/express_detail.dwt.php:129
 #: content/apps/express/templates/admin/merchant_express_detail.dwt.php:10
 #: content/apps/express/templates/merchant/express_detail.dwt.php:124
 msgid "已退回"
 msgstr "已退回"
+
+#: content/apps/express/templates/admin/merchant_detail.dwt.php:86
+#: content/apps/express/templates/admin/express_list.dwt.php:109
+#: content/apps/express/templates/admin/merchant_list.dwt.php:73
+#: content/apps/express/templates/admin/express_account_list.dwt.php:58
+#: content/apps/express/templates/admin/express_order_wait_pickup.dwt.php:80
+#: content/apps/express/templates/admin/express_history_list.dwt.php:76
+#: content/apps/express/templates/admin/express_match_list.dwt.php:55
+#: content/apps/express/templates/admin/express_reminder_list.dwt.php:87
+#: content/apps/express/templates/admin/express_match_detail.dwt.php:83
+#: content/apps/express/templates/merchant/express_task_list.dwt.php:159
+#: content/apps/express/templates/merchant/express_list.dwt.php:125
+#: content/apps/express/templates/merchant/express_account_list.dwt.php:67
+#: content/apps/express/templates/merchant/express_order_wait_pickup.dwt.php:86
+#: content/apps/express/templates/merchant/express_history_list.dwt.php:76
+#: content/apps/express/templates/merchant/express_match_list.dwt.php:59
+#: content/apps/express/templates/merchant/express_match_detail.dwt.php:93
+msgid "没有找到任何记录"
+msgstr "沒有找到任何記錄"
 
 #: content/apps/express/templates/admin/express_current_location.dwt.php:4
 #: content/apps/express/templates/admin/express_list.dwt.php:23
@@ -700,6 +725,10 @@ msgid "当前位置"
 msgstr "當前位置"
 
 #: content/apps/express/templates/admin/express_list.dwt.php:91
+msgid "你确定要删除配送员【%1】吗？"
+msgstr "你確定要刪除配送員【%1】嗎？"
+
+#: content/apps/express/templates/admin/express_list.dwt.php:91
 #: content/apps/express/templates/merchant/express_list.dwt.php:105
 msgid "删除"
 msgstr "刪除"
@@ -773,6 +802,7 @@ msgstr "公裏"
 
 #: content/apps/express/templates/admin/shipping_ecjia_express.dwt.php:126
 #: content/apps/express/templates/admin/shipping_ecjia_express.dwt.php:136
+#: content/apps/express/templates/admin/express_detail.dwt.php:110
 #: content/apps/express/templates/merchant/express_detail.dwt.php:111
 msgid "配送费"
 msgstr "配送費"
@@ -866,17 +896,15 @@ msgstr "賬戶變動原因"
 msgid "可用资金账户"
 msgstr "可用資金賬戶"
 
-#: content/apps/express/templates/admin/express_account_list.dwt.php:58
-#: content/apps/express/templates/admin/express_match_detail.dwt.php:83
-#: content/apps/express/templates/merchant/express_account_list.dwt.php:67
-#: content/apps/express/templates/merchant/express_match_detail.dwt.php:93
-msgid "没有找到任何记录"
-msgstr "沒有找到任何記錄"
-
 #: content/apps/express/templates/admin/reassign_express_user_list.dwt.php:39
 #: content/apps/express/templates/admin/reassign_express_user_list.dwt.php:42
 #: content/apps/express/templates/admin/reassign_express_user_list.dwt.php:72
 #: content/apps/express/templates/admin/reassign_express_user_list.dwt.php:75
+#: content/apps/express/templates/admin/express_detail.dwt.php:87
+#: content/apps/express/templates/admin/express_detail.dwt.php:88
+#: content/apps/express/templates/admin/express_detail.dwt.php:89
+#: content/apps/express/templates/admin/library/waitgrablist_search_user_list.lbi.php:80
+#: content/apps/express/templates/admin/library/waitgrablist_search_user_list.lbi.php:83
 #: content/apps/express/templates/admin/waitgrablist_search_user_list.dwt.php:84
 #: content/apps/express/templates/admin/waitgrablist_search_user_list.dwt.php:87
 #: content/apps/express/templates/admin/express_match_detail.dwt.php:40
@@ -933,6 +961,8 @@ msgstr "是否確定讓  【%1】  去配送？"
 
 #: content/apps/express/templates/admin/reassign_express_user_list.dwt.php:47
 #: content/apps/express/templates/admin/reassign_express_user_list.dwt.php:80
+#: content/apps/express/templates/admin/library/reassign_express_user_list.lbi.php:44
+#: content/apps/express/templates/admin/library/reassign_express_user_list.lbi.php:77
 #: content/apps/express/templates/admin/library/waitgrablist_search_user_list.lbi.php:50
 #: content/apps/express/templates/admin/library/waitgrablist_search_user_list.lbi.php:52
 #: content/apps/express/templates/admin/library/waitgrablist_search_user_list.lbi.php:89
@@ -960,6 +990,11 @@ msgstr "指派給他"
 #: content/apps/express/templates/merchant/library/waitgrablist_search_user_list.lbi.php:105
 msgid "还未添加配送员!"
 msgstr "還未添加配送員!"
+
+#: content/apps/express/templates/admin/express_detail.dwt.php:25
+#: content/apps/express/templates/merchant/express_detail.dwt.php:28
+msgid "基本信息"
+msgstr "基本信息"
 
 #: content/apps/express/templates/admin/express_detail.dwt.php:31
 #: content/apps/express/templates/admin/express_edit.dwt.php:25
@@ -1012,16 +1047,41 @@ msgstr "申請來源："
 msgid "所在地区："
 msgstr "所在地區："
 
-#: content/apps/express/templates/admin/express_order_wait_pickup.dwt.php:39
-#: content/apps/express/templates/admin/express_history_list.dwt.php:37
-msgid "请输入配送员名称或配送单号"
-msgstr "請輸入配送員名稱或配送單號"
+#: content/apps/express/templates/admin/express_detail.dwt.php:79
+#: content/apps/express/templates/merchant/express_detail.dwt.php:76
+msgid "配送情况"
+msgstr "配送情況"
 
-#: content/apps/express/templates/admin/express_order_wait_pickup.dwt.php:54
-#: content/apps/express/templates/admin/express_history_list.dwt.php:52
-msgid "取/送货地址"
-msgstr "取/送貨地址"
+#: content/apps/express/templates/admin/express_detail.dwt.php:87
+#: content/apps/express/templates/merchant/express_detail.dwt.php:87
+msgid "已完成："
+msgstr "已完成："
 
+#: content/apps/express/templates/admin/express_detail.dwt.php:88
+msgid "抢单数："
+msgstr "搶單數："
+
+#: content/apps/express/templates/admin/express_detail.dwt.php:99
+#: content/apps/express/templates/merchant/express_detail.dwt.php:99
+msgid "配送记录"
+msgstr "配送記錄"
+
+#: content/apps/express/templates/admin/express_detail.dwt.php:106
+msgid "店铺名称"
+msgstr "店鋪名稱"
+
+#: content/apps/express/templates/admin/express_detail.dwt.php:107
+msgid "取货/送货地址"
+msgstr "取貨/送貨地址"
+
+#: content/apps/express/templates/admin/express_detail.dwt.php:108
+#: content/apps/express/templates/admin/express_order_wait_pickup.dwt.php:56
+#: content/apps/express/templates/merchant/express_detail.dwt.php:109
+#: content/apps/express/templates/merchant/express_order_wait_pickup.dwt.php:60
+msgid "接单时间"
+msgstr "接單時間"
+
+#: content/apps/express/templates/admin/express_detail.dwt.php:109
 #: content/apps/express/templates/admin/express_order_wait_pickup.dwt.php:55
 #: content/apps/express/templates/admin/express_history_list.dwt.php:53
 #: content/apps/express/templates/admin/express_match_detail.dwt.php:63
@@ -1032,12 +1092,7 @@ msgstr "取/送貨地址"
 msgid "任务类型"
 msgstr "任務類型"
 
-#: content/apps/express/templates/admin/express_order_wait_pickup.dwt.php:56
-#: content/apps/express/templates/merchant/express_detail.dwt.php:109
-#: content/apps/express/templates/merchant/express_order_wait_pickup.dwt.php:60
-msgid "接单时间"
-msgstr "接單時間"
-
+#: content/apps/express/templates/admin/express_detail.dwt.php:111
 #: content/apps/express/templates/admin/express_order_wait_pickup.dwt.php:57
 #: content/apps/express/templates/admin/express_history_list.dwt.php:55
 #: content/apps/express/templates/merchant/express_task_list.dwt.php:130
@@ -1047,21 +1102,38 @@ msgstr "接單時間"
 msgid "配送状态"
 msgstr "配送狀態"
 
-#: content/apps/express/templates/admin/express_order_wait_pickup.dwt.php:66
-#: content/apps/express/templates/admin/express_reminder_list.dwt.php:73
-#: content/apps/express/templates/merchant/express_order_wait_pickup.dwt.php:74
-msgid "重新指派"
-msgstr "重新指派"
-
+#: content/apps/express/templates/admin/express_detail.dwt.php:120
 #: content/apps/express/templates/admin/express_order_wait_pickup.dwt.php:72
 #: content/apps/express/templates/admin/express_history_list.dwt.php:68
 msgid "取："
 msgstr "取："
 
+#: content/apps/express/templates/admin/express_detail.dwt.php:121
 #: content/apps/express/templates/admin/express_order_wait_pickup.dwt.php:73
 #: content/apps/express/templates/admin/express_history_list.dwt.php:69
 msgid "送："
 msgstr "送："
+
+#: content/apps/express/templates/admin/express_detail.dwt.php:133
+#: content/apps/express/templates/merchant/express_detail.dwt.php:128
+msgid "该订单暂无操作记录"
+msgstr "該訂單暫無操作記錄"
+
+#: content/apps/express/templates/admin/express_order_wait_pickup.dwt.php:39
+#: content/apps/express/templates/admin/express_history_list.dwt.php:37
+msgid "请输入配送员名称或配送单号"
+msgstr "請輸入配送員名稱或配送單號"
+
+#: content/apps/express/templates/admin/express_order_wait_pickup.dwt.php:54
+#: content/apps/express/templates/admin/express_history_list.dwt.php:52
+msgid "取/送货地址"
+msgstr "取/送貨地址"
+
+#: content/apps/express/templates/admin/express_order_wait_pickup.dwt.php:66
+#: content/apps/express/templates/admin/express_reminder_list.dwt.php:73
+#: content/apps/express/templates/merchant/express_order_wait_pickup.dwt.php:74
+msgid "重新指派"
+msgstr "重新指派"
 
 #: content/apps/express/templates/admin/express_edit.dwt.php:33
 msgid "员工编号："
@@ -1092,6 +1164,13 @@ msgstr "請輸入登錄密碼"
 #: content/apps/express/templates/admin/express_edit.dwt.php:73
 msgid "选择地区："
 msgstr "選擇地區："
+
+#: content/apps/express/templates/admin/express_edit.dwt.php:76
+#: content/apps/express/templates/admin/express_edit.dwt.php:82
+#: content/apps/express/templates/admin/express_edit.dwt.php:88
+#: content/apps/express/templates/admin/express_edit.dwt.php:94
+msgid "请选择..."
+msgstr "請選擇..."
 
 #: content/apps/express/templates/admin/express_edit.dwt.php:112
 msgid "配送费用："
@@ -1391,6 +1470,7 @@ msgstr "未結算"
 #: content/apps/express/templates/merchant/express_task_list.dwt.php:35
 #: content/apps/express/templates/merchant/express_task_list.dwt.php:156
 #: content/apps/express/templates/merchant/express_detail.dwt.php:124
+#: content/apps/express/templates/merchant/express_order_wait_pickup.dwt.php:35
 #: content/apps/express/templates/merchant/express_order_detail.dwt.php:14
 msgid "待派单"
 msgstr "待派單"
@@ -1423,6 +1503,10 @@ msgstr "地址："
 msgid "请输入名称或手机号"
 msgstr "請輸入名稱或手機號"
 
+#: content/apps/express/templates/merchant/express_list.dwt.php:105
+msgid "你确定要删除该配送员吗？"
+msgstr "你確定要刪除該配送員嗎？"
+
 #: content/apps/express/templates/merchant/express_account_list.dwt.php:35
 msgid "按时间段查询："
 msgstr "按時間段查詢："
@@ -1449,17 +1533,9 @@ msgstr "離線 （%1）"
 msgid "未查找到配送员!"
 msgstr "未查找到配送員!"
 
-#: content/apps/express/templates/merchant/express_detail.dwt.php:28
-msgid "基本信息"
-msgstr "基本信息"
-
 #: content/apps/express/templates/merchant/express_detail.dwt.php:64
 msgid "添加时间："
 msgstr "添加時間："
-
-#: content/apps/express/templates/merchant/express_detail.dwt.php:76
-msgid "配送情况"
-msgstr "配送情況"
 
 #: content/apps/express/templates/merchant/express_detail.dwt.php:85
 msgid "派单数："
@@ -1468,14 +1544,6 @@ msgstr "派單數:"
 #: content/apps/express/templates/merchant/express_detail.dwt.php:86
 msgid "未完成："
 msgstr "未完成："
-
-#: content/apps/express/templates/merchant/express_detail.dwt.php:87
-msgid "已完成："
-msgstr "已完成："
-
-#: content/apps/express/templates/merchant/express_detail.dwt.php:99
-msgid "配送记录"
-msgstr "配送記錄"
 
 #: content/apps/express/templates/merchant/express_detail.dwt.php:108
 msgid "送货地址"
